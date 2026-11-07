@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Broadcast Odometry Transform | ROS 2 | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="Introduction In chapter 65 the node simple_controller started to publish the robot&#39;s pose as an Odometry message on bumperbot_controller/odom . That message is…">
+<link rel="canonical" href="https://techarcanist.com/documented-software-learnings/ros2/ros2-66/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="Broadcast Odometry Transform | ROS 2">
+<meta property="og:description" content="Introduction In chapter 65 the node simple_controller started to publish the robot&#39;s pose as an Odometry message on bumperbot_controller/odom . That message is…">
+<meta property="og:url" content="https://techarcanist.com/documented-software-learnings/ros2/ros2-66/">
+<meta property="og:image" content="https://techarcanist.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=69fcf7c238">
+<link rel="stylesheet" href="/assets/home.css?v=69fcf7c238">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/" aria-current="page">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap reader wide">
+  <aside class="rd-nav" id="rd-nav">
+    <a class="rd-series" href="/documented-software-learnings/ros2/"><span class="label">Series</span>ROS 2</a>
+    <ol>
+      <li><a href="/documented-software-learnings/ros2/ros2_a/"><span class="mono">01</span>Installing Ubuntu Desktop (Dual Boot with Windows)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_b/"><span class="mono">02</span>ROS 2 Jazzy Installation on Ubuntu (Step-by-Step)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_c/"><span class="mono">03</span>Development Environment Setup for ROS 2 Jazzy on Ubuntu (With Clear Explanations)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_d/"><span class="mono">04</span>ROS 2 Fundamentals: Architecture, Communication, Packages, and Workspaces</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_e/"><span class="mono">05</span>ROS 2 Workspace &amp; Package Creation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_f/"><span class="mono">06</span>ROS 2 Python Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_g/"><span class="mono">07</span>ROS 2 C++ Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_h/"><span class="mono">08</span>ROS 2 Python Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_i/"><span class="mono">09</span>ROS 2 C++ Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_j/"><span class="mono">10</span>Robot Locomotion: Introduction</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_k/"><span class="mono">11</span>Wheeled Locomotion Architectures</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_l/"><span class="mono">12</span>Rolling Friction &amp; Wheeled Locomotion Efficiency</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_m/"><span class="mono">13</span>Introduction to Robot Simulation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_n/"><span class="mono">14</span>URDF</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_o/"><span class="mono">15</span>Create a URDF Model</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_p/"><span class="mono">16</span>Rviz</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_q/"><span class="mono">17</span>Node Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_r/"><span class="mono">18</span>Python Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_s/"><span class="mono">19</span>C++ Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_t/"><span class="mono">20</span>ROS 2 Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-u/"><span class="mono">21</span>Visualize The Robot In RVIZ2</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-v/"><span class="mono">22</span>Launch Files</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-w/"><span class="mono">23</span>ROS 2 Launch Files: Visualizing the Robot with One Command</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-x/"><span class="mono">24</span>Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-y/"><span class="mono">25</span>Simulating the Robot in Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-z/"><span class="mono">26</span>ROS 2 Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-aa/"><span class="mono">27</span>Control Types</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ab/"><span class="mono">28</span>ROS 2 Control: Prepare the Robot for Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ac/"><span class="mono">29</span>Understanding ROS 2 Control | Explanation of Chapter 28</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ad/"><span class="mono">30</span>ROS 2 Control: Moving the BumperBot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ae/"><span class="mono">31</span>Robot Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-af/"><span class="mono">32</span>Pose of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_af/"><span class="mono">33</span>Translation Vector</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ag/"><span class="mono">34</span>Introduction to Turtlesim</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ah/"><span class="mono">35</span>Translation Vector Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ai/"><span class="mono">36</span>Translation Vector Between Two Turtles: CPP</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_aj/"><span class="mono">37</span>Rotation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ak/"><span class="mono">38</span>Rotation Matrix Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_al/"><span class="mono">39</span>Transformation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_am/"><span class="mono">40</span>Differential Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-41/"><span class="mono">41</span>Velocity of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-42/"><span class="mono">42</span>Simple Speed Controller: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-43/"><span class="mono">43</span>Launch the Simple Speed Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-44/"><span class="mono">44</span>Teleoperating the BumperBot with a Joystick</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-45/"><span class="mono">45</span>ROS 2 Diff Drive Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-46/"><span class="mono">46</span>TF 2 Library</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-47/"><span class="mono">47</span>Operation With Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-48/"><span class="mono">48</span>Static &amp; Dynamic Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-49/"><span class="mono">49</span>Simple TF2 Static Broadcaster</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-50/"><span class="mono">50</span>Simple TF2 Broadcaster: Static and Dynamic Transforms</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-51/"><span class="mono">51</span>ROS 2 Services</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-52/"><span class="mono">52</span>Service Server in Python: AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-53/"><span class="mono">53</span>Service Client in Python: Calling AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-54/"><span class="mono">54</span>Simple TF2 Listener in Python: a get_transform Service</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-55/"><span class="mono">55</span>Euler Angles and Quaternions</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-56/"><span class="mono">56</span>Euler to Quaternion: Turning the Robot with tf_transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-57/"><span class="mono">57</span>tf2 Tools: view_frames and tf2_echo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-58/"><span class="mono">58</span>Where Is the Robot? Local and Global Localization</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-59/"><span class="mono">59</span>Odometry: Counting Steps to Know Where the Robot Is</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-60/"><span class="mono">60</span>Wheel Odometry and Encoders</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-61/"><span class="mono">61</span>Robot Speed from Wheel Encoders</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-62/"><span class="mono">62</span>Simple Controller: Robot Speed from Joint States</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-63/"><span class="mono">63</span>Robot Position and Orientation from the Wheels</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-64/"><span class="mono">64</span>Wheel Odometry: x, y and theta in the Simple Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-65/"><span class="mono">65</span>Publish Odometry Message</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-66/" aria-current="page"><span class="mono">66</span>Broadcast Odometry Transform</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-67/"><span class="mono">67</span>Probability Introduction</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-68/"><span class="mono">68</span>Probability Tools for Localization</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-69/"><span class="mono">69</span>Adding Noise to Robot Motion: the Noisy Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-70/"><span class="mono">70</span>Launch Noisy Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-71/"><span class="mono">71</span>Odometry Comparison</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-72/"><span class="mono">72</span>Advantages of Having Multiple Sensors</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-73/"><span class="mono">73</span>Gyroscope</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-74/"><span class="mono">74</span>Accelerometer and IMU</a></li>
+    </ol>
+  </aside>
+  <article class="rd-main">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/documented-software-learnings/">Library</a><span>/</span><a href="/documented-software-learnings/ros2/">ROS 2</a><span>/</span><span>66</span></nav>
+    <button class="btn btn-sm btn-line rd-tg" type="button" id="rd-tg">All chapters</button>
+<p class="sh-label mono"><span>66</span>Chapter 66 of 74</p>    <h1>Broadcast Odometry Transform</h1>
+<div class="rd-prog" aria-hidden="true"><i style="width:89.2%"></i></div>    <div class="prose"><div class="col"><h2 id="introduction">Introduction</h2><p>In chapter 65 the node <code>simple_controller</code> started to publish the robot's pose as an Odometry message on <code>bumperbot_controller/odom</code>. That message is for programs that want the pose and the speeds. Tools that follow <b>frames</b>, such as RViz, do not read it: they follow transforms on the <code>/tf</code> topic.</p><p>This chapter makes the same pose available there too. After publishing the Odometry message, the node copies the same <code>x_</code>, <code>y_</code> and the same quaternion <code>q</code> into a <b>transform</b> that says where the frame <code>base_footprint</code> is seen from the frame <code>odom</code>, and sends it with a <code>TransformBroadcaster</code>. Then RViz can show the frame of the robot moving while the robot drives in Gazebo.</p><ul><li><code>odom</code>: the frame fixed where the node started. It never moves.</li><li><code>base_footprint</code>: the frame of the robot. It moves and turns with the pose.</li></ul><p class="note">The node from chapter 65 must already build and run, with the Gazebo simulation and the controller launch file. This chapter changes <code>simple_controller.py</code> and adds one dependency, <code>tf2_ros</code>, to <code>CMakeLists.txt</code> and <code>package.xml</code>.</p><h3 id="where-the-pieces-come-from">Where the pieces come from</h3><div class="table-wrap"><table><tbody><tr><td>Idea</td><td>Where it was met</td><td>Section</td></tr><tr><td>the pose x_, y_, theta_ and the quaternion q</td><td>chapters 64 and 65</td><td><a href="/documented-software-learnings/ros2/ros2-65/#the-code">The code</a> and <a href="/documented-software-learnings/ros2/ros2-65/#theta-becomes-z-and-w">Theta becomes z and w</a></td></tr><tr><td>publishing a message from a node</td><td>chapter 65</td><td><a href="/documented-software-learnings/ros2/ros2-65/#what-is-new">What is new</a></td></tr><tr><td>a transform broadcaster, frame_id and child_frame_id</td><td>chapters 49 and 50</td><td><a href="/documented-software-learnings/ros2/ros2-49/#write-the-code">Write the code</a> and <a href="/documented-software-learnings/ros2/ros2-50/#how-the-code-works">How the code works</a></td></tr><tr><td>a transform that changes over time</td><td>chapter 57</td><td><a href="/documented-software-learnings/ros2/ros2-57/#the-moving-transform">The moving transform</a></td></tr><tr><td>RViz: fixed frame and the TF display</td><td>chapter 49</td><td><a href="/documented-software-learnings/ros2/ros2-49/#set-the-fixed-frame">Set the fixed frame</a>, <a href="/documented-software-learnings/ros2/ros2-49/#add-the-tf-display">Add the TF display</a> and <a href="/documented-software-learnings/ros2/ros2-49/#show-the-frame-names">Show the frame names</a></td></tr><tr><td>why odometry drifts</td><td>chapter 60</td><td><a href="/documented-software-learnings/ros2/ros2-60/#sd-s4x">When odometry goes wrong</a></td></tr></tbody></table></div></div><div class="col"><h2 id="writing-the-code">Writing the code</h2><h3 id="open-the-file">Open the file</h3><p>In VS Code, open <code>src</code>, then the <code>bumperbot_controller</code> package folder, then the <code>bumperbot_controller</code> folder inside it, and open <code>simple_controller.py</code>.</p><figure class="img sz-s al-l"><img src="/uploads/2026/11/image-63.png" alt="The VS Code explorer with src, bumperbot_controller, bumperbot_controller and simple_controller.py marked by a yellow arrow" loading="lazy"><figcaption>The path to simple_controller.py: src, bumperbot_controller, bumperbot_controller, simple_controller.py.</figcaption></figure><h3 id="the-code">The code</h3><p>The whole code, with the new lines added to chapter 65:</p><div class="codeblock" data-lang="Python"><pre class="code numbered"><code><span class="ln"><span class="tok-comment">#!/usr/bin/env python3</span></span>
+<span class="ln"><span class="tok-keyword">import</span> <span class="tok-namespace">rclpy</span></span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">rclpy</span><span class="tok-namespace">.</span><span class="tok-namespace">node</span> <span class="tok-keyword">import</span> Node</span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">rclpy</span><span class="tok-namespace">.</span><span class="tok-namespace">constants</span> <span class="tok-keyword">import</span> S_TO_NS</span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">rclpy</span><span class="tok-namespace">.</span><span class="tok-namespace">time</span> <span class="tok-keyword">import</span> Time</span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">std_msgs</span><span class="tok-namespace">.</span><span class="tok-namespace">msg</span> <span class="tok-keyword">import</span> Float64MultiArray</span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">geometry_msgs</span><span class="tok-namespace">.</span><span class="tok-namespace">msg</span> <span class="tok-keyword">import</span> TwistStamped</span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">sensor_msgs</span><span class="tok-namespace">.</span><span class="tok-namespace">msg</span> <span class="tok-keyword">import</span> JointState</span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">nav_msgs</span><span class="tok-namespace">.</span><span class="tok-namespace">msg</span> <span class="tok-keyword">import</span> Odometry</span>
+<span class="ln"><span class="tok-keyword">import</span> <span class="tok-namespace">numpy</span> <span class="tok-keyword">as</span> <span class="tok-namespace">np</span></span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">tf2_ros</span> <span class="tok-keyword">import</span> TransformBroadcaster</span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">geometry_msgs</span><span class="tok-namespace">.</span><span class="tok-namespace">msg</span> <span class="tok-keyword">import</span> TransformStamped</span>
+<span class="ln"><span class="tok-keyword">import</span> <span class="tok-namespace">math</span></span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">tf_transformations</span> <span class="tok-keyword">import</span> quaternion_from_euler</span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">class</span> <span class="tok-className">SimpleController</span><span class="tok-punctuation">(</span>Node<span class="tok-punctuation">)</span><span class="tok-punctuation">:</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-keyword">def</span> <span class="tok-definition">__init__</span><span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span></span>
+<span class="ln">        <span class="tok-typeName">super</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span><span class="tok-definition">__init__</span><span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">simple_controller</span><span class="tok-string">"</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>declare_parameter<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">wheel_radius</span><span class="tok-string">"</span><span class="tok-punctuation">,</span> <span class="tok-number">0.033</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>declare_parameter<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">wheel_separation</span><span class="tok-string">"</span><span class="tok-punctuation">,</span> <span class="tok-number">0.17</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_ <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_parameter<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">wheel_radius</span><span class="tok-string">"</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>get_parameter_value<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>double_value</span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_separation_ <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_parameter<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">wheel_separation</span><span class="tok-string">"</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>get_parameter_value<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>double_value</span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_logger<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>info<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">Using wheel radius </span><span class="tok-string">%f</span><span class="tok-string">"</span> <span class="tok-operator">%</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_<span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_logger<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>info<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">Using wheel separation </span><span class="tok-string">%f</span><span class="tok-string">"</span> <span class="tok-operator">%</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_separation_<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>left_wheel_prev_pos_ <span class="tok-operator">=</span> <span class="tok-number">0.0</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>right_wheel_prev_pos_ <span class="tok-operator">=</span> <span class="tok-number">0.0</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>x_ <span class="tok-operator">=</span> <span class="tok-number">0.0</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>y_ <span class="tok-operator">=</span> <span class="tok-number">0.0</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>theta_ <span class="tok-operator">=</span> <span class="tok-number">0.0</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_cmd_pub_ <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>create_publisher<span class="tok-punctuation">(</span>Float64MultiArray<span class="tok-punctuation">,</span> <span class="tok-string">"</span><span class="tok-string">simple_velocity_controller/commands</span><span class="tok-string">"</span><span class="tok-punctuation">,</span> <span class="tok-number">10</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>vel_sub_ <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>create_subscription<span class="tok-punctuation">(</span>TwistStamped<span class="tok-punctuation">,</span> <span class="tok-string">"</span><span class="tok-string">bumperbot_controller/cmd_vel</span><span class="tok-string">"</span><span class="tok-punctuation">,</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>velCallback<span class="tok-punctuation">,</span> <span class="tok-number">10</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>joint_sub_ <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>create_subscription<span class="tok-punctuation">(</span>JointState<span class="tok-punctuation">,</span><span class="tok-string">"</span><span class="tok-string">joint_states</span><span class="tok-string">"</span><span class="tok-punctuation">,</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>jointCallback<span class="tok-punctuation">,</span> <span class="tok-number">10</span><span class="tok-punctuation">)</span>        </span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>odom_pub_ <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>create_publisher<span class="tok-punctuation">(</span>Odometry<span class="tok-punctuation">,</span> <span class="tok-string">"</span><span class="tok-string">bumperbot_controller/odom</span><span class="tok-string">"</span><span class="tok-punctuation">,</span> <span class="tok-number">10</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>speed_conversion_ <span class="tok-operator">=</span> np<span class="tok-operator">.</span>array<span class="tok-punctuation">(</span><span class="tok-punctuation">[</span><span class="tok-punctuation">[</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_<span class="tok-operator">/</span><span class="tok-number">2</span><span class="tok-punctuation">,</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_<span class="tok-operator">/</span><span class="tok-number">2</span><span class="tok-punctuation">]</span><span class="tok-punctuation">,</span></span>
+<span class="ln">                                           <span class="tok-punctuation">[</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_<span class="tok-operator">/</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_separation_<span class="tok-punctuation">,</span> <span class="tok-operator">-</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_<span class="tok-operator">/</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_separation_<span class="tok-punctuation">]</span><span class="tok-punctuation">]</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_logger<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>info<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">The conversion matrix is </span><span class="tok-string">%s</span><span class="tok-string">"</span> <span class="tok-operator">%</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>speed_conversion_<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-comment"># Fill the Odometry message with invariant parameters</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>odom_msg_ <span class="tok-operator">=</span> Odometry<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>odom_msg_<span class="tok-operator">.</span>header<span class="tok-operator">.</span>frame_id <span class="tok-operator">=</span> <span class="tok-string">"</span><span class="tok-string">odom</span><span class="tok-string">"</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>odom_msg_<span class="tok-operator">.</span>child_frame_id <span class="tok-operator">=</span> <span class="tok-string">"</span><span class="tok-string">base_footprint</span><span class="tok-string">"</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>odom_msg_<span class="tok-operator">.</span>pose<span class="tok-operator">.</span>pose<span class="tok-operator">.</span>orientation<span class="tok-operator">.</span>x <span class="tok-operator">=</span> <span class="tok-number">0.0</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>odom_msg_<span class="tok-operator">.</span>pose<span class="tok-operator">.</span>pose<span class="tok-operator">.</span>orientation<span class="tok-operator">.</span>y <span class="tok-operator">=</span> <span class="tok-number">0.0</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>odom_msg_<span class="tok-operator">.</span>pose<span class="tok-operator">.</span>pose<span class="tok-operator">.</span>orientation<span class="tok-operator">.</span>z <span class="tok-operator">=</span> <span class="tok-number">0.0</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>odom_msg_<span class="tok-operator">.</span>pose<span class="tok-operator">.</span>pose<span class="tok-operator">.</span>orientation<span class="tok-operator">.</span>w <span class="tok-operator">=</span> <span class="tok-number">1.0</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-comment"># Fill the TF message</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>br_ <span class="tok-operator">=</span> TransformBroadcaster<span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>transform_stamped_ <span class="tok-operator">=</span> TransformStamped<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>transform_stamped_<span class="tok-operator">.</span>header<span class="tok-operator">.</span>frame_id <span class="tok-operator">=</span> <span class="tok-string">"</span><span class="tok-string">odom</span><span class="tok-string">"</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>transform_stamped_<span class="tok-operator">.</span>child_frame_id <span class="tok-operator">=</span> <span class="tok-string">"</span><span class="tok-string">base_footprint</span><span class="tok-string">"</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>prev_time_ <span class="tok-operator">=</span> <span class="tok-bool">None</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-keyword">def</span> <span class="tok-definition">velCallback</span><span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-punctuation">,</span> msg<span class="tok-punctuation">)</span><span class="tok-punctuation">:</span></span>
+<span class="ln">        robot_speed <span class="tok-operator">=</span> np<span class="tok-operator">.</span>array<span class="tok-punctuation">(</span><span class="tok-punctuation">[</span><span class="tok-punctuation">[</span>msg<span class="tok-operator">.</span>twist<span class="tok-operator">.</span>linear<span class="tok-operator">.</span>x<span class="tok-punctuation">]</span><span class="tok-punctuation">,</span></span>
+<span class="ln">                                <span class="tok-punctuation">[</span>msg<span class="tok-operator">.</span>twist<span class="tok-operator">.</span>angular<span class="tok-operator">.</span>z<span class="tok-punctuation">]</span><span class="tok-punctuation">]</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        wheel_speed <span class="tok-operator">=</span> np<span class="tok-operator">.</span>matmul<span class="tok-punctuation">(</span>np<span class="tok-operator">.</span>linalg<span class="tok-operator">.</span>inv<span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>speed_conversion_<span class="tok-punctuation">)</span><span class="tok-punctuation">,</span> robot_speed<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        wheel_speed_msg <span class="tok-operator">=</span> Float64MultiArray<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        wheel_speed_msg<span class="tok-operator">.</span>data <span class="tok-operator">=</span> <span class="tok-punctuation">[</span>wheel_speed<span class="tok-punctuation">[</span><span class="tok-number">1</span><span class="tok-punctuation">,</span> <span class="tok-number">0</span><span class="tok-punctuation">]</span><span class="tok-punctuation">,</span> wheel_speed<span class="tok-punctuation">[</span><span class="tok-number">0</span><span class="tok-punctuation">,</span> <span class="tok-number">0</span><span class="tok-punctuation">]</span><span class="tok-punctuation">]</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_cmd_pub_<span class="tok-operator">.</span>publish<span class="tok-punctuation">(</span>wheel_speed_msg<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-keyword">def</span> <span class="tok-definition">jointCallback</span><span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-punctuation">,</span> msg<span class="tok-punctuation">)</span><span class="tok-punctuation">:</span></span>
+<span class="ln">        now <span class="tok-operator">=</span> Time<span class="tok-operator">.</span>from_msg<span class="tok-punctuation">(</span>msg<span class="tok-operator">.</span>header<span class="tok-operator">.</span>stamp<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-comment"># First message, or sim time went backwards (e.g. sim reset): re-seed</span></span>
+<span class="ln">        <span class="tok-keyword">if</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>prev_time_ <span class="tok-operator">is</span> <span class="tok-bool">None</span> <span class="tok-operator">or</span> now <span class="tok-operator">&lt;</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>prev_time_<span class="tok-punctuation">:</span></span>
+<span class="ln">            <span class="tok-typeName">self</span><span class="tok-operator">.</span>left_wheel_prev_pos_ <span class="tok-operator">=</span> msg<span class="tok-operator">.</span>position<span class="tok-punctuation">[</span><span class="tok-number">0</span><span class="tok-punctuation">]</span></span>
+<span class="ln">            <span class="tok-typeName">self</span><span class="tok-operator">.</span>right_wheel_prev_pos_ <span class="tok-operator">=</span> msg<span class="tok-operator">.</span>position<span class="tok-punctuation">[</span><span class="tok-number">1</span><span class="tok-punctuation">]</span></span>
+<span class="ln">            <span class="tok-typeName">self</span><span class="tok-operator">.</span>prev_time_ <span class="tok-operator">=</span> now</span>
+<span class="ln">            <span class="tok-keyword">return</span></span>
+<span class="ln"></span>
+<span class="ln">        dt <span class="tok-operator">=</span> <span class="tok-punctuation">(</span>now <span class="tok-operator">-</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>prev_time_<span class="tok-punctuation">)</span><span class="tok-operator">.</span>nanoseconds <span class="tok-operator">/</span> S_TO_NS</span>
+<span class="ln">        <span class="tok-keyword">if</span> dt <span class="tok-operator">==</span> <span class="tok-number">0.0</span><span class="tok-punctuation">:</span>   <span class="tok-comment"># duplicate stamp</span></span>
+<span class="ln">            <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_logger<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>warn<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">Skipping joint state: duplicate stamp</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">                                throttle_duration_sec<span class="tok-operator">=</span><span class="tok-number">2.0</span><span class="tok-punctuation">)</span></span>
+<span class="ln">            <span class="tok-keyword">return</span></span>
+<span class="ln"></span>
+<span class="ln">        dp_left <span class="tok-operator">=</span> msg<span class="tok-operator">.</span>position<span class="tok-punctuation">[</span><span class="tok-number">0</span><span class="tok-punctuation">]</span> <span class="tok-operator">-</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>left_wheel_prev_pos_</span>
+<span class="ln">        dp_right <span class="tok-operator">=</span> msg<span class="tok-operator">.</span>position<span class="tok-punctuation">[</span><span class="tok-number">1</span><span class="tok-punctuation">]</span> <span class="tok-operator">-</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>right_wheel_prev_pos_</span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>left_wheel_prev_pos_ <span class="tok-operator">=</span> msg<span class="tok-operator">.</span>position<span class="tok-punctuation">[</span><span class="tok-number">0</span><span class="tok-punctuation">]</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>right_wheel_prev_pos_ <span class="tok-operator">=</span> msg<span class="tok-operator">.</span>position<span class="tok-punctuation">[</span><span class="tok-number">1</span><span class="tok-punctuation">]</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>prev_time_ <span class="tok-operator">=</span> now</span>
+<span class="ln"></span>
+<span class="ln">        fi_left <span class="tok-operator">=</span> dp_left <span class="tok-operator">/</span> dt</span>
+<span class="ln">        fi_right <span class="tok-operator">=</span> dp_right <span class="tok-operator">/</span> dt</span>
+<span class="ln"></span>
+<span class="ln">        linear <span class="tok-operator">=</span> <span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_ <span class="tok-operator">*</span> fi_right <span class="tok-operator">+</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_ <span class="tok-operator">*</span> fi_left<span class="tok-punctuation">)</span> <span class="tok-operator">/</span> <span class="tok-number">2</span></span>
+<span class="ln">        angular <span class="tok-operator">=</span> <span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_ <span class="tok-operator">*</span> fi_right <span class="tok-operator">-</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_ <span class="tok-operator">*</span> fi_left<span class="tok-punctuation">)</span> <span class="tok-operator">/</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_separation_</span>
+<span class="ln"></span>
+<span class="ln">        d_s <span class="tok-operator">=</span> <span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_ <span class="tok-operator">*</span> dp_right <span class="tok-operator">+</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_ <span class="tok-operator">*</span> dp_left<span class="tok-punctuation">)</span> <span class="tok-operator">/</span> <span class="tok-number">2</span></span>
+<span class="ln">        d_theta <span class="tok-operator">=</span> <span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_ <span class="tok-operator">*</span> dp_right <span class="tok-operator">-</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_ <span class="tok-operator">*</span> dp_left<span class="tok-punctuation">)</span> <span class="tok-operator">/</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_separation_</span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>theta_ <span class="tok-operator">+</span><span class="tok-operator">=</span> d_theta</span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>x_ <span class="tok-operator">+</span><span class="tok-operator">=</span> d_s <span class="tok-operator">*</span> math<span class="tok-operator">.</span>cos<span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>theta_<span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>y_ <span class="tok-operator">+</span><span class="tok-operator">=</span> d_s <span class="tok-operator">*</span> math<span class="tok-operator">.</span>sin<span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>theta_<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        q <span class="tok-operator">=</span> quaternion_from_euler<span class="tok-punctuation">(</span><span class="tok-number">0</span><span class="tok-punctuation">,</span> <span class="tok-number">0</span><span class="tok-punctuation">,</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>theta_<span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>odom_msg_<span class="tok-operator">.</span>header<span class="tok-operator">.</span>stamp <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_clock<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>now<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>to_msg<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>odom_msg_<span class="tok-operator">.</span>pose<span class="tok-operator">.</span>pose<span class="tok-operator">.</span>position<span class="tok-operator">.</span>x <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>x_</span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>odom_msg_<span class="tok-operator">.</span>pose<span class="tok-operator">.</span>pose<span class="tok-operator">.</span>position<span class="tok-operator">.</span>y <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>y_</span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>odom_msg_<span class="tok-operator">.</span>pose<span class="tok-operator">.</span>pose<span class="tok-operator">.</span>orientation<span class="tok-operator">.</span>x <span class="tok-operator">=</span> q<span class="tok-punctuation">[</span><span class="tok-number">0</span><span class="tok-punctuation">]</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>odom_msg_<span class="tok-operator">.</span>pose<span class="tok-operator">.</span>pose<span class="tok-operator">.</span>orientation<span class="tok-operator">.</span>y <span class="tok-operator">=</span> q<span class="tok-punctuation">[</span><span class="tok-number">1</span><span class="tok-punctuation">]</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>odom_msg_<span class="tok-operator">.</span>pose<span class="tok-operator">.</span>pose<span class="tok-operator">.</span>orientation<span class="tok-operator">.</span>z <span class="tok-operator">=</span> q<span class="tok-punctuation">[</span><span class="tok-number">2</span><span class="tok-punctuation">]</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>odom_msg_<span class="tok-operator">.</span>pose<span class="tok-operator">.</span>pose<span class="tok-operator">.</span>orientation<span class="tok-operator">.</span>w <span class="tok-operator">=</span> q<span class="tok-punctuation">[</span><span class="tok-number">3</span><span class="tok-punctuation">]</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>odom_msg_<span class="tok-operator">.</span>twist<span class="tok-operator">.</span>twist<span class="tok-operator">.</span>linear<span class="tok-operator">.</span>x <span class="tok-operator">=</span> linear</span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>odom_msg_<span class="tok-operator">.</span>twist<span class="tok-operator">.</span>twist<span class="tok-operator">.</span>angular<span class="tok-operator">.</span>z <span class="tok-operator">=</span> angular</span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>odom_pub_<span class="tok-operator">.</span>publish<span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>odom_msg_<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>transform_stamped_<span class="tok-operator">.</span>transform<span class="tok-operator">.</span>translation<span class="tok-operator">.</span>x <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>x_</span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>transform_stamped_<span class="tok-operator">.</span>transform<span class="tok-operator">.</span>translation<span class="tok-operator">.</span>y <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>y_</span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>transform_stamped_<span class="tok-operator">.</span>transform<span class="tok-operator">.</span>rotation<span class="tok-operator">.</span>x <span class="tok-operator">=</span> q<span class="tok-punctuation">[</span><span class="tok-number">0</span><span class="tok-punctuation">]</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>transform_stamped_<span class="tok-operator">.</span>transform<span class="tok-operator">.</span>rotation<span class="tok-operator">.</span>y <span class="tok-operator">=</span> q<span class="tok-punctuation">[</span><span class="tok-number">1</span><span class="tok-punctuation">]</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>transform_stamped_<span class="tok-operator">.</span>transform<span class="tok-operator">.</span>rotation<span class="tok-operator">.</span>z <span class="tok-operator">=</span> q<span class="tok-punctuation">[</span><span class="tok-number">2</span><span class="tok-punctuation">]</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>transform_stamped_<span class="tok-operator">.</span>transform<span class="tok-operator">.</span>rotation<span class="tok-operator">.</span>w <span class="tok-operator">=</span> q<span class="tok-punctuation">[</span><span class="tok-number">3</span><span class="tok-punctuation">]</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>transform_stamped_<span class="tok-operator">.</span>header<span class="tok-operator">.</span>stamp <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_clock<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>now<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>to_msg<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>br_<span class="tok-operator">.</span>sendTransform<span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>transform_stamped_<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">def</span> <span class="tok-definition">main</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span></span>
+<span class="ln">    rclpy<span class="tok-operator">.</span>init<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    simple_controller <span class="tok-operator">=</span> SimpleController<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln">    rclpy<span class="tok-operator">.</span>spin<span class="tok-punctuation">(</span>simple_controller<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    simple_controller<span class="tok-operator">.</span>destroy_node<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln">    rclpy<span class="tok-operator">.</span>shutdown<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">if</span> <span class="tok-variableName">__name__</span> <span class="tok-operator">==</span> <span class="tok-string">'</span><span class="tok-string">__main__</span><span class="tok-string">'</span><span class="tok-punctuation">:</span></span>
+<span class="ln">    main<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span></code></pre></div><h3 id="what-is-new">What is new</h3><ul><li><b>Lines 11 and 12:</b> <code>from tf2_ros import TransformBroadcaster</code> and <code>from geometry_msgs.msg import TransformStamped</code>: the tool that sends transforms and the message that holds one.</li><li><b>Lines 54 to 58:</b> set-up in <code>__init__</code>. The broadcaster <code>br_</code>, one empty <code>TransformStamped</code> called <code>transform_stamped_</code> and its two frame names, made once: <code>frame_id = "odom"</code> (the parent) and <code>child_frame_id = "base_footprint"</code> (the child), the same names as in the Odometry message.</li><li><b>Lines 120 to 127:</b> at the very end of <code>jointCallback</code>: the translation gets <code>x_</code> and <code>y_</code>, the rotation gets the same <code>q</code> as the Odometry message (no second conversion), the time stamp is set, and <code>sendTransform</code> sends it.</li></ul><p>Small changes that are not new ideas: the imports are in a different order, the line that logs the conversion matrix now sits right below the matrix (line 43), <code>prev_time_ = None</code> moved to the end of <code>__init__</code> (line 60), and the two log lines for the wheel radius and the wheel separation use <code>%f</code> (see the note below). Everything up to line 118 is the node of chapter 65.</p><p class="note">In the notes these two lines used <code>%d</code>. <code>%d</code> prints a whole number, so 0.033 and 0.17 would show as 0 in the log. The earlier chapters use <code>%f</code> (the log then shows 0.033000 and 0.170000), so the code above uses <code>%f</code>. The maths is not affected either way.</p><h3 id="the-same-numbers-twice">The same numbers, twice</h3><div class="table-wrap"><table><tbody><tr><td>What</td><td>Odometry message (chapter 65)</td><td>Transform (this chapter)</td></tr><tr><td>parent frame</td><td><code>header.frame_id = "odom"</code> (line 47)</td><td><code>header.frame_id = "odom"</code> (line 57)</td></tr><tr><td>child frame</td><td><code>child_frame_id = "base_footprint"</code> (line 48)</td><td><code>child_frame_id = "base_footprint"</code> (line 58)</td></tr><tr><td>position</td><td><code>pose.pose.position.x, y</code> = x_, y_ (lines 110, 111)</td><td><code>transform.translation.x, y</code> = x_, y_ (lines 120, 121)</td></tr><tr><td>turn</td><td><code>pose.pose.orientation</code> = q (lines 112 to 115)</td><td><code>transform.rotation</code> = q (lines 122 to 125)</td></tr><tr><td>speeds</td><td><code>twist</code> = linear, angular (lines 116, 117)</td><td>none: a transform has no speeds</td></tr><tr><td>sent with</td><td><code>odom_pub_.publish(...)</code> on bumperbot_controller/odom (line 118)</td><td><code>br_.sendTransform(...)</code> on /tf (line 127)</td></tr></tbody></table></div><p>Drag the time in the picture below. The numbers in the transform come from the same formulas as in chapter 64, and the frame <code>base_footprint</code> moves exactly as RViz will show it later in this chapter.</p><div class="widget"><iframe allow="fullscreen" allowfullscreen src="/widgets/claude-ros2-66-20261121-022000-odom-and-base-footprint.html" title="The frame base_footprint moves, the frame odom stays"></iframe></div><h3 id="add-the-dependency">Add the dependency</h3><p>The new import needs <code>tf2_ros</code>. First <code>CMakeLists.txt</code> in <code>bumperbot_controller</code>: add this line next to the other <code>find_package</code> lines.</p><div class="codeblock" data-lang="CMake"><pre class="code"><code><span class="ln"><span class="tok-typeName">find_package</span><span class="tok-punctuation">(</span><span class="tok-string">tf2_ros</span> <span class="tok-string">REQUIRED</span><span class="tok-punctuation">)</span></span></code></pre></div><figure class="img sz-l"><img src="/uploads/2026/11/image-87.png" alt="The VS Code explorer and CMakeLists.txt. Yellow arrows mark the bumperbot_controller folder, the CMakeLists.txt file and the new line find_package(tf2_ros REQUIRED) after find_package(std_msgs REQUIRED)." loading="lazy"><figcaption>CMakeLists.txt: the new line is the third arrow, at the end of the find_package lines.</figcaption></figure><p>Then <code>package.xml</code>: add this line next to the other <code>depend</code> lines.</p><div class="codeblock" data-lang="XML"><pre class="code"><code><span class="ln"><span class="tok-typeName">&lt;depend</span><span class="tok-typeName">&gt;</span>tf2_ros<span class="tok-typeName">&lt;/depend&gt;</span></span></code></pre></div><figure class="img "><img src="/uploads/2026/11/image-88.png" alt="The VS Code explorer and package.xml. A yellow arrow marks the file and another marks the new line depend tf2_ros, right after depend nav_msgs." loading="lazy"><figcaption>package.xml: the new line is <code>depend tf2_ros</code>, below the <code>nav_msgs</code> line of chapter 65.</figcaption></figure><h3 id="code-visualizer">Code visualizer</h3><p>Every line explained, with a step-by-step run, a map, bugs to try and a live picture of the robot filling both messages. Lines that did not change since chapter 65 keep their explanation; the new lines 4 and 5, 9, 11 and 12, 30 and 31, 43 to 45, 54 to 60 and 120 to 127 are the new part.</p><div class="widget"><iframe allow="fullscreen" allowfullscreen src="/widgets/claude-ros2-66-20261121-022000-simple-controller-transform-visualizer.html" title="Simple controller: broadcast the odometry transform, code visualizer"></iframe></div></div><div class="col"><h2 id="building-and-running">Building and running</h2><h3 id="terminal-1-build">Terminal 1: build</h3><p>Open a terminal and build the workspace:</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln"><span class="tok-typeName">cd</span> bumperbot_ws</span></code></pre></div><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">colcon build</span></code></pre></div><figure class="img sz-s al-l"><img src="/uploads/2026/11/image-77.png" alt="A terminal after colcon build. Five packages are finished and the last line reads Summary: 5 packages finished [3.42s]." loading="lazy"><figcaption>The build: five packages finished.</figcaption></figure><p class="caption">What you should see</p><div class="codeblock" data-lang="Plain text"><pre class="code"><code>Starting &gt;&gt;&gt; bumperbot_msgs
+Starting &gt;&gt;&gt; bumperbot_controller
+Starting &gt;&gt;&gt; bumperbot_cpp_examples
+Starting &gt;&gt;&gt; bumperbot_description
+Finished &lt;&lt;&lt; bumperbot_description [0.27s]
+Finished &lt;&lt;&lt; bumperbot_cpp_examples [0.41s]
+Finished &lt;&lt;&lt; bumperbot_msgs [0.90s]
+Starting &gt;&gt;&gt; bumperbot_py_examples
+Finished &lt;&lt;&lt; bumperbot_controller [2.01s]
+Finished &lt;&lt;&lt; bumperbot_py_examples [2.26s]
+
+Summary: 5 packages finished [3.42s]</code></pre></div><h3 id="terminal-2-the-simulation">Terminal 2: the simulation</h3><p>Open another terminal, source the workspace and start Gazebo with the robot:</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">. install/setup.bash</span></code></pre></div><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">ros2 launch bumperbot_description gazebo.launch.py</span></code></pre></div><figure class="img sz-m al-l"><img src="/uploads/2026/11/image-90.png" alt="Two terminals. The top one shows the build summary. In the bottom one, the commands source install/setup.bash and ros2 launch bumperbot_description gazebo.launch.py are typed." loading="lazy"><figcaption>Terminal 2: the Gazebo launch command.</figcaption></figure><h3 id="terminal-3-the-controllers-and-the-node">Terminal 3: the controllers and the node</h3><p>Open one more terminal and start the controllers, which also start <code>simple_controller</code>:</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">. install/setup.bash</span></code></pre></div><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">ros2 launch bumperbot_controller controller.launch.py</span></code></pre></div><figure class="img sz-l"><img src="/uploads/2026/11/image-91.png" alt="Three terminals. In the bottom one, install/setup.bash is sourced and ros2 launch bumperbot_controller controller.launch.py is typed." loading="lazy"><figcaption>Terminal 3: the launch command for the controllers and the node.</figcaption></figure></div><div class="col"><h2 id="looking-at-the-frames-in-rviz">Looking at the frames in RViz</h2><h3 id="terminal-4-start-rviz">Terminal 4: start RViz</h3><p>Open a fourth terminal, source the workspace and start RViz:</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">. install/setup.bash</span></code></pre></div><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">rviz2</span></code></pre></div><figure class="img sz-l"><img src="/uploads/2026/11/image-92.png" alt="Four terminals. The bottom one has install/setup.bash sourced and rviz2 typed, with a yellow arrow at the rviz2 command. Under it, RViz prints a line that Stereo is NOT SUPPORTED." loading="lazy"><figcaption>Terminal 4: rviz2 starts. The line "Stereo is NOT SUPPORTED" is only about 3D glasses, not an error.</figcaption></figure><h3 id="set-up-rviz">Set up RViz</h3><p>The numbers match the yellow numbers in the picture below.</p><ol><li>Change the <b>Fixed Frame</b> (under Global Options) to <code>odom</code>. This is the frame that does not move.</li><li>Click <b>Add</b> and add the <b>TF</b> display.</li><li>On the left, click the arrow of <b>TF</b> to open its options.</li><li>Tick <b>Show Names</b>.</li><li>Click the arrow of <b>Frames</b> to open the list of frames.</li><li>Tick <b>base_footprint</b>.</li><li>Tick <b>odom</b>.</li></ol><figure class="img sz-l"><img src="/uploads/2026/11/image-93.png" alt="RViz with seven yellow numbers: 1 the Fixed Frame set to odom, 2 the Add button, 3 the TF display, 4 Show Names ticked, 5 the Frames list, 6 base_footprint ticked, 7 odom ticked. The 3D view shows the frame base_footprint with red, green and blue axes." loading="lazy"><figcaption>RViz with the fixed frame odom and the frames base_footprint and odom ticked.</figcaption></figure><p>The two frames sit on top of each other, because the robot has not moved yet: x_, y_ and theta_ are all 0.</p><h3 id="terminal-5-turn-on-the-spot">Terminal 5: turn on the spot</h3><p>Open a fifth terminal, source the workspace and publish a command that only turns: linear speed 0, angular speed 0.5 rad/s.</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">. install/setup.bash</span></code></pre></div><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">ros2 topic pub /bumperbot_controller/cmd_vel geometry_msgs/msg/TwistStamped <span class="tok-string">'header:</span></span>
+<span class="ln"><span class="tok-string">  stamp:</span></span>
+<span class="ln"><span class="tok-string">    sec: 0</span></span>
+<span class="ln"><span class="tok-string">    nanosec: 0</span></span>
+<span class="ln"><span class="tok-string">  frame_id: '</span><span class="tok-string">'</span></span>
+<span class="ln"><span class="tok-string">twist:</span></span>
+<span class="ln"><span class="tok-string">  linear:</span></span>
+<span class="ln"><span class="tok-string">    x: 0.0</span></span>
+<span class="ln"><span class="tok-string">    y: 0.0</span></span>
+<span class="ln"><span class="tok-string">    z: 0.0</span></span>
+<span class="ln"><span class="tok-string">  angular:</span></span>
+<span class="ln"><span class="tok-string">    x: 0.0</span></span>
+<span class="ln"><span class="tok-string">    y: 0.0</span></span>
+<span class="ln"><span class="tok-string">    z: 0.5'</span></span></code></pre></div><figure class="img "><img src="/uploads/2026/11/image-94.png" alt="Five terminals. The bottom one has install/setup.bash sourced and the ros2 topic pub command typed over several lines, with a yellow arrow at the command and another at angular z 0.5." loading="lazy"><figcaption>Terminal 5: the command that turns the robot on the spot.</figcaption></figure><p>Look at RViz and Gazebo together. In Gazebo the robot turns on the spot. In RViz the frame <code>base_footprint</code> turns on the spot too, around the frame <code>odom</code>, and its origin stays where it is.</p><figure class="video"><div class="embed"><iframe src="https://www.youtube-nocookie.com/embed/rYC9Wp0CHt8?rel=0&amp;modestbranding=1&amp;playsinline=1" loading="lazy" title="Video" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div><figcaption>A recording of the turn on the spot: Gazebo and RViz side by side.</figcaption></figure><h3 id="drive-and-turn">Drive and turn</h3><p>Press Ctrl+C in terminal 5 and publish the command again with a forward speed as well: linear x 0.5 and angular z 0.5.</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">ros2 topic pub /bumperbot_controller/cmd_vel geometry_msgs/msg/TwistStamped <span class="tok-string">'header:</span></span>
+<span class="ln"><span class="tok-string">  stamp:</span></span>
+<span class="ln"><span class="tok-string">    sec: 0</span></span>
+<span class="ln"><span class="tok-string">    nanosec: 0</span></span>
+<span class="ln"><span class="tok-string">  frame_id: '</span><span class="tok-string">'</span></span>
+<span class="ln"><span class="tok-string">twist:</span></span>
+<span class="ln"><span class="tok-string">  linear:</span></span>
+<span class="ln"><span class="tok-string">    x: 0.5</span></span>
+<span class="ln"><span class="tok-string">    y: 0.0</span></span>
+<span class="ln"><span class="tok-string">    z: 0.0</span></span>
+<span class="ln"><span class="tok-string">  angular:</span></span>
+<span class="ln"><span class="tok-string">    z: 0.5'</span></span></code></pre></div><figure class="img sz-l"><img src="/uploads/2026/11/image-95.png" alt="A terminal after Ctrl+C. The ros2 topic pub command is typed again with linear x 0.5 and angular z 0.5." loading="lazy"><figcaption>Terminal 5: the command with linear x 0.5 and angular z 0.5.</figcaption></figure><p>Now the robot drives in Gazebo. In RViz only the frame <code>base_footprint</code> moves, along a circle, because the frame <code>odom</code> is the fixed frame and stays where the robot started. With V = 0.5 m/s and omega = 0.5 rad/s the radius is V ÷ omega = 0.5 ÷ 0.5 = 1 m (chapter 64).</p><figure class="video"><div class="embed"><iframe src="https://www.youtube-nocookie.com/embed/TJAQuj_fYw8?rel=0&amp;modestbranding=1&amp;playsinline=1" loading="lazy" title="Video" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div><figcaption>A recording of drive and turn: the robot in Gazebo and the frame base_footprint in RViz.</figcaption></figure></div><div class="col"><h2 id="remember">Remember</h2><ul><li>Chapter 65 sent the pose as an Odometry message on <code>bumperbot_controller/odom</code>. Frame tools such as RViz follow <b>transforms on /tf</b>, so this chapter sends the same pose as a transform too.</li><li>A <code>TransformBroadcaster</code> sends the transform. The <code>TransformStamped</code> message and the broadcaster are made <b>once</b> in <code>__init__</code>; the two frame names never change: parent <code>odom</code>, child <code>base_footprint</code>.</li><li>At the end of every <code>jointCallback</code> the translation gets <code>x_</code> and <code>y_</code>, the rotation gets the <b>same q</b> as the Odometry message, the time stamp is set, and <code>sendTransform</code> sends it.</li><li>The frame names in the transform must match those in the Odometry message, and RViz needs <code>odom</code> as its fixed frame, otherwise it reports that the frame does not exist.</li><li>In RViz only <code>base_footprint</code> moves; <code>odom</code> stays where the node started. Turning on the spot turns the frame; driving and turning moves it along a circle.</li><li>The new import needs <code>tf2_ros</code> as a <code>depend</code> in package.xml and a <code>find_package</code> in CMakeLists.txt.</li><li>The pose still drifts: a small error in the wheel radius or separation grows with the distance (chapter 60).</li></ul></div></div>
+    <nav class="pager" aria-label="Chapters">
+<a href="/documented-software-learnings/ros2/ros2-65/"><span class="mono">Chapter 65</span>Publish Odometry Message</a><a class="nx" href="/documented-software-learnings/ros2/ros2-67/"><span class="mono">Chapter 67</span>Probability Introduction</a>    </nav>
+  </article>
+</div>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a><a href="/documented-software-learnings/ultimaker-cura/">Ultimaker Cura</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=69fcf7c238" defer></script>
+<script src="/assets/home.js?v=69fcf7c238" defer></script>
+</body>
+</html>

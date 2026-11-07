@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wrong sizes, wrong path</title>
+<style>
+html,body{margin:0;background:#0e182c;color:#e8eef7;font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+.w{padding:12px 14px;max-width:1100px;margin:0 auto;background:#0e182c}
+.w.fs{max-width:none;height:100vh;overflow:auto;padding:14px 20px}
+.top{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+h1{font-size:18px;margin:0 0 4px}.sub{color:#a9b8cc;font-size:14px;margin:0 0 10px}
+.card{background:#13213a;border:1px solid #23395c;border-radius:12px;padding:14px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:8px 0}
+.btn{background:#1b2c4a;color:#e8eef7;border:1px solid #2b4366;border-radius:8px;padding:6px 12px;font:600 13px system-ui,sans-serif;cursor:pointer}
+.btn:hover,.btn.on{border-color:#ff8a3d}
+label.sl{display:block;font-size:14px;color:#cfe0f5;margin:6px 0 2px}
+input[type=range]{width:100%;accent-color:#ff8a3d}
+svg{width:100%;height:auto;display:block;max-height:300px}
+.w.fs svg{max-height:55vh}
+.say{background:#0f1b31;border:1px solid #23395c;border-radius:10px;padding:10px 12px;margin-top:10px;font-size:14.5px}
+.say code{font:13px ui-monospace,Consolas,monospace;color:#ffd9b8}
+.ok{color:#66e3b0}.bad{color:#ff6b6b}.warn{color:#ffd24a}.dim{color:#8ea2bb}
+.links{margin-top:10px;font-size:13.5px;color:#a9b8cc}.links a{color:#ff8a3d}
+</style></head><body><div class="w" id="wrap">
+<div class="top"><div><h1>Wrong wheel sizes, wrong path</h1>
+<p class="sub">The robot really drives 2 m, turns left 90 degrees and drives 1 m (green). The noisy node works out its odometry with the wrong sizes (orange). Change the two errors the launch file adds.</p></div>
+<button class="btn" id="fsb" aria-label="Show full screen. Press Escape to exit.">Full screen</button></div>
+<div class="card">
+<label class="sl">wheel_radius_error: <b id="rv"></b> mm (the radius is 33 mm)</label><input type="range" id="re" min="0" max="10" step="0.5" value="5" aria-label="radius error in millimetres">
+<label class="sl">wheel_separation_error: <b id="sv"></b> mm (the separation is 170 mm)</label><input type="range" id="se" min="0" max="40" step="1" value="20" aria-label="separation error in millimetres">
+<svg id="svg" viewBox="0 0 660 260" role="img" aria-label="Top view of the real path and the path the noisy odometry believes"></svg>
+<div class="say" id="say"></div>
+</div>
+<div class="links">Earlier chapters:
+<a href="/documented-software-learnings/ros2/ros2-64/#the-formulas" target="_blank" rel="noopener">chapter 64: how the sizes enter the odometry</a>,
+<a href="/documented-software-learnings/ros2/ros2-60/#sd-s4x" target="_blank" rel="noopener">chapter 60: when odometry goes wrong</a>.</div>
+</div>
+<script>
+(function(){
+var R=0.033,S=0.17;
+function $(i){return document.getElementById(i)}
+function f(v,d){var s=v.toFixed(d===undefined?3:d);return /^-0\.0+$/.test(s)?s.slice(1):s}
+var K=170,X0=60,Y0=210;
+function P(x,y){return [X0+x*K,Y0-y*K]}
+function draw(){
+  var er=+$('re').value/1000,es=+$('se').value/1000,r2=R+er,s2=S+es,kd=r2/R,kt=(r2/s2)/(R/S);
+  $('rv').textContent=f(er*1000,1);$('sv').textContent=f(es*1000,0);
+  /* real: 2 m forward, 90 degrees left, 1 m forward. noisy: distances times kd, the turn times kt */
+  var th=Math.PI/2*kt,bx=2*kd,by=0,ex=bx+1*kd*Math.cos(th),ey=by+1*kd*Math.sin(th);
+  var err=Math.hypot(ex-2,ey-1),g='',i;
+  for(i=0;i<=3;i++)g+='<line x1="'+P(i,0)[0]+'" y1="'+(Y0-4)+'" x2="'+P(i,0)[0]+'" y2="'+(Y0+4)+'" stroke="#a9b8cc"/><text x="'+P(i,0)[0]+'" y="'+(Y0+20)+'" fill="#8ea2bb" font-size="11" text-anchor="middle">'+i+' m</text>';
+  g+='<line x1="'+X0+'" y1="'+Y0+'" x2="'+P(3,0)[0]+'" y2="'+Y0+'" stroke="#2b4366" stroke-width="2"/>';
+  var a=P(0,0),b=P(2,0),c=P(2,1),d=P(bx,by),e=P(ex,ey);
+  g+='<polyline points="'+a+' '+b+' '+c+'" fill="none" stroke="#66e3b0" stroke-width="4"/><circle cx="'+c[0]+'" cy="'+c[1]+'" r="7" fill="#66e3b0"/>';
+  g+='<polyline points="'+a+' '+d+' '+e+'" fill="none" stroke="#ff8a3d" stroke-width="4" stroke-dasharray="9 5"/><circle cx="'+e[0]+'" cy="'+e[1]+'" r="7" fill="#ff8a3d"/>';
+  g+='<text x="'+(c[0]+12)+'" y="'+(c[1]+(ey>1?20:4))+'" fill="#66e3b0" font-size="13" font-weight="700">real end</text><text x="'+Math.min(e[0]+12,560)+'" y="'+(e[1]+(ey>1?4:20))+'" fill="#ff8a3d" font-size="13" font-weight="700">noisy end</text>';
+  g+='<text x="20" y="28" fill="#8ea2bb" font-size="12">top view, the start is the dot at the left, one square mark is 1 m</text>';
+  $('sv').textContent=f(es*1000,0);
+  $('svg').innerHTML=g;
+  $('say').innerHTML='Radius '+f(r2)+' m and separation '+f(s2)+' m (exact: 0.033 and 0.170). Every distance is stretched by '+f(r2,3)+' ÷ 0.033 = <b>'+f(kd,4)+'</b>, and every turn by ('+f(r2,3)+' ÷ '+f(s2,3)+') ÷ (0.033 ÷ 0.170) = <b>'+f(kt,4)+'</b>, so the 90 degree turn reads <b>'+f(90*kt,2)+'°</b>.<br>The noisy odometry ends at ('+f(ex,3)+', '+f(ey,3)+') m instead of (2.000, 1.000) m: off by <b>'+f(err,3)+' m</b>. The real robot is not affected: the errors only live inside the noisy node.'}
+$('re').oninput=draw;$('se').oninput=draw;draw();
+(function(){
+  var W=$('wrap'),B=$('fsb'),pseudo=false;
+  function isFs(){return !!(document.fullscreenElement||document.webkitFullscreenElement)}
+  function on(p){W.classList.add('fs');if(p){W.style.position='fixed';W.style.inset='0';W.style.zIndex='99';pseudo=true}B.textContent='Exit full screen'}
+  function off(){W.classList.remove('fs');W.style.position='';W.style.inset='';W.style.zIndex='';pseudo=false;B.textContent='Full screen'}
+  B.onclick=function(){
+    if(W.classList.contains('fs')){if(isFs())(document.exitFullscreen||document.webkitExitFullscreen).call(document);off();return}
+    var fn=W.requestFullscreen||W.webkitRequestFullscreen;
+    if(fn){try{var r=fn.call(W);if(r&&r.then)r.then(function(){on(false)},function(){on(true)});else on(false)}catch(e){on(true)}}else on(true)};
+  document.addEventListener('fullscreenchange',function(){if(!isFs()&&!pseudo)off()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&pseudo)off()});
+})();
+})();
+</script>
+<script>
+(function(){function s(){parent.postMessage({taWidget:location.pathname,h:document.documentElement.scrollHeight},'*')}
+new ResizeObserver(s).observe(document.documentElement);addEventListener('load',s);setInterval(s,1500);})();
+</script></body></html>

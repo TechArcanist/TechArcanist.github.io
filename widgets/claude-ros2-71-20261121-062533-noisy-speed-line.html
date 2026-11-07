@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Why the noisy speed vibrates</title>
+<style>
+html,body{margin:0;background:#0e182c;color:#e8eef7;font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+.w{padding:12px 14px;max-width:1100px;margin:0 auto;background:#0e182c}
+.w.fs{max-width:none;height:100vh;overflow:auto;padding:14px 20px}
+.top{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+h1{font-size:18px;margin:0 0 4px}.sub{color:#a9b8cc;font-size:14px;margin:0 0 10px}
+.card{background:#13213a;border:1px solid #23395c;border-radius:12px;padding:14px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:8px 0}
+.btn{background:#1b2c4a;color:#e8eef7;border:1px solid #2b4366;border-radius:8px;padding:6px 12px;font:600 13px system-ui,sans-serif;cursor:pointer}
+.btn:hover,.btn.on{border-color:#ff8a3d}
+label.sl{display:block;font-size:14px;color:#cfe0f5;margin:6px 0 2px}
+input[type=range]{width:100%;accent-color:#ff8a3d}
+svg{width:100%;height:auto;display:block;max-height:280px}
+.w.fs svg{max-height:55vh}
+.say{background:#0f1b31;border:1px solid #23395c;border-radius:10px;padding:10px 12px;margin-top:10px;font-size:14.5px}
+.ok{color:#66e3b0}.bad{color:#ff6b6b}.warn{color:#ffd24a}.dim{color:#8ea2bb}
+.links{margin-top:10px;font-size:13.5px;color:#a9b8cc}.links a{color:#ff8a3d}
+</style></head><body><div class="w" id="wrap">
+<div class="top"><div><h1>Why the noisy speed vibrates</h1>
+<p class="sub">The noisy node adds a small random number to every wheel angle. Speed is a change of angle divided by a short time, so the small numbers become big jumps. Change the noise and the time between readings.</p></div>
+<button class="btn" id="fsb" aria-label="Show full screen. Press Escape to exit.">Full screen</button></div>
+<div class="card">
+<div class="row"><button class="btn on" id="m0">Robot standing still</button><button class="btn" id="m1">Robot driving at 0.5 m/s</button></div>
+<label class="sl">noise added to each wheel angle: <b id="nv"></b> rad (the node of chapter 69 uses 0.005)</label><input type="range" id="ns" min="0" max="0.01" step="0.0005" value="0.005" aria-label="noise in radians">
+<label class="sl">time between two readings: <b id="tv"></b> s (the simulation gives about 0.01)</label><input type="range" id="dt" min="0.005" max="0.05" step="0.005" value="0.01" aria-label="time between readings in seconds">
+<svg id="svg" viewBox="0 0 660 260" role="img" aria-label="The clean linear speed and the noisy linear speed over 100 readings"></svg>
+<div class="say" id="say"></div>
+</div>
+<div class="links">Earlier chapters:
+<a href="/documented-software-learnings/ros2/ros2-62/#the-formulas" target="_blank" rel="noopener">chapter 62: the formulas for the speeds</a>,
+<a href="/documented-software-learnings/ros2/ros2-60/#sd-s4x" target="_blank" rel="noopener">chapter 60: when odometry goes wrong</a>.</div>
+</div>
+<script>
+(function(){
+var R=0.033,N=100,MODE=0;
+function $(i){return document.getElementById(i)}
+function f(v,d){var s=v.toFixed(d===undefined?4:d);return /^-0\.0+$/.test(s)?s.slice(1):s}
+/* fixed random numbers, so the picture never jumps: two noisy wheels, N+1 readings each */
+var Z=(function(){var s=12345,a=[],i;function r(){s=(s*1103515245+12345)%2147483648;return s/2147483648}
+  for(i=0;i<2*(N+1);i++){var u=Math.max(r(),1e-6),v=r();a.push(Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v))}return a})();
+function series(sg,dt,v0){var out=[],k,L=v0/R*dt;           /* clean wheel angle change per reading = v0 / R x dt */
+  for(k=1;k<=N;k++){var nl=sg*(Z[k]-Z[k-1]),nr=sg*(Z[N+1+k]-Z[N+1+k-1]);            /* noise of the change = noise now minus noise before */
+    var fl=(L+nl)/dt,fr=(L+nr)/dt;out.push(R*fr/2+R*fl/2)}
+  return out}
+function draw(){
+  var sg=+$('ns').value,dt=+$('dt').value,v0=MODE?0.5:0,s=series(sg,dt,v0),i,g='',m=0,sd=0;
+  $('nv').textContent=f(sg,4);$('tv').textContent=f(dt,3);
+  s.forEach(function(x){m+=x});m/=N;s.forEach(function(x){sd+=(x-m)*(x-m)});sd=Math.sqrt(sd/N);
+  var th=R*sg/dt,span=Math.max(0.05,th*3.4),y0=v0;
+  function X(k){return 60+k/N*580}function Y(v){return 130-(v-y0)/span*100}
+  for(i=-2;i<=2;i++){var v=y0+i*span/2;g+='<line x1="56" y1="'+Y(v)+'" x2="640" y2="'+Y(v)+'" stroke="#1b2c4a"/><text x="52" y="'+(Y(v)+4)+'" fill="#8ea2bb" font-size="10" text-anchor="end">'+f(v,3)+'</text>'}
+  g+='<line x1="60" y1="'+Y(y0)+'" x2="640" y2="'+Y(y0)+'" stroke="#66e3b0" stroke-width="3"/>';
+  g+='<polyline fill="none" stroke="#ff8a3d" stroke-width="1.8" points="'+s.map(function(v,k){return X(k+1).toFixed(1)+','+Math.max(8,Math.min(252,Y(v))).toFixed(1)}).join(' ')+'"/>';
+  g+='<text x="60" y="256" fill="#8ea2bb" font-size="11">reading number (1 to '+N+')</text><text x="640" y="14" fill="#8ea2bb" font-size="11" text-anchor="end">linear speed, m/s (green: real, orange: noisy)</text>';
+  $('svg').innerHTML=g;
+  $('say').innerHTML='<b>Working.</b> Each wheel angle gets a random number of size '+f(sg,4)+' rad. The change between two readings (dp) is the new angle minus the old one, so it carries the noise of two readings, about √2 × '+f(sg,4)+' = '+f(Math.SQRT2*sg,4)+' rad. A wheel speed is dp ÷ dt = '+f(Math.SQRT2*sg,4)+' ÷ '+f(dt,3)+' = '+f(Math.SQRT2*sg/dt,3)+' rad/s. The linear speed is (r × right + r × left) ÷ 2, which gives a spread of r × noise ÷ dt = 0.033 × '+f(sg,4)+' ÷ '+f(dt,3)+' = <b>'+f(th,4)+' m/s</b>.<br>The orange line above has a measured spread of '+f(sd,4)+' m/s, and its mean is '+f(m,4)+' m/s ('+(MODE?'the robot really drives at 0.5 m/s':'the robot is really standing still')+'). The real robot is not noisy: only the numbers of this node vibrate (as far as I know this is how the noisy node of chapter 69 gets its noise).'}
+function setm(m){MODE=m;$('m0').classList.toggle('on',m===0);$('m1').classList.toggle('on',m===1);draw()}
+$('m0').onclick=function(){setm(0)};$('m1').onclick=function(){setm(1)};$('ns').oninput=draw;$('dt').oninput=draw;draw();
+(function(){
+  var W=$('wrap'),B=$('fsb'),pseudo=false;
+  function isFs(){return !!(document.fullscreenElement||document.webkitFullscreenElement)}
+  function on(p){W.classList.add('fs');if(p){W.style.position='fixed';W.style.inset='0';W.style.zIndex='99';pseudo=true}B.textContent='Exit full screen'}
+  function off(){W.classList.remove('fs');W.style.position='';W.style.inset='';W.style.zIndex='';pseudo=false;B.textContent='Full screen'}
+  B.onclick=function(){
+    if(W.classList.contains('fs')){if(isFs())(document.exitFullscreen||document.webkitExitFullscreen).call(document);off();return}
+    var fn=W.requestFullscreen||W.webkitRequestFullscreen;
+    if(fn){try{var r=fn.call(W);if(r&&r.then)r.then(function(){on(false)},function(){on(true)});else on(false)}catch(e){on(true)}}else on(true)};
+  document.addEventListener('fullscreenchange',function(){if(!isFs()&&!pseudo)off()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&pseudo)off()});
+})();
+})();
+</script>
+<script>
+(function(){function s(){parent.postMessage({taWidget:location.pathname,h:document.documentElement.scrollHeight},'*')}
+new ResizeObserver(s).observe(document.documentElement);addEventListener('load',s);setInterval(s,1500);})();
+</script></body></html>

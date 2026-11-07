@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Moving base, fixed top plate</title>
+<style>
+:root{--bg:#0e182c;--panel:#14223d;--line:#2a3b5f;--text:#e8eef9;--dim:#9aabc9;--or:#ff9f43;--or2:#ffc078;--bl:#5aa9ff;--gr:#4cc38a;--rd:#ff6b6b}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.w{max-width:900px;margin:0 auto;padding:16px}
+h3{margin:0 0 4px;font-size:1.05rem}
+p.s{margin:0 0 12px;color:var(--dim);font-size:.9rem}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px}
+svg{display:block;width:100%;height:auto}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}
+button{font:inherit;font-weight:600;color:var(--bg);background:var(--or);border:0;border-radius:999px;padding:8px 16px;cursor:pointer}
+button.g{background:transparent;color:var(--text);border:1px solid var(--line)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--or2);outline-offset:2px}
+label{display:flex;align-items:center;gap:8px;font-size:.88rem;color:var(--dim)}
+input[type=range]{flex:1;min-width:160px;accent-color:var(--or)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:12px}
+.st{background:#0f1b33;border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.st b{display:block;font-size:1.1rem;color:var(--or2);font-variant-numeric:tabular-nums}
+.st span{font-size:.78rem;color:var(--dim)}
+.note{margin-top:10px;font-size:.88rem;color:var(--dim)}
+.note b{color:var(--text)}
+</style>
+</head>
+<body>
+<div class="w">
+<h3>The base drives, the top plate rides along</h3>
+<p class="s">Every 0.1 s the timer adds 0.05 m to the base position (lines 47 and 58). The top plate is always 0.3 m above the base, because the static transform never changes. Press Play, or drag the time.</p>
+<div class="card">
+<svg id="sv" viewBox="0 0 760 330" role="img" aria-label="Side view: odom, the moving base and the top plate, and the frame tree"></svg>
+<div class="row">
+<button id="play">Play</button>
+<button class="g" id="reset">Reset</button>
+<label>time <input type="range" id="t" min="0" max="10" step="0.1" value="0" aria-label="time in seconds"><b id="tv">0.0 s</b></label>
+</div>
+<div class="row">
+<label><input type="checkbox" id="fix"> look from the robot (RViz Fixed Frame = bumperbot_base)</label>
+<label><input type="checkbox" id="mem"> forget line 58 (x is not remembered)</label>
+</div>
+<div class="stats">
+<div class="st"><b id="sTicks">0</b><span>timer ticks so far</span></div>
+<div class="st"><b id="sX">0.00 m</b><span>base position x in odom</span></div>
+<div class="st"><b id="sTop">(0.00, 0, 0.30)</b><span>top plate in odom</span></div>
+<div class="st"><b id="sMsg">1 + 0</b><span>messages: /tf_static + /tf</span></div>
+</div>
+<p class="note" id="note"></p>
+</div>
+</div>
+<script>
+(function(){
+var T=0,timer=null,sv=document.getElementById('sv');
+var C={bg:'#0e182c',line:'#2a3b5f',text:'#e8eef9',dim:'#9aabc9',or:'#ff9f43',or2:'#ffc078',bl:'#5aa9ff',gr:'#4cc38a',rd:'#ff6b6b'};
+function el(id){return document.getElementById(id)}
+function tx(x,y,s,c,a,sz,w){return '<text x="'+x+'" y="'+y+'" fill="'+c+'" font-size="'+(sz||13)+'" font-weight="'+(w||600)+'" text-anchor="'+(a||'start')+'" font-family="system-ui,sans-serif">'+s+'</text>'}
+function ar(x0,y0,x1,y1,c){var dx=x1-x0,dy=y1-y0,l=Math.sqrt(dx*dx+dy*dy)||1,ux=dx/l,uy=dy/l,h=8;return '<line x1="'+x0+'" y1="'+y0+'" x2="'+(x1-ux*h*.8)+'" y2="'+(y1-uy*h*.8)+'" stroke="'+c+'" stroke-width="3" stroke-linecap="round"/><polygon points="'+x1+','+y1+' '+(x1-ux*h-uy*h*.55)+','+(y1-uy*h+ux*h*.55)+' '+(x1-ux*h+uy*h*.55)+','+(y1-uy*h-ux*h*.55)+'" fill="'+c+'"/>'}
+function draw(){
+  var fix=el('fix').checked,mem=el('mem').checked,ticks=Math.floor(T/0.1+1e-9),x=ticks===0?0:(mem?0.05:ticks*0.05);
+  var sc=85,gy=230,ox=fix?250-x*sc:40,bx=fix?250:40+Math.min(x,5.3)*sc,ty=gy-0.3*260,h='';
+  h+='<rect x="0" y="0" width="760" height="330" fill="'+C.bg+'"/>';
+  h+='<rect x="6" y="6" width="500" height="318" rx="12" fill="#101d36" stroke="'+C.line+'"/>';
+  h+=tx(20,30,'Side view'+(fix?' (seen from the robot)':' (seen from odom)'),C.text,'start',13,700);
+  h+='<line x1="16" y1="'+gy+'" x2="496" y2="'+gy+'" stroke="'+C.line+'" stroke-width="2"/>';
+  for(var m=0;m<=6;m++){var mx=ox+m*sc;if(mx>12&&mx<500)h+='<line x1="'+mx+'" y1="'+(gy-4)+'" x2="'+mx+'" y2="'+(gy+4)+'" stroke="'+C.dim+'" stroke-width="2"/>'+tx(mx,gy+20,m+' m',C.dim,'middle',11,500)}
+  if(ox>-60&&ox<520)h+=ar(ox,gy,ox+44,gy,C.gr)+ar(ox,gy,ox,gy-44,C.bl)+tx(ox+4,gy+40,'odom (never moves)',C.text,'start',12,600);
+  if(ticks>0){
+    if(!fix)h+='<line x1="'+ox+'" y1="'+(gy+58)+'" x2="'+bx+'" y2="'+(gy+58)+'" stroke="'+C.or+'" stroke-width="3" stroke-dasharray="6 5"/>'+tx(Math.max(ox+60,Math.min((ox+bx)/2,420)),gy+78,'x = '+x.toFixed(2)+' m'+(x>5.3?' (off the picture)':''),C.or2,'middle',12,700);
+    h+='<rect x="'+(bx-30)+'" y="'+(gy-20)+'" width="60" height="20" rx="5" fill="#1d2b4a" stroke="'+C.or+'" stroke-width="2"/>'+ar(bx,gy-10,bx+40,gy-10,C.gr)+tx(bx+36,gy-26,'bumperbot_base',C.text,'start',12,600);
+    h+='<line x1="'+bx+'" y1="'+(gy-20)+'" x2="'+bx+'" y2="'+(ty+6)+'" stroke="'+C.or2+'" stroke-width="2" stroke-dasharray="4 4"/>'+ar(bx,ty,bx+36,ty,C.gr)+ar(bx,ty,bx,ty-36,C.bl)+tx(bx+8,ty-42,'bumperbot_top',C.text,'start',12,600)+tx(bx+8,(gy-20+ty)/2+4,'0.3 m',C.or2,'start',11,700);
+  }else h+=tx(140,gy-60,'Press Play: the first tick comes after 0.1 s',C.dim,'start',13,600);
+  var X=530;
+  h+='<rect x="'+(X-14)+'" y="6" width="248" height="318" rx="12" fill="#101d36" stroke="'+C.line+'"/>';
+  h+=tx(X,30,'The frame tree',C.text,'start',13,700);
+  function node(y,label,sub,col){return '<rect x="'+X+'" y="'+y+'" width="216" height="46" rx="10" fill="#14223d" stroke="'+col+'" stroke-width="2"/>'+tx(X+108,y+20,label,C.text,'middle',13,700)+tx(X+108,y+37,sub,C.dim,'middle',11,500)}
+  h+=node(48,'odom','the root, fixed in the world',C.bl);
+  h+=ar(X+108,94,X+108,128,ticks>0?C.or:C.line)+tx(X+118,116,ticks>0?'/tf, every 0.1 s':'/tf: nothing yet',ticks>0?C.or2:C.dim,'start',11,700);
+  h+=node(130,'bumperbot_base',ticks>0?'x = '+x.toFixed(2)+' m (changes)':'unknown until the first tick',C.or);
+  h+=ar(X+108,176,X+108,210,C.gr)+tx(X+118,198,'/tf_static, once',C.gr,'start',11,700);
+  h+=node(212,'bumperbot_top','always 0.3 m above the base',C.gr);
+  h+=tx(X,292,'lines 45-46 make the upper arrow,',C.dim,'start',11,500)+tx(X,308,'lines 23-24 the lower one.',C.dim,'start',11,500);
+  sv.innerHTML=h;
+  el('tv').textContent=T.toFixed(1)+' s';el('t').value=T;
+  el('sTicks').textContent=ticks;el('sX').textContent=x.toFixed(2)+' m';el('sTop').textContent=ticks>0?'('+x.toFixed(2)+', 0, 0.30)':'not known yet';el('sMsg').textContent='1 + '+ticks;
+  el('note').innerHTML=mem&&ticks>1?'<b>Without line 58</b> every tick computes 0.0 + 0.05, so the base jumps to 0.05 m once and then stands still. No error is printed.':(fix?'<b>Seen from the robot</b> the base stays in the middle and odom slides backwards. Same data, different point of view: that is why your notes set the Fixed Frame to odom.':'Speed = 0.05 m every 0.1 s = <b>0.5 m per second</b>. The top plate moves too, without any new message about it: tf2 simply chains the two transforms.');
+}
+function stop(){if(timer){clearInterval(timer);timer=null}el('play').textContent='Play'}
+el('play').onclick=function(){if(timer){stop();return}if(T>=10)T=0;el('play').textContent='Pause';timer=setInterval(function(){T=Math.round((T+0.1)*10)/10;if(T>=10){T=10;stop()}draw()},100)};
+el('reset').onclick=function(){stop();T=0;draw()};
+el('t').oninput=function(){stop();T=+this.value;draw()};
+el('fix').onchange=draw;el('mem').onchange=draw;
+draw();
+})();
+</script>
+<script>
+(function(){function s(){parent.postMessage({taWidget:location.pathname,h:document.documentElement.scrollHeight},'*')}
+new ResizeObserver(s).observe(document.documentElement);addEventListener('load',s);setInterval(s,1500);})();
+</script></body>
+</html>

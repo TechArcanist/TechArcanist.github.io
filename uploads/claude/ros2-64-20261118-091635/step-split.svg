@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 330" role="img" aria-label="One step d_s drawn at the heading theta. Its share along x is d_s times cos theta and its share along y is d_s times sin theta.">
+<rect width="760" height="330" rx="14" fill="#0e182c"/>
+<defs>
+<marker id="ao" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#ff8a3d"/></marker>
+<marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5ab4ff"/></marker>
+<marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#66e3b0"/></marker>
+<marker id="ay" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#ffd24a"/></marker>
+</defs>
+<g font-family="system-ui,Segoe UI,Roboto,sans-serif">
+<text x="24" y="32" fill="#a9b8cc" font-size="14">One step d_s at the heading theta, split into its x share and its y share. Not to scale.</text>
+<line x1="40" y1="250" x2="360" y2="250" stroke="#2b4366" stroke-width="2" marker-end="url(#ab)"/>
+<line x1="110" y1="290" x2="110" y2="60" stroke="#2b4366" stroke-width="2" marker-end="url(#ag)"/>
+<text x="364" y="254" fill="#5ab4ff" font-size="13">x</text>
+<text x="110" y="56" fill="#66e3b0" font-size="13" text-anchor="middle">y</text>
+<line x1="110" y1="250" x2="259.7" y2="250" stroke="#5ab4ff" stroke-width="5"/>
+<line x1="259.7" y1="250" x2="259.7" y2="133.0" stroke="#66e3b0" stroke-width="5"/>
+<line x1="110" y1="250" x2="259.7" y2="133.0" stroke="#ff8a3d" stroke-width="5" marker-end="url(#ao)"/>
+<circle cx="110" cy="250" r="6" fill="#e8eef7"/>
+<path d="M 170 250 A 60 60 0 0 0 157.3 213.1" fill="none" stroke="#ffd24a" stroke-width="2"/>
+<text x="176" y="236" fill="#ffd24a" font-size="15" font-weight="700">theta</text>
+<text x="176.9" y="183.5" fill="#ff8a3d" font-size="14" font-weight="700" text-anchor="end">d_s</text>
+<text x="184.9" y="272" fill="#5ab4ff" font-size="13" text-anchor="middle" font-weight="700">d_s × cos(theta)</text>
+<text x="269.7" y="195.5" fill="#66e3b0" font-size="13" font-weight="700">d_s × sin(theta)</text>
+<rect x="450" y="60" width="292" height="236" rx="10" fill="#0f1b31" stroke="#23395c"/>
+<text x="466" y="90" fill="#5ab4ff" font-size="12.5" font-weight="600" font-family="ui-monospace,Menlo,Consolas,monospace">x&#160;=&#160;x&#160;+&#160;d_s&#160;×&#160;cos(theta)</text>
+<text x="466" y="112" fill="#66e3b0" font-size="12.5" font-weight="600" font-family="ui-monospace,Menlo,Consolas,monospace">y&#160;=&#160;y&#160;+&#160;d_s&#160;×&#160;sin(theta)</text>
+<text x="466" y="156" fill="#a9b8cc" font-size="12.5" font-weight="400">An example from the screen:</text>
+<text x="466" y="178" fill="#e8eef7" font-size="12.5" font-weight="600" font-family="ui-monospace,Menlo,Consolas,monospace">theta&#160;=&#160;198.530&#160;rad</text>
+<text x="466" y="200" fill="#a9b8cc" font-size="12.5" font-weight="400">(31 full turns + 3.7513 rad)</text>
+<text x="466" y="222" fill="#e8eef7" font-size="12.5" font-weight="600" font-family="ui-monospace,Menlo,Consolas,monospace">cos&#160;=&#160;-0.819841,&#160;sin&#160;=&#160;-0.572591</text>
+<text x="466" y="244" fill="#e8eef7" font-size="12.5" font-weight="600" font-family="ui-monospace,Menlo,Consolas,monospace">d_s&#160;=&#160;0.005&#160;m</text>
+<text x="466" y="266" fill="#5ab4ff" font-size="12.5" font-weight="600" font-family="ui-monospace,Menlo,Consolas,monospace">x&#160;changes&#160;by&#160;-0.004099&#160;m</text>
+<text x="466" y="288" fill="#66e3b0" font-size="12.5" font-weight="600" font-family="ui-monospace,Menlo,Consolas,monospace">y&#160;changes&#160;by&#160;-0.002863&#160;m</text>
+</g></svg>

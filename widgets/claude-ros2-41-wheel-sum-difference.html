@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Add for speed, subtract for turning</title>
+<style>
+html,body{margin:0;background:#0e182c;color:#e8eef7;font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+.w{padding:16px;max-width:980px;margin:0 auto}
+h1{font-size:18px;margin:0 0 4px}.sub{color:#a9b8cc;font-size:14px;margin:0 0 12px}
+.card{background:#13213a;border:1px solid #23395c;border-radius:12px;padding:14px}
+.grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:14px}
+@media (max-width:760px){.grid{grid-template-columns:1fr}}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:6px 0}
+.btn{background:#1b2c4a;color:#e8eef7;border:1px solid #2b4366;border-radius:8px;padding:5px 10px;font:600 12.5px system-ui,sans-serif;cursor:pointer}
+.btn:hover,.btn.on{border-color:#ff8a3d}
+label.s{display:block;font-size:13.5px;color:#cfe0f5;margin-top:8px}
+label.s b{color:#ffd9bf}
+input[type=range]{width:100%;accent-color:#ff8a3d}
+svg{width:100%;height:auto;display:block}
+.work{background:#060c18;border:1px solid #1f3352;border-radius:8px;padding:10px 12px;font:13px/1.75 ui-monospace,Consolas,monospace;color:#cfe0f5;white-space:pre-wrap}
+.say{background:#0f1b31;border:1px solid #23395c;border-radius:10px;padding:10px 12px;margin-top:10px;font-size:14.5px}
+.ok{color:#66e3b0}.or{color:#ff8a3d}.bl{color:#5ab4ff}.dim{color:#6b7f96}
+</style></head><body><div class="w">
+<h1>Add for speed, subtract for turning</h1>
+<p class="sub">Set how fast each wheel turns. The middle of the robot moves at the average of the two wheel speeds (add, then halve), and the robot turns by how much faster one side is than the other (subtract, then divide by the gap between the wheels).</p>
+<div class="card">
+<div class="row"><span class="dim">try:</span><button class="btn" data-p="5,5">same speed</button><button class="btn" data-p="6,4">right faster</button><button class="btn" data-p="4,6">left faster</button><button class="btn" data-p="5,-5">opposite</button><button class="btn" data-p="5,0">left stopped</button></div>
+<div class="grid">
+<div>
+<label class="s">right wheel φ̇R: <b id="rv"></b> rad/s<input type="range" id="r" min="-10" max="10" step="0.5" value="6"></label>
+<label class="s">left wheel φ̇L: <b id="lv"></b> rad/s<input type="range" id="l" min="-10" max="10" step="0.5" value="4"></label>
+<svg id="sv" viewBox="0 0 360 300" role="img" aria-label="The robot from above with its path for the next 3 seconds"></svg>
+</div>
+<div><div class="work" id="wk"></div><div class="say" id="say"></div></div>
+</div>
+</div>
+</div>
+<script>
+(function(){
+var WR=0.033,WS=0.17,S={r:6,l:4};
+function $(i){return document.getElementById(i)}
+function f(v,d){var s=v.toFixed(d===undefined?3:d);return /^-0\.0*$/.test(s)?s.slice(1):s}
+function draw(){
+  var vR=WR*S.r,vL=WR*S.l,V=(vR+vL)/2,W=(vR-vL)/WS;
+  $('rv').textContent=S.r;$('lv').textContent=S.l;$('r').value=S.r;$('l').value=S.l;
+  [].slice.call(document.querySelectorAll('[data-p]')).forEach(function(b){var p=b.getAttribute('data-p').split(',');b.classList.toggle('on',+p[0]===S.r&&+p[1]===S.l)});
+  /* path for the next 3 s, drawn from above: start at the middle, facing up the screen */
+  var sc=260,x=0,y=0,th=0,pts=[],dt=0.02;for(var t=0;t<=3+1e-9;t+=dt){pts.push([x,y]);x+=V*Math.cos(th)*dt;y+=V*Math.sin(th)*dt;th+=W*dt}
+  var cx=180,cy=230,g='<rect x="4" y="4" width="352" height="292" rx="10" fill="#0b1626" stroke="#23395c"/>';
+  for(var k=-3;k<=3;k++){g+='<line x1="'+(cx+k*sc*0.2)+'" y1="10" x2="'+(cx+k*sc*0.2)+'" y2="290" stroke="#16263c"/>'}
+  g+='<polyline fill="none" stroke="#ffd24a" stroke-width="2" stroke-dasharray="5 4" points="'+pts.map(function(p){return (cx-p[1]*sc).toFixed(1)+','+(cy-p[0]*sc).toFixed(1)}).join(' ')+'"/>';
+  /* robot body at the start, facing up; right wheel on the right of the screen */
+  g+='<rect x="'+(cx-26)+'" y="'+(cy-20)+'" width="52" height="40" rx="8" fill="rgba(255,138,61,.18)" stroke="#ff8a3d" stroke-width="2.5"/>';
+  g+='<rect x="'+(cx+26)+'" y="'+(cy-14)+'" width="8" height="28" rx="2" fill="#5ab4ff"/><rect x="'+(cx-34)+'" y="'+(cy-14)+'" width="8" height="28" rx="2" fill="#5ab4ff"/>';
+  function arrow(x0,v,col,lab){var L=v*120,y1=cy-L;var s='<line x1="'+x0+'" y1="'+cy+'" x2="'+x0+'" y2="'+y1.toFixed(1)+'" stroke="'+col+'" stroke-width="3"/>';
+    if(Math.abs(L)>6)s+='<path d="M'+(x0-6)+' '+(y1+(L>0?8:-8)).toFixed(1)+' L'+x0+' '+y1.toFixed(1)+' L'+(x0+6)+' '+(y1+(L>0?8:-8)).toFixed(1)+'" fill="none" stroke="'+col+'" stroke-width="3"/>';
+    return s+'<text x="'+x0+'" y="'+(cy+36)+'" fill="'+col+'" font-size="10.5" text-anchor="middle" font-family="ui-monospace,Consolas,monospace">'+lab+'</text>'}
+  g+=arrow(cx+30,vR,'#5ab4ff','R '+f(vR))+arrow(cx-30,vL,'#5ab4ff','L '+f(vL))+arrow(cx,V,'#66e3b0','V');
+  g+='<text x="14" y="24" fill="#a7b8cd" font-size="11">path for the next 3 s (seen from above)</text><text x="14" y="282" fill="#7f93ad" font-size="10.5">grid: 0.2 m · arrows: m/s at each wheel and the middle</text>';
+  $('sv').innerHTML=g;
+  $('wk').innerHTML='<b>1. Speed of each wheel along the floor</b> (radius × turning speed)\n'+
+    '  right: W_r × φ̇R = '+WR+' × '+S.r+' = <span class="bl">'+f(vR)+' m/s</span>\n'+
+    '  left:  W_r × φ̇L = '+WR+' × '+S.l+' = <span class="bl">'+f(vL)+' m/s</span>\n\n'+
+    '<b>2. ADD for the forward speed V</b> (the middle is halfway between the wheels)\n'+
+    '  V = (right + left) ÷ 2 = ('+f(vR)+' + '+f(vL)+') ÷ 2 = <span class="ok">'+f(V)+' m/s</span>\n\n'+
+    '<b>3. SUBTRACT for the turning speed W</b> (how much faster the right side goes)\n'+
+    '  W = (right − left) ÷ W_s = ('+f(vR)+' − '+f(vL)+') ÷ '+WS+' = <span class="or">'+f(W)+' rad/s</span>\n'+
+    '  = '+f(W*180/Math.PI,1)+'° per second'+(W>1e-9?', turning left':W<-1e-9?', turning right':', no turning');
+  var m;
+  if(Math.abs(S.r-S.l)<1e-9&&Math.abs(S.r)>1e-9)m='Both wheels the same: the difference is 0, so <b>W = 0</b> and the robot drives straight. All of the speed goes into moving.';
+  else if(Math.abs(S.r+S.l)<1e-9&&Math.abs(S.r)>1e-9)m='Opposite speeds: the sum is 0, so <b>V = 0</b> and the middle does not move. All of the difference goes into turning: the robot spins on the spot.';
+  else if(Math.abs(S.r)<1e-9&&Math.abs(S.l)<1e-9)m='Both wheels stopped: nothing moves.';
+  else m='The common part of the two wheel speeds pushes the robot forward, the difference turns it. The path is a circle of radius V ÷ W = '+(Math.abs(W)>1e-9?f(Math.abs(V/W))+' m':'(very large)')+'.';
+  $('say').innerHTML=m+' <span class="dim">Here W_r = 0.033 m and W_s = 0.17 m. A turn to the left is positive.</span>'}
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-p]');if(!b)return;var p=b.getAttribute('data-p').split(',');S.r=+p[0];S.l=+p[1];draw()});
+$('r').oninput=function(){S.r=+this.value;draw()};$('l').oninput=function(){S.l=+this.value;draw()};
+draw();
+})();
+</script>
+</body></html>

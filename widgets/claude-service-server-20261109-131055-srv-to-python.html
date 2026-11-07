@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>From AddTwoInts.srv to Python</title>
+<style>
+html,body{margin:0;background:#0e182c;color:#e8eef7;font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+.w{padding:16px;max-width:980px;margin:0 auto}
+h1{font-size:18px;margin:0 0 4px}
+.sub{color:#a9b8cc;font-size:14px;margin:0 0 14px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:14px}
+@media (max-width:720px){.grid{grid-template-columns:1fr}}
+.card{background:#13213a;border:1px solid #23395c;border-radius:12px;padding:14px;min-width:0}
+.lbl{font:600 11px ui-monospace,Consolas,monospace;letter-spacing:.08em;text-transform:uppercase;color:#7f93ad;margin-bottom:8px}
+.code{font:14px/1.7 ui-monospace,Consolas,monospace;background:#0a1324;border:1px solid #1f3352;border-radius:8px;padding:8px 0;overflow-x:auto}
+.ln{display:flex;gap:10px;padding:0 12px;cursor:pointer;border-left:3px solid transparent}
+.ln .n{color:#4f6582;width:14px;text-align:right;flex:none}
+.ln.req{background:rgba(90,180,255,.07)}.ln.res{background:rgba(255,138,61,.08)}
+.ln.on{border-left-color:#ffd24a;background:rgba(255,210,74,.14)}
+.cm{color:#6f84a0}.ty{color:#c9a7ff}.fd{color:#e8eef7;font-weight:700}.sep{color:#ffd24a;font-weight:700}
+.obj{border:1px solid #23395c;border-radius:10px;padding:10px 12px;margin-bottom:10px;background:#0f1b31}
+.obj h3{margin:0 0 6px;font:700 14px ui-monospace,Consolas,monospace}
+.obj.rq h3{color:#5ab4ff}.obj.rs h3{color:#ff8a3d}
+.row{display:flex;align-items:center;gap:8px;margin:5px 0;flex-wrap:wrap;border-radius:6px;padding:2px 4px}
+.row.on{background:rgba(255,210,74,.14)}
+.row code{font:13px ui-monospace,Consolas,monospace;min-width:40px}
+input[type=text]{width:120px;background:#0a1324;border:1px solid #2b4366;color:#e8eef7;border-radius:7px;padding:6px 8px;font:14px ui-monospace,Consolas,monospace}
+.val{font:700 15px ui-monospace,Consolas,monospace;color:#ff8a3d}
+button{background:#ff8a3d;color:#1a0d02;border:0;border-radius:8px;padding:8px 14px;font:600 14px system-ui,sans-serif;cursor:pointer}
+button.g{background:transparent;color:#e8eef7;border:1px solid #2b4366}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.out{font:13px/1.6 ui-monospace,Consolas,monospace;background:#0a1324;border:1px solid #1f3352;border-radius:8px;padding:8px 10px;white-space:pre-wrap;word-break:break-word;min-height:66px}
+.ok{color:#66e3b0}.bad{color:#ff6b6b}.warn{color:#ffd24a}
+.why{font-size:14px;color:#c6d3e4;margin-top:10px}
+label.ck{display:flex;gap:8px;align-items:flex-start;font-size:14px;margin:6px 0;cursor:pointer}
+.arrow{text-align:center;color:#7f93ad;font:12px ui-monospace,Consolas,monospace;margin:2px 0 8px}
+</style></head><body><div class="w">
+<h1>From AddTwoInts.srv to Python objects</h1>
+<p class="sub">The build reads the .srv file and writes two Python classes. Point at a line or a field to see where it goes. Then type two numbers and send a request.</p>
+<div class="grid">
+ <div class="card">
+  <div class="lbl">srv/AddTwoInts.srv (what you wrote)</div>
+  <div class="code" id="src"></div>
+  <label class="ck"><input type="checkbox" id="noSep"> Forget the <code>---</code> line</label>
+  <div class="why" id="srcWhy">Above <b class="sep">---</b>: the <b style="color:#5ab4ff">request</b>. Below: the <b style="color:#ff8a3d">response</b>.</div>
+ </div>
+ <div class="card">
+  <div class="lbl">What colcon build makes (bumperbot_msgs.srv)</div>
+  <div class="obj rq" id="oReq"><h3>AddTwoInts.Request</h3>
+   <div class="row" data-f="a"><code>a</code><span class="ty">int64</span><input type="text" id="ia" value="7" aria-label="value of a"></div>
+   <div class="row" data-f="b"><code>b</code><span class="ty">int64</span><input type="text" id="ib" value="5" aria-label="value of b"></div>
+  </div>
+  <div class="arrow" id="arr">request goes to the server ↓ · response comes back ↓</div>
+  <div class="obj rs" id="oRes"><h3>AddTwoInts.Response</h3>
+   <div class="row" data-f="sum"><code>sum</code><span class="ty">int64</span><span class="val" id="vs">0</span></div>
+  </div>
+  <div class="btns"><button id="send">Send the request</button><button class="g" id="reset">Empty response</button></div>
+  <div class="out" id="out"></div>
+ </div>
+</div>
+</div>
+<script>
+(function(){
+var L=[['cm','# Request'],['f','int64','a'],['f','int64','b'],['sep','---'],['cm','# Response'],['f','int64','sum']];
+var MIN=-9223372036854775808n,MAX=9223372036854775807n;
+var src=document.getElementById('src'),noSep=document.getElementById('noSep'),out=document.getElementById('out');
+function draw(){
+  var sep=!noSep.checked,h='',part='req';
+  L.forEach(function(l,i){
+    if(l[0]==='sep'&&!sep)return;
+    var cls=(l[0]==='sep')?'':part;
+    if(l[0]==='sep')part='res';
+    var t=l[0]==='cm'?'<span class="cm">'+l[1]+'</span>':l[0]==='sep'?'<span class="sep">---</span>':'<span class="ty">'+l[1]+'</span> <span class="fd">'+l[2]+'</span>';
+    h+='<div class="ln '+cls+'" data-f="'+(l[2]||'')+'"><span class="n">'+(i+1)+'</span><span>'+t+'</span></div>';
+  });
+  src.innerHTML=h;
+  document.getElementById('oRes').style.opacity=sep?1:.35;
+  document.getElementById('arr').textContent=sep?'request goes to the server ↓ · response comes back ↓':'no --- line: no response part';
+  document.getElementById('srcWhy').innerHTML=sep?'Above <b class="sep">---</b>: the <b style="color:#5ab4ff">request</b>. Below: the <b style="color:#ff8a3d">response</b>.':
+    '<span class="warn">Without <b>---</b> there is no split between request and response.</span> As far as I know the generator then treats every field as request and the response is empty, or the build stops with an error, depending on the version. Either way <code>res.sum</code> would not exist and the server would fail.';
+  bind();
+}
+function bind(){
+  Array.prototype.forEach.call(document.querySelectorAll('[data-f]'),function(el){
+    el.onmouseenter=function(){hl(el.getAttribute('data-f'))};el.onmouseleave=function(){hl('')};
+    el.onclick=function(){hl(el.getAttribute('data-f'))};
+  });
+}
+function hl(f){Array.prototype.forEach.call(document.querySelectorAll('[data-f]'),function(el){el.classList.toggle('on',!!f&&el.getAttribute('data-f')===f)})}
+function parse(v,name){
+  v=v.trim();
+  if(!/^-?\d+$/.test(v)){return {err:"The '"+name+"' field must be of type 'int' (you typed "+JSON.stringify(v)+"). int64 holds whole numbers only. (Error wording approximate.)"}}
+  var n=BigInt(v);
+  if(n<MIN||n>MAX)return {err:"The '"+name+"' field must be an integer in [-9223372036854775808, 9223372036854775807]. (Wording approximate.)"};
+  return {n:n};
+}
+document.getElementById('send').onclick=function(){
+  if(noSep.checked){out.innerHTML='<span class="bad">There is no AddTwoInts.Response with a sum field, so the server cannot set res.sum.</span>';document.getElementById('vs').textContent='?';return}
+  var a=parse(document.getElementById('ia').value,'a'),b=parse(document.getElementById('ib').value,'b');
+  if(a.err||b.err){out.innerHTML='<span class="bad">'+(a.err||b.err)+'</span>\nThe request is not sent: the message class checks the value when it is set.';document.getElementById('vs').textContent='0';return}
+  var s=a.n+b.n,over=s>MAX||s<MIN;
+  document.getElementById('vs').textContent=over?'error':s.toString();
+  out.innerHTML='request:  AddTwoInts.Request(a='+a.n+', b='+b.n+')\nserver:   res.sum = req.a + req.b = '+a.n+' + '+b.n+' = '+s+'\n'+
+    (over?'<span class="bad">The sum does not fit in int64, so setting res.sum fails inside the callback and the caller gets no answer. (As far as I know.)</span>':'<span class="ok">response: AddTwoInts.Response(sum='+s+')</span>');
+};
+document.getElementById('reset').onclick=function(){document.getElementById('vs').textContent='0';out.textContent='A new response starts empty: sum is 0 until the server sets it.'};
+noSep.onchange=draw;draw();
+out.textContent='Press "Send the request". Try 7 and 5, then a decimal like 7.5, then a huge number.';
+})();
+</script>
+<script>
+(function(){function s(){parent.postMessage({taWidget:location.pathname,h:document.documentElement.scrollHeight},'*')}
+new ResizeObserver(s).observe(document.documentElement);addEventListener('load',s);setInterval(s,1500);})();
+</script></body></html>

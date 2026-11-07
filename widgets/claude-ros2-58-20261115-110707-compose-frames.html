@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Compose two transforms</title>
+<style>
+html,body{margin:0;background:#0e182c;color:#e8eef7;font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+.w{padding:16px;max-width:980px;margin:0 auto}
+h1{font-size:18px;margin:0 0 4px}.sub{color:#a9b8cc;font-size:14px;margin:0 0 12px}
+.card{background:#13213a;border:1px solid #23395c;border-radius:12px;padding:14px}
+.grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:14px}
+@media (max-width:760px){.grid{grid-template-columns:1fr}}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:6px 0}
+.btn{background:#1b2c4a;color:#e8eef7;border:1px solid #2b4366;border-radius:8px;padding:5px 10px;font:600 12.5px system-ui,sans-serif;cursor:pointer}
+.btn:hover,.btn.on{border-color:#ff8a3d}
+fieldset{border:1px solid #23395c;border-radius:10px;margin:8px 0;padding:6px 10px 8px}
+legend{font-size:13.5px;font-weight:700;padding:0 4px}
+label.s{display:block;font-size:13px;color:#cfe0f5;margin-top:4px}
+label.s b{color:#ffd9bf}
+input[type=range]{width:100%;accent-color:#ff8a3d}
+svg{width:100%;height:auto;display:block}
+.work{background:#060c18;border:1px solid #1f3352;border-radius:8px;padding:10px 12px;font:12.5px/1.75 ui-monospace,Consolas,monospace;color:#cfe0f5;white-space:pre-wrap;overflow-wrap:anywhere}
+.say{background:#0f1b31;border:1px solid #23395c;border-radius:10px;padding:10px 12px;margin-top:10px;font-size:14.5px}
+.or{color:#ff8a3d}.bl{color:#5ab4ff}.ye{color:#ffd24a}.dim{color:#6b7f96}
+</style></head><body><div class="w">
+<h1>Compose two transforms: where is the robot in the map?</h1>
+<p class="sub">Set where the starting point O sits in the map (orange) and where the robot R is compared with its start (blue). The yellow dashed arrow is the answer: the robot in the map, worked out step by step on the right.</p>
+<div class="card">
+<div class="row"><span class="dim">try:</span><button class="btn" data-p="2,1,90,1.5,0.5,30">example</button><button class="btn" data-p="0,0,0,1.5,0.5,30">started at the map origin</button><button class="btn" data-p="3,0.5,180,1,0,0">started facing the other way</button><button class="btn" data-p="1,2,45,0,0,90">robot only turned</button></div>
+<div class="grid">
+<div>
+<svg id="sv" viewBox="0 0 400 340" role="img" aria-label="The map with the frames M, O and R"></svg>
+<fieldset><legend class="or">map → start (T_MO)</legend>
+<label class="s">x: <b id="ax"></b> m<input type="range" id="a_x" min="-1" max="4" step="0.1"></label>
+<label class="s">y: <b id="ay"></b> m<input type="range" id="a_y" min="-1" max="3.5" step="0.1"></label>
+<label class="s">angle: <b id="at"></b>°<input type="range" id="a_t" min="-180" max="180" step="5"></label></fieldset>
+<fieldset><legend class="bl">start → robot (T_OR)</legend>
+<label class="s">x: <b id="bx"></b> m<input type="range" id="b_x" min="-2" max="2.5" step="0.1"></label>
+<label class="s">y: <b id="by"></b> m<input type="range" id="b_y" min="-2" max="2.5" step="0.1"></label>
+<label class="s">angle: <b id="bt"></b>°<input type="range" id="b_t" min="-180" max="180" step="5"></label></fieldset>
+</div>
+<div><div class="work" id="wk"></div><div class="say" id="say"></div></div>
+</div>
+</div>
+</div>
+<script>
+(function(){
+var S={ax:2,ay:1,at:90,bx:1.5,by:0.5,bt:30};
+function $(i){return document.getElementById(i)}
+function r(v,d){var s=v.toFixed(d===undefined?3:d);if(/^-0\.?0*$/.test(s))s=s.slice(1);return s}
+function wrap(a){while(a>180)a-=360;while(a<=-180)a+=360;return a}
+var X0=60,Y0=290,K=60;
+function P(x,y){return [X0+x*K,Y0-y*K]}
+function frame(x,y,t,lab,col,ox,oy){var p=P(x,y),c=Math.cos(t*Math.PI/180),s=Math.sin(t*Math.PI/180),L=34;
+  var ex=[p[0]+c*L,p[1]-s*L],ey=[p[0]-s*L,p[1]-c*L];
+  return '<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+ex[0].toFixed(1)+'" y2="'+ex[1].toFixed(1)+'" stroke="#ff6b6b" stroke-width="3"/>'+
+   '<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+ey[0].toFixed(1)+'" y2="'+ey[1].toFixed(1)+'" stroke="#66e3b0" stroke-width="3"/>'+
+   '<circle cx="'+p[0]+'" cy="'+p[1]+'" r="5" fill="'+col+'"/><text x="'+(p[0]+ox)+'" y="'+(p[1]+oy)+'" fill="'+col+'" font-size="15" font-weight="700">'+lab+'</text>'}
+function arrow(a,b,col,dash){var p=P(a[0],a[1]),q=P(b[0],b[1]);var dx=q[0]-p[0],dy=q[1]-p[1],L=Math.hypot(dx,dy);if(L<12)return '';
+  var ux=dx/L,uy=dy/L,e=[q[0]-ux*8,q[1]-uy*8];
+  return '<line x1="'+(p[0]+ux*8).toFixed(1)+'" y1="'+(p[1]+uy*8).toFixed(1)+'" x2="'+e[0].toFixed(1)+'" y2="'+e[1].toFixed(1)+'" stroke="'+col+'" stroke-width="2.5"'+(dash?' stroke-dasharray="6 5"':'')+'/>'+
+   '<path d="M'+(e[0]-ux*9-uy*5).toFixed(1)+' '+(e[1]-uy*9+ux*5).toFixed(1)+'L'+e[0].toFixed(1)+' '+e[1].toFixed(1)+'L'+(e[0]-ux*9+uy*5).toFixed(1)+' '+(e[1]-uy*9-ux*5).toFixed(1)+'" fill="none" stroke="'+col+'" stroke-width="2.5"/>'}
+function draw(){
+  ['ax','ay','at','bx','by','bt'].forEach(function(k){$(k).textContent=k.charAt(1)==='t'?S[k]:r(S[k],1);$(k.charAt(0)+'_'+k.charAt(1)).value=S[k]});
+  [].slice.call(document.querySelectorAll('[data-p]')).forEach(function(b){var p=b.getAttribute('data-p').split(',').map(Number);b.classList.toggle('on',p[0]===S.ax&&p[1]===S.ay&&p[2]===S.at&&p[3]===S.bx&&p[4]===S.by&&p[5]===S.bt)});
+  var t=S.at*Math.PI/180,c=Math.cos(t),s=Math.sin(t);
+  var rx=S.ax+c*S.bx-s*S.by,ry=S.ay+s*S.bx+c*S.by,rt=wrap(S.at+S.bt);
+  var g='<rect x="2" y="2" width="396" height="336" rx="10" fill="#0b1626" stroke="#23395c"/>';
+  for(var i=-1;i<=5;i++){var a=P(i,0);g+='<line x1="'+a[0]+'" y1="8" x2="'+a[0]+'" y2="332" stroke="#16263c"/>'}
+  for(var j=-1;j<=4;j++){var b=P(0,j);g+='<line x1="8" y1="'+b[1]+'" x2="392" y2="'+b[1]+'" stroke="#16263c"/>'}
+  g+='<text x="10" y="18" fill="#7f93ad" font-size="11">grid: 1 m</text>';
+  g+=arrow([0,0],[S.ax,S.ay],'#ff8a3d')+arrow([S.ax,S.ay],[rx,ry],'#5ab4ff')+arrow([0,0],[rx,ry],'#ffd24a',1);
+  g+=frame(0,0,0,'M','#e8eef7',-22,20)+frame(S.ax,S.ay,S.at,'O','#ff8a3d',8,20)+frame(rx,ry,rt,'R','#5ab4ff',-26,-6);
+  $('sv').innerHTML=g;
+  var cA=r(c),sA=r(s);
+  $('wk').innerHTML=
+   '<b>Step 1. Turn the robot’s offset by the angle of O</b>\n'+
+   '<span class="dim">The offset x_OR, y_OR is measured along O’s own axes. O is turned by '+S.at+'° in the map, so turn the offset by '+S.at+'° too.</span>\n'+
+   '  cos('+S.at+'°) = '+cA+'   sin('+S.at+'°) = '+sA+'\n'+
+   '  along map x: cos × x_OR − sin × y_OR\n'+
+   '             = '+cA+' × '+r(S.bx,1)+' − '+sA+' × '+r(S.by,1)+' = '+r(c*S.bx-s*S.by)+'\n'+
+   '  along map y: sin × x_OR + cos × y_OR\n'+
+   '             = '+sA+' × '+r(S.bx,1)+' + '+cA+' × '+r(S.by,1)+' = '+r(s*S.bx+c*S.by)+'\n\n'+
+   '<b>Step 2. Add where O sits in the map</b>\n'+
+   '  x_MR = x_MO + '+r(c*S.bx-s*S.by)+' = '+r(S.ax,1)+' + '+r(c*S.bx-s*S.by)+' = <span class="ye">'+r(rx,2)+' m</span>\n'+
+   '  y_MR = y_MO + '+r(s*S.bx+c*S.by)+' = '+r(S.ay,1)+' + '+r(s*S.bx+c*S.by)+' = <span class="ye">'+r(ry,2)+' m</span>\n\n'+
+   '<b>Step 3. Add the two angles</b>\n'+
+   '  θ_MR = θ_MO + θ_OR = '+S.at+'° + '+S.bt+'° = '+(S.at+S.bt)+'°'+(rt!==S.at+S.bt?' = <span class="ye">'+rt+'°</span> (same direction, kept between −180° and 180°)':' = <span class="ye">'+rt+'°</span>');
+  var m;
+  if(S.ax===0&&S.ay===0&&S.at===0)m='The robot started exactly at the map origin, so M and O are the same frame and the answer equals the local pose: T_MR = T_OR.';
+  else if(S.bx===0&&S.by===0)m='The robot has not moved away from its start, it only turned. Its position in the map is the position of O; only the angle changes.';
+  else m='The same blue offset gives a different yellow answer when you move or turn O. Knowing where the robot is compared with its start is not enough: you also need where the start is in the map.';
+  $('say').innerHTML=m+' <span class="dim">x is forward (red axis), y is to the left (green axis), angles count to the left.</span>'}
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-p]');if(!b)return;var p=b.getAttribute('data-p').split(',').map(Number);S.ax=p[0];S.ay=p[1];S.at=p[2];S.bx=p[3];S.by=p[4];S.bt=p[5];draw()});
+['ax','ay','at','bx','by','bt'].forEach(function(k){$(k.charAt(0)+'_'+k.charAt(1)).oninput=function(){S[k]=+this.value;draw()}});
+draw();
+})();
+</script>
+<script>
+(function(){function s(){parent.postMessage({taWidget:location.pathname,h:document.documentElement.scrollHeight},'*')}
+new ResizeObserver(s).observe(document.documentElement);addEventListener('load',s);setInterval(s,1500);})();
+</script></body></html>

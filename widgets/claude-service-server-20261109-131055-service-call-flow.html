@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>One service call</title>
+<style>
+html,body{margin:0;background:#0e182c;color:#e8eef7;font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+.w{padding:16px;max-width:1000px;margin:0 auto}
+h1{font-size:18px;margin:0 0 4px}
+.sub{color:#a9b8cc;font-size:14px;margin:0 0 12px}
+.card{background:#13213a;border:1px solid #23395c;border-radius:12px;padding:12px}
+svg{display:block;width:100%;height:auto}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+button{background:#ff8a3d;color:#1a0d02;border:0;border-radius:8px;padding:8px 14px;font:600 14px system-ui,sans-serif;cursor:pointer}
+button.g{background:transparent;color:#e8eef7;border:1px solid #2b4366}
+button[disabled]{opacity:.4;cursor:not-allowed}
+.cnt{font:12px ui-monospace,Consolas,monospace;color:#8aa0bd}
+input[type=number]{width:80px;background:#0a1324;border:1px solid #2b4366;color:#e8eef7;border-radius:7px;padding:6px 8px;font:14px ui-monospace,Consolas,monospace}
+label{font-size:14px;display:inline-flex;gap:6px;align-items:center}
+.why{background:#0f1b31;border:1px solid #23395c;border-radius:10px;padding:10px 12px;margin:8px 0;font-size:14.5px;min-height:64px}
+.why b.t{display:block;color:#ff8a3d;margin-bottom:2px}
+.terms{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:720px){.terms{grid-template-columns:1fr}}
+.term{background:#060c18;border:1px solid #1f3352;border-radius:8px;padding:8px 10px;font:12.5px/1.6 ui-monospace,Consolas,monospace;white-space:pre-wrap;word-break:break-word;min-height:120px}
+.term .h{color:#7f93ad;font-family:system-ui,sans-serif;font-size:11px;letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:4px}
+.ok{color:#66e3b0}.bad{color:#ff6b6b}.warn{color:#ffd24a}.p{color:#8fd3ff}
+.cks{display:flex;flex-wrap:wrap;gap:14px;margin:4px 0 8px}
+</style></head><body><div class="w">
+<h1>One service call, step by step</h1>
+<p class="sub">Left: the terminal that calls (the client). Right: your node (the server). Go Next and Back, or press Play. Change the numbers or break something with the checkboxes.</p>
+<div class="card">
+ <svg id="sv" viewBox="0 0 760 250" role="img" aria-label="Client, service add_two_ints and server"></svg>
+ <div class="bar">
+  <button class="g" id="bk">Back</button><button id="nx">Next</button><button class="g" id="pl">Play</button>
+  <span class="cnt" id="cnt"></span>
+  <label>a <input type="number" id="a" value="7"></label><label>b <input type="number" id="b" value="5"></label>
+ </div>
+ <div class="cks">
+  <label><input type="checkbox" id="noSrv"> the server is not running</label>
+  <label><input type="checkbox" id="noSrc"> the client terminal is not sourced</label>
+  <label><input type="checkbox" id="noRet"> the callback forgets <code>return res</code></label>
+ </div>
+ <div class="why" id="why"></div>
+ <div class="terms"><div class="term" id="tc"></div><div class="term" id="ts"></div></div>
+</div>
+</div>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)},st=0,timer=null;
+function num(id){var v=parseInt($(id).value,10);return isNaN(v)?0:v}
+function steps(){
+  var a=num('a'),b=num('b'),s=a+b,noSrv=$('noSrv').checked,noSrc=$('noSrc').checked,noRet=$('noRet').checked;
+  var S=[];
+  S.push({t:'The server starts',x:'You run the node. It creates the service add_two_ints and prints that it is ready. Then rclpy.spin waits for requests: the node is alive, doing nothing.',srv:noSrv?'off':'ready',env:null,
+    tc:'',ts:noSrv?'(nothing: the node was not started)':'$ ros2 run bumperbot_py_examples simple_service_server\n<span class="ok">[INFO] [simple_service_server]: Service add_two_ints Ready</span>'});
+  if(noSrc){
+    S.push({t:'The client cannot read the type',x:'This terminal was not sourced, so it does not know the package bumperbot_msgs. It cannot build a request of type AddTwoInts, so nothing is sent. Fix: run <code>. install/setup.bash</code> in this terminal too.',srv:noSrv?'off':'ready',env:null,
+      tc:'$ ros2 service call /add_two_ints bumperbot_msgs/srv/AddTwoInts "{a: '+a+', b: '+b+'}"\n<span class="bad">The passed service type is invalid</span>\n(wording approximate)',ts:noSrv?'':'<span class="ok">[INFO] ... Service add_two_ints Ready</span>\n(no request arrives)'});
+    return S;
+  }
+  S.push({t:'The client looks for the service',x:'The terminal command acts as a client. It first waits until a server with the name /add_two_ints exists.'+(noSrv?' None does, so it keeps waiting. Start the server and the call goes through.':' One does, so it continues at once.'),srv:noSrv?'off':'ready',env:null,wait:true,
+    tc:'$ ros2 service call /add_two_ints bumperbot_msgs/srv/AddTwoInts "a: '+a+'\nb: '+b+'"\n<span class="warn">waiting for service to become available...</span>',ts:noSrv?'':'<span class="ok">[INFO] ... Service add_two_ints Ready</span>'});
+  if(noSrv)return S;
+  S.push({t:'The request travels',x:'The client fills an AddTwoInts.Request with a = '+a+' and b = '+b+' and sends it to /add_two_ints.',srv:'ready',env:['req','a='+a+', b='+b],
+    tc:'$ ros2 service call ...\nwaiting for service to become available...\n<span class="p">requester: making request: bumperbot_msgs.srv.AddTwoInts_Request(a='+a+', b='+b+')</span>',ts:'<span class="ok">[INFO] ... Service add_two_ints Ready</span>'});
+  S.push({t:'The callback runs once',x:'spin hands the request to serviceCallback(req, res). It logs the numbers, sets res.sum = '+a+' + '+b+' = '+s+(noRet?', but never returns res. As far as I know rclpy then reports an error in the server terminal and no response is sent.':' and returns res.'),srv:'busy',env:null,
+    tc:'$ ros2 service call ...\nwaiting for service to become available...\nrequester: making request: ...(a='+a+', b='+b+')',
+    ts:'<span class="ok">[INFO] ... Service add_two_ints Ready</span>\n[INFO] ... New Request Received a: '+a+', b: '+b+'\n[INFO] ... Returning sum: '+s+(noRet?'\n<span class="bad">error: the service callback returned None instead of a response\n(wording approximate)</span>':'')});
+  if(noRet){S.push({t:'No answer comes back',x:'The client keeps waiting for a response that never arrives. Add <code>return res</code> as the last line of the callback.',srv:'ready',env:null,wait:true,
+    tc:'$ ros2 service call ...\nrequester: making request: ...(a='+a+', b='+b+')\n<span class="warn">(still waiting, no response)</span>',ts:'[INFO] ... Returning sum: '+s+'\n<span class="bad">error: ... returned None (approximate)</span>'});return S}
+  S.push({t:'The response travels back',x:'ROS 2 sends res back to the client that asked, and only to it.',srv:'ready',env:['res','sum='+s],
+    tc:'$ ros2 service call ...\nrequester: making request: ...(a='+a+', b='+b+')',ts:'[INFO] ... New Request Received a: '+a+', b: '+b+'\n[INFO] ... Returning sum: '+s});
+  S.push({t:'The client prints the result and exits',x:'The terminal prints the response and the command ends. The server keeps running and waits for the next request.',srv:'ready',env:null,
+    tc:'$ ros2 service call ...\nrequester: making request: bumperbot_msgs.srv.AddTwoInts_Request(a='+a+', b='+b+')\n\nresponse:\n<span class="ok">bumperbot_msgs.srv.AddTwoInts_Response(sum='+s+')</span>',
+    ts:'<span class="ok">[INFO] ... Service add_two_ints Ready</span>\n[INFO] ... New Request Received a: '+a+', b: '+b+'\n[INFO] ... Returning sum: '+s});
+  return S;
+}
+function box(x,y,w,h,col,t,s,on){return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="12" fill="#0f1d30" stroke="'+col+'" stroke-width="'+(on?3:2)+'" opacity="'+(on===false?.4:1)+'"/>'+
+  '<text x="'+(x+w/2)+'" y="'+(y+h/2-4)+'" text-anchor="middle" fill="#eef3fa" font-size="16" font-weight="700" font-family="system-ui,sans-serif">'+t+'</text>'+
+  '<text x="'+(x+w/2)+'" y="'+(y+h/2+16)+'" text-anchor="middle" fill="#a7b8cd" font-size="12" font-family="ui-monospace,Consolas,monospace">'+s+'</text>'}
+function env(x,y,col,lab){return '<g transform="translate('+x+' '+y+')"><rect x="-17" y="-11" width="34" height="22" rx="3" fill="#0b1522" stroke="'+col+'" stroke-width="2"/><path d="M-17 -11 L0 2 L17 -11" fill="none" stroke="'+col+'" stroke-width="2"/></g>'+
+  '<text x="'+x+'" y="'+(y-20)+'" text-anchor="middle" fill="'+col+'" font-size="13" font-weight="700" font-family="ui-monospace,Consolas,monospace">'+lab+'</text>'}
+function draw(){
+  var S=steps();st=Math.max(0,Math.min(st,S.length-1));var s=S[st];
+  var srvCol=s.srv==='off'?'#4a5a70':s.srv==='busy'?'#ffd24a':'#66e3b0';
+  var g='<line x1="210" y1="125" x2="550" y2="125" stroke="#4f9c80" stroke-width="2.5" stroke-dasharray="6 5"/>';
+  g+='<rect x="300" y="105" width="160" height="40" rx="20" fill="#11241f" stroke="#66e3b0" stroke-width="2"/><text x="380" y="130" text-anchor="middle" fill="#66e3b0" font-size="14" font-family="ui-monospace,Consolas,monospace">/add_two_ints</text>';
+  g+=box(20,85,190,80,'#ff8a3d','client','ros2 service call',true);
+  g+=box(550,85,190,80,srvCol,'server',s.srv==='off'?'not running':'simple_service_server',s.srv!=='off');
+  if(s.srv==='busy')g+='<text x="645" y="200" text-anchor="middle" fill="#ffd24a" font-size="13" font-family="ui-monospace,Consolas,monospace">serviceCallback runs</text>';
+  if(s.wait)g+='<text x="115" y="200" text-anchor="middle" fill="#ffd24a" font-size="13" font-family="ui-monospace,Consolas,monospace">waiting...</text>';
+  if(s.env){var r=s.env[0]==='req';g+=env(r?255:505,95,r?'#ffd24a':'#5ab4ff',(r?'request ':'response ')+s.env[1]);
+    g+='<text x="380" y="78" text-anchor="middle" fill="#a7b8cd" font-size="12" font-family="system-ui,sans-serif">'+(r?'client → server':'server → client')+'</text>'}
+  g+='<text x="380" y="235" text-anchor="middle" fill="#6b7f96" font-size="12" font-family="system-ui,sans-serif">dashed green line = the service: nothing travels on it until a client asks</text>';
+  $('sv').innerHTML=g;
+  $('why').innerHTML='<b class="t">Step '+(st+1)+' of '+S.length+': '+s.t+'</b>'+s.x;
+  $('tc').innerHTML='<span class="h">Terminal 2: the client</span>'+(s.tc||'(not used yet)');
+  $('ts').innerHTML='<span class="h">Terminal 1: the server</span>'+(s.ts||'');
+  $('cnt').textContent='step '+(st+1)+' / '+S.length;$('bk').disabled=st===0;$('nx').textContent=st===S.length-1?'Start again':'Next';
+}
+$('nx').onclick=function(){var n=steps().length;st=st>=n-1?0:st+1;draw()};
+$('bk').onclick=function(){st--;draw()};
+$('pl').onclick=function(){if(timer){clearInterval(timer);timer=null;$('pl').textContent='Play';return}st=0;draw();$('pl').textContent='Pause';
+  timer=setInterval(function(){var n=steps().length;if(st>=n-1){clearInterval(timer);timer=null;$('pl').textContent='Play';return}st++;draw()},1500)};
+['a','b'].forEach(function(i){$(i).oninput=draw});['noSrv','noSrc','noRet'].forEach(function(i){$(i).onchange=function(){st=0;draw()}});
+draw();
+})();
+</script>
+<script>
+(function(){function s(){parent.postMessage({taWidget:location.pathname,h:document.documentElement.scrollHeight},'*')}
+new ResizeObserver(s).observe(document.documentElement);addEventListener('load',s);setInterval(s,1500);})();
+</script></body></html>

@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simple Controller: Robot Speed from Joint States | ROS 2 | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="Introduction In the earlier chapters the node simple_controller only worked in one direction: it took a speed command for the robot on…">
+<link rel="canonical" href="https://techarcanist.com/documented-software-learnings/ros2/ros2-62/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="Simple Controller: Robot Speed from Joint States | ROS 2">
+<meta property="og:description" content="Introduction In the earlier chapters the node simple_controller only worked in one direction: it took a speed command for the robot on…">
+<meta property="og:url" content="https://techarcanist.com/documented-software-learnings/ros2/ros2-62/">
+<meta property="og:image" content="https://techarcanist.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=69fcf7c238">
+<link rel="stylesheet" href="/assets/home.css?v=69fcf7c238">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/" aria-current="page">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap reader wide">
+  <aside class="rd-nav" id="rd-nav">
+    <a class="rd-series" href="/documented-software-learnings/ros2/"><span class="label">Series</span>ROS 2</a>
+    <ol>
+      <li><a href="/documented-software-learnings/ros2/ros2_a/"><span class="mono">01</span>Installing Ubuntu Desktop (Dual Boot with Windows)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_b/"><span class="mono">02</span>ROS 2 Jazzy Installation on Ubuntu (Step-by-Step)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_c/"><span class="mono">03</span>Development Environment Setup for ROS 2 Jazzy on Ubuntu (With Clear Explanations)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_d/"><span class="mono">04</span>ROS 2 Fundamentals: Architecture, Communication, Packages, and Workspaces</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_e/"><span class="mono">05</span>ROS 2 Workspace &amp; Package Creation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_f/"><span class="mono">06</span>ROS 2 Python Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_g/"><span class="mono">07</span>ROS 2 C++ Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_h/"><span class="mono">08</span>ROS 2 Python Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_i/"><span class="mono">09</span>ROS 2 C++ Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_j/"><span class="mono">10</span>Robot Locomotion: Introduction</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_k/"><span class="mono">11</span>Wheeled Locomotion Architectures</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_l/"><span class="mono">12</span>Rolling Friction &amp; Wheeled Locomotion Efficiency</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_m/"><span class="mono">13</span>Introduction to Robot Simulation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_n/"><span class="mono">14</span>URDF</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_o/"><span class="mono">15</span>Create a URDF Model</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_p/"><span class="mono">16</span>Rviz</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_q/"><span class="mono">17</span>Node Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_r/"><span class="mono">18</span>Python Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_s/"><span class="mono">19</span>C++ Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_t/"><span class="mono">20</span>ROS 2 Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-u/"><span class="mono">21</span>Visualize The Robot In RVIZ2</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-v/"><span class="mono">22</span>Launch Files</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-w/"><span class="mono">23</span>ROS 2 Launch Files: Visualizing the Robot with One Command</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-x/"><span class="mono">24</span>Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-y/"><span class="mono">25</span>Simulating the Robot in Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-z/"><span class="mono">26</span>ROS 2 Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-aa/"><span class="mono">27</span>Control Types</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ab/"><span class="mono">28</span>ROS 2 Control: Prepare the Robot for Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ac/"><span class="mono">29</span>Understanding ROS 2 Control | Explanation of Chapter 28</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ad/"><span class="mono">30</span>ROS 2 Control: Moving the BumperBot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ae/"><span class="mono">31</span>Robot Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-af/"><span class="mono">32</span>Pose of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_af/"><span class="mono">33</span>Translation Vector</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ag/"><span class="mono">34</span>Introduction to Turtlesim</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ah/"><span class="mono">35</span>Translation Vector Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ai/"><span class="mono">36</span>Translation Vector Between Two Turtles: CPP</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_aj/"><span class="mono">37</span>Rotation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ak/"><span class="mono">38</span>Rotation Matrix Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_al/"><span class="mono">39</span>Transformation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_am/"><span class="mono">40</span>Differential Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-41/"><span class="mono">41</span>Velocity of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-42/"><span class="mono">42</span>Simple Speed Controller: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-43/"><span class="mono">43</span>Launch the Simple Speed Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-44/"><span class="mono">44</span>Teleoperating the BumperBot with a Joystick</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-45/"><span class="mono">45</span>ROS 2 Diff Drive Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-46/"><span class="mono">46</span>TF 2 Library</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-47/"><span class="mono">47</span>Operation With Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-48/"><span class="mono">48</span>Static &amp; Dynamic Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-49/"><span class="mono">49</span>Simple TF2 Static Broadcaster</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-50/"><span class="mono">50</span>Simple TF2 Broadcaster: Static and Dynamic Transforms</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-51/"><span class="mono">51</span>ROS 2 Services</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-52/"><span class="mono">52</span>Service Server in Python: AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-53/"><span class="mono">53</span>Service Client in Python: Calling AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-54/"><span class="mono">54</span>Simple TF2 Listener in Python: a get_transform Service</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-55/"><span class="mono">55</span>Euler Angles and Quaternions</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-56/"><span class="mono">56</span>Euler to Quaternion: Turning the Robot with tf_transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-57/"><span class="mono">57</span>tf2 Tools: view_frames and tf2_echo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-58/"><span class="mono">58</span>Where Is the Robot? Local and Global Localization</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-59/"><span class="mono">59</span>Odometry: Counting Steps to Know Where the Robot Is</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-60/"><span class="mono">60</span>Wheel Odometry and Encoders</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-61/"><span class="mono">61</span>Robot Speed from Wheel Encoders</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-62/" aria-current="page"><span class="mono">62</span>Simple Controller: Robot Speed from Joint States</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-63/"><span class="mono">63</span>Robot Position and Orientation from the Wheels</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-64/"><span class="mono">64</span>Wheel Odometry: x, y and theta in the Simple Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-65/"><span class="mono">65</span>Publish Odometry Message</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-66/"><span class="mono">66</span>Broadcast Odometry Transform</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-67/"><span class="mono">67</span>Probability Introduction</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-68/"><span class="mono">68</span>Probability Tools for Localization</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-69/"><span class="mono">69</span>Adding Noise to Robot Motion: the Noisy Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-70/"><span class="mono">70</span>Launch Noisy Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-71/"><span class="mono">71</span>Odometry Comparison</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-72/"><span class="mono">72</span>Advantages of Having Multiple Sensors</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-73/"><span class="mono">73</span>Gyroscope</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-74/"><span class="mono">74</span>Accelerometer and IMU</a></li>
+    </ol>
+  </aside>
+  <article class="rd-main">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/documented-software-learnings/">Library</a><span>/</span><a href="/documented-software-learnings/ros2/">ROS 2</a><span>/</span><span>62</span></nav>
+    <button class="btn btn-sm btn-line rd-tg" type="button" id="rd-tg">All chapters</button>
+<p class="sh-label mono"><span>62</span>Chapter 62 of 74</p>    <h1>Simple Controller: Robot Speed from Joint States</h1>
+<div class="rd-prog" aria-hidden="true"><i style="width:83.8%"></i></div>    <div class="prose"><div class="col"><h2 id="introduction">Introduction</h2><p>In the earlier chapters the node <code>simple_controller</code> only worked in one direction: it took a speed command for the robot on <code>bumperbot_controller/cmd_vel</code> and turned it into a speed for each wheel with the inverse of the conversion matrix.</p><p>This chapter adds the other direction. The node now reads the wheel angles on the <code>joint_states</code> topic and works out how fast the robot is <b>really</b> driving and turning:</p><ul><li>how far each wheel turned since the last message (new angle minus old angle),</li><li>how much time passed (stamp now minus stamp before),</li><li>the speed of each wheel (angle ÷ time),</li><li>and from those, the driving speed and the turning speed of the robot.</li></ul><p>This is the first step of odometry: knowing how the robot moves from how its wheels move. To test it, the robot is told to turn on the spot at 0.5 rad/s, and the node should measure about the same 0.5.</p><p class="note">The simple controller from the earlier chapters must already build and run, with the Gazebo simulation and the controller launch file. This chapter changes simple_controller.py and adds one dependency.</p><h3 id="the-formulas">The formulas</h3><p>Every letter first, then the formula:</p><div class="table-wrap"><table><tbody><tr><td>Letter</td><td>Meaning</td><td>Value here</td></tr><tr><td>r</td><td>wheel radius</td><td>0.033 m</td></tr><tr><td>s</td><td>wheel separation (distance between the two wheels)</td><td>0.17 m</td></tr><tr><td>Δφ (dp in the code)</td><td>how far a wheel turned since the last reading: new angle minus old angle</td><td>in rad</td></tr><tr><td>Δt (dt in the code)</td><td>time between the two readings: stamp now minus stamp before</td><td>in s</td></tr><tr><td>φ̇R, φ̇L (fi_right, fi_left)</td><td>speed of the right and left wheel: Δφ ÷ Δt</td><td>in rad/s</td></tr><tr><td>V (linear)</td><td>driving speed of the robot: (r × φ̇R + r × φ̇L) ÷ 2</td><td>in m/s</td></tr><tr><td>ω (angular)</td><td>turning speed of the robot: (r × φ̇R minus r × φ̇L) ÷ s</td><td>in rad/s</td></tr></tbody></table></div><p class="note">These are the two rows of the same conversion matrix the controller already uses. velCallback uses its inverse to go from the robot speed to the wheel speeds (a command). jointCallback uses the rows as they are to go from the wheel speeds to the robot speed (a measurement).</p></div><div class="col"><h2 id="writing-the-code">Writing the code</h2><h3 id="open-the-file">Open the file</h3><p>In VS Code, open <code>src</code>, then the <code>bumperbot_controller</code> package folder, then the <code>bumperbot_controller</code> folder inside it, and open <code>simple_controller.py</code>.</p><figure class="img sz-s al-l"><img src="/uploads/2026/11/image-53.png" alt="VS Code explorer with src, bumperbot_controller, bumperbot_controller and simple_controller.py marked 1 to 4" loading="lazy"><figcaption>The path to simple_controller.py: src, bumperbot_controller, bumperbot_controller, simple_controller.py.</figcaption></figure><h3 id="the-code">The code</h3><p>The whole node, with the new odometry part added to the controller from before:</p><div class="codeblock" data-lang="Python"><pre class="code numbered"><code><span class="ln"><span class="tok-comment">#!/usr/bin/env python3</span></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">import</span> <span class="tok-namespace">rclpy</span></span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">rclpy</span><span class="tok-namespace">.</span><span class="tok-namespace">node</span> <span class="tok-keyword">import</span> Node</span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">std_msgs</span><span class="tok-namespace">.</span><span class="tok-namespace">msg</span> <span class="tok-keyword">import</span> Float64MultiArray</span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">geometry_msgs</span><span class="tok-namespace">.</span><span class="tok-namespace">msg</span> <span class="tok-keyword">import</span> TwistStamped</span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">sensor_msgs</span><span class="tok-namespace">.</span><span class="tok-namespace">msg</span> <span class="tok-keyword">import</span> JointState</span>
+<span class="ln"><span class="tok-keyword">import</span> <span class="tok-namespace">numpy</span> <span class="tok-keyword">as</span> <span class="tok-namespace">np</span></span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">rclpy</span><span class="tok-namespace">.</span><span class="tok-namespace">time</span> <span class="tok-keyword">import</span> Time</span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">rclpy</span><span class="tok-namespace">.</span><span class="tok-namespace">constants</span> <span class="tok-keyword">import</span> S_TO_NS</span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">class</span> <span class="tok-className">SimpleController</span><span class="tok-punctuation">(</span>Node<span class="tok-punctuation">)</span><span class="tok-punctuation">:</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-keyword">def</span> <span class="tok-definition">__init__</span><span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span></span>
+<span class="ln">        <span class="tok-typeName">super</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span><span class="tok-definition">__init__</span><span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">simple_controller</span><span class="tok-string">"</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>declare_parameter<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">wheel_radius</span><span class="tok-string">"</span><span class="tok-punctuation">,</span> <span class="tok-number">0.033</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>declare_parameter<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">wheel_separation</span><span class="tok-string">"</span><span class="tok-punctuation">,</span> <span class="tok-number">0.17</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_ <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_parameter<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">wheel_radius</span><span class="tok-string">"</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>get_parameter_value<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>double_value</span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_separation_ <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_parameter<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">wheel_separation</span><span class="tok-string">"</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>get_parameter_value<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>double_value</span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_logger<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>info<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">Using wheel radius </span><span class="tok-string">%f</span><span class="tok-string">"</span> <span class="tok-operator">%</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_<span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_logger<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>info<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">Using wheel separation </span><span class="tok-string">%f</span><span class="tok-string">"</span> <span class="tok-operator">%</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_separation_<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>left_wheel_prev_pos_ <span class="tok-operator">=</span> <span class="tok-number">0.0</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>right_wheel_prev_pos_ <span class="tok-operator">=</span> <span class="tok-number">0.0</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>prev_time_ <span class="tok-operator">=</span> <span class="tok-bool">None</span>   <span class="tok-comment"># set from the first joint_states message</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_cmd_pub_ <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>create_publisher<span class="tok-punctuation">(</span>Float64MultiArray<span class="tok-punctuation">,</span> <span class="tok-string">"</span><span class="tok-string">simple_velocity_controller/commands</span><span class="tok-string">"</span><span class="tok-punctuation">,</span> <span class="tok-number">10</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>vel_sub_ <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>create_subscription<span class="tok-punctuation">(</span>TwistStamped<span class="tok-punctuation">,</span> <span class="tok-string">"</span><span class="tok-string">bumperbot_controller/cmd_vel</span><span class="tok-string">"</span><span class="tok-punctuation">,</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>velCallback<span class="tok-punctuation">,</span> <span class="tok-number">10</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>joint_sub_ <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>create_subscription<span class="tok-punctuation">(</span>JointState<span class="tok-punctuation">,</span> <span class="tok-string">"</span><span class="tok-string">joint_states</span><span class="tok-string">"</span><span class="tok-punctuation">,</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>jointCallback<span class="tok-punctuation">,</span> <span class="tok-number">10</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>speed_conversion_ <span class="tok-operator">=</span> np<span class="tok-operator">.</span>array<span class="tok-punctuation">(</span><span class="tok-punctuation">[</span><span class="tok-punctuation">[</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_<span class="tok-operator">/</span><span class="tok-number">2</span><span class="tok-punctuation">,</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_<span class="tok-operator">/</span><span class="tok-number">2</span><span class="tok-punctuation">]</span><span class="tok-punctuation">,</span></span>
+<span class="ln">                                           <span class="tok-punctuation">[</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_<span class="tok-operator">/</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_separation_<span class="tok-punctuation">,</span> <span class="tok-operator">-</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_<span class="tok-operator">/</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_separation_<span class="tok-punctuation">]</span><span class="tok-punctuation">]</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_logger<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>info<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">The conversion matrix is </span><span class="tok-string">%s</span><span class="tok-string">"</span> <span class="tok-operator">%</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>speed_conversion_<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-keyword">def</span> <span class="tok-definition">velCallback</span><span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-punctuation">,</span> msg<span class="tok-punctuation">)</span><span class="tok-punctuation">:</span></span>
+<span class="ln">        robot_speed <span class="tok-operator">=</span> np<span class="tok-operator">.</span>array<span class="tok-punctuation">(</span><span class="tok-punctuation">[</span><span class="tok-punctuation">[</span>msg<span class="tok-operator">.</span>twist<span class="tok-operator">.</span>linear<span class="tok-operator">.</span>x<span class="tok-punctuation">]</span><span class="tok-punctuation">,</span></span>
+<span class="ln">                                <span class="tok-punctuation">[</span>msg<span class="tok-operator">.</span>twist<span class="tok-operator">.</span>angular<span class="tok-operator">.</span>z<span class="tok-punctuation">]</span><span class="tok-punctuation">]</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        wheel_speed <span class="tok-operator">=</span> np<span class="tok-operator">.</span>matmul<span class="tok-punctuation">(</span>np<span class="tok-operator">.</span>linalg<span class="tok-operator">.</span>inv<span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>speed_conversion_<span class="tok-punctuation">)</span><span class="tok-punctuation">,</span> robot_speed<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        wheel_speed_msg <span class="tok-operator">=</span> Float64MultiArray<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        wheel_speed_msg<span class="tok-operator">.</span>data <span class="tok-operator">=</span> <span class="tok-punctuation">[</span>wheel_speed<span class="tok-punctuation">[</span><span class="tok-number">1</span><span class="tok-punctuation">,</span> <span class="tok-number">0</span><span class="tok-punctuation">]</span><span class="tok-punctuation">,</span> wheel_speed<span class="tok-punctuation">[</span><span class="tok-number">0</span><span class="tok-punctuation">,</span> <span class="tok-number">0</span><span class="tok-punctuation">]</span><span class="tok-punctuation">]</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_cmd_pub_<span class="tok-operator">.</span>publish<span class="tok-punctuation">(</span>wheel_speed_msg<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-keyword">def</span> <span class="tok-definition">jointCallback</span><span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-punctuation">,</span> msg<span class="tok-punctuation">)</span><span class="tok-punctuation">:</span></span>
+<span class="ln">        now <span class="tok-operator">=</span> Time<span class="tok-operator">.</span>from_msg<span class="tok-punctuation">(</span>msg<span class="tok-operator">.</span>header<span class="tok-operator">.</span>stamp<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-comment"># First message, or sim time went backwards (e.g. sim reset): re-seed</span></span>
+<span class="ln">        <span class="tok-keyword">if</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>prev_time_ <span class="tok-operator">is</span> <span class="tok-bool">None</span> <span class="tok-operator">or</span> now <span class="tok-operator">&lt;</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>prev_time_<span class="tok-punctuation">:</span></span>
+<span class="ln">            <span class="tok-typeName">self</span><span class="tok-operator">.</span>left_wheel_prev_pos_ <span class="tok-operator">=</span> msg<span class="tok-operator">.</span>position<span class="tok-punctuation">[</span><span class="tok-number">0</span><span class="tok-punctuation">]</span></span>
+<span class="ln">            <span class="tok-typeName">self</span><span class="tok-operator">.</span>right_wheel_prev_pos_ <span class="tok-operator">=</span> msg<span class="tok-operator">.</span>position<span class="tok-punctuation">[</span><span class="tok-number">1</span><span class="tok-punctuation">]</span></span>
+<span class="ln">            <span class="tok-typeName">self</span><span class="tok-operator">.</span>prev_time_ <span class="tok-operator">=</span> now</span>
+<span class="ln">            <span class="tok-keyword">return</span></span>
+<span class="ln"></span>
+<span class="ln">        dt <span class="tok-operator">=</span> <span class="tok-punctuation">(</span>now <span class="tok-operator">-</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>prev_time_<span class="tok-punctuation">)</span><span class="tok-operator">.</span>nanoseconds <span class="tok-operator">/</span> S_TO_NS</span>
+<span class="ln">        <span class="tok-keyword">if</span> dt <span class="tok-operator">==</span> <span class="tok-number">0.0</span><span class="tok-punctuation">:</span>   <span class="tok-comment"># duplicate stamp</span></span>
+<span class="ln">            <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_logger<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>warn<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">Skipping joint state: duplicate stamp</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">                                throttle_duration_sec<span class="tok-operator">=</span><span class="tok-number">2.0</span><span class="tok-punctuation">)</span></span>
+<span class="ln">            <span class="tok-keyword">return</span></span>
+<span class="ln"></span>
+<span class="ln">        dp_left <span class="tok-operator">=</span> msg<span class="tok-operator">.</span>position<span class="tok-punctuation">[</span><span class="tok-number">0</span><span class="tok-punctuation">]</span> <span class="tok-operator">-</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>left_wheel_prev_pos_</span>
+<span class="ln">        dp_right <span class="tok-operator">=</span> msg<span class="tok-operator">.</span>position<span class="tok-punctuation">[</span><span class="tok-number">1</span><span class="tok-punctuation">]</span> <span class="tok-operator">-</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>right_wheel_prev_pos_</span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>left_wheel_prev_pos_ <span class="tok-operator">=</span> msg<span class="tok-operator">.</span>position<span class="tok-punctuation">[</span><span class="tok-number">0</span><span class="tok-punctuation">]</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>right_wheel_prev_pos_ <span class="tok-operator">=</span> msg<span class="tok-operator">.</span>position<span class="tok-punctuation">[</span><span class="tok-number">1</span><span class="tok-punctuation">]</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>prev_time_ <span class="tok-operator">=</span> now</span>
+<span class="ln"></span>
+<span class="ln">        fi_left <span class="tok-operator">=</span> dp_left <span class="tok-operator">/</span> dt</span>
+<span class="ln">        fi_right <span class="tok-operator">=</span> dp_right <span class="tok-operator">/</span> dt</span>
+<span class="ln"></span>
+<span class="ln">        linear <span class="tok-operator">=</span> <span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_ <span class="tok-operator">*</span> fi_right <span class="tok-operator">+</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_ <span class="tok-operator">*</span> fi_left<span class="tok-punctuation">)</span> <span class="tok-operator">/</span> <span class="tok-number">2</span></span>
+<span class="ln">        angular <span class="tok-operator">=</span> <span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_ <span class="tok-operator">*</span> fi_right <span class="tok-operator">-</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_ <span class="tok-operator">*</span> fi_left<span class="tok-punctuation">)</span> <span class="tok-operator">/</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_separation_</span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_logger<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>info<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">linear: </span><span class="tok-string">%f</span><span class="tok-string">, angular: </span><span class="tok-string">%f</span><span class="tok-string">"</span> <span class="tok-operator">%</span> <span class="tok-punctuation">(</span>linear<span class="tok-punctuation">,</span> angular<span class="tok-punctuation">)</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">def</span> <span class="tok-definition">main</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span></span>
+<span class="ln">    rclpy<span class="tok-operator">.</span>init<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    simple_controller <span class="tok-operator">=</span> SimpleController<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln">    rclpy<span class="tok-operator">.</span>spin<span class="tok-punctuation">(</span>simple_controller<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    simple_controller<span class="tok-operator">.</span>destroy_node<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln">    rclpy<span class="tok-operator">.</span>shutdown<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">if</span> <span class="tok-variableName">__name__</span> <span class="tok-operator">==</span> <span class="tok-string">'</span><span class="tok-string">__main__</span><span class="tok-string">'</span><span class="tok-punctuation">:</span></span>
+<span class="ln">    main<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span></code></pre></div><h3 id="what-is-new">What is new</h3><ul><li><b>Lines 7, 9 and 10:</b> three new imports: the <code>JointState</code> message, the <code>Time</code> class and <code>S_TO_NS</code>, the number of nanoseconds in one second (1 000 000 000).</li><li><b>Lines 24 and 25:</b> the start-up log now uses <code>%f</code>, so the sizes are printed as 0.033000 and 0.170000 instead of 0.</li><li><b>Lines 27 to 29:</b> the "before" values: both wheel angles start at 0.0 rad and <code>prev_time_</code> starts as <code>None</code>: the first <code>joint_states</code> message sets it.</li><li><b>Line 33:</b> a subscription to <code>joint_states</code> that calls <code>jointCallback</code> for every message.</li><li><b>Lines 50 to 79:</b> <code>jointCallback</code> itself: the time stamp of the message (line 51), the first-message check that only stores the first reading (lines 53 to 58), dt in seconds (line 60), a check for a repeated stamp (lines 61 to 64), the change of angle of each wheel (lines 66 and 67), the new "before" values (lines 69 to 71), the wheel speeds (lines 73 and 74) and the robot speed (lines 76 and 77), printed in the log (line 79).</li></ul><h3 id="code-visualizer">Code visualizer</h3><p>Every line explained at three levels, with a step-by-step run, a map, bugs to try and a live picture of the odometry.</p><div class="widget"><iframe allow="fullscreen" allowfullscreen src="/widgets/claude-ros2-62-20261115-204953-simple-controller-odometry-visualizer.html" title="Simple controller with odometry: code visualizer"></iframe></div><h3 id="how-jointcallback-links-to-chapters-59-to-61">How jointCallback links to chapters 59 to 61</h3><p>jointCallback is the theory of the last three chapters turned into code: the encoder angles from chapter 60, Δφ, Δt and the wheel speeds from chapter 61, the matrix that gives V and ω, and the counting of small steps from chapter 59. Step through it to see which lines run and which chapter each idea comes from, with the numbers worked out. The two error switches show how a chapter 60 error slips through unnoticed and makes the position drift.</p><div class="widget"><iframe allow="fullscreen" allowfullscreen src="/widgets/ros2-62-jointcallback-chapters.html" title="jointCallback linked to chapters 59 to 61"></iframe></div><h3 id="one-matrix-two-directions">One matrix, two directions</h3><p>Pick a command and watch it go out to the wheels and come back as a measurement. The checkbox shows what happens when the node is given the wrong wheel radius.</p><div class="widget"><iframe allow="fullscreen" allowfullscreen src="/widgets/claude-ros2-62-20261115-204953-command-and-measure.html" title="Command the wheels, then measure the robot"></iframe></div></div><div class="col"><h2 id="adding-the-sensor-msgs-dependency">Adding the sensor_msgs dependency</h2><p>JointState comes from the <code>sensor_msgs</code> package, so the package has to say that it needs it, in two files in the same <code>bumperbot_controller</code> folder.</p><h3 id="cmakelists-txt">CMakeLists.txt</h3><figure class="img sz-l"><img src="/uploads/2026/11/image-54.png" alt="CMakeLists.txt of bumperbot_controller with find_package(sensor_msgs REQUIRED) on line 13" loading="lazy"><figcaption>CMakeLists.txt with the new find_package line (line 13), next to the other find_package lines.</figcaption></figure><p>Add:</p><div class="codeblock" data-lang="CMake"><pre class="code numbered"><code><span class="ln"><span class="tok-typeName">find_package</span><span class="tok-punctuation">(</span><span class="tok-string">sensor_msgs</span> <span class="tok-string">REQUIRED</span><span class="tok-punctuation">)</span></span></code></pre></div><h3 id="package-xml">package.xml</h3><figure class="img sz-l"><img src="/uploads/2026/11/image-55.png" alt="package.xml of bumperbot_controller with depend sensor_msgs on line 16" loading="lazy"><figcaption>package.xml with the new depend line (line 16), under the other depend lines.</figcaption></figure><p>Add, under the other <code>&lt;depend&gt;</code> lines:</p><div class="codeblock" data-lang="XML"><pre class="code numbered"><code><span class="ln"><span class="tok-typeName">&lt;depend</span><span class="tok-typeName">&gt;</span>sensor_msgs<span class="tok-typeName">&lt;/depend&gt;</span></span></code></pre></div></div><div class="col"><h2 id="building-and-running">Building and running</h2><h3 id="terminal-1-build">Terminal 1: build</h3><p>Open a new terminal and build the workspace:</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln"><span class="tok-typeName">cd</span> bumperbot_ws</span></code></pre></div><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">colcon build</span></code></pre></div><p class="caption">What you should see</p><div class="codeblock" data-lang="Plain text"><pre class="code"><code>Starting &gt;&gt;&gt; bumperbot_msgs
+Starting &gt;&gt;&gt; bumperbot_controller
+Starting &gt;&gt;&gt; bumperbot_cpp_examples
+Starting &gt;&gt;&gt; bumperbot_description
+Finished &lt;&lt;&lt; bumperbot_description [0.65s]
+Finished &lt;&lt;&lt; bumperbot_msgs [2.48s]
+Starting &gt;&gt;&gt; bumperbot_py_examples
+Finished &lt;&lt;&lt; bumperbot_controller [8.49s]
+Finished &lt;&lt;&lt; bumperbot_py_examples [10.3s]
+Finished &lt;&lt;&lt; bumperbot_cpp_examples [29.3s]
+
+Summary: 5 packages finished [29.7s]</code></pre></div><figure class="img sz-s al-l"><img src="/uploads/2026/11/image-56.png" alt="Terminal with cd bumperbot_ws and colcon build, 5 packages finished" loading="lazy"><figcaption>The build: 5 packages finished.</figcaption></figure><h3 id="terminal-2-the-simulation">Terminal 2: the simulation</h3><p>Open another terminal, source the workspace and start Gazebo with the robot:</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">. install/setup.bash</span></code></pre></div><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">ros2 launch bumperbot_description gazebo.launch.py</span></code></pre></div><figure class="img sz-m al-l"><img src="/uploads/2026/11/image-58.png" alt="Two terminals: the finished build above, and below the source command and the Gazebo launch command" loading="lazy"><figcaption>The second terminal: source, then launch the simulation.</figcaption></figure><h3 id="terminal-3-the-controllers-and-the-node">Terminal 3: the controllers and the node</h3><p>Open one more terminal and start the controllers, which also start simple_controller:</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">. install/setup.bash</span></code></pre></div><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">ros2 launch bumperbot_controller controller.launch.py</span></code></pre></div><figure class="img sz-m al-l"><img src="/uploads/2026/11/image-59.png" alt="Three terminal panes: the build, Gazebo debug output, and the controller launch command" loading="lazy"><figcaption>The third terminal launches the controllers; Gazebo keeps running in the pane above.</figcaption></figure></div><div class="col"><h2 id="sending-a-command-and-reading-the-speed">Sending a command and reading the speed</h2><h3 id="terminal-4-a-turning-command">Terminal 4: a turning command</h3><p>Open a new terminal again, source the workspace and publish a command that only turns: linear speed 0, angular speed 0.5 rad/s.</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">. install/setup.bash</span></code></pre></div><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">ros2 topic pub /bumperbot_controller/cmd_vel geometry_msgs/msg/TwistStamped <span class="tok-string">'header:</span></span>
+<span class="ln"><span class="tok-string">  stamp:</span></span>
+<span class="ln"><span class="tok-string">    sec: 0</span></span>
+<span class="ln"><span class="tok-string">    nanosec: 0</span></span>
+<span class="ln"><span class="tok-string">  frame_id: '</span><span class="tok-string">'</span></span>
+<span class="ln"><span class="tok-string">twist:</span></span>
+<span class="ln"><span class="tok-string">  linear:</span></span>
+<span class="ln"><span class="tok-string">    x: 0.0</span></span>
+<span class="ln"><span class="tok-string">    y: 0.0</span></span>
+<span class="ln"><span class="tok-string">    z: 0.0</span></span>
+<span class="ln"><span class="tok-string">  angular:</span></span>
+<span class="ln"><span class="tok-string">    z: 0.5'</span></span></code></pre></div><figure class="img sz-s al-l"><img src="/uploads/2026/11/image-60.png" alt="The ros2 topic pub command typed over several lines, with the controller log scrolling above" loading="lazy"><figcaption>The command typed over several lines; the controller log scrolls in the pane above.</figcaption></figure><p class="caption">What you should see (the command is sent again and again)</p><div class="codeblock" data-lang="Plain text"><pre class="code"><code>publishing #52: geometry_msgs.msg.TwistStamped(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id='None'), twist=geometry_msgs.msg.Twist(linear=geometry_msgs.msg.Vector3(x=0.0, y=0.0, z=0.0), angular=geometry_msgs.msg.Vector3(x=0.0, y=0.0, z=0.5)))
+
+publishing #53: geometry_msgs.msg.TwistStamped(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id='None'), twist=geometry_msgs.msg.Twist(linear=geometry_msgs.msg.Vector3(x=0.0, y=0.0, z=0.0), angular=geometry_msgs.msg.Vector3(x=0.0, y=0.0, z=0.5)))
+
+publishing #54: geometry_msgs.msg.TwistStamped(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id='None'), twist=geometry_msgs.msg.Twist(linear=geometry_msgs.msg.Vector3(x=0.0, y=0.0, z=0.0), angular=geometry_msgs.msg.Vector3(x=0.0, y=0.0, z=0.5)))
+
+publishing #55: geometry_msgs.msg.TwistStamped(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id='None'), twist=geometry_msgs.msg.Twist(linear=geometry_msgs.msg.Vector3(x=0.0, y=0.0, z=0.0), angular=geometry_msgs.msg.Vector3(x=0.0, y=0.0, z=0.5)))
+
+publishing #56: geometry_msgs.msg.TwistStamped(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id='None'), twist=geometry_msgs.msg.Twist(linear=geometry_msgs.msg.Vector3(x=0.0, y=0.0, z=0.0), angular=geometry_msgs.msg.Vector3(x=0.0, y=0.0, z=0.5)))
+
+publishing #57: geometry_msgs.msg.TwistStamped(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id='None'), twist=geometry_msgs.msg.Twist(linear=geometry_msgs.msg.Vector3(x=0.0, y=0.0, z=0.0), angular=geometry_msgs.msg.Vector3(x=0.0, y=0.0, z=0.5)))
+
+publishing #58: geometry_msgs.msg.TwistStamped(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id='None'), twist=geometry_msgs.msg.Twist(linear=geometry_msgs.msg.Vector3(x=0.0, y=0.0, z=0.0), angular=geometry_msgs.msg.Vector3(x=0.0, y=0.0, z=0.5)))</code></pre></div><h3 id="the-measured-speed">The measured speed</h3><p>In the controller terminal, jointCallback prints one line for every joint_states message:</p><p class="caption">What you should see in the controller terminal</p><div class="codeblock" data-lang="Plain text"><pre class="code"><code><span class="ln">[simple_controller.py-3] [INFO] [1794804280.395014753] [simple_controller]: linear: -0.000000, angular: 0.454545</span>
+<span class="ln">[simple_controller.py-3] [INFO] [1794804280.405066091] [simple_controller]: linear: -0.000000, angular: 0.500000</span>
+<span class="ln">[simple_controller.py-3] [INFO] [1794804280.417371043] [simple_controller]: linear: -0.000000, angular: 0.833333</span>
+<span class="ln">[simple_controller.py-3] [INFO] [1794804280.427553601] [simple_controller]: linear: -0.000000, angular: 0.357143</span>
+<span class="ln">[simple_controller.py-3] [INFO] [1794804280.437835198] [simple_controller]: linear: -0.000000, angular: 0.454545</span></code></pre></div><p>linear stays at 0, because the wheels turn equally fast in opposite directions. angular stays around the commanded 0.5 but changes from line to line. The formula is right: each reading covers only about 10 ms, and a small difference in that time changes the result a lot. Every value fits the idea that the wheels moved 10 ms of turning per message while the stamps were a whole number of milliseconds apart (my guess from the numbers): for example 11 ms gives 0.5 × 10 ÷ 11 = 0.454545. The widget below replays the 92 values from a longer run of the same test.</p><div class="widget"><iframe allow="fullscreen" allowfullscreen src="/widgets/claude-ros2-62-20261115-204953-jumpy-angular.html" title="Why the measured turning speed jumps"></iframe></div><figure class="video"><div class="embed"><iframe src="https://www.youtube-nocookie.com/embed/eMOWst2pNYA?rel=0&amp;modestbranding=1&amp;playsinline=1" loading="lazy" title="Video" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div><figcaption>Screen recording of the test.</figcaption></figure></div><div class="col"><h2 id="remember">Remember</h2><ul><li>A speed needs two readings: wheel speed = (new angle minus old angle) ÷ (stamp now minus stamp before), in rad/s.</li><li>The time comes as whole nanoseconds: divide by <code>S_TO_NS</code> (1 000 000 000) to get seconds.</li><li>Driving speed V = (r × φ̇R + r × φ̇L) ÷ 2, turning speed ω = (r × φ̇R minus r × φ̇L) ÷ s: the two rows of the conversion matrix. velCallback uses the inverse (command), jointCallback the rows as they are (measurement).</li><li>Store the reading as the new "before" values only after using the old ones, and skip a message when dt is 0 (a repeated stamp). The first message, or a jump back in time, only stores the "before" values.</li><li>dt is worked out from two message stamps (lines 51 and 60), so the node's own clock is not involved.</li><li>Equal and opposite wheel speeds give linear 0: turning on the spot. The measured angular speed jumps around 0.5 because each reading covers only about 10 ms.</li><li>JointState comes from sensor_msgs: add <code>find_package(sensor_msgs REQUIRED)</code> to CMakeLists.txt and <code>&lt;depend&gt;sensor_msgs&lt;/depend&gt;</code> to package.xml.</li></ul></div></div>
+    <nav class="pager" aria-label="Chapters">
+<a href="/documented-software-learnings/ros2/ros2-61/"><span class="mono">Chapter 61</span>Robot Speed from Wheel Encoders</a><a class="nx" href="/documented-software-learnings/ros2/ros2-63/"><span class="mono">Chapter 63</span>Robot Position and Orientation from the Wheels</a>    </nav>
+  </article>
+</div>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a><a href="/documented-software-learnings/ultimaker-cura/">Ultimaker Cura</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=69fcf7c238" defer></script>
+<script src="/assets/home.js?v=69fcf7c238" defer></script>
+</body>
+</html>

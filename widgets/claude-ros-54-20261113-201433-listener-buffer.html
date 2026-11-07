@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How the listener fills the buffer</title>
+<style>
+html,body{margin:0;background:#0e182c;color:#e8eef7;font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+.w{padding:16px;max-width:980px;margin:0 auto}
+h1{font-size:18px;margin:0 0 4px}.sub{color:#a9b8cc;font-size:14px;margin:0 0 12px}
+.card{background:#13213a;border:1px solid #23395c;border-radius:12px;padding:14px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:8px 0}
+.btn{background:#1b2c4a;color:#e8eef7;border:1px solid #2b4366;border-radius:8px;padding:6px 12px;font:600 13px system-ui,sans-serif;cursor:pointer}
+.btn:hover{border-color:#ff8a3d}
+label.ck{display:flex;align-items:center;gap:6px;font-size:14px;color:#cfe0f5}
+input[type=range]{width:100%;accent-color:#ff8a3d}
+svg{width:100%;height:auto;display:block}
+.say{background:#0f1b31;border:1px solid #23395c;border-radius:10px;padding:10px 12px;margin-top:10px;font-size:14.5px}
+.ok{color:#66e3b0}.bad{color:#ff6b6b}.warn{color:#ffd24a}.dim{color:#6b7f96}
+</style></head><body><div class="w">
+<h1>How the listener fills the buffer</h1>
+<p class="sub">Your node talks on two topics and also listens to them. Press Play or drag the time, then switch things off to see what the buffer can still answer.</p>
+<div class="card">
+<div class="row"><button class="btn" id="pl">Play</button><button class="btn" id="rs">Reset</button><span class="dim">time since the node started: <b id="tv"></b></span></div>
+<input type="range" id="t" min="0" max="30" step="0.05" value="0" aria-label="time">
+<div class="row"><label class="ck"><input type="checkbox" id="li" checked> TransformListener created (line 26)</label><label class="ck"><input type="checkbox" id="tm" checked> timer running (line 47)</label><label class="ck"><input type="checkbox" id="lt"> listener only starts at 5 s</label></div>
+<svg id="sv" viewBox="0 0 640 300" role="img" aria-label="Broadcasters, topics and the buffer"></svg>
+<div class="say" id="say"></div>
+</div>
+</div>
+<script>
+(function(){
+var S={t:0,play:0,id:null};
+function $(i){return document.getElementById(i)}
+function fx(v){var s=String(Math.round(v*1e6)/1e6);return s.indexOf('.')<0?s+'.0':s}
+function box(x,y,w,h,c,f){return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="10" fill="'+(f||'#0f1d30')+'" stroke="'+c+'" stroke-width="2"/>'}
+function tx(x,y,s,c,a,z,m){return '<text x="'+x+'" y="'+y+'" fill="'+c+'" font-size="'+(z||12)+'" text-anchor="'+(a||'start')+'"'+(m?' font-family="ui-monospace,Consolas,monospace"':' font-weight="700"')+'>'+s+'</text>'}
+function env(x,y,c){return '<g transform="translate('+x.toFixed(1)+' '+y+')"><rect x="-10" y="-7" width="20" height="14" rx="2" fill="#0b1522" stroke="'+c+'" stroke-width="2"/><path d="M-10 -7 L0 1 L10 -7" fill="none" stroke="'+c+'" stroke-width="2"/></g>'}
+function draw(){
+  var t=S.t,L=$('li').checked,T=$('tm').checked,late=$('lt').checked,start=late?5:0,listening=L&&t>=start;
+  var k=T?Math.floor(t*10+1e-9):0,x=0;for(var i=0;i<k;i++)x=x+0.05;
+  var heardFrom=Math.max(start,0),kh=listening&&T?k-Math.floor(heardFrom*10+1e-9):0,kept=Math.min(Math.max(kh,0),100);
+  $('tv').textContent=t.toFixed(2)+' s';
+  var g='';
+  g+=box(10,40,170,90,'#ff8a3d')+tx(95,62,'your node','#eef3fa','middle',13)+tx(95,84,'static broadcaster','#a7b8cd','middle',11,1)+tx(95,102,'dynamic broadcaster','#a7b8cd','middle',11,1)+tx(95,120,T?'timer: every 0.1 s':'timer missing','#ff8a3d','middle',11,1);
+  g+=box(240,30,160,50,'#66e3b0')+tx(320,52,'/tf_static','#eef3fa','middle',13)+tx(320,70,'kept for latecomers','#66e3b0','middle',10.5,1);
+  g+=box(240,100,160,50,T?'#ff8a3d':'#3a4a60')+tx(320,122,'/tf','#eef3fa','middle',13)+tx(320,140,T?'x '+fx(x):'silent','#ff8a3d','middle',10.5,1);
+  g+='<line x1="180" y1="62" x2="240" y2="55" stroke="#66e3b0" stroke-width="2"/><line x1="180" y1="105" x2="240" y2="125" stroke="'+(T?'#ff8a3d':'#3a4a60')+'" stroke-width="2"/>';
+  if(T&&k>0){var ph=(t*10)%1;g+=env(180+60*ph,105+20*ph,'#ff8a3d');if(listening)g+=env(400+60*ph,125+60*ph,'#ff8a3d')}
+  var bc=listening?'#5ab4ff':'#3a4a60';
+  g+=box(460,30,170,170,bc,'#0b1626')+tx(545,52,'tf_buffer_','#eef3fa','middle',13)+tx(545,70,L?(listening?'listener filling':'listener not started'):'no listener','#a7b8cd','middle',10.5,1);
+  var st=L&&t>=start;
+  g+=tx(472,98,'base → top','#66e3b0','start',11.5,1)+tx(472,114,st?'z 0.3, kept forever':'(empty)',st?'#66e3b0':'#6b7f96','start',11,1);
+  g+=tx(472,142,'odom → base','#ff8a3d','start',11.5,1)+tx(472,158,kept>0?kept+' entries, newest x '+fx(x):'(empty)',kept>0?'#ff8a3d':'#6b7f96','start',11,1)+tx(472,174,kept>0?'about the last 10 s':'','#6b7f96','start',10.5,1);
+  g+='<line x1="400" y1="55" x2="460" y2="100" stroke="'+(st?'#66e3b0':'#3a4a60')+'" stroke-width="2"/><line x1="400" y1="125" x2="460" y2="150" stroke="'+(listening&&T?'#ff8a3d':'#3a4a60')+'" stroke-width="2"/>';
+  g+=box(240,220,390,66,'#2b4366','#0f1b31')+tx(252,242,'get_transform odom → bumperbot_top','#a7b8cd','start',11.5,1);
+  var okO=st&&kept>0,okB=st;
+  g+=tx(252,262,okO?'success=True: x '+fx(x)+', z 0.3':'success=False: "odom" does not exist',okO?'#66e3b0':'#ff6b6b','start',12,1);
+  g+=tx(252,279,'base → top: '+(okB?'success=True, z 0.3':'success=False'),okB?'#66e3b0':'#ff6b6b','start',11,1);
+  g+=box(10,220,170,66,'#2b4366','#0f1b31')+tx(95,244,'RViz','#eef3fa','middle',13)+tx(95,264,'another listener','#a7b8cd','middle',11,1)+tx(95,280,'same messages','#6b7f96','middle',10.5,1);
+  $('sv').innerHTML=g;
+  var m;
+  if(!L)m='<span class="bad">No listener:</span> the messages are still published (RViz sees them), but nothing writes them into <code>tf_buffer_</code>. Every lookup fails.';
+  else if(t<start)m='<span class="warn">The listener has not started yet.</span> When it starts, it still gets the static transform, because /tf_static keeps it for late subscribers (as far as I know, this is its transient local setting). Moving transforms sent before that are gone.';
+  else if(!T)m='<span class="warn">No timer:</span> odom is never published, so only bumperbot_base → bumperbot_top can be answered.';
+  else if(k===0)m='Before the first tick (0.1 s) only the static transform exists: asking about odom fails for a moment.';
+  else m='<span class="ok">Both transforms are in the buffer.</span> The static one is stored once; the moving one arrives 10 times a second and the buffer keeps about the last 10 seconds of it.';
+  $('say').innerHTML=m}
+function stop(){if(S.id){clearInterval(S.id);S.id=null}S.play=0;$('pl').textContent='Play'}
+$('pl').onclick=function(){if(S.play){stop();return}S.play=1;this.textContent='Pause';if(S.t>=30)S.t=0;var last=Date.now();
+  S.id=setInterval(function(){var n=Date.now();S.t=Math.min(30,S.t+(n-last)/1000);last=n;$('t').value=S.t;draw();if(S.t>=30)stop()},50)};
+$('rs').onclick=function(){stop();S.t=0;$('t').value=0;draw()};
+$('t').oninput=function(){S.t=+this.value;draw()};
+['li','tm','lt'].forEach(function(i){$(i).onchange=draw});
+draw();
+})();
+</script>
+<script>
+(function(){function s(){parent.postMessage({taWidget:location.pathname,h:document.documentElement.scrollHeight},'*')}
+new ResizeObserver(s).observe(document.documentElement);addEventListener('load',s);setInterval(s,1500);})();
+</script></body></html>

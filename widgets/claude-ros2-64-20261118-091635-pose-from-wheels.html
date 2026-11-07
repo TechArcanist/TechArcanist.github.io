@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Three tests: x, y and theta</title>
+<style>
+html,body{margin:0;background:#0e182c;color:#e8eef7;font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+.w{padding:12px 14px;max-width:1100px;margin:0 auto;background:#0e182c}
+.w.fs{max-width:none;height:100vh;overflow:auto;padding:14px 20px}
+.top{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+h1{font-size:18px;margin:0 0 4px}.sub{color:#a9b8cc;font-size:14px;margin:0 0 10px}
+a{color:#7fc4ff}
+.card{background:#13213a;border:1px solid #23395c;border-radius:12px;padding:12px 14px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:6px 0}
+.btn{background:#1b2c4a;color:#e8eef7;border:1px solid #2b4366;border-radius:8px;padding:6px 12px;font:600 13px system-ui,sans-serif;cursor:pointer}
+.btn:hover,.btn.on{border-color:#ff8a3d}
+.sl{display:block;font-size:13.5px;color:#cfe0f5;margin:4px 0}
+input[type=range]{width:100%;accent-color:#ff8a3d}
+svg{width:100%;height:auto;display:block;max-height:240px}
+.w.fs svg{max-height:60vh}
+.main{display:grid;grid-template-columns:1.15fr 1fr;gap:12px;align-items:start;margin-top:6px}
+@media(max-width:760px){.main{grid-template-columns:1fr}}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:700px){.cols{grid-template-columns:1fr}}
+.say{background:#0f1b31;border:1px solid #23395c;border-radius:10px;padding:8px 12px;margin-top:8px;font-size:12px;white-space:pre-wrap;font-family:ui-monospace,Consolas,monospace;color:#cfe0f5;line-height:1.55}
+.term{background:#060c18;border:1px solid #1f3352;border-radius:8px;padding:8px 10px;font:12px/1.55 ui-monospace,Consolas,monospace;white-space:pre-wrap;word-break:break-all;color:#cfe0f5;margin-top:8px}
+.dim{color:#6b7f96}
+</style></head><body><div class="w" id="wrap">
+<div class="top"><div><h1>Three tests: what x, y and theta do</h1>
+<p class="sub">Pick one of the three commands of the chapter and watch the node add up one small step per reading (lines 84 to 88). More on the adding up: <a href="/documented-software-learnings/ros2/ros2-63/#sd-s5x" target="_blank" rel="noopener">chapter 63, Odometry, one reading at a time</a>.</p></div>
+<button class="btn" id="fsb" aria-label="Show full screen. Press Escape to exit.">Full screen</button></div>
+<div class="card">
+<div class="row"><button class="btn on" data-p="0,0.5">Turn left on the spot</button><button class="btn" data-p="0,-0.5">Turn right on the spot</button><button class="btn" data-p="0.5,0.5">Drive and turn</button></div>
+<div class="cols"><div>
+<label class="sl">command V (linear x): <b id="vv"></b> m/s<input type="range" id="V" min="-0.5" max="1" step="0.1" value="0"></label>
+<label class="sl">command ω (angular z): <b id="wv"></b> rad/s<input type="range" id="W" min="-1.5" max="1.5" step="0.1" value="0.5"></label></div><div>
+<div class="row"><button class="btn" id="pl">Play</button><button class="btn" id="rs">Reset</button><span class="dim">1 reading = 0.01 s</span></div>
+<label class="sl">reading number: <b id="kv"></b><input type="range" id="K" min="1" max="300" step="1" value="40"></label></div></div>
+<div class="main"><div><svg id="sv" viewBox="0 0 640 240" role="img" aria-label="The path of the robot seen from above and a dial with its heading"></svg>
+<div class="term" id="log"></div></div>
+<div class="say" id="say" style="margin-top:0"></div></div>
+</div></div>
+<script>
+(function(){
+var RR=0.033,SS=0.17,TW=2*Math.PI,S={V:0,W:0.5,k:40,play:0,id:null};
+function $(i){return document.getElementById(i)}
+function f6(v){var s=v.toFixed(6);return /^-0\.0+$/.test(s)?'-0.000000':s}
+function g6(v){var s=v.toFixed(6);return /^-0\.0+$/.test(s)?s.slice(1):s}
+function run(V,W,n){var right=(V+W*SS/2)/RR,left=(V-W*SS/2)/RR,dl=left*0.01,dr=right*0.01,x=0,y=0,th=0,o=[];
+  for(var k=1;k<=n;k++){var al=RR*dl,ar=RR*dr,ds=(ar+al)/2,dth=(ar-al)/SS,t0=th,x0=x,y0=y;th=t0+dth;x=x0+ds*Math.cos(th);y=y0+ds*Math.sin(th);
+    o.push({k:k,dl:dl,dr:dr,al:al,ar:ar,ds:ds,dth:dth,t0:t0,t1:th,x0:x0,y0:y0,x1:x,y1:y,lin:(ar+al)/2/0.01,ang:(ar-al)/SS/0.01})}
+  return o}
+function draw(){
+  var R=run(S.V,S.W,300),k=Math.min(S.k,300),r=R[k-1];
+  $('vv').textContent=S.V.toFixed(1);$('wv').textContent=S.W.toFixed(1);$('kv').textContent=k;
+  var mx=0,my=0,Mx=0,My=0;R.forEach(function(q){mx=Math.min(mx,q.x1);Mx=Math.max(Mx,q.x1);my=Math.min(my,q.y1);My=Math.max(My,q.y1)});
+  var sp=Math.max(Mx-mx,My-my,0.6),sc=170/sp,ox=20+(360-(Mx-mx)*sc)/2-mx*sc,oy=120+((My-my)*sc)/2+my*sc;
+  function X(v){return ox+v*sc}function Y(v){return oy-v*sc}
+  var g='<rect x="10" y="10" width="390" height="220" rx="8" fill="#0b1626" stroke="#2b4366"/>';
+  g+='<line x1="'+X(0).toFixed(1)+'" y1="14" x2="'+X(0).toFixed(1)+'" y2="226" stroke="#16263c"/><line x1="14" y1="'+Y(0).toFixed(1)+'" x2="396" y2="'+Y(0).toFixed(1)+'" stroke="#16263c"/>';
+  g+='<polyline fill="none" stroke="#3a4a60" stroke-width="1.5" points="'+['0,0'].concat(R.map(function(q){return q.x1+','+q.y1})).map(function(p){var a=p.split(',');return X(+a[0]).toFixed(1)+','+Y(+a[1]).toFixed(1)}).join(' ')+'"/>';
+  g+='<polyline fill="none" stroke="#ff8a3d" stroke-width="2.5" points="'+['0,0'].concat(R.slice(0,k).map(function(q){return q.x1+','+q.y1})).map(function(p){var a=p.split(',');return X(+a[0]).toFixed(1)+','+Y(+a[1]).toFixed(1)}).join(' ')+'"/>';
+  g+='<circle cx="'+X(0).toFixed(1)+'" cy="'+Y(0).toFixed(1)+'" r="5" fill="#66e3b0"/>';
+  var cx=X(r.x1),cy=Y(r.y1),a=r.t1,L=15;
+  g+='<polygon points="'+(cx+L*Math.cos(a)).toFixed(1)+','+(cy-L*Math.sin(a)).toFixed(1)+' '+(cx+L*0.7*Math.cos(a+2.5)).toFixed(1)+','+(cy-L*0.7*Math.sin(a+2.5)).toFixed(1)+' '+(cx+L*0.7*Math.cos(a-2.5)).toFixed(1)+','+(cy-L*0.7*Math.sin(a-2.5)).toFixed(1)+'" fill="#13213a" stroke="#ffd24a" stroke-width="2.5"/>';
+  g+='<text x="18" y="28" fill="#a9b8cd" font-size="11">from above: x right, y up, green dot = start, '+sp.toFixed(1)+' m across</text>';
+  var dx=520,dy=122,DR=78,t=r.t1%TW;
+  g+='<circle cx="'+dx+'" cy="'+dy+'" r="'+DR+'" fill="#0b1626" stroke="#2b4366"/><line x1="'+(dx-DR)+'" y1="'+dy+'" x2="'+(dx+DR)+'" y2="'+dy+'" stroke="#16263c"/><line x1="'+dx+'" y1="'+(dy-DR)+'" x2="'+dx+'" y2="'+(dy+DR)+'" stroke="#16263c"/>';
+  g+='<line x1="'+dx+'" y1="'+dy+'" x2="'+(dx+DR*Math.cos(r.t0)).toFixed(1)+'" y2="'+(dy-DR*Math.sin(r.t0)).toFixed(1)+'" stroke="#7f93ad" stroke-width="4"/><line x1="'+dx+'" y1="'+dy+'" x2="'+(dx+DR*Math.cos(r.t1)).toFixed(1)+'" y2="'+(dy-DR*Math.sin(r.t1)).toFixed(1)+'" stroke="#ff8a3d" stroke-width="4"/>';
+  g+='<text x="'+dx+'" y="'+(dy+DR+20)+'" fill="#ff8a3d" font-size="12" text-anchor="middle" font-weight="700">theta '+g6(r.t1)+' rad</text>';
+  g+='<text x="'+dx+'" y="22" fill="#a9b8cd" font-size="11" text-anchor="middle">heading dial (grey: before, orange: now)</text>';
+  $('sv').innerHTML=g;
+  var lines=[],i0=Math.max(0,k-3);for(var i=i0;i<k;i++){var q=R[i];lines.push('linear: '+g6(q.lin)+', angular: '+g6(q.ang));lines.push('x: '+g6(q.x1)+', y: '+g6(q.y1)+', theta: '+g6(q.t1))}
+  $('log').textContent='Terminal 3, last 3 readings (here dt is exactly 0.01 s, so linear and angular do not jump; in the real log they do):\n'+lines.join('\n');
+  var cs=Math.cos(r.t1),sn=Math.sin(r.t1);
+  $('say').textContent='reading '+k+':\nd_s = ('+g6(r.ar)+' + '+g6(r.al)+') ÷ 2 = '+g6(r.ds)+' m      d_theta = ('+g6(r.ar)+' minus '+g6(r.al)+') ÷ 0.17 = '+g6(r.dth)+' rad\ntheta = '+g6(r.t0)+' + '+g6(r.dth)+' = '+g6(r.t1)+' rad\nx = '+g6(r.x0)+' + '+g6(r.ds)+' × cos('+g6(r.t1)+') = '+g6(r.x0)+' + '+g6(r.ds)+' × '+g6(cs)+' = '+g6(r.x1)+' m\ny = '+g6(r.y0)+' + '+g6(r.ds)+' × sin('+g6(r.t1)+') = '+g6(r.y0)+' + '+g6(r.ds)+' × '+g6(sn)+' = '+g6(r.y1)+' m'
+   +(Math.abs(r.ds)<1e-12?'\nNo step forward (equal and opposite wheels): x and y stay put and only theta changes.':'')
+   +(Math.abs(S.W)>1e-9&&Math.abs(S.V)>1e-9?'\nThe robot drives a circle of radius V ÷ ω = '+S.V.toFixed(1)+' ÷ '+S.W.toFixed(1)+' = '+(S.V/S.W).toFixed(2)+' m.':'')}
+function stop(){if(S.id){clearInterval(S.id);S.id=null}S.play=0;$('pl').textContent='Play'}
+$('pl').onclick=function(){if(S.play){stop();return}S.play=1;this.textContent='Pause';if(S.k>=300)S.k=1;S.id=setInterval(function(){S.k=Math.min(300,S.k+3);$('K').value=S.k;draw();if(S.k>=300)stop()},50)};
+$('rs').onclick=function(){stop();S.k=1;$('K').value=1;draw()};
+$('V').oninput=function(){S.V=+this.value;mark();draw()};$('W').oninput=function(){S.W=+this.value;mark();draw()};$('K').oninput=function(){S.k=+this.value;draw()};
+var PB=Array.prototype.slice.call(document.querySelectorAll('button[data-p]'));
+function mark(){PB.forEach(function(b){var p=b.dataset.p.split(',');b.classList.toggle('on',+p[0]===S.V&&+p[1]===S.W)})}
+PB.forEach(function(b){b.onclick=function(){var p=b.dataset.p.split(',');S.V=+p[0];S.W=+p[1];$('V').value=S.V;$('W').value=S.W;mark();draw()}});
+draw();
+(function(){
+  var W=$('wrap'),B=$('fsb'),pseudo=false;
+  function isFs(){return !!(document.fullscreenElement||document.webkitFullscreenElement)}
+  function on(p){W.classList.add('fs');if(p){W.style.position='fixed';W.style.inset='0';W.style.zIndex='99';pseudo=true}B.textContent='Exit full screen'}
+  function off(){W.classList.remove('fs');W.style.position='';W.style.inset='';W.style.zIndex='';pseudo=false;B.textContent='Full screen'}
+  B.onclick=function(){
+    if(W.classList.contains('fs')){if(isFs())(document.exitFullscreen||document.webkitExitFullscreen).call(document);off();return}
+    var f=W.requestFullscreen||W.webkitRequestFullscreen;
+    if(f){try{var r=f.call(W);if(r&&r.then)r.then(function(){on(false)},function(){on(true)});else on(false)}catch(e){on(true)}}else on(true)};
+  document.addEventListener('fullscreenchange',function(){if(!isFs()&&!pseudo)off()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&pseudo)off()});
+})();
+})();
+</script>
+<script>
+(function(){function s(){parent.postMessage({taWidget:location.pathname,h:document.documentElement.scrollHeight},'*')}
+new ResizeObserver(s).observe(document.documentElement);addEventListener('load',s);setInterval(s,1500);})();
+</script></body></html>

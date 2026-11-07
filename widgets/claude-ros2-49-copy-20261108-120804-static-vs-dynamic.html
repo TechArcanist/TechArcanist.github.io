@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Static vs dynamic transforms</title>
+<style>
+:root{--bg:#0e182c;--panel:#14223d;--line:#2a3b5f;--text:#e8eef9;--dim:#9aabc9;--or:#ff9f43;--or2:#ffc078;--bl:#5aa9ff;--gr:#4cc38a;--rd:#ff6b6b}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.w{max-width:900px;margin:0 auto;padding:16px}
+h3{margin:0 0 4px;font-size:1.05rem}
+p.s{margin:0 0 12px;color:var(--dim);font-size:.9rem}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px}
+svg{display:block;width:100%;height:auto}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}
+button{font:inherit;font-weight:600;color:var(--bg);background:var(--or);border:0;border-radius:999px;padding:8px 16px;cursor:pointer}
+button.g{background:transparent;color:var(--text);border:1px solid var(--line)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--or2);outline-offset:2px}
+label{display:flex;align-items:center;gap:8px;font-size:.88rem;color:var(--dim)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+@media (max-width:560px){.cols{grid-template-columns:1fr}}
+.box{background:#0f1b33;border:1px solid var(--line);border-radius:10px;padding:10px;font-size:.88rem}
+.box h4{margin:0 0 6px;font-size:.92rem}
+.box.ok{border-color:var(--gr)}.box.bad{border-color:var(--rd)}.box.warn{border-color:var(--or)}
+.dim{color:var(--dim)}
+</style>
+</head>
+<body>
+<div class="w">
+<h3>Said once, or said again and again?</h3>
+<p class="s">Your node sends the top plate position once on /tf_static (line 33) and the base position 10 times a second on /tf (line 57). Start a listener late and see what each topic gives it. The animation is slowed down 5 times so you can follow the dots.</p>
+<div class="card">
+<svg id="sv" viewBox="0 0 760 262" role="img" aria-label="Two topics: one message kept on /tf_static, a stream of messages on /tf, and a listener"></svg>
+<div class="row">
+<button id="play">Pause</button>
+<button id="late">Start a listener now</button>
+<button class="g" id="reset">Reset</button>
+</div>
+<div class="row">
+<label><input type="checkbox" id="wrong"> mistake: use the static broadcaster for the moving base (line 14)</label>
+</div>
+<div class="cols">
+<div class="box" id="bS"><h4>/tf_static (top plate)</h4><div id="oS" class="dim">No listener yet.</div></div>
+<div class="box" id="bD"><h4>/tf (moving base)</h4><div id="oD" class="dim">No listener yet.</div></div>
+</div>
+</div>
+</div>
+<script>
+(function(){
+var C={bg:'#0e182c',line:'#2a3b5f',text:'#e8eef9',dim:'#9aabc9',or:'#ff9f43',or2:'#ffc078',bl:'#5aa9ff',gr:'#4cc38a',rd:'#ff6b6b'};
+var t=0,run=true,listenAt=null,timer=null,SLOW=5;
+function el(i){return document.getElementById(i)}
+function tx(x,y,s,c,a,sz,w){return '<text x="'+x+'" y="'+y+'" fill="'+c+'" font-size="'+(sz||13)+'" font-weight="'+(w||600)+'" text-anchor="'+(a||'start')+'" font-family="system-ui,sans-serif">'+s+'</text>'}
+function box(x,y,w,h,col,a,b){return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="10" fill="#14223d" stroke="'+col+'" stroke-width="2"/>'+tx(x+w/2,y+h/2-2,a,C.text,'middle',13,700)+tx(x+w/2,y+h/2+15,b,C.dim,'middle',11,500)}
+function draw(){
+  var wrong=el('wrong').checked,ticks=Math.floor(t/0.1+1e-9),h='';
+  h+='<rect width="760" height="262" fill="'+C.bg+'"/>';
+  h+=box(10,30,150,56,C.gr,'__init__','line 33, runs once')+box(10,150,150,56,C.or,'timerCallback','line 57, every 0.1 s');
+  h+=box(250,30,200,56,C.gr,'/tf_static','keeps the last message*')+box(250,150,200,56,wrong?C.rd:C.or,wrong?'/tf_static (wrong)':'/tf','not kept, keeps coming');
+  h+='<line x1="160" y1="58" x2="250" y2="58" stroke="'+C.line+'" stroke-width="3"/><line x1="160" y1="178" x2="250" y2="178" stroke="'+C.line+'" stroke-width="3"/>';
+  h+='<circle cx="290" cy="104" r="6" fill="'+C.gr+'"/>'+tx(302,108,'kept: z = 0.3 (sent at t = 0)',C.gr,'start',11,700);
+  for(var k=Math.max(1,ticks-6);k<=ticks;k++){var age=t-k*0.1,px=160+age*SLOW*90;if(px<250)h+='<circle cx="'+px+'" cy="178" r="6" fill="'+C.or+'"/>'}
+  if(ticks>0)h+=tx(350,224,'latest x = '+(ticks*0.05).toFixed(2)+' m',C.or2,'middle',11,700);
+  var on=listenAt!==null;
+  h+=box(560,90,180,70,on?C.bl:C.line,on?'listener (RViz)':'no listener yet',on?'started at t = '+listenAt.toFixed(1)+' s':'press the button');
+  if(on){h+='<line x1="450" y1="58" x2="560" y2="110" stroke="'+C.gr+'" stroke-width="3"/><line x1="450" y1="178" x2="560" y2="140" stroke="'+(wrong?C.rd:C.or)+'" stroke-width="3"/>'}
+  h+=tx(10,252,'* as far as I know: /tf_static uses transient-local QoS, so late listeners receive the stored message.',C.dim,'start',11,500);
+  h+=tx(740,20,'t = '+t.toFixed(1)+' s (real time, shown 5x slower)',C.dim,'end',11,600);
+  el('sv').innerHTML=h;
+  if(on){
+    el('oS').innerHTML='Got the top plate position <b>at once</b>, even though it was sent '+listenAt.toFixed(1)+' s before the listener started. It is kept.';el('bS').className='box ok';
+    var got=Math.max(0,ticks-Math.floor(listenAt/0.1+1e-9));
+    if(wrong){el('oD').innerHTML='Only the <b>newest</b> x is kept, and it is treated as true at all times. Smooth motion and lookups in the past break; RViz may show the base jumping. No error is printed.';el('bD').className='box bad'}
+    else{el('oD').innerHTML='Nothing old is kept, but a new position arrives every 0.1 s: '+got+' received since the listener started (latest x = '+(ticks*0.05).toFixed(2)+' m).';el('bD').className='box ok'}
+  }else{el('oS').textContent='No listener yet.';el('oD').textContent='No listener yet.';el('bS').className='box';el('bD').className='box'}
+}
+function tick(){if(!run)return;t=Math.round((t+0.02)*100)/100;draw()}
+timer=setInterval(tick,100);
+el('play').onclick=function(){run=!run;this.textContent=run?'Pause':'Play'};
+el('late').onclick=function(){listenAt=t;draw()};
+el('reset').onclick=function(){t=0;listenAt=null;run=true;el('play').textContent='Pause';draw()};
+el('wrong').onchange=draw;
+draw();
+})();
+</script>
+<script>
+(function(){function s(){parent.postMessage({taWidget:location.pathname,h:document.documentElement.scrollHeight},'*')}
+new ResizeObserver(s).observe(document.documentElement);addEventListener('load',s);setInterval(s,1500);})();
+</script></body>
+</html>
