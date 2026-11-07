@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wheel Odometry: x, y and theta in the Simple Controller | ROS 2 | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="Introduction In chapter 62 the node simple_controller learned to measure how the robot really moves. It reads the wheel angles on the joint_states topic, works…">
+<link rel="canonical" href="https://techarcanist.com/documented-software-learnings/ros2/ros2-64/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="Wheel Odometry: x, y and theta in the Simple Controller | ROS 2">
+<meta property="og:description" content="Introduction In chapter 62 the node simple_controller learned to measure how the robot really moves. It reads the wheel angles on the joint_states topic, works…">
+<meta property="og:url" content="https://techarcanist.com/documented-software-learnings/ros2/ros2-64/">
+<meta property="og:image" content="https://techarcanist.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=e43b0871b9">
+<link rel="stylesheet" href="/assets/home.css?v=e43b0871b9">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/" aria-current="page">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap reader wide">
+  <aside class="rd-nav" id="rd-nav">
+    <a class="rd-series" href="/documented-software-learnings/ros2/"><span class="label">Series</span>ROS 2</a>
+    <ol>
+      <li><a href="/documented-software-learnings/ros2/ros2_a/"><span class="mono">01</span>Installing Ubuntu Desktop (Dual Boot with Windows)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_b/"><span class="mono">02</span>ROS 2 Jazzy Installation on Ubuntu (Step-by-Step)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_c/"><span class="mono">03</span>Development Environment Setup for ROS 2 Jazzy on Ubuntu (With Clear Explanations)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_d/"><span class="mono">04</span>ROS 2 Fundamentals: Architecture, Communication, Packages, and Workspaces</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_e/"><span class="mono">05</span>ROS 2 Workspace &amp; Package Creation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_f/"><span class="mono">06</span>ROS 2 Python Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_g/"><span class="mono">07</span>ROS 2 C++ Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_h/"><span class="mono">08</span>ROS 2 Python Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_i/"><span class="mono">09</span>ROS 2 C++ Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_j/"><span class="mono">10</span>Robot Locomotion: Introduction</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_k/"><span class="mono">11</span>Wheeled Locomotion Architectures</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_l/"><span class="mono">12</span>Rolling Friction &amp; Wheeled Locomotion Efficiency</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_m/"><span class="mono">13</span>Introduction to Robot Simulation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_n/"><span class="mono">14</span>URDF</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_o/"><span class="mono">15</span>Create a URDF Model</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_p/"><span class="mono">16</span>Rviz</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_q/"><span class="mono">17</span>Node Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_r/"><span class="mono">18</span>Python Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_s/"><span class="mono">19</span>C++ Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_t/"><span class="mono">20</span>ROS 2 Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-u/"><span class="mono">21</span>Visualize The Robot In RVIZ2</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-v/"><span class="mono">22</span>Launch Files</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-w/"><span class="mono">23</span>ROS 2 Launch Files: Visualizing the Robot with One Command</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-x/"><span class="mono">24</span>Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-y/"><span class="mono">25</span>Simulating the Robot in Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-z/"><span class="mono">26</span>ROS 2 Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-aa/"><span class="mono">27</span>Control Types</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ab/"><span class="mono">28</span>ROS 2 Control: Prepare the Robot for Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ac/"><span class="mono">29</span>Understanding ROS 2 Control | Explanation of Chapter 28</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ad/"><span class="mono">30</span>ROS 2 Control: Moving the BumperBot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ae/"><span class="mono">31</span>Robot Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-af/"><span class="mono">32</span>Pose of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_af/"><span class="mono">33</span>Translation Vector</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ag/"><span class="mono">34</span>Introduction to Turtlesim</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ah/"><span class="mono">35</span>Translation Vector Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ai/"><span class="mono">36</span>Translation Vector Between Two Turtles: CPP</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_aj/"><span class="mono">37</span>Rotation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ak/"><span class="mono">38</span>Rotation Matrix Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_al/"><span class="mono">39</span>Transformation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_am/"><span class="mono">40</span>Differential Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-41/"><span class="mono">41</span>Velocity of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-42/"><span class="mono">42</span>Simple Speed Controller: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-43/"><span class="mono">43</span>Launch the Simple Speed Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-44/"><span class="mono">44</span>Teleoperating the BumperBot with a Joystick</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-45/"><span class="mono">45</span>ROS 2 Diff Drive Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-46/"><span class="mono">46</span>TF 2 Library</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-47/"><span class="mono">47</span>Operation With Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-48/"><span class="mono">48</span>Static &amp; Dynamic Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-49/"><span class="mono">49</span>Simple TF2 Static Broadcaster</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-50/"><span class="mono">50</span>Simple TF2 Broadcaster: Static and Dynamic Transforms</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-51/"><span class="mono">51</span>ROS 2 Services</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-52/"><span class="mono">52</span>Service Server in Python: AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-53/"><span class="mono">53</span>Service Client in Python: Calling AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-54/"><span class="mono">54</span>Simple TF2 Listener in Python: a get_transform Service</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-55/"><span class="mono">55</span>Euler Angles and Quaternions</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-56/"><span class="mono">56</span>Euler to Quaternion: Turning the Robot with tf_transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-57/"><span class="mono">57</span>tf2 Tools: view_frames and tf2_echo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-58/"><span class="mono">58</span>Where Is the Robot? Local and Global Localization</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-59/"><span class="mono">59</span>Odometry: Counting Steps to Know Where the Robot Is</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-60/"><span class="mono">60</span>Wheel Odometry and Encoders</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-61/"><span class="mono">61</span>Robot Speed from Wheel Encoders</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-62/"><span class="mono">62</span>Simple Controller: Robot Speed from Joint States</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-63/"><span class="mono">63</span>Robot Position and Orientation from the Wheels</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-64/" aria-current="page"><span class="mono">64</span>Wheel Odometry: x, y and theta in the Simple Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-65/"><span class="mono">65</span>Publish Odometry Message</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-66/"><span class="mono">66</span>Broadcast Odometry Transform</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-67/"><span class="mono">67</span>Probability Introduction</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-68/"><span class="mono">68</span>Probability Tools for Localization</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-69/"><span class="mono">69</span>Adding Noise to Robot Motion: the Noisy Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-70/"><span class="mono">70</span>Launch Noisy Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-71/"><span class="mono">71</span>Odometry Comparison</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-72/"><span class="mono">72</span>Advantages of Having Multiple Sensors</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-73/"><span class="mono">73</span>Gyroscope</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-74/"><span class="mono">74</span>Accelerometer and IMU</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-75/"><span class="mono">75</span>Simulate IMU Sensor</a></li>
+    </ol>
+  </aside>
+  <article class="rd-main">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/documented-software-learnings/">Library</a><span>/</span><a href="/documented-software-learnings/ros2/">ROS 2</a><span>/</span><span>64</span></nav>
+    <button class="btn btn-sm btn-line rd-tg" type="button" id="rd-tg">All chapters</button>
+<p class="sh-label mono"><span>64</span>Chapter 64 of 75</p>    <h1>Wheel Odometry: x, y and theta in the Simple Controller</h1>
+<div class="rd-prog" aria-hidden="true"><i style="width:85.3%"></i></div>    <div class="prose"><div class="col"><h2 id="introduction">Introduction</h2><p>In chapter 62 the node <code>simple_controller</code> learned to measure how the robot really moves. It reads the wheel angles on the <code>joint_states</code> topic, works out how far each wheel turned (dp) and how much time passed (dt), and logs the driving speed <code>linear</code> and the turning speed <code>angular</code>. Chapter 63 then showed the idea behind odometry: a distance is a speed added up over many tiny pieces of time (the ∫ sign), and an angle works the same way.</p><p>This chapter puts that idea into code. The node now keeps the robot's <b>pose</b>, three numbers that say where the robot is and which way it faces:</p><ul><li><code>x_</code>: how far the robot is in front of its starting point, in metres,</li><li><code>y_</code>: how far it is to the left of its starting point, in metres,</li><li><code>theta_</code>: the direction it faces, in radians.</li></ul><p>With every joint_states message the node works out one small step, how far the robot moved (<code>d_s</code>) and how much it turned (<code>d_theta</code>), and adds the step to x, y and theta. Then it logs the three numbers, so they can be watched changing while the robot turns and drives in Gazebo.</p><p class="note">The node from chapter 62 must already build and run, with the Gazebo simulation and the controller launch file. This chapter only changes simple_controller.py. It needs no new dependency, because <code>math</code> is part of Python itself (as far as I know).</p><h3 id="where-the-pieces-come-from">Where the pieces come from</h3><div class="table-wrap"><table><tbody><tr><td>Idea</td><td>Where it was met</td><td>Section</td></tr><tr><td>counting steps to know where the robot is</td><td>chapter 59</td><td><a href="/documented-software-learnings/ros2/ros2-59/#sd-s3x">Wheel odometry: counting wheel turns</a></td></tr><tr><td>how an encoder gives the angle of a wheel, and why odometry drifts</td><td>chapter 60</td><td><a href="/documented-software-learnings/ros2/ros2-60/#sd-s2x">The incremental encoder</a> and <a href="/documented-software-learnings/ros2/ros2-60/#sd-s4x">When odometry goes wrong</a></td></tr><tr><td>dp (new angle minus old angle) and dt</td><td>chapter 61</td><td><a href="/documented-software-learnings/ros2/ros2-61/#sd-s4x">Change, written Δ, and the wheel speed</a></td></tr><tr><td>jointCallback, linear and angular</td><td>chapter 62</td><td><a href="/documented-software-learnings/ros2/ros2-62/#the-formulas">The formulas</a> and <a href="/documented-software-learnings/ros2/ros2-62/#how-jointcallback-links-to-chapters-59-to-61">How jointCallback links to chapters 59 to 61</a></td></tr><tr><td>adding up small pieces; how far the robot moved; how much it turned</td><td>chapter 63</td><td><a href="/documented-software-learnings/ros2/ros2-63/#sd-s2x">Adding up small pieces: the ∫ sign</a>, <a href="/documented-software-learnings/ros2/ros2-63/#sd-s3x">How far the robot moved</a>, <a href="/documented-software-learnings/ros2/ros2-63/#sd-s4x">How much the robot turned</a>, <a href="/documented-software-learnings/ros2/ros2-63/#sd-s5x">Odometry, one reading at a time</a></td></tr></tbody></table></div><h3 id="the-formulas">The formulas</h3><p>Every letter first, then the formulas:</p><div class="table-wrap"><table><tbody><tr><td>Letter</td><td>Meaning</td><td>Value here</td></tr><tr><td>r</td><td>wheel radius</td><td>0.033 m</td></tr><tr><td>s</td><td>wheel separation (distance between the two wheels)</td><td>0.17 m</td></tr><tr><td>Δφ (dp_left, dp_right in the code)</td><td>how far a wheel turned since the last reading: new angle minus old angle</td><td>in rad</td></tr><tr><td>Δs (d_s)</td><td>how far the robot moved forward in this reading: (r × ΔφR + r × ΔφL) ÷ 2</td><td>in m</td></tr><tr><td>Δθ (d_theta)</td><td>how much the robot turned in this reading: (r × ΔφR minus r × ΔφL) ÷ s</td><td>in rad</td></tr><tr><td>θ (theta_)</td><td>the heading: the old θ plus Δθ</td><td>in rad</td></tr><tr><td>x (x_)</td><td>the old x plus Δs × cos θ</td><td>in m</td></tr><tr><td>y (y_)</td><td>the old y plus Δs × sin θ</td><td>in m</td></tr></tbody></table></div><p class="note">Δs and Δθ have the same shape as V and ω of chapter 62, but with Δφ in place of φ̇. Speed × time = distance, and φ̇ × Δt = Δφ, so Δt cancels: the step comes straight from dp, with no division by time. The <b>new</b> θ is used for x and y, so the line that adds to theta comes first.</p><figure class="img sz-l"><img src="/uploads/claude/ros2-64-20261118-091635/wheel-steps.svg" alt="Two wheels seen from above with the left wheel rolling 0.004575 m and the right wheel 0.005425 m. The orange arrow in the middle is their average, d_s = 0.005 m. The difference divided by s = 0.17 m gives d_theta = 0.005 rad." loading="lazy"><figcaption>Two wheel distances give the step forward (their average) and the turn (their difference divided by s). The numbers are one reading of the drive and turn test below.</figcaption></figure><figure class="img sz-l"><img src="/uploads/claude/ros2-64-20261118-091635/step-split.svg" alt="One step d_s drawn at the heading theta. The part along x is d_s times cos theta and the part along y is d_s times sin theta. An example with theta = 198.530 rad gives x changing by -0.004099 m and y by -0.002863 m." loading="lazy"><figcaption>One step, split into its x share and its y share. The example is a real reading from the test below.</figcaption></figure></div><div class="col"><h2 id="writing-the-code">Writing the code</h2><h3 id="open-the-file">Open the file</h3><p>In VS Code, open <code>src</code>, then the <code>bumperbot_controller</code> package folder, then the <code>bumperbot_controller</code> folder inside it, and open <code>simple_controller.py</code>.</p><figure class="img sz-s al-l"><img src="/uploads/2026/11/image-63.png" alt="The VS Code explorer with src, bumperbot_controller, bumperbot_controller and simple_controller.py marked by a yellow arrow" loading="lazy"><figcaption>The path to simple_controller.py: src, bumperbot_controller, bumperbot_controller, simple_controller.py.</figcaption></figure><h3 id="the-code">The code</h3><p>The whole node, with the new odometry lines added to the node of chapter 62:</p><div class="codeblock" data-lang="Python"><pre class="code numbered"><code><span class="ln"><span class="tok-comment">#!/usr/bin/env python3</span></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">import</span> <span class="tok-namespace">rclpy</span></span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">rclpy</span><span class="tok-namespace">.</span><span class="tok-namespace">node</span> <span class="tok-keyword">import</span> Node</span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">std_msgs</span><span class="tok-namespace">.</span><span class="tok-namespace">msg</span> <span class="tok-keyword">import</span> Float64MultiArray</span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">geometry_msgs</span><span class="tok-namespace">.</span><span class="tok-namespace">msg</span> <span class="tok-keyword">import</span> TwistStamped</span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">sensor_msgs</span><span class="tok-namespace">.</span><span class="tok-namespace">msg</span> <span class="tok-keyword">import</span> JointState</span>
+<span class="ln"><span class="tok-keyword">import</span> <span class="tok-namespace">numpy</span> <span class="tok-keyword">as</span> <span class="tok-namespace">np</span></span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">rclpy</span><span class="tok-namespace">.</span><span class="tok-namespace">time</span> <span class="tok-keyword">import</span> Time</span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">rclpy</span><span class="tok-namespace">.</span><span class="tok-namespace">constants</span> <span class="tok-keyword">import</span> S_TO_NS</span>
+<span class="ln"><span class="tok-keyword">import</span> <span class="tok-namespace">math</span></span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">class</span> <span class="tok-className">SimpleController</span><span class="tok-punctuation">(</span>Node<span class="tok-punctuation">)</span><span class="tok-punctuation">:</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-keyword">def</span> <span class="tok-definition">__init__</span><span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span></span>
+<span class="ln">        <span class="tok-typeName">super</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span><span class="tok-definition">__init__</span><span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">simple_controller</span><span class="tok-string">"</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>declare_parameter<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">wheel_radius</span><span class="tok-string">"</span><span class="tok-punctuation">,</span> <span class="tok-number">0.033</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>declare_parameter<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">wheel_separation</span><span class="tok-string">"</span><span class="tok-punctuation">,</span> <span class="tok-number">0.17</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_ <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_parameter<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">wheel_radius</span><span class="tok-string">"</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>get_parameter_value<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>double_value</span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_separation_ <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_parameter<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">wheel_separation</span><span class="tok-string">"</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>get_parameter_value<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>double_value</span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_logger<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>info<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">Using wheel radius </span><span class="tok-string">%f</span><span class="tok-string">"</span> <span class="tok-operator">%</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_<span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_logger<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>info<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">Using wheel separation </span><span class="tok-string">%f</span><span class="tok-string">"</span> <span class="tok-operator">%</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_separation_<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>left_wheel_prev_pos_ <span class="tok-operator">=</span> <span class="tok-number">0.0</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>right_wheel_prev_pos_ <span class="tok-operator">=</span> <span class="tok-number">0.0</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>prev_time_ <span class="tok-operator">=</span> <span class="tok-bool">None</span>   <span class="tok-comment"># set from the first joint_states message</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>x_ <span class="tok-operator">=</span> <span class="tok-number">0.0</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>y_ <span class="tok-operator">=</span> <span class="tok-number">0.0</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>theta_ <span class="tok-operator">=</span> <span class="tok-number">0.0</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_cmd_pub_ <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>create_publisher<span class="tok-punctuation">(</span>Float64MultiArray<span class="tok-punctuation">,</span> <span class="tok-string">"</span><span class="tok-string">simple_velocity_controller/commands</span><span class="tok-string">"</span><span class="tok-punctuation">,</span> <span class="tok-number">10</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>vel_sub_ <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>create_subscription<span class="tok-punctuation">(</span>TwistStamped<span class="tok-punctuation">,</span> <span class="tok-string">"</span><span class="tok-string">bumperbot_controller/cmd_vel</span><span class="tok-string">"</span><span class="tok-punctuation">,</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>velCallback<span class="tok-punctuation">,</span> <span class="tok-number">10</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>joint_sub_ <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>create_subscription<span class="tok-punctuation">(</span>JointState<span class="tok-punctuation">,</span> <span class="tok-string">"</span><span class="tok-string">joint_states</span><span class="tok-string">"</span><span class="tok-punctuation">,</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>jointCallback<span class="tok-punctuation">,</span> <span class="tok-number">10</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>speed_conversion_ <span class="tok-operator">=</span> np<span class="tok-operator">.</span>array<span class="tok-punctuation">(</span><span class="tok-punctuation">[</span><span class="tok-punctuation">[</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_<span class="tok-operator">/</span><span class="tok-number">2</span><span class="tok-punctuation">,</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_<span class="tok-operator">/</span><span class="tok-number">2</span><span class="tok-punctuation">]</span><span class="tok-punctuation">,</span></span>
+<span class="ln">                                           <span class="tok-punctuation">[</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_<span class="tok-operator">/</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_separation_<span class="tok-punctuation">,</span> <span class="tok-operator">-</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_<span class="tok-operator">/</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_separation_<span class="tok-punctuation">]</span><span class="tok-punctuation">]</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_logger<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>info<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">The conversion matrix is </span><span class="tok-string">%s</span><span class="tok-string">"</span> <span class="tok-operator">%</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>speed_conversion_<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-keyword">def</span> <span class="tok-definition">velCallback</span><span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-punctuation">,</span> msg<span class="tok-punctuation">)</span><span class="tok-punctuation">:</span></span>
+<span class="ln">        robot_speed <span class="tok-operator">=</span> np<span class="tok-operator">.</span>array<span class="tok-punctuation">(</span><span class="tok-punctuation">[</span><span class="tok-punctuation">[</span>msg<span class="tok-operator">.</span>twist<span class="tok-operator">.</span>linear<span class="tok-operator">.</span>x<span class="tok-punctuation">]</span><span class="tok-punctuation">,</span></span>
+<span class="ln">                                <span class="tok-punctuation">[</span>msg<span class="tok-operator">.</span>twist<span class="tok-operator">.</span>angular<span class="tok-operator">.</span>z<span class="tok-punctuation">]</span><span class="tok-punctuation">]</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        wheel_speed <span class="tok-operator">=</span> np<span class="tok-operator">.</span>matmul<span class="tok-punctuation">(</span>np<span class="tok-operator">.</span>linalg<span class="tok-operator">.</span>inv<span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>speed_conversion_<span class="tok-punctuation">)</span><span class="tok-punctuation">,</span> robot_speed<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        wheel_speed_msg <span class="tok-operator">=</span> Float64MultiArray<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        wheel_speed_msg<span class="tok-operator">.</span>data <span class="tok-operator">=</span> <span class="tok-punctuation">[</span>wheel_speed<span class="tok-punctuation">[</span><span class="tok-number">1</span><span class="tok-punctuation">,</span> <span class="tok-number">0</span><span class="tok-punctuation">]</span><span class="tok-punctuation">,</span> wheel_speed<span class="tok-punctuation">[</span><span class="tok-number">0</span><span class="tok-punctuation">,</span> <span class="tok-number">0</span><span class="tok-punctuation">]</span><span class="tok-punctuation">]</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_cmd_pub_<span class="tok-operator">.</span>publish<span class="tok-punctuation">(</span>wheel_speed_msg<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-keyword">def</span> <span class="tok-definition">jointCallback</span><span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-punctuation">,</span> msg<span class="tok-punctuation">)</span><span class="tok-punctuation">:</span></span>
+<span class="ln">        now <span class="tok-operator">=</span> Time<span class="tok-operator">.</span>from_msg<span class="tok-punctuation">(</span>msg<span class="tok-operator">.</span>header<span class="tok-operator">.</span>stamp<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-comment"># First message, or sim time went backwards (e.g. sim reset): re-seed</span></span>
+<span class="ln">        <span class="tok-keyword">if</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>prev_time_ <span class="tok-operator">is</span> <span class="tok-bool">None</span> <span class="tok-operator">or</span> now <span class="tok-operator">&lt;</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>prev_time_<span class="tok-punctuation">:</span></span>
+<span class="ln">            <span class="tok-typeName">self</span><span class="tok-operator">.</span>left_wheel_prev_pos_ <span class="tok-operator">=</span> msg<span class="tok-operator">.</span>position<span class="tok-punctuation">[</span><span class="tok-number">0</span><span class="tok-punctuation">]</span></span>
+<span class="ln">            <span class="tok-typeName">self</span><span class="tok-operator">.</span>right_wheel_prev_pos_ <span class="tok-operator">=</span> msg<span class="tok-operator">.</span>position<span class="tok-punctuation">[</span><span class="tok-number">1</span><span class="tok-punctuation">]</span></span>
+<span class="ln">            <span class="tok-typeName">self</span><span class="tok-operator">.</span>prev_time_ <span class="tok-operator">=</span> now</span>
+<span class="ln">            <span class="tok-keyword">return</span></span>
+<span class="ln"></span>
+<span class="ln">        dt <span class="tok-operator">=</span> <span class="tok-punctuation">(</span>now <span class="tok-operator">-</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>prev_time_<span class="tok-punctuation">)</span><span class="tok-operator">.</span>nanoseconds <span class="tok-operator">/</span> S_TO_NS</span>
+<span class="ln">        <span class="tok-keyword">if</span> dt <span class="tok-operator">==</span> <span class="tok-number">0.0</span><span class="tok-punctuation">:</span>   <span class="tok-comment"># duplicate stamp</span></span>
+<span class="ln">            <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_logger<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>warn<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">Skipping joint state: duplicate stamp</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">                                throttle_duration_sec<span class="tok-operator">=</span><span class="tok-number">2.0</span><span class="tok-punctuation">)</span></span>
+<span class="ln">            <span class="tok-keyword">return</span></span>
+<span class="ln"></span>
+<span class="ln">        dp_left <span class="tok-operator">=</span> msg<span class="tok-operator">.</span>position<span class="tok-punctuation">[</span><span class="tok-number">0</span><span class="tok-punctuation">]</span> <span class="tok-operator">-</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>left_wheel_prev_pos_</span>
+<span class="ln">        dp_right <span class="tok-operator">=</span> msg<span class="tok-operator">.</span>position<span class="tok-punctuation">[</span><span class="tok-number">1</span><span class="tok-punctuation">]</span> <span class="tok-operator">-</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>right_wheel_prev_pos_</span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>left_wheel_prev_pos_ <span class="tok-operator">=</span> msg<span class="tok-operator">.</span>position<span class="tok-punctuation">[</span><span class="tok-number">0</span><span class="tok-punctuation">]</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>right_wheel_prev_pos_ <span class="tok-operator">=</span> msg<span class="tok-operator">.</span>position<span class="tok-punctuation">[</span><span class="tok-number">1</span><span class="tok-punctuation">]</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>prev_time_ <span class="tok-operator">=</span> now</span>
+<span class="ln"></span>
+<span class="ln">        fi_left <span class="tok-operator">=</span> dp_left <span class="tok-operator">/</span> dt</span>
+<span class="ln">        fi_right <span class="tok-operator">=</span> dp_right <span class="tok-operator">/</span> dt</span>
+<span class="ln"></span>
+<span class="ln">        linear <span class="tok-operator">=</span> <span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_ <span class="tok-operator">*</span> fi_right <span class="tok-operator">+</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_ <span class="tok-operator">*</span> fi_left<span class="tok-punctuation">)</span> <span class="tok-operator">/</span> <span class="tok-number">2</span></span>
+<span class="ln">        angular <span class="tok-operator">=</span> <span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_ <span class="tok-operator">*</span> fi_right <span class="tok-operator">-</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_ <span class="tok-operator">*</span> fi_left<span class="tok-punctuation">)</span> <span class="tok-operator">/</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_separation_</span>
+<span class="ln"></span>
+<span class="ln">        d_s <span class="tok-operator">=</span> <span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_ <span class="tok-operator">*</span> dp_right <span class="tok-operator">+</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_ <span class="tok-operator">*</span> dp_left<span class="tok-punctuation">)</span> <span class="tok-operator">/</span> <span class="tok-number">2</span></span>
+<span class="ln">        d_theta <span class="tok-operator">=</span> <span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_ <span class="tok-operator">*</span> dp_right <span class="tok-operator">-</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_radius_ <span class="tok-operator">*</span> dp_left<span class="tok-punctuation">)</span> <span class="tok-operator">/</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>wheel_separation_</span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>theta_ <span class="tok-operator">+</span><span class="tok-operator">=</span> d_theta</span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>x_ <span class="tok-operator">+</span><span class="tok-operator">=</span> d_s <span class="tok-operator">*</span> math<span class="tok-operator">.</span>cos<span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>theta_<span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>y_ <span class="tok-operator">+</span><span class="tok-operator">=</span> d_s <span class="tok-operator">*</span> math<span class="tok-operator">.</span>sin<span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>theta_<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_logger<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>info<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">linear: </span><span class="tok-string">%f</span><span class="tok-string">, angular: </span><span class="tok-string">%f</span><span class="tok-string">"</span> <span class="tok-operator">%</span> <span class="tok-punctuation">(</span>linear<span class="tok-punctuation">,</span> angular<span class="tok-punctuation">)</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_logger<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>info<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">x: </span><span class="tok-string">%f</span><span class="tok-string">, y: </span><span class="tok-string">%f</span><span class="tok-string">, theta: </span><span class="tok-string">%f</span><span class="tok-string">"</span> <span class="tok-operator">%</span> <span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>x_<span class="tok-punctuation">,</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>y_<span class="tok-punctuation">,</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>theta_<span class="tok-punctuation">)</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">def</span> <span class="tok-definition">main</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span></span>
+<span class="ln">    rclpy<span class="tok-operator">.</span>init<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    simple_controller <span class="tok-operator">=</span> SimpleController<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln">    rclpy<span class="tok-operator">.</span>spin<span class="tok-punctuation">(</span>simple_controller<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    simple_controller<span class="tok-operator">.</span>destroy_node<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln">    rclpy<span class="tok-operator">.</span>shutdown<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">if</span> <span class="tok-variableName">__name__</span> <span class="tok-operator">==</span> <span class="tok-string">'</span><span class="tok-string">__main__</span><span class="tok-string">'</span><span class="tok-punctuation">:</span></span>
+<span class="ln">    main<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span></code></pre></div><h3 id="what-is-new">What is new</h3><ul><li><b>Line 11:</b> <code>import math</code>, for <code>math.cos</code> and <code>math.sin</code>.</li><li><b>Lines 32 to 34:</b> the pose. <code>x_</code>, <code>y_</code> and <code>theta_</code> all start at 0.0: the robot is at the origin and faces forward.</li><li><b>Lines 84 and 85:</b> the step of this reading: <code>d_s</code>, how far the robot moved, and <code>d_theta</code>, how much it turned. Both are made from <code>dp_left</code> and <code>dp_right</code>.</li><li><b>Lines 86 to 88:</b> the adding up. <code>theta_</code> grows by <code>d_theta</code>, then <code>x_</code> grows by <code>d_s</code> times the cosine of the heading and <code>y_</code> by <code>d_s</code> times its sine.</li><li><b>Line 91:</b> a second log line that prints x, y and theta.</li></ul><p>Everything else is the node of chapter 62, unchanged (lines 55 to 82 are its <code>jointCallback</code>: the first-message check, dt, dp, the speeds).</p><h3 id="one-reading-with-real-numbers">One reading with real numbers</h3><p>The last test of this chapter, driving and turning at the same time (linear x 0.5 and angular z 0.5), has the most to show, so here is one reading worked out by hand. The controller makes the right wheel turn at (0.5 + 0.5 × 0.17 ÷ 2) ÷ 0.033 = 16.4394 rad/s and the left wheel at (0.5 minus 0.5 × 0.17 ÷ 2) ÷ 0.033 = 13.8636 rad/s. The "before" values for theta, x and y are read from a line of the log on the screen (the screenshots below).</p><ol><li><b>dp (lines 71 and 72):</b> in 10 ms the right wheel turns 16.4394 × 0.01 = 0.164394 rad and the left wheel 13.8636 × 0.01 = 0.138636 rad.</li><li><b>d_s (line 84):</b> r × dp_right = 0.033 × 0.164394 = 0.005425 m and r × dp_left = 0.033 × 0.138636 = 0.004575 m. So d_s = (0.005425 + 0.004575) ÷ 2 = 0.01 ÷ 2 = 0.005 m.</li><li><b>d_theta (line 85):</b> (0.005425 minus 0.004575) ÷ 0.17 = 0.00085 ÷ 0.17 = 0.005 rad.</li><li><b>theta (line 86):</b> the log shows theta = 198.525000 before, so theta = 198.525 + 0.005 = 198.530 rad.</li><li><b>cos and sin (lines 87 and 88):</b> 198.530 rad is 31 full turns plus 3.7513 rad (a full turn is 2π = 6.2832 rad), and cos and sin repeat after every full turn. cos(198.530) = -0.819841 and sin(198.530) = -0.572591.</li><li><b>x (line 87):</b> x = -0.652450 + 0.005 × (-0.819841) = -0.652450 + (-0.004099) = -0.656549 m.</li><li><b>y (line 88):</b> y = 1.817925 + 0.005 × (-0.572591) = 1.817925 + (-0.002863) = 1.815062 m.</li></ol><p>The next log line of the test shows x: -0.656549, y: 1.815062 and theta: 198.530000: the same numbers. The widget below does the same sum for other readings of the screenshots. Tick "use the old theta" and the result is off by about 0.00002: with the old heading (198.525) x would come out as -0.656563, which is not what the screen shows. So the node really does use the new theta, and line 86 must stay above lines 87 and 88.</p><div class="widget"><iframe allow="fullscreen" allowfullscreen src="/widgets/claude-ros2-64-20261118-091635-check-the-screen.html?v=d54a455e30" title="Check the numbers on the screen"></iframe></div><h3 id="code-visualizer">Code visualizer</h3><p>Every line explained at three levels, with a step-by-step run, a map, bugs to try and a live picture of the robot adding up its path.</p><div class="widget"><iframe allow="fullscreen" allowfullscreen src="/widgets/claude-ros2-64-20261118-091635-simple-controller-pose-visualizer.html?v=536bf0bf17" title="Simple controller pose: code visualizer"></iframe></div></div><div class="col"><h2 id="building-and-running">Building and running</h2><h3 id="terminal-1-build">Terminal 1: build</h3><p>Open a terminal and build the workspace:</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln"><span class="tok-typeName">cd</span> bumperbot_ws</span></code></pre></div><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">colcon build</span></code></pre></div><p class="caption">What you should see</p><div class="codeblock" data-lang="Plain text"><pre class="code"><code>Starting &gt;&gt;&gt; bumperbot_msgs
+Starting &gt;&gt;&gt; bumperbot_controller
+Starting &gt;&gt;&gt; bumperbot_cpp_examples
+Starting &gt;&gt;&gt; bumperbot_description
+Finished &lt;&lt;&lt; bumperbot_description [0.34s]
+Finished &lt;&lt;&lt; bumperbot_cpp_examples [0.47s]
+Finished &lt;&lt;&lt; bumperbot_controller [0.72s]
+Finished &lt;&lt;&lt; bumperbot_msgs [0.78s]
+Starting &gt;&gt;&gt; bumperbot_py_examples
+Finished &lt;&lt;&lt; bumperbot_py_examples [1.50s]
+
+Summary: 5 packages finished [2.51s]</code></pre></div><figure class="img sz-m al-l"><img src="/uploads/2026/11/image-64.png" alt="Terminal with cd bumperbot_ws and colcon build marked by yellow arrows, and the build output ending with 5 packages finished in 2.51 s" loading="lazy"><figcaption>The build: 5 packages finished.</figcaption></figure><h3 id="terminal-2-the-simulation">Terminal 2: the simulation</h3><p>Open another terminal, source the workspace and start Gazebo with the robot:</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">. install/setup.bash</span></code></pre></div><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">ros2 launch bumperbot_description gazebo.launch.py</span></code></pre></div><figure class="img sz-m al-l"><img src="/uploads/2026/11/image-65.png" alt="Two terminals: the finished build above, and below the source command and the Gazebo launch command" loading="lazy"><figcaption>The second terminal: source, then launch the simulation.</figcaption></figure><h3 id="terminal-3-the-controllers-and-the-node">Terminal 3: the controllers and the node</h3><p>Open one more terminal and start the controllers, which also start simple_controller:</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">. install/setup.bash</span></code></pre></div><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">ros2 launch bumperbot_controller controller.launch.py</span></code></pre></div><figure class="img sz-l"><img src="/uploads/2026/11/image-66.png" alt="Three terminals: the build, the Gazebo launch, and below them the controller launch command with the first start-up lines" loading="lazy"><figcaption>The third terminal launches the controllers; Gazebo keeps running in the pane above.</figcaption></figure><p>As soon as the node gets joint_states messages it prints two lines for every message: the speeds (line 90) and the pose (line 91). The robot is not moving yet, so every number is 0 (printed as 0.000000 or -0.000000, which is only how a tiny negative number or a negative zero looks with six digits):</p><p class="caption">What you should see in terminal 3 (the first lines, the robot standing still)</p><div class="codeblock" data-lang="Plain text"><pre class="code"><code>[simple_controller.py-3] [INFO] [1794958994.696752250] [simple_controller]: linear: -0.000000, angular: -0.000000
+[simple_controller.py-3] [INFO] [1794958994.697508608] [simple_controller]: x: -0.000000, y: 0.000000, theta: -0.000000
+[simple_controller.py-3] [INFO] [1794958994.705669270] [simple_controller]: linear: 0.000000, angular: -0.000000
+[simple_controller.py-3] [INFO] [1794958994.706290914] [simple_controller]: x: -0.000000, y: 0.000000, theta: -0.000000
+[simple_controller.py-3] [INFO] [1794958994.716003206] [simple_controller]: linear: 0.000000, angular: -0.000000
+[simple_controller.py-3] [INFO] [1794958994.716302968] [simple_controller]: x: -0.000000, y: 0.000000, theta: -0.000000</code></pre></div><figure class="img sz-l"><img src="/uploads/2026/11/image-67.png" alt="The three terminals with the controller log in the bottom pane: pairs of lines with linear and angular, and x, y and theta, all close to 0. The pose lines are marked with a white box." loading="lazy"><figcaption>The log of the node while the robot stands still: the pose lines (white box) show x, y and theta at 0.</figcaption></figure></div><div class="col"><h2 id="sending-commands-and-reading-the-pose">Sending commands and reading the pose</h2><p>Three commands, one after the other, each in a fourth terminal that is sourced like the others. Terminal 3 keeps printing the log, so x, y and theta can be watched while the robot moves in Gazebo.</p><h3 id="turn-left-on-the-spot">Turn left on the spot</h3><p>Publish a command that only turns, to the left: linear speed 0 and angular speed 0.5 rad/s.</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">. install/setup.bash</span></code></pre></div><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">ros2 topic pub /bumperbot_controller/cmd_vel geometry_msgs/msg/TwistStamped <span class="tok-string">'header:</span></span>
+<span class="ln"><span class="tok-string">  stamp:</span></span>
+<span class="ln"><span class="tok-string">    sec: 0</span></span>
+<span class="ln"><span class="tok-string">    nanosec: 0</span></span>
+<span class="ln"><span class="tok-string">  frame_id: '</span><span class="tok-string">'</span></span>
+<span class="ln"><span class="tok-string">twist:</span></span>
+<span class="ln"><span class="tok-string">  linear:</span></span>
+<span class="ln"><span class="tok-string">    x: 0.0</span></span>
+<span class="ln"><span class="tok-string">    y: 0.0</span></span>
+<span class="ln"><span class="tok-string">    z: 0.0</span></span>
+<span class="ln"><span class="tok-string">  angular:</span></span>
+<span class="ln"><span class="tok-string">    z: 0.5'</span></span></code></pre></div><figure class="img sz-l"><img src="/uploads/2026/11/image-68.png" alt="Four terminals. The bottom one has the ros2 topic pub command typed over several lines, with a yellow arrow at the frame_id line and angular z 0.5 at the end. In the controller pane above, theta counts up: 111.000000, 111.005000, 111.010000, 111.015000." loading="lazy"><figcaption>The command in terminal 4. Above it the log already shows theta counting up in steps of 0.005.</figcaption></figure><p>Theta now grows by 0.005 with every reading, and x and y stay at 0:</p><p class="caption">What you should see in terminal 3</p><div class="codeblock" data-lang="Plain text"><pre class="code"><code>[simple_controller.py-3] [INFO] [1794959835.866186563] [simple_controller]: linear: 0.000000, angular: 0.500000
+[simple_controller.py-3] [INFO] [1794959835.867126201] [simple_controller]: x: -0.000000, y: -0.000000, theta: 152.220000
+[simple_controller.py-3] [INFO] [1794959835.874889598] [simple_controller]: linear: 0.000000, angular: 0.500000
+[simple_controller.py-3] [INFO] [1794959835.875281919] [simple_controller]: x: -0.000000, y: -0.000000, theta: 152.225000
+[simple_controller.py-3] [INFO] [1794959835.887337432] [simple_controller]: linear: 0.000000, angular: 0.500000
+[simple_controller.py-3] [INFO] [1794959835.888042188] [simple_controller]: x: -0.000000, y: -0.000000, theta: 152.230000
+[simple_controller.py-3] [INFO] [1794959835.897112241] [simple_controller]: linear: 0.000000, angular: 0.500000
+[simple_controller.py-3] [INFO] [1794959835.897889527] [simple_controller]: x: -0.000000, y: -0.000000, theta: 152.235000</code></pre></div><figure class="img sz-l"><img src="/uploads/2026/11/image-69.png" alt="The controller log with the theta values 152.220000, 152.225000, 152.230000 and 152.235000 inside a white box, while x and y stay at 0" loading="lazy"><figcaption>Theta keeps growing, and the robot turns on the spot in Gazebo.</figcaption></figure><p>Why 0.005? The wheels turn equally fast in opposite directions, so d_s = 0 and d_theta = (0.033 × 0.012879 minus 0.033 × (-0.012879)) ÷ 0.17 = 0.00085 ÷ 0.17 = 0.005 rad per reading (0.5 rad/s × 0.01 s). That is why x and y do not change: d_s is 0, so d_s × cos and d_s × sin are 0 too. And 152.22 is such a big number because theta is never wrapped back into the range minus π to π: 152.22 rad is about 24 full turns of the test so far (152.22 ÷ 6.2832 = 24.2). The cos and sin of lines 87 and 88 repeat after every full turn, so this does not matter for x and y.</p><figure class="video"><div class="embed"><iframe src="https://www.youtube-nocookie.com/embed/xOWL3EdwmRE?rel=0&amp;modestbranding=1&amp;playsinline=1" loading="lazy" title="Video" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div><figcaption>A recording of the turn on the spot: theta counts up and the robot rotates.</figcaption></figure><h3 id="turn-the-other-way">Turn the other way</h3><p>Now the same command with angular z -0.5: the robot turns to the right.</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">ros2 topic pub /bumperbot_controller/cmd_vel geometry_msgs/msg/TwistStamped <span class="tok-string">'header:</span></span>
+<span class="ln"><span class="tok-string">  stamp:</span></span>
+<span class="ln"><span class="tok-string">    sec: 0</span></span>
+<span class="ln"><span class="tok-string">    nanosec: 0</span></span>
+<span class="ln"><span class="tok-string">  frame_id: '</span><span class="tok-string">'</span></span>
+<span class="ln"><span class="tok-string">twist:</span></span>
+<span class="ln"><span class="tok-string">  linear:</span></span>
+<span class="ln"><span class="tok-string">    x: 0.0</span></span>
+<span class="ln"><span class="tok-string">    y: 0.0</span></span>
+<span class="ln"><span class="tok-string">    z: 0.0</span></span>
+<span class="ln"><span class="tok-string">  angular:</span></span>
+<span class="ln"><span class="tok-string">    z: -0.5'</span></span></code></pre></div><figure class="img"><img src="/uploads/2026/11/image-70.png" alt="Four terminals. In the controller pane theta falls: 229.625000, 229.620000, 229.615000, 229.610000. The bottom terminal has the command with angular z -0.5 and a yellow arrow." loading="lazy"><figcaption>The command with angular z -0.5. In the controller pane theta now falls.</figcaption></figure><p class="caption">What you should see in terminal 3</p><div class="codeblock" data-lang="Plain text"><pre class="code"><code>[simple_controller.py-3] [INFO] [1794960014.305103509] [simple_controller]: linear: -0.000000, angular: -0.714286
+[simple_controller.py-3] [INFO] [1794960014.306028972] [simple_controller]: x: 0.000000, y: 0.000000, theta: 229.625000
+[simple_controller.py-3] [INFO] [1794960014.317135721] [simple_controller]: linear: 0.000000, angular: -0.384615
+[simple_controller.py-3] [INFO] [1794960014.317754045] [simple_controller]: x: 0.000000, y: 0.000000, theta: 229.620000
+[simple_controller.py-3] [INFO] [1794960014.332117843] [simple_controller]: linear: 0.000000, angular: -0.500000
+[simple_controller.py-3] [INFO] [1794960014.332704598] [simple_controller]: x: 0.000000, y: 0.000000, theta: 229.615000
+[simple_controller.py-3] [INFO] [1794960014.342042009] [simple_controller]: linear: 0.000000, angular: -0.500000
+[simple_controller.py-3] [INFO] [1794960014.342536761] [simple_controller]: x: 0.000000, y: 0.000000, theta: 229.610000</code></pre></div><p>Theta falls by 0.005 with every reading: d_theta is now (r × dp_right minus r × dp_left) ÷ s with the right wheel turning backward, so it is negative. A little later the log shows the same thing:</p><figure class="img sz-m al-l"><img src="/uploads/2026/11/image-71.png" alt="Controller log lines with theta values 209.335000, 209.330000, 209.325000 and 209.320000 and angular values -0.500000 and -0.555556" loading="lazy"><figcaption>Theta keeps falling: 209.335, 209.330, 209.325, 209.320.</figcaption></figure><p>The robot in Gazebo turns the opposite way too. Notice the angular values (-0.500000, -0.555556 ...): they jump a little from line to line, as in chapter 62, because they divide by dt. Theta steps by exactly 0.005 every time, because it adds up dp, not speeds.</p><figure class="video"><div class="embed"><iframe src="https://www.youtube-nocookie.com/embed/SaKKnL3bCyo?rel=0&amp;modestbranding=1&amp;playsinline=1" loading="lazy" title="Video" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div><figcaption>A recording of the other direction: theta counts down and the robot turns the other way.</figcaption></figure><h3 id="drive-and-turn">Drive and turn</h3><p>Finally give a driving speed as well: linear x 0.5 and angular z 0.5. The robot now moves forward while it turns, so x and y change too.</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">ros2 topic pub /bumperbot_controller/cmd_vel geometry_msgs/msg/TwistStamped <span class="tok-string">'header:</span></span>
+<span class="ln"><span class="tok-string">  stamp:</span></span>
+<span class="ln"><span class="tok-string">    sec: 0</span></span>
+<span class="ln"><span class="tok-string">    nanosec: 0</span></span>
+<span class="ln"><span class="tok-string">  frame_id: '</span><span class="tok-string">'</span></span>
+<span class="ln"><span class="tok-string">twist:</span></span>
+<span class="ln"><span class="tok-string">  linear:</span></span>
+<span class="ln"><span class="tok-string">    x: 0.5</span></span>
+<span class="ln"><span class="tok-string">    y: 0.0</span></span>
+<span class="ln"><span class="tok-string">    z: 0.0</span></span>
+<span class="ln"><span class="tok-string">  angular:</span></span>
+<span class="ln"><span class="tok-string">    z: 0.5'</span></span></code></pre></div><figure class="img sz-l"><img src="/uploads/2026/11/image-72.png" alt="Four terminals. The bottom one has the command with linear x 0.5 and angular z 0.5 and a yellow arrow at the x: 0.5 line. The controller pane above shows x, y and theta changing: for example x 0.775213, y 1.511793, theta 121.490000." loading="lazy"><figcaption>The command with linear x 0.5 and angular z 0.5. In the controller pane x and y change as well as theta.</figcaption></figure><p class="caption">What you should see in terminal 3</p><div class="codeblock" data-lang="Plain text"><pre class="code"><code>[simple_controller.py-3] [INFO] [1794960259.208810373] [simple_controller]: linear: 0.500000, angular: 0.500000
+[simple_controller.py-3] [INFO] [1794960259.209150851] [simple_controller]: x: 0.775213, y: 1.511793, theta: 121.490000
+[simple_controller.py-3] [INFO] [1794960259.221980921] [simple_controller]: linear: 0.500000, angular: 0.500000
+[simple_controller.py-3] [INFO] [1794960259.222839718] [simple_controller]: x: 0.772627, y: 1.516072, theta: 121.495000
+[simple_controller.py-3] [INFO] [1794960259.231722450] [simple_controller]: linear: 0.500000, angular: 0.500000
+[simple_controller.py-3] [INFO] [1794960259.232083299] [simple_controller]: x: 0.770019, y: 1.520338, theta: 121.500000
+[simple_controller.py-3] [INFO] [1794960259.246233844] [simple_controller]: linear: 0.500000, angular: 0.500000
+[simple_controller.py-3] [INFO] [1794960259.246567878] [simple_controller]: x: 0.767390, y: 1.524591, theta: 121.505000</code></pre></div><p>A little later the log looked like this (the readings used in the worked example above):</p><figure class="img sz-m al-l"><img src="/uploads/2026/11/image-73.png" alt="Controller log lines: x -0.652450, y 1.817925, theta 198.525000, then x -0.656549, y 1.815062, theta 198.530000, then x -0.660634, y 1.812178, theta 198.535000, then x -0.664705, y 1.809274, theta 198.540000" loading="lazy"><figcaption>x, y and theta all change: the robot moves and turns at the same time.</figcaption></figure><p>Each reading moves the robot 0.005 m (0.5 m/s × 0.01 s) and turns it 0.005 rad, so it drives along a circle. Its radius is V ÷ ω = 0.5 ÷ 0.5 = 1 m (the path in the widget below). The signs of x and y change as the heading goes round, because cos and sin of the heading change sign.</p><figure class="video"><div class="embed"><iframe src="https://www.youtube-nocookie.com/embed/nLW6HhpuG74?rel=0&amp;modestbranding=1&amp;playsinline=1" loading="lazy" title="Video" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div><figcaption>A recording of drive and turn together: x and y change and the robot moves along a circle.</figcaption></figure><h3 id="three-tests-one-picture">Three tests, one picture</h3><p>Pick one of the three commands and drag the reading slider: the picture shows the path, the heading and the lines that terminal 3 would print, with the working for the last reading.</p><div class="widget"><iframe allow="fullscreen" allowfullscreen src="/widgets/claude-ros2-64-20261118-091635-pose-from-wheels.html?v=ec42181ff6" title="Three tests: x, y and theta"></iframe></div></div><div class="col"><h2 id="remember">Remember</h2><ul><li>The pose is three numbers on the node: <code>x_</code> and <code>y_</code> in metres and <code>theta_</code> in radians. They all start at 0.0 when the node starts.</li><li>One reading gives one small step: d_s = (r × dp_right + r × dp_left) ÷ 2 for the way forward, and d_theta = (r × dp_right minus r × dp_left) ÷ s for the turn. They use dp, not the speeds, so dt cancels.</li><li>Add up in this order: <code>theta_ += d_theta</code> first, then <code>x_ += d_s * math.cos(theta_)</code> and <code>y_ += d_s * math.sin(theta_)</code>. Use <code>+=</code>, not <code>=</code>, and give cos and sin radians.</li><li>Turning left on the spot raises theta by 0.005 per reading (0.5 rad/s × 0.01 s), turning right lowers it, and x and y stay put because d_s is 0. With V = 0.5 and ω = 0.5 the robot drives a circle of radius V ÷ ω = 1 m.</li><li>Theta is never wrapped, so it can show values such as 152.22. cos and sin repeat every full turn, so x and y are still right.</li><li>The first message only stores the "before" values, so the pose starts to change from the second message. A repeated stamp (dt = 0) is skipped.</li><li>Odometry only adds up small steps, so a small error in the wheel radius or the wheel separation grows with the distance driven (chapter 60), and the node starts at (0, 0, 0) wherever the robot is.</li></ul></div></div>
+    <nav class="pager" aria-label="Chapters">
+<a href="/documented-software-learnings/ros2/ros2-63/"><span class="mono">Chapter 63</span>Robot Position and Orientation from the Wheels</a><a class="nx" href="/documented-software-learnings/ros2/ros2-65/"><span class="mono">Chapter 65</span>Publish Odometry Message</a>    </nav>
+  </article>
+</div>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a><a href="/documented-software-learnings/ultimaker-cura/">Ultimaker Cura</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=e43b0871b9" defer></script>
+<script data-goatcounter="https://techarcanist.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script><script src="/assets/home.js?v=e43b0871b9" defer></script>
+</body>
+</html>

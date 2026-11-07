@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tech Arcanist Website: A Static Site with Its Own Admin and Interactive Lessons | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="The current techarcanist.com, rebuilt from the WordPress site as plain content files, a Python build, a local admin with drafts, history and interactive lesson…">
+<link rel="canonical" href="https://techarcanist.com/project/techarcanist-com/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="Tech Arcanist Website: A Static Site with Its Own Admin and Interactive Lessons">
+<meta property="og:description" content="The current techarcanist.com, rebuilt from the WordPress site as plain content files, a Python build, a local admin with drafts, history and interactive lesson…">
+<meta property="og:url" content="https://techarcanist.com/project/techarcanist-com/">
+<meta property="og:image" content="/uploads/projects/techarcanist-com/00-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=e43b0871b9">
+<link rel="stylesheet" href="/assets/home.css?v=e43b0871b9">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/" aria-current="page">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<section class="cs-hero">
+  <div class="wrap">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/project/">Work</a><span>/</span><span>01 of 32</span></nav>
+    <h1>Tech Arcanist Website: A Static Site with Its Own Admin and Interactive Lessons</h1>
+<p class="cs-lead">The current techarcanist.com, rebuilt from the WordPress site as plain content files, a Python build, a local admin with drafts, history and interactive lesson visualizers and free publishing to GitHub Pages.</p>  </div>
+  <div class="wrap">
+    <dl class="cs-spec mono">
+<div><dt>Discipline</dt><dd><a href="/project/#web">Software &amp; Web</a></dd></div>      <div><dt>Contents</dt><dd>16 images</dd></div>
+    </dl>
+  </div>
+  <div class="wrap"><figure class="cs-cover"><img src="/thumbs/631ecd8d5dca-1600.webp" alt="Tech Arcanist Website: A Static Site with Its Own Admin and Interactive Lessons"><span class="corner tl"></span><span class="corner br"></span></figure></div>
+</section>
+
+<section class="sec tight">
+  <div class="wrap doc">
+    <aside class="toc" aria-label="On this page">
+      <p class="label">On this page</p>
+      <ol><li><a href="#introduction"><span class="mono">01</span>Introduction</a></li><li><a href="#tech-stack"><span class="mono">02</span>Tech stack</a></li><li><a href="#how-it-works"><span class="mono">03</span>How it works</a></li><li><a href="#public-features-what-any-visitor-sees"><span class="mono">04</span>Public features: what any visitor sees</a></li><li><a href="#admin-features"><span class="mono">05</span>Admin features</a></li><li><a href="#send-to-claude-and-the-lesson-kit"><span class="mono">06</span>Send to Claude and the lesson kit</a></li><li><a href="#problems-solved"><span class="mono">07</span>Problems solved</a></li><li><a href="#milestones"><span class="mono">08</span>Milestones</a></li><li><a href="#what-comes-next"><span class="mono">09</span>What comes next</a></li></ol>
+    </aside>
+    <article class="prose">
+      <div class="col"><h2 id="introduction">Introduction</h2><p>This is the site this page lives on. In November 2026 I rebuilt techarcanist.com from scratch as a <strong>static website with its own local admin</strong>, on top of everything my first WordPress portfolio held. Every page is a small folder of files, a Python script turns those files into plain HTML, and a publish button sends the result to <strong>GitHub Pages</strong>, with no WordPress plan and no server to pay for.</p><div class="btns"><a class="btn" href="/">Open the home page</a></div><p>The site holds my projects, my story and my learning library: the ROS 2, PLC, Fusion, FlutterFlow and Onshape series, with interactive lesson visualizers built into the chapters.</p><h3 id="what-it-had-to-do">What it had to do</h3><ul><li><b>Keep everything from the first site:</b> every project, chapter, image, PDF, video and interactive guide, with nothing loading from the old WordPress address.</li><li><b>Be easy to restructure:</b> content kept apart from the design, so a page can be reorganised, moved or redesigned without touching the rest.</li><li><b>Let me edit without code:</b> an editor, drafts, ordering and a live preview, on my own computer.</li><li><b>Cost nothing to host:</b> free hosting with no limit on how often the site is published.</li><li><b>Teach well:</b> chapters with interactive visualizers that fit one laptop screen.</li></ul><p>The story of the first site, and how its content was carried over, is on its own page: <a href="/project/first-portfolio-wordpress/">My First Portfolio: The WordPress Site</a>.</p></div><div class="col"><h2 id="tech-stack">Tech stack</h2><div class="table-wrap"><table><tbody><tr><td>Part</td><td>Choice</td><td>Why</td></tr><tr><td>Content</td><td>One folder per page: <code>item.json</code> (title, summary, cover, type, categories, order, status) and <code>body.html</code>; site-wide data in <code>site.json</code></td><td>Plain files are easy to back up, compare and restructure</td></tr><tr><td>Build</td><td>Python with Jinja templates (<code>tools/build.py</code>)</td><td>The whole site is generated in one run, with no database</td></tr><tr><td>Admin</td><td>A small Python server on 127.0.0.1 with a JavaScript editor</td><td>Only my computer can reach it, so it needs no online login</td></tr><tr><td>Hosting</td><td>GitHub Pages, with the domain pointed from WordPress.com DNS</td><td>Free, and no limit on publishes</td></tr><tr><td>Videos</td><td>Unlisted YouTube uploads from the admin</td><td>Keeps the published site small</td></tr><tr><td>Look</td><td>Hand-written CSS and JavaScript, a dark blue theme with a green-on-black second theme</td><td>The same colours as my interactive guides</td></tr></tbody></table></div></div><div class="col"><h2 id="how-it-works">How it works</h2><figure class="img sz-l"><img src="/uploads/projects/techarcanist-com/architecture.svg" alt="Diagram: the local admin saves content files and sends exports to Claude; the build turns the content into HTML; the site is published to GitHub Pages; videos sit on YouTube; content is backed up to a private repository" loading="lazy"><figcaption>From content files to the live site.</figcaption></figure><ul><li><b>Edit:</b> the admin opens a page, I change it in the editor and save. The previous version goes into a history folder first.</li><li><b>Preview:</b> every other address on the admin server is a live preview of the site, drafts included.</li><li><b>Build:</b> <code>build.py</code> reads every folder and writes the public pages, the Work grid, the course indexes, the search data and the home page counters.</li><li><b>Publish:</b> a first step builds the site and lists the pages that changed since the last publish; a second step pushes that exact version to GitHub and watches the deploy until it succeeds or fails.</li></ul></div><div class="col"><h2 id="public-features-what-any-visitor-sees">Public features: what any visitor sees</h2><h3 id="home-page">Home page</h3><p>The name in large type, a particle field with a small self-driving robot (a click sends it on a planned path, a click on the text launches a drone), my story, teaching, awards, tech stack and contact. The counters (projects, technologies, chapters) are worked out by the build, so they stay correct without being edited by hand.</p><figure class="img"><img src="/uploads/projects/techarcanist-com/08-work-wall.png" alt="The work wall on the home page: many project and chapter pictures floating in a dark 3D space, with the current one named at the bottom" loading="lazy"><figcaption>The work wall: every project and chapter flies past in 3D.</figcaption></figure><div class="cols cols-2"><div class="col"><figure class="img"><img src="/uploads/projects/techarcanist-com/01-loader.png" alt="A short terminal-style loading screen shown on the first visit" loading="lazy"><figcaption>The first visit opens with a short terminal-style loader.</figcaption></figure></div><div class="col"><figure class="img sz-m"><img src="/uploads/projects/techarcanist-com/07-home-phone.png" alt="The home page on a phone" loading="lazy"><figcaption>The home page on a phone.</figcaption></figure></div></div><h3 id="work-and-library">Work and Library</h3><p>The Work page is a filterable grid of projects, link cards and course cards in an order set from the admin. The Library lists the learning series with a picture card for every chapter.</p><figure class="img"><img src="/uploads/projects/techarcanist-com/02-work.png" alt="The Work page with category filters and a grid of project cards" loading="lazy"><figcaption>The Work page.</figcaption></figure><figure class="img sz-l"><img src="/uploads/projects/techarcanist-com/03-library.png" alt="The Library page listing the learning series" loading="lazy"><figcaption>The Library.</figcaption></figure><h3 id="chapters-with-interactive-lessons">Chapters with interactive lessons</h3><p>Chapters can hold code blocks with line numbers and colours, PDFs, videos and visualizers. A visualizer opens inside its section, takes on the colour of its section card, and has a Full screen button. Newer ROS 2 chapters are whole interactive lessons: steps with Next and Back, sliders, a quiz and a word list.</p><figure class="img sz-l"><img src="/uploads/projects/techarcanist-com/04-lesson.png" alt="ROS 2 chapter 73 on the gyroscope, an interactive lesson with a drive simulation on the left and step text on the right" loading="lazy"><figcaption>An interactive lesson: chapter 73, the gyroscope.</figcaption></figure><h3 id="small-things-that-help">Small things that help</h3><ul><li>Search across the whole site with Ctrl K.</li><li>Two themes: dark blue and green on black.</li><li>Every page checked for sideways scrolling at six screen widths, from 320 to 1920 pixels.</li><li>A privacy page that explains the little that happens on a visit.</li></ul></div><div class="col"><h2 id="admin-features">Admin features</h2><p>The admin is a small program that runs only on my computer, at a local address, so nobody else can reach it. Every page of the site is written, ordered, checked and published from here, without touching code.</p><h3 id="work-the-order-of-the-grid">Work: the order of the grid</h3><p>One list holds every project, link card and course card. Dragging a row changes its place on the Work page and on the home page. Each row shows whether it is a project, a course or a draft.</p><figure class="img"><img src="/uploads/projects/techarcanist-com/05-admin.png" alt="The admin Work tab: a list of projects, link cards and courses with drag handles" loading="lazy"><figcaption>The Work tab.</figcaption></figure><h3 id="the-editor">The editor</h3><ul><li><b>Blocks:</b> sections, columns, tables, code blocks, notes, quotes, images, PDFs and files, videos, visualizers, buttons and GitHub links, plus a raw HTML mode.</li><li><b>Fast input:</b> screenshots paste straight in with Ctrl V, a slash opens the block list, and Markdown pasted in turns into formatted text.</li><li><b>Side panel:</b> Draft or Published, the address of the page (changing it leaves a redirect behind), the 16:9 cover image with Upload and Paste buttons, the card summary and the categories.</li><li><b>Images:</b> an image can be cropped in place, and the original file is kept.</li></ul><figure class="img"><img src="/uploads/projects/techarcanist-com/06-admin-editor.png" alt="The admin editor open on a project, with the block toolbar, sections, cover image, status and categories" loading="lazy"><figcaption>The editor with its toolbar and side panel.</figcaption></figure><h3 id="courses-chapters-in-order">Courses: chapters in order</h3><p>Each learning series has its own list of chapters. A chapter can be added at the end or after any other chapter, dragged into a new place or moved to another course, and the chapter numbers update by themselves.</p><figure class="img"><img src="/uploads/projects/techarcanist-com/10-admin-courses.png" alt="The Courses tab listing the courses with their chapter counts" loading="lazy"><figcaption>The Courses tab: every course and its chapters.</figcaption></figure><h3 id="new-entries-and-quick-capture">New entries and quick capture</h3><p>The + New button asks what to add (a quick capture, a chapter, a project, a course or a link card) and then where it goes. A quick capture is an instant draft for rough notes and screenshots taken while learning; it is tidied up later.</p><div class="cols cols-2"><div class="col"><figure class="img"><img src="/uploads/projects/techarcanist-com/14-admin-new.png" alt="The + New dialog with five choices: Quick capture, Chapter, Project, Course and Link card" loading="lazy"><figcaption>The + New dialog.</figcaption></figure></div><div class="col"><figure class="img"><img src="/uploads/projects/techarcanist-com/11-admin-drafts.png" alt="The Drafts tab listing draft entries" loading="lazy"><figcaption>Drafts: everything not yet published.</figcaption></figure></div></div><h3 id="history-and-safety">History and safety</h3><ul><li>Every save, apply, move and restore keeps the previous version, and any of them can be restored with one click.</li><li>Deleted pages go to a trash folder and can be brought back.</li><li>If a page was changed elsewhere after it was opened, saving warns before it overwrites the newer version.</li></ul><figure class="img sz-l"><img src="/uploads/projects/techarcanist-com/17-admin-history.png" alt="The History dialog of a project listing earlier saves with Restore buttons" loading="lazy"><figcaption>History: every earlier version of a page, ready to restore.</figcaption></figure><h3 id="site-settings">Site settings</h3><p>The home page text, story, skills, profile links, counters and the Claude templates are edited in forms, not in code.</p><figure class="img sz-l"><img src="/uploads/projects/techarcanist-com/15-admin-settings.png" alt="Site settings with tabs for Homepage, Story, Skills, Profile and links, Claude prompts and Advanced" loading="lazy"><figcaption>Site settings: the hero heading, subheading and intro paragraph.</figcaption></figure><h3 id="videos">Videos</h3><p>Each video on the site has an Upload to YouTube button. The upload goes in as unlisted, and the page then plays the YouTube copy instead of carrying the file. If YouTube ever locks a video, the copy on GitHub can be switched back on.</p><figure class="img"><img src="/uploads/projects/techarcanist-com/13-admin-videos.png" alt="The Videos tab: YouTube connected, the video space used on GitHub, and a list of videos with the pages that use them" loading="lazy"><figcaption>The Videos tab: each video with its YouTube copy and the page that uses it.</figcaption></figure><h3 id="publish-and-earlier-versions">Publish and earlier versions</h3><p>Publishing has two steps. Preview changes builds exactly what will go live and lists the pages that changed. Publish this version sends that same version to GitHub and waits until GitHub has deployed it. The last three published versions stay on the computer, and Restore puts one back online in about a minute if a publish goes wrong.</p><figure class="img sz-l"><img src="/uploads/projects/techarcanist-com/16-admin-publish.png" alt="The Publish and security tab with the two publish buttons and a list of the live version and three earlier versions with Restore buttons" loading="lazy"><figcaption>Publish: two steps, and three earlier versions kept.</figcaption></figure></div><div class="col"><h2 id="send-to-claude-and-the-lesson-kit">Send to Claude and the lesson kit</h2><p>Notes captured while learning are rough. The admin packs a page (text, images, files and visualizers) into an export folder with a short brief, and Claude writes a restructured version into a result folder. The admin shows the old and new versions side by side, and only an Apply click changes the page.</p><ul><li><b>Templates:</b> restructure a page, add visualizers, build a code visualizer, build a whole-chapter lesson, or fix one visualizer.</li><li><b>The lesson kit:</b> every export carries a kit with the shared lesson engine, tests that open the lesson in headless Chrome at laptop and phone width, and a check of the whole result.</li><li><b>Context:</b> each export also lists the sections of earlier chapters with exact links and the closest earlier visualizers, so a new chapter links back to what came before and reuses what already works.</li><li><b>House rules in every brief:</b> plain words, no second-person wording, no dashes, no emojis, and every visualizer fits one laptop screen.</li></ul></div><div class="col"><h2 id="problems-solved">Problems solved</h2><h3 id="visualizers-that-came-out-blank">Visualizers that came out blank</h3><p>In the wide chapter layout, visualizer frames grew to 6000 pixels wide and looked empty. A grid column limit fixed it.</p><h3 id="a-white-button-on-a-white-card">A white button on a white card</h3><p>Content buttons were invisible on light cards, so they became accent blue with dark text.</p><h3 id="a-visualizer-in-the-wrong-colour">A visualizer in the wrong colour</h3><p>The site reads the background of each visualizer and paints its frame to match. The whole section card takes the colour only when the visualizer is the section; otherwise only the visualizer does.</p><h3 id="too-big-for-free-hosting">Too big for free hosting</h3><p>The site with all its videos came close to the size limit of GitHub Pages. Moving the large videos to unlisted YouTube uploads made room, and the publish step now warns before the site gets too large.</p><h3 id="a-publish-with-mismatched-code">A publish with mismatched code</h3><p>Once, a publish ran with an old build script and new templates, and the library list on the home page was empty for a few minutes. The publish step now reloads the build script whenever it changes.</p><h3 id="file-names-that-differ-only-in-capital-letters">File names that differ only in capital letters</h3><p>Windows treats Image.png and image.png as one file, GitHub does not. The publish step now warns about such links.</p></div><div class="col"><h2 id="milestones">Milestones</h2><ul><li>Everything from the first site carried over: 870 images, 63 PDFs and 37 videos, with nothing loading from the old address.</li><li>445 code blocks on 25 pages rebuilt with line numbers and colours during the move.</li><li>8 November 2026: the domain switched from WordPress to this site.</li><li>Since then, every new project, chapter and visualizer is added through the admin, and the counters on the home page update on their own.</li></ul></div><div class="col"><h2 id="what-comes-next">What comes next</h2><ul><li>An online admin on a free cloud server, with a password and a one-time code, so pages can be edited away from my computer. It is ready in code but waits for server capacity.</li><li>A script in the lesson kit that carries a code visualizer over to the next chapter's changed lines on its own, instead of by hand.</li></ul></div>
+    </article>
+  </div>
+</section>
+
+<section class="wrap">
+  <nav class="pager" aria-label="More projects">
+<span></span><a class="nx" href="/project/psit-vyomnauts/"><span class="mono">Next</span>PSIT Vyomnauts: Club Website, Admin Panel and DIY Lab</a>  </nav>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <p class="label">Related work</p>
+    <div class="grid3"><a class="pcard" href="/project/psit-vyomnauts/" data-cats="web" data-search="psit vyomnauts: club website, admin panel and diy lab a 3d, content-managed website for the aerospace, drone and robotics club of psit kanpur, with its own github-backed admin panel, 24 interactive engineering simulators, recruitment campaigns and a diy guide platform for members. software &amp; web">
+  <div class="pcard-media">
+<img src="/uploads/projects/psit-vyomnauts/02-home-hero.png" alt="" loading="lazy">    <span class="pcard-kind mono">Project</span>
+  </div>
+  <div class="pcard-body">
+    <p class="pcard-cats mono">Software &amp; Web</p>
+    <h3>PSIT Vyomnauts: Club Website, Admin Panel and DIY Lab</h3>
+    <p class="pcard-sum">A 3D, content-managed website for the aerospace, drone and robotics club of PSIT Kanpur, with its own GitHub-backed admin panel, 24 interactive engineering simulators, recruitment campaigns and a DIY guide platform for members.</p>
+  </div>
+</a>
+<a class="pcard" href="/project/rrai/" data-cats="web" data-search="portfolio for raman research and innovation a modern website for an industry 4.0 and 5.0 technology company, with a password-free google-login admin panel to edit products, portfolio, team, partners and seo and to read enquiries, all on firebase&#39;s free plan. software &amp; web">
+  <div class="pcard-media">
+<img src="/thumbs/b3be264667e0-720.webp" alt="" loading="lazy">    <span class="pcard-kind mono">Project</span>
+  </div>
+  <div class="pcard-body">
+    <p class="pcard-cats mono">Software &amp; Web</p>
+    <h3>Portfolio for Raman Research and Innovation</h3>
+    <p class="pcard-sum">A modern website for an Industry 4.0 and 5.0 technology company, with a password-free Google-login admin panel to edit products, portfolio, team, partners and SEO and to read enquiries, all on Firebase&#39;s free plan.</p>
+  </div>
+</a>
+<a class="pcard" href="/project/maker-buddies/" data-cats="web learn" data-search="maker buddies: a gamified diy platform for makers a prototype diy platform built as a project idea for inunity: every project is unique, versioned and owned by its inventor, makers earn xp, levels and badges for building, and redeem xp for real merch. software &amp; web teaching &amp; docs">
+  <div class="pcard-media">
+<img src="/uploads/projects/maker-buddies/00-cover-hero.png" alt="" loading="lazy">    <span class="pcard-kind mono">Project</span>
+  </div>
+  <div class="pcard-body">
+    <p class="pcard-cats mono">Software &amp; Web / Teaching &amp; Docs</p>
+    <h3>Maker Buddies: A Gamified DIY Platform for Makers</h3>
+    <p class="pcard-sum">A prototype DIY platform built as a project idea for inunity: every project is unique, versioned and owned by its inventor, makers earn XP, levels and badges for building, and redeem XP for real merch.</p>
+  </div>
+</a>
+</div>
+  </div>
+</section>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a><a href="/documented-software-learnings/ultimaker-cura/">Ultimaker Cura</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=e43b0871b9" defer></script>
+<script data-goatcounter="https://techarcanist.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script><script src="/assets/home.js?v=e43b0871b9" defer></script>
+</body>
+</html>

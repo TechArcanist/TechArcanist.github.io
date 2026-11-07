@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simulate IMU Sensor | ROS 2 | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="Introduction Chapters 73 and 74 explained how a gyroscope and an accelerometer work, and how both sit together in one chip called an IMU . This chapter gives…">
+<link rel="canonical" href="https://techarcanist.com/documented-software-learnings/ros2/ros2-75/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="Simulate IMU Sensor | ROS 2">
+<meta property="og:description" content="Introduction Chapters 73 and 74 explained how a gyroscope and an accelerometer work, and how both sit together in one chip called an IMU . This chapter gives…">
+<meta property="og:url" content="https://techarcanist.com/documented-software-learnings/ros2/ros2-75/">
+<meta property="og:image" content="https://techarcanist.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=e43b0871b9">
+<link rel="stylesheet" href="/assets/home.css?v=e43b0871b9">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/" aria-current="page">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap reader wide">
+  <aside class="rd-nav" id="rd-nav">
+    <a class="rd-series" href="/documented-software-learnings/ros2/"><span class="label">Series</span>ROS 2</a>
+    <ol>
+      <li><a href="/documented-software-learnings/ros2/ros2_a/"><span class="mono">01</span>Installing Ubuntu Desktop (Dual Boot with Windows)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_b/"><span class="mono">02</span>ROS 2 Jazzy Installation on Ubuntu (Step-by-Step)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_c/"><span class="mono">03</span>Development Environment Setup for ROS 2 Jazzy on Ubuntu (With Clear Explanations)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_d/"><span class="mono">04</span>ROS 2 Fundamentals: Architecture, Communication, Packages, and Workspaces</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_e/"><span class="mono">05</span>ROS 2 Workspace &amp; Package Creation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_f/"><span class="mono">06</span>ROS 2 Python Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_g/"><span class="mono">07</span>ROS 2 C++ Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_h/"><span class="mono">08</span>ROS 2 Python Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_i/"><span class="mono">09</span>ROS 2 C++ Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_j/"><span class="mono">10</span>Robot Locomotion: Introduction</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_k/"><span class="mono">11</span>Wheeled Locomotion Architectures</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_l/"><span class="mono">12</span>Rolling Friction &amp; Wheeled Locomotion Efficiency</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_m/"><span class="mono">13</span>Introduction to Robot Simulation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_n/"><span class="mono">14</span>URDF</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_o/"><span class="mono">15</span>Create a URDF Model</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_p/"><span class="mono">16</span>Rviz</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_q/"><span class="mono">17</span>Node Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_r/"><span class="mono">18</span>Python Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_s/"><span class="mono">19</span>C++ Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_t/"><span class="mono">20</span>ROS 2 Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-u/"><span class="mono">21</span>Visualize The Robot In RVIZ2</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-v/"><span class="mono">22</span>Launch Files</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-w/"><span class="mono">23</span>ROS 2 Launch Files: Visualizing the Robot with One Command</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-x/"><span class="mono">24</span>Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-y/"><span class="mono">25</span>Simulating the Robot in Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-z/"><span class="mono">26</span>ROS 2 Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-aa/"><span class="mono">27</span>Control Types</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ab/"><span class="mono">28</span>ROS 2 Control: Prepare the Robot for Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ac/"><span class="mono">29</span>Understanding ROS 2 Control | Explanation of Chapter 28</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ad/"><span class="mono">30</span>ROS 2 Control: Moving the BumperBot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ae/"><span class="mono">31</span>Robot Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-af/"><span class="mono">32</span>Pose of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_af/"><span class="mono">33</span>Translation Vector</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ag/"><span class="mono">34</span>Introduction to Turtlesim</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ah/"><span class="mono">35</span>Translation Vector Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ai/"><span class="mono">36</span>Translation Vector Between Two Turtles: CPP</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_aj/"><span class="mono">37</span>Rotation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ak/"><span class="mono">38</span>Rotation Matrix Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_al/"><span class="mono">39</span>Transformation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_am/"><span class="mono">40</span>Differential Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-41/"><span class="mono">41</span>Velocity of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-42/"><span class="mono">42</span>Simple Speed Controller: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-43/"><span class="mono">43</span>Launch the Simple Speed Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-44/"><span class="mono">44</span>Teleoperating the BumperBot with a Joystick</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-45/"><span class="mono">45</span>ROS 2 Diff Drive Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-46/"><span class="mono">46</span>TF 2 Library</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-47/"><span class="mono">47</span>Operation With Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-48/"><span class="mono">48</span>Static &amp; Dynamic Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-49/"><span class="mono">49</span>Simple TF2 Static Broadcaster</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-50/"><span class="mono">50</span>Simple TF2 Broadcaster: Static and Dynamic Transforms</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-51/"><span class="mono">51</span>ROS 2 Services</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-52/"><span class="mono">52</span>Service Server in Python: AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-53/"><span class="mono">53</span>Service Client in Python: Calling AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-54/"><span class="mono">54</span>Simple TF2 Listener in Python: a get_transform Service</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-55/"><span class="mono">55</span>Euler Angles and Quaternions</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-56/"><span class="mono">56</span>Euler to Quaternion: Turning the Robot with tf_transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-57/"><span class="mono">57</span>tf2 Tools: view_frames and tf2_echo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-58/"><span class="mono">58</span>Where Is the Robot? Local and Global Localization</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-59/"><span class="mono">59</span>Odometry: Counting Steps to Know Where the Robot Is</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-60/"><span class="mono">60</span>Wheel Odometry and Encoders</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-61/"><span class="mono">61</span>Robot Speed from Wheel Encoders</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-62/"><span class="mono">62</span>Simple Controller: Robot Speed from Joint States</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-63/"><span class="mono">63</span>Robot Position and Orientation from the Wheels</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-64/"><span class="mono">64</span>Wheel Odometry: x, y and theta in the Simple Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-65/"><span class="mono">65</span>Publish Odometry Message</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-66/"><span class="mono">66</span>Broadcast Odometry Transform</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-67/"><span class="mono">67</span>Probability Introduction</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-68/"><span class="mono">68</span>Probability Tools for Localization</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-69/"><span class="mono">69</span>Adding Noise to Robot Motion: the Noisy Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-70/"><span class="mono">70</span>Launch Noisy Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-71/"><span class="mono">71</span>Odometry Comparison</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-72/"><span class="mono">72</span>Advantages of Having Multiple Sensors</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-73/"><span class="mono">73</span>Gyroscope</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-74/"><span class="mono">74</span>Accelerometer and IMU</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-75/" aria-current="page"><span class="mono">75</span>Simulate IMU Sensor</a></li>
+    </ol>
+  </aside>
+  <article class="rd-main">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/documented-software-learnings/">Library</a><span>/</span><a href="/documented-software-learnings/ros2/">ROS 2</a><span>/</span><span>75</span></nav>
+    <button class="btn btn-sm btn-line rd-tg" type="button" id="rd-tg">All chapters</button>
+<p class="sh-label mono"><span>75</span>Chapter 75 of 75</p>    <h1>Simulate IMU Sensor</h1>
+<div class="rd-prog" aria-hidden="true"><i style="width:100.0%"></i></div>    <div class="prose"><div class="col"><h2 id="introduction">Introduction</h2>
+<p>Chapters 73 and 74 explained how a gyroscope and an accelerometer work, and how both sit together in one chip called an <a href="/documented-software-learnings/ros2/ros-74/#sd-s2x" target="_blank" rel="noopener">IMU</a>. This chapter gives the simulated BumperBot an IMU of its own and looks at what it measures:</p>
+<ul>
+<li>a new <b>imu_link</b> in the robot model, fixed on top of <code>base_link</code>,</li>
+<li>an <b>IMU sensor in Gazebo</b> that publishes 100 readings per second, with a small random noise like a real chip,</li>
+<li>a <b>bridge</b> that carries the readings from Gazebo into ROS 2 on the topic <code>/imu/out</code>,</li>
+<li>a look at the readings in the terminal and in PlotJuggler while the robot drives.</li>
+</ul>
+<h3 id="what-must-already-work">What must already work</h3>
+<ul>
+<li>The robot in Gazebo with its launch file (<a href="/documented-software-learnings/ros2/ros2-y/#write-the-launch-file" target="_blank" rel="noopener">chapter 25</a>) and the Humble or Iron version check (<a href="/documented-software-learnings/ros2/ros2-ab/#update-the-gazebo-launch-file" target="_blank" rel="noopener">chapter 28</a>).</li>
+<li>The controllers and the joystick, started the same way as in <a href="/documented-software-learnings/ros2/ros2-71/#terminal-3-the-controllers" target="_blank" rel="noopener">chapter 71</a>.</li>
+<li>PlotJuggler, installed in <a href="/documented-software-learnings/ros2/ros2-71/#terminal-4-install-plotjuggler" target="_blank" rel="noopener">chapter 71</a>.</li>
+</ul>
+<h3 id="the-four-files-that-change">The four files that change</h3>
+<div class="table-wrap"><table>
+<tbody><tr><td>File</td><td>What is added</td></tr>
+<tr><td><code>bumperbot_description/urdf/bumperbot.urdf.xacro</code></td><td>the <code>imu_link</code> and the fixed <code>imu_joint</code></td></tr>
+<tr><td><code>bumperbot_description/urdf/bumperbot_gazebo.xacro</code></td><td>the IMU system plugin and the IMU sensor with its noise</td></tr>
+<tr><td><code>bumperbot_description/launch/gazebo.launch.py</code></td><td>the <code>/imu</code> topic in the bridge, renamed to <code>/imu/out</code></td></tr>
+<tr><td><code>bumperbot_description/package.xml</code></td><td>the dependency on <code>ros_gz_bridge</code></td></tr>
+</tbody></table></div>
+</div>
+
+<div class="col"><h2 id="add-the-imu-to-the-robot-model">Add the IMU to the robot model</h2>
+<h3 id="open-bumperbot-urdf-xacro">Open bumperbot.urdf.xacro</h3>
+<p>In VS Code, open <code>src</code>, then <code>bumperbot_description</code>, then <code>urdf</code>, and open <code>bumperbot.urdf.xacro</code>.</p>
+<figure class="img sz-s al-l"><img src="/uploads/2026/11/image-120.png" alt="VS Code explorer with bumperbot.urdf.xacro selected in the urdf folder"><figcaption>bumperbot.urdf.xacro in the urdf folder</figcaption></figure>
+<h3 id="add-the-imu-link-and-the-imu-joint">Add the imu_link and the imu_joint</h3>
+<p>Add this code at the end of the file, just before the closing <code>&lt;/robot&gt;</code> tag:</p>
+<pre class="code"><code>&lt;link name="imu_link"&gt;
+  &lt;inertial&gt;
+    &lt;origin xyz="-0.00552433659106688 0.000168210391520346 0.000514000497342681" rpy="0 0 0" /&gt;
+    &lt;mass value="0.000528415362211671" /&gt;
+    &lt;inertia ixx="1.46176048428261E-08" ixy="1.40015117949421E-10" ixz="-1.99633872937403E-12"
+             iyy="8.59662482954888E-09" iyz="7.52375112767959E-12"
+             izz="2.30279421279312E-08" /&gt;
+  &lt;/inertial&gt;
+  &lt;visual&gt;
+    &lt;origin xyz="0 0 0" rpy="0 0 0" /&gt;
+    &lt;geometry&gt;
+      &lt;mesh filename="package://bumperbot_description/meshes/imu_link.STL" /&gt;
+    &lt;/geometry&gt;
+    &lt;material name=""&gt;
+      &lt;color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" /&gt;
+    &lt;/material&gt;
+  &lt;/visual&gt;
+  &lt;collision&gt;
+    &lt;origin xyz="0 0 0" rpy="0 0 0" /&gt;
+    &lt;geometry&gt;
+      &lt;mesh filename="package://bumperbot_description/meshes/imu_link.STL" /&gt;
+    &lt;/geometry&gt;
+  &lt;/collision&gt;
+&lt;/link&gt;
+
+&lt;joint name="imu_joint" type="fixed"&gt;
+  &lt;origin xyz="0 0 0.0698986241758014" rpy="0 0 0" /&gt;
+  &lt;parent link="base_link" /&gt;
+  &lt;child link="imu_link" /&gt;
+  &lt;axis xyz="0 0 0" /&gt;
+&lt;/joint&gt;</code></pre>
+<figure class="img sz-l"><img src="/uploads/2026/11/image-118.png" alt="bumperbot.urdf.xacro with the new imu_link and imu_joint highlighted at the end of the file"><figcaption>The new imu_link and imu_joint at the end of bumperbot.urdf.xacro</figcaption></figure>
+<h3 id="what-the-new-lines-mean">What the new lines mean</h3>
+<p>The IMU is added the same way as the <a href="/documented-software-learnings/ros2/ros2_o/#add-the-caster-wheels" target="_blank" rel="noopener">caster wheels</a>: a link that describes the part, and a fixed joint that says where it sits.</p>
+<div class="table-wrap"><table>
+<tbody><tr><td>Part</td><td>What it says</td></tr>
+<tr><td><code>&lt;inertial&gt;</code></td><td>how heavy the chip is and how its mass is spread: 0.000528 kg, about half a gram, so it does not change how the robot moves</td></tr>
+<tr><td><code>&lt;visual&gt;</code></td><td>what it looks like: the <code>imu_link.STL</code> mesh in a light blue grey colour</td></tr>
+<tr><td><code>&lt;collision&gt;</code></td><td>the shape Gazebo uses for touching: the same mesh</td></tr>
+<tr><td><code>imu_joint</code>, <code>type="fixed"</code></td><td>the chip is screwed to the robot and never moves on its own</td></tr>
+<tr><td><code>origin xyz="0 0 0.0699"</code></td><td>it sits 0.0699 m (about 7 cm) straight above the origin of <code>base_link</code>, with no turn (<code>rpy="0 0 0"</code>), so its x, y and z axes point the same way as the robot's. The origin of <code>base_link</code> is at the height of the wheel axles (the wheel joints have z = 0), which is the wheel radius, 0.033 m, above the floor. So the IMU ends up near the top of the body: 0.033 + 0.0699 = 0.1029 m above the floor.</td></tr>
+</tbody></table></div>
+<figure class="img sz-m al-l"><img src="/uploads/claude/simulate-imu-sensor-20261128-041450/imu-placement.svg" alt="Side view of the robot to scale: base_link at the wheel axles 0.033 m above the floor, imu_link 0.0699 m higher near the top of the body"><figcaption>Where the imu_link sits: 0.0699 m above base_link, which is at the wheel axles, so near the top of the body</figcaption></figure>
+</div>
+
+<div class="col"><h2 id="add-the-imu-sensor-in-gazebo">Add the IMU sensor in Gazebo</h2>
+<h3 id="open-bumperbot-gazebo-xacro">Open bumperbot_gazebo.xacro</h3>
+<p>Open <code>bumperbot_gazebo.xacro</code> in the same <code>urdf</code> folder.</p>
+<figure class="img sz-s al-l"><img src="/uploads/2026/11/image-119.png" alt="VS Code explorer with bumperbot_gazebo.xacro selected"><figcaption>bumperbot_gazebo.xacro in the urdf folder</figcaption></figure>
+<h3 id="load-the-imu-system-plugin">Load the IMU system plugin</h3>
+<p>Gazebo needs a system plugin that simulates IMU sensors. Add it inside the <code>&lt;gazebo&gt;</code> block, right after the ROS 2 Control plugin from <a href="/documented-software-learnings/ros2/ros2-ab/#update-bumperbot-gazebo-xacro" target="_blank" rel="noopener">chapter 28</a>. The name depends on the ROS 2 version.</p>
+<p>For ROS 2 Humble:</p>
+<pre class="code"><code>&lt;plugin filename="ignition-gazebo-imu-system" name="ignition::gazebo::systems::Imu"&gt;
+&lt;/plugin&gt;</code></pre>
+<p>For ROS 2 Iron and newer:</p>
+<pre class="code"><code>&lt;plugin filename="gz-sim-imu-system" name="gz::sim::systems::Imu"&gt;
+&lt;/plugin&gt;</code></pre>
+<figure class="img sz-m al-l"><img src="/uploads/2026/11/image-121.png" alt="bumperbot_gazebo.xacro with the IMU plugin added below the ROS 2 Control plugin for Humble and for Iron and newer"><figcaption>The IMU plugin, once in the Humble block and once in the Iron and newer block</figcaption></figure>
+<h3 id="describe-the-imu-sensor">Describe the IMU sensor</h3>
+<p>After that, add the sensor itself. It is attached to the <code>imu_link</code> from the robot model:</p>
+<pre class="code"><code>&lt;!-- IMU --&gt;
+&lt;gazebo reference="imu_link"&gt;
+  &lt;sensor name="imu" type="imu"&gt;
+    &lt;always_on&gt;true&lt;/always_on&gt;
+    &lt;update_rate&gt;100&lt;/update_rate&gt;
+    &lt;gz_frame_id&gt;imu_link&lt;/gz_frame_id&gt;
+    &lt;topic&gt;imu&lt;/topic&gt;
+    &lt;imu&gt;
+      &lt;angular_velocity&gt;
+        &lt;x&gt;
+          &lt;noise type="gaussian"&gt;
+            &lt;mean&gt;0.0&lt;/mean&gt;
+            &lt;stddev&gt;2e-4&lt;/stddev&gt;
+          &lt;/noise&gt;
+        &lt;/x&gt;
+        &lt;y&gt;
+          &lt;noise type="gaussian"&gt;
+            &lt;mean&gt;0.0&lt;/mean&gt;
+            &lt;stddev&gt;2e-4&lt;/stddev&gt;
+          &lt;/noise&gt;
+        &lt;/y&gt;
+        &lt;z&gt;
+          &lt;noise type="gaussian"&gt;
+            &lt;mean&gt;0.0&lt;/mean&gt;
+            &lt;stddev&gt;2e-4&lt;/stddev&gt;
+          &lt;/noise&gt;
+        &lt;/z&gt;
+      &lt;/angular_velocity&gt;
+      &lt;linear_acceleration&gt;
+        &lt;x&gt;
+          &lt;noise type="gaussian"&gt;
+            &lt;mean&gt;0.0&lt;/mean&gt;
+            &lt;stddev&gt;1.7e-2&lt;/stddev&gt;
+          &lt;/noise&gt;
+        &lt;/x&gt;
+        &lt;y&gt;
+          &lt;noise type="gaussian"&gt;
+            &lt;mean&gt;0.0&lt;/mean&gt;
+            &lt;stddev&gt;1.7e-2&lt;/stddev&gt;
+          &lt;/noise&gt;
+        &lt;/y&gt;
+        &lt;z&gt;
+          &lt;noise type="gaussian"&gt;
+            &lt;mean&gt;0.0&lt;/mean&gt;
+            &lt;stddev&gt;1.7e-2&lt;/stddev&gt;
+          &lt;/noise&gt;
+        &lt;/z&gt;
+      &lt;/linear_acceleration&gt;
+    &lt;/imu&gt;
+  &lt;/sensor&gt;
+&lt;/gazebo&gt;</code></pre>
+<figure class="img sz-l"><img src="/uploads/2026/11/image-122.png" alt="bumperbot_gazebo.xacro with the IMU sensor block highlighted"><figcaption>The IMU sensor block in bumperbot_gazebo.xacro</figcaption></figure>
+<h3 id="what-the-sensor-settings-mean">What the sensor settings mean</h3>
+<div class="table-wrap"><table>
+<tbody><tr><td>Setting</td><td>Value</td><td>What it means</td></tr>
+<tr><td><code>always_on</code></td><td>true</td><td>the sensor works from the start of the simulation</td></tr>
+<tr><td><code>update_rate</code></td><td>100</td><td>100 readings per second: one reading every 1 ÷ 100 = 0.01 s</td></tr>
+<tr><td><code>gz_frame_id</code></td><td>imu_link</td><td>each reading is stamped with the frame of the IMU, so ROS 2 knows where on the robot it was measured</td></tr>
+<tr><td><code>topic</code></td><td>imu</td><td>the Gazebo topic the readings are sent on</td></tr>
+<tr><td><code>angular_velocity</code> noise</td><td>mean 0, stddev 2e-4</td><td>the gyroscope part: every turning speed gets a random error, on average 0, spread 2e-4 = 0.0002 rad/s</td></tr>
+<tr><td><code>linear_acceleration</code> noise</td><td>mean 0, stddev 1.7e-2</td><td>the accelerometer part: every acceleration gets a random error, on average 0, spread 1.7e-2 = 0.017 m/s²</td></tr>
+</tbody></table></div>
+<p>The noise is a <b>gaussian</b> (normal) random number, the bell curve of <a href="/documented-software-learnings/ros2/ros2-68/#sd-s9x" target="_blank" rel="noopener">chapter 68</a>: the mean says where the errors are centred and the standard deviation (stddev) says how far they spread. A perfect simulated sensor would hide the problems a real IMU has, so the noise makes the simulation more honest.</p>
+<div class="widget"><iframe allow="fullscreen" allowfullscreen src="/widgets/claude-simulate-imu-sensor-20261128-041450-imu-noise.html?v=9a96d1cf8e" title="IMU noise: what mean and stddev do to the readings"></iframe></div>
+</div>
+
+<div class="col"><h2 id="bring-the-readings-into-ros-2">Bring the readings into ROS 2</h2>
+<h3 id="open-gazebo-launch-py">Open gazebo.launch.py</h3>
+<p>The IMU now sends its readings on a Gazebo topic. ROS 2 nodes cannot read Gazebo topics directly, so the bridge from <a href="/documented-software-learnings/ros2/ros2-y/#write-the-launch-file" target="_blank" rel="noopener">chapter 25</a> must carry them over. Open the <code>launch</code> folder and then <code>gazebo.launch.py</code>.</p>
+<figure class="img sz-s al-l"><img src="/uploads/2026/11/image-124.png" alt="VS Code explorer with gazebo.launch.py selected in the launch folder"><figcaption>gazebo.launch.py in the launch folder</figcaption></figure>
+<h3 id="add-the-imu-to-the-bridge">Add the IMU to the bridge</h3>
+<p>Change the bridge node so it also carries the IMU topic:</p>
+<pre class="code"><code>gz_ros2_bridge = Node(
+    package="ros_gz_bridge",
+    executable="parameter_bridge",
+    arguments=[
+        "/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock",
+        "/imu@sensor_msgs/msg/Imu[gz.msgs.IMU"
+    ],
+    remappings=[
+        ('/imu', '/imu/out'),
+    ]
+)</code></pre>
+<figure class="img sz-l"><img src="/uploads/2026/11/image-125.png" alt="gazebo.launch.py with the gz_ros2_bridge node highlighted, carrying /clock and /imu"><figcaption>The bridge node in gazebo.launch.py, now with the /imu topic</figcaption></figure>
+<p>Each bridge argument has the same shape: <b>topic @ ROS 2 type [ Gazebo type</b>. As far as I know, the <code>[</code> means the messages flow one way only, from Gazebo to ROS 2, which is all a sensor needs. The <code>remappings</code> line renames the ROS 2 topic from <code>/imu</code> to <code>/imu/out</code>, so the readings arrive in ROS 2 on <code>/imu/out</code>. The bridge node must also stay in the list returned by <code>LaunchDescription</code>, as in the picture.</p>
+<div class="widget"><iframe allow="fullscreen" allowfullscreen src="/widgets/claude-simulate-imu-sensor-20261128-041450-imu-data-path.html?v=0dec55a3a1" title="The path of one IMU reading from Gazebo to ROS 2"></iframe></div>
+<h3 id="add-the-dependency-to-package-xml">Add the dependency to package.xml</h3>
+<p>The launch file now needs the <code>ros_gz_bridge</code> package, so tell ROS 2 about it. Open <code>package.xml</code> of the same package, <code>bumperbot_description</code>, and add this line next to the other <code>exec_depend</code> lines:</p>
+<pre class="code"><code>&lt;exec_depend&gt;ros_gz_bridge&lt;/exec_depend&gt;</code></pre>
+<figure class="img sz-l"><img src="/uploads/2026/11/image-126.png" alt="package.xml of bumperbot_description with the ros_gz_bridge exec_depend line marked"><figcaption>The new exec_depend line in package.xml</figcaption></figure>
+</div>
+
+<div class="col"><h2 id="build-and-look-at-the-readings">Build and look at the readings</h2>
+<h3 id="terminal-1-build-the-workspace">Terminal 1: build the workspace</h3>
+<p>Go to the workspace:</p>
+<div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln"><span class="tok-typeName">cd</span> bumperbot_ws</span></code></pre></div>
+<p>Build it:</p>
+<div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">colcon build</span></code></pre></div>
+<p class="caption">What you should see</p>
+<div class="codeblock" data-lang="Plain text"><pre class="code"><code>Starting &gt;&gt;&gt; bumperbot_msgs
+Starting &gt;&gt;&gt; bumperbot_controller
+Starting &gt;&gt;&gt; bumperbot_cpp_examples
+Starting &gt;&gt;&gt; bumperbot_description
+Finished &lt;&lt;&lt; bumperbot_cpp_examples [0.37s]
+Finished &lt;&lt;&lt; bumperbot_controller [0.78s]
+Finished &lt;&lt;&lt; bumperbot_msgs [0.92s]
+Starting &gt;&gt;&gt; bumperbot_py_examples
+Finished &lt;&lt;&lt; bumperbot_description [1.20s]
+Finished &lt;&lt;&lt; bumperbot_py_examples [1.46s]
+
+Summary: 5 packages finished [2.57s]</code></pre></div>
+<figure class="img sz-s al-l"><img src="/uploads/2026/11/image-127.png" alt="Terminal: colcon build finishing 5 packages"><figcaption>The workspace builds</figcaption></figure>
+<h3 id="terminal-2-start-the-simulation">Terminal 2: start the simulation</h3>
+<p>Open a new terminal in the workspace and source it:</p>
+<div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">. install/setup.bash</span></code></pre></div>
+<p>Start the robot in Gazebo:</p>
+<div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">ros2 launch bumperbot_description gazebo.launch.py</span></code></pre></div>
+<p class="caption">What you should see</p>
+<div class="codeblock" data-lang="Plain text"><pre class="code"><code>[gazebo-2] [Dbg] [ImuSensor.cc:150] IMU data for [bumperbot::base_footprint::imu] advertised on [imu]</code></pre></div>
+<figure class="img sz-m al-l"><img src="/uploads/2026/11/image-128.png" alt="Gazebo running the BumperBot simulation"><figcaption>The simulation is running; the log line above says the IMU publishes on the Gazebo topic imu</figcaption></figure>
+<h3 id="terminal-3-read-the-imu-topic">Terminal 3: read the IMU topic</h3>
+<p>Open a third terminal in the workspace and source it:</p>
+<div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">. install/setup.bash</span></code></pre></div>
+<p>Print every message on <code>/imu/out</code>:</p>
+<div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">ros2 topic <span class="tok-typeName">echo</span> /imu/out</span></code></pre></div>
+<p class="caption">What you should see</p>
+<div class="codeblock" data-lang="Plain text"><pre class="code"><code>angular_velocity:
+  x: -0.0003625079190463711
+  y: -0.00019713507617265803
+  z: 0.0005380791268850312
+angular_velocity_covariance:
+- 3.999999975690116e-08
+- 0.0
+- 0.0
+- 0.0
+- 3.999999975690116e-08
+- 0.0
+- 0.0
+- 0.0
+- 3.999999975690116e-08
+linear_acceleration:
+  x: 0.12352216982227612
+  y: -0.008985411455847058
+  z: 9.800843644362653
+linear_acceleration_covariance:
+- 0.00028899998869746923
+- 0.0
+- 0.0
+- 0.0
+- 0.00028899998869746923
+- 0.0
+- 0.0
+- 0.0
+- 0.00028899998869746923
+---</code></pre></div>
+<p class="note">This is one message from the run in the pictures. New messages keep arriving 100 times per second, and the numbers change every time because of the noise.</p>
+<div class="cols cols-2"><div class="col"><figure class="img"><img src="/uploads/2026/11/image-129.png" alt="Three terminals: the build, the simulation log and ros2 topic echo /imu/out being typed"><figcaption>Terminal 3 starts ros2 topic echo /imu/out</figcaption></figure></div><div class="col"><figure class="img"><img src="/uploads/2026/11/image-130-crop.png" alt="The /imu/out messages scrolling in the terminal: angular_velocity, linear_acceleration and their covariances"><figcaption>The IMU messages arriving on /imu/out</figcaption></figure></div></div>
+<h3 id="what-the-numbers-say">What the numbers say</h3>
+<ul>
+<li><b>angular_velocity</b> is the gyroscope part, in radians per second. The robot stands still, so x, y and z are only tiny noise around 0.</li>
+<li><b>linear_acceleration</b> is the accelerometer part, in metres per second per second. z is about 9.8. As far as I know, this is gravity: a real accelerometer on a table feels the pull of the Earth on its up axis, and the simulated one does the same.</li>
+<li>The <b>covariance</b> lists come from the noise settings. A covariance is the stddev multiplied by itself:</li>
+</ul>
+<div class="table-wrap"><table>
+<tbody><tr><td>Reading</td><td>stddev in the sensor block</td><td>stddev × stddev</td><td>printed covariance</td></tr>
+<tr><td>angular_velocity</td><td>2e-4 = 0.0002</td><td>0.0002 × 0.0002 = 0.00000004 = 4e-8</td><td>3.999999975690116e-08</td></tr>
+<tr><td>linear_acceleration</td><td>1.7e-2 = 0.017</td><td>0.017 × 0.017 = 0.000289</td><td>0.00028899998869746923</td></tr>
+</tbody></table></div>
+<p>The printed values differ only in the last digits, which come from how the computer stores decimal numbers. Each list has nine numbers: a 3 × 3 table for x, y and z. Only the first, fifth and ninth are used, the x, y and z of the noise.</p>
+<h3 id="plot-the-readings-in-plotjuggler">Plot the readings in PlotJuggler</h3>
+<p>Stop the echo with Ctrl+C. Then start PlotJuggler in the same terminal:</p>
+<div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">ros2 run plotjuggler plotjuggler</span></code></pre></div>
+<figure class="img sz-l"><img src="/uploads/2026/11/image-131.png" alt="Terminal after stopping the echo, with ros2 run plotjuggler plotjuggler typed at the bottom"><figcaption>Starting PlotJuggler after stopping the echo</figcaption></figure>
+<p>In PlotJuggler, as in <a href="/documented-software-learnings/ros2/ros2-71/#connect-plotjuggler-to-ros-2" target="_blank" rel="noopener">chapter 71</a>:</p>
+<ol>
+<li>Start the <b>ROS 2 Topic Subscriber</b>.</li>
+<li>Select the message <code>/imu/out</code>.</li>
+<li>Click <b>OK</b>.</li>
+<li>In the list on the left, open <b>imu</b>, then <b>out</b>, then <b>angular_velocity</b>, and drag <b>z</b> into the graph.</li>
+</ol>
+<figure class="img sz-m al-l"><img src="/uploads/2026/11/My-notes-page-1.png" alt="Notes on PlotJuggler: steps 1 to 4 marked on the Select ROS messages window and the topic tree, with the noisy z graph"><figcaption>The four steps in PlotJuggler, and the angular velocity z in the graph</figcaption></figure>
+</div>
+
+<div class="col"><h2 id="drive-the-robot-and-watch-the-imu">Drive the robot and watch the IMU</h2>
+<h3 id="terminal-4-the-controllers">Terminal 4: the controllers</h3>
+<p>Open a fourth terminal in the workspace and source it:</p>
+<div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">. install/setup.bash</span></code></pre></div>
+<p>Start the controllers, with the same option as in <a href="/documented-software-learnings/ros2/ros2-71/#terminal-3-the-controllers" target="_blank" rel="noopener">chapter 71</a>:</p>
+<div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">ros2 launch bumperbot_controller controller.launch.py use_simple_controller:<span class="tok-operator">=</span>false</span></code></pre></div>
+<figure class="img sz-l"><img src="/uploads/2026/11/image-132.png" alt="Terminal 4 starting controller.launch.py with use_simple_controller:=false"><figcaption>Terminal 4 starts the controllers</figcaption></figure>
+<h3 id="terminal-5-the-joystick">Terminal 5: the joystick</h3>
+<p>Open a fifth terminal in the workspace and source it:</p>
+<div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">. install/setup.bash</span></code></pre></div>
+<p>Start the joystick:</p>
+<div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">ros2 launch bumperbot_controller joystick_teleop.launch.py</span></code></pre></div>
+<figure class="img sz-l"><img src="/uploads/2026/11/image-133.png" alt="Terminal 5 starting joystick_teleop.launch.py while the controllers log in terminal 4"><figcaption>Terminal 5 starts the joystick</figcaption></figure>
+<h3 id="watch-the-readings">Watch the readings</h3>
+<p>Now drive the robot with the joystick and watch the angular velocity z in PlotJuggler. While the robot stands still, the line only shakes a little around 0: that is the noise of 0.0002 rad/s. When the robot turns, the line jumps up or down, because the gyroscope part of the IMU feels the turn.</p>
+<figure class="video"><div class="embed"><iframe src="https://www.youtube-nocookie.com/embed/MrVYixt18yw?rel=0&amp;modestbranding=1&amp;playsinline=1" loading="lazy" title="Video" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div><figcaption>Driving with the joystick while PlotJuggler shows the IMU readings</figcaption></figure>
+</div>
+
+<div class="col"><h2 id="remember">Remember</h2>
+<ul>
+<li>The IMU is a new <code>imu_link</code> with a fixed <code>imu_joint</code>, 0.0699 m above <code>base_link</code>, with the same axes as the robot.</li>
+<li>Gazebo needs the IMU system plugin: <code>ignition-gazebo-imu-system</code> on Humble, <code>gz-sim-imu-system</code> on Iron and newer.</li>
+<li>The sensor block sets 100 readings per second on the Gazebo topic <code>imu</code>, with gaussian noise: stddev 0.0002 rad/s for the angular velocity and 0.017 m/s² for the linear acceleration.</li>
+<li>The bridge argument <code>/imu@sensor_msgs/msg/Imu[gz.msgs.IMU</code> carries the readings into ROS 2, and the remapping renames the topic to <code>/imu/out</code>.</li>
+<li><code>ros_gz_bridge</code> goes into <code>package.xml</code> as an <code>exec_depend</code>.</li>
+<li>In the messages, the covariance is the stddev multiplied by itself (0.0002 × 0.0002 = 4e-8), and the z acceleration of about 9.8 is gravity.</li>
+<li>Turning the robot shows up in the angular velocity z in PlotJuggler.</li>
+</ul>
+</div></div>
+    <nav class="pager" aria-label="Chapters">
+<a href="/documented-software-learnings/ros2/ros-74/"><span class="mono">Chapter 74</span>Accelerometer and IMU</a><a class="nx" href="/documented-software-learnings/ros2/"><span class="mono">Series complete</span>Back to ROS 2</a>    </nav>
+  </article>
+</div>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a><a href="/documented-software-learnings/ultimaker-cura/">Ultimaker Cura</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=e43b0871b9" defer></script>
+<script data-goatcounter="https://techarcanist.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script><script src="/assets/home.js?v=e43b0871b9" defer></script>
+</body>
+</html>

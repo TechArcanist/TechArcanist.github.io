@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tech Arcanist DIY Platform: Projects, Courses and Progress Tracking | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="A prototype DIY platform suggested to inunity: makers publish step-by-step builds with code, YouTube, Wokwi simulators and interactive HTML visualizers, bundle…">
+<link rel="canonical" href="https://techarcanist.com/project/techarcanist-blog/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="Tech Arcanist DIY Platform: Projects, Courses and Progress Tracking">
+<meta property="og:description" content="A prototype DIY platform suggested to inunity: makers publish step-by-step builds with code, YouTube, Wokwi simulators and interactive HTML visualizers, bundle…">
+<meta property="og:url" content="https://techarcanist.com/project/techarcanist-blog/">
+<meta property="og:image" content="/uploads/projects/techarcanist-blog/00-cover-hero.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=e43b0871b9">
+<link rel="stylesheet" href="/assets/home.css?v=e43b0871b9">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/" aria-current="page">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<section class="cs-hero">
+  <div class="wrap">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/project/">Work</a><span>/</span><span>06 of 32</span></nav>
+    <h1>Tech Arcanist DIY Platform: Projects, Courses and Progress Tracking</h1>
+<p class="cs-lead">A prototype DIY platform suggested to inunity: makers publish step-by-step builds with code, YouTube, Wokwi simulators and interactive HTML visualizers, bundle them into courses and track progress, on a Firebase backend.</p>  </div>
+  <div class="wrap">
+    <dl class="cs-spec mono">
+<div><dt>Discipline</dt><dd><a href="/project/#web">Software &amp; Web</a></dd></div>      <div><dt>Contents</dt><dd>24 images</dd></div>
+    </dl>
+  </div>
+  <div class="wrap"><figure class="cs-cover"><img src="/uploads/projects/techarcanist-blog/00-cover-hero.png" alt="Tech Arcanist DIY Platform: Projects, Courses and Progress Tracking"><span class="corner tl"></span><span class="corner br"></span></figure></div>
+</section>
+
+<section class="sec tight">
+  <div class="wrap doc">
+    <aside class="toc" aria-label="On this page">
+      <p class="label">On this page</p>
+      <ol><li><a href="#introduction"><span class="mono">01</span>Introduction</a></li><li><a href="#tech-stack"><span class="mono">02</span>Tech stack</a></li><li><a href="#how-it-works"><span class="mono">03</span>How it works</a></li><li><a href="#public-features-what-any-visitor-sees"><span class="mono">04</span>Public features: what any visitor sees</a></li><li><a href="#features-for-signed-in-members"><span class="mono">05</span>Features for signed-in members</a></li><li><a href="#admin-features"><span class="mono">06</span>Admin features</a></li><li><a href="#data-model"><span class="mono">07</span>Data model</a></li><li><a href="#problems-solved"><span class="mono">08</span>Problems solved</a></li></ol>
+    </aside>
+    <article class="prose">
+      <div class="col"><h2 id="introduction">Introduction</h2><p>Tech Arcanist is a DIY project sharing platform. A maker writes a project as numbered steps with photos, code, YouTube videos, Wokwi and Tinkercad circuit simulators and interactive HTML visualizers, plus a materials list. Other people can like, save, comment on, fork and "make" it, and several projects can be bundled into a course: a step-by-step guide to building something bigger.</p><p>It is a prototype. I built it as a suggestion for inunity, my last company, which has its own DIY application, Inpulse. I wanted to show what more features a DIY app could have and what a better ecosystem for DIY could look like: lessons you can interact with inside a project, courses, progress tracking, forking and backups.</p><p>It is a complete working app, not only a front end. The page is one HTML file and the backend is Firebase: sign-in, a Firestore database with security rules, and hosting. A maker signs in, publishes a project from the form, it is saved in Firestore and it is visible to everyone. There is no server code of my own, and it runs on Firebase's free plan at techarcanist.blog.</p><div class="btns"><a class="btn" href="https://techarcanist.blog" target="_blank" rel="noopener">Visit the live website</a></div><h3 id="who-it-is-for">Who it is for</h3><p>Makers and learners in electronics, robotics, AI, IoT, 3D printing, programming and cybersecurity, which are the categories on the site. It is first of all the home of the Tech Arcanist projects and courses, and anyone with a Google or email account can publish their own.</p><h3 id="what-it-does">What it does</h3><ul><li><b>Projects:</b> a step-by-step build page with a cover image, materials with prices and links, difficulty voting and comments.</li><li><b>Interactive steps:</b> every step can hold text, code, a YouTube video, a Wokwi or Tinkercad simulator and a custom HTML visualizer that runs inside the page.</li><li><b>Courses:</b> an ordered list of projects with a banner image and a progress bar for each signed-in learner.</li><li><b>Progress and profiles:</b> every step can be ticked off, started builds show up on the home page, and each maker has a profile with badges and followers.</li><li><b>Backup:</b> any project can be downloaded as a file and imported again.</li></ul><h3 id="ideas-this-prototype-puts-forward">Ideas this prototype puts forward</h3><ul><li><b>Learn by trying:</b> simulators and HTML visualizers inside the steps, so a reader can run a circuit or play with an idea without leaving the page.</li><li><b>Courses with progress:</b> projects bundled into a path, with a tick for every step and a bar for every course, plus course-only projects that live only inside a course.</li><li><b>Remix and keep your work:</b> fork a project into your own draft, and export or import a project as a file.</li><li><b>Honest difficulty:</b> readers vote Too Easy, Just Right or Too Hard on each project.</li><li><b>Made for phones:</b> a filter panel, a bottom tab bar and the phone's own share sheet.</li></ul><ul><li><b>Live site:</b> <a href="https://techarcanist.blog" target="_blank" rel="noopener">techarcanist.blog</a></li></ul></div><div class="col"><h2 id="tech-stack">Tech stack</h2><div class="table-wrap"><table><tbody><tr><td>Part</td><td>Choice</td><td>Why</td></tr><tr><td>Front end</td><td>One HTML file of 5,363 lines: about 1,390 lines of CSS and about 3,200 lines of JavaScript inline, 180 top-level functions. No framework, no build step</td><td>Deploys by uploading one file and is easy to change</td></tr><tr><td>Backend</td><td>Firebase, a managed backend: Authentication for accounts, Cloud Firestore as the database with security rules, and Hosting. There is no custom server code, no Node server and no Cloud Functions</td><td>A project published from the form is stored in Firestore and is visible to everyone at once, with nothing for me to host or maintain</td></tr><tr><td>Look</td><td>Hand-written CSS with variables, a light and a dark theme, a black, grey and purple palette</td><td>My own look, not a template</td></tr><tr><td>Code in steps</td><td>highlight.js 11.9</td><td>Syntax-coloured code blocks</td></tr><tr><td>Database</td><td>Cloud Firestore: 4 groups of data protected by a 41-line rules file</td><td>No server to run, free tier</td></tr><tr><td>Sign-in</td><td>Firebase Authentication with Google, or email and password</td><td>No account code of my own</td></tr><tr><td>Images</td><td>Stored inside the Firestore documents as data (base64). The Storage library is loaded but not used for images</td><td>No paid storage plan needed</td></tr><tr><td>Analytics</td><td>Firebase Analytics</td><td>Visit counts</td></tr><tr><td>Hosting</td><td>Firebase Hosting with every address served by the one HTML file, on the custom domain techarcanist.blog</td><td>Free tier, one-command deploy</td></tr><tr><td>Installable</td><td>A web app manifest, so phones can add it to the home screen. There is no service worker</td><td>Opens like an app on phones</td></tr></tbody></table></div></div><div class="col"><h2 id="how-it-works">How it works</h2><figure class="img"><img src="/uploads/projects/techarcanist-blog/architecture.svg" alt="Diagram: the browser app loads from Firebase Hosting and talks directly to Firebase Auth and Cloud Firestore, with highlight.js, YouTube, Wokwi and Tinkercad embeds and a browser cache" loading="lazy"><figcaption>The whole app runs in the browser. Firestore holds the data and its rules decide who may change what.</figcaption></figure><ul><li><b>Browser app:</b> a small router reads the address (a project, a course, a profile, the Projects page, the Courses page, Saved, Following or New) and shows the matching page. The back button works.</li><li><b>Firestore and its rules:</b> anyone can read projects, courses and profiles. A signed-in user can create a project or course, and only its author can change or delete it. A user's private state (likes, saved projects, step progress, votes, follows) can be read and written only by that user.</li><li><b>Sign-in:</b> Google or email and password, with a profile document created on the first sign-in.</li><li><b>Embeds:</b> YouTube, Wokwi and Tinkercad are loaded inside steps, and highlight.js colours the code.</li></ul><p><b>A typical action, publishing a project:</b> the form is gathered and checked (a title, a description and at least one step), photos and attachments are turned into data and added to the project document, the document is written to Firestore, the project list reloads and the new project page opens. From then on every visitor can read it.</p></div><div class="col"><h2 id="public-features-what-any-visitor-sees">Public features: what any visitor sees</h2><h3 id="home-projects-and-courses">Home, Projects and Courses</h3><p>The home page has an animated hero ("Build. Share. DIY."), a search box that looks through title, description, author, tags and materials, category chips (Electronics, Robotics, AI and ML, IoT, 3D Printing, Programming, Cybersecurity), difficulty chips (Beginner, Intermediate, Advanced), a Featured filter and a sort menu (Newest, Most Liked, Most Viewed, Most Made). A Courses row sits above the project grid. A Trending row (the top 6 of the last 7 days by likes plus views) only appears once at least 8 projects are published. The Projects and Courses pages use the same filters on their own pages.</p><figure class="img sz-l"><img src="/uploads/projects/techarcanist-blog/01-home.png" alt="Tech Arcanist home page with the Build. Share. DIY. hero, category and difficulty chips and the ROS 2 course card" loading="lazy"><figcaption>The home page in the light theme, with the one course on the site so far.</figcaption></figure><figure class="img sz-m"><img src="/uploads/projects/techarcanist-blog/02-home-dark.png" alt="The same home page in the dark theme" loading="lazy"><figcaption>The dark theme, switched with the moon button and remembered for next time.</figcaption></figure><figure class="img sz-l"><img src="/uploads/projects/techarcanist-blog/05-projects-empty.png" alt="Projects page showing No projects found" loading="lazy"><figcaption>The Projects page today: nothing to list yet, because the one project is course only.</figcaption></figure><h3 id="the-project-page">The project page</h3><p>Everything about a project sits on one page:</p><ul><li><b>Header:</b> category, difficulty, time, number of steps and author, then the cover image and an optional YouTube video.</li><li><b>Action bar:</b> Like, Save, I Made This, Fork, Share and Export.</li><li><b>Progress:</b> a bar and one dot per step, saved to the signed-in reader's account.</li><li><b>Info and voting:</b> time, difficulty, number of materials, views, likes and made-it count, and a "Rate Difficulty" vote (Too Easy, Just Right, Too Hard) with result bars.</li><li><b>Materials and Tools:</b> each item with an optional buy link and a price, and an estimated total.</li><li><b>Comments and related projects:</b> related projects share the category or a tag, up to 4.</li></ul><figure class="img sz-l"><img src="/uploads/projects/techarcanist-blog/03-project-page.png" alt="Project page with cover, action bar, progress, info cards, difficulty vote, one step and comments" loading="lazy"><figcaption>The project page as a visitor sees it, here for the one project on the site.</figcaption></figure><h3 id="interactive-steps-video-simulators-html-visualizers-and-code">Interactive steps: video, simulators, HTML visualizers and code</h3><p>A step is more than text and pictures. Each step has a title, photos (several photos become a swipeable carousel, and a tap opens a full-size lightbox) and content blocks that the author stacks in any order and can move up or down:</p><ul><li><b>Text</b> for explanations.</li><li><b>Code</b> with a language picker, a file name, syntax colours and a Copy button.</li><li><b>YouTube:</b> paste a video link and it plays inside the step. A project can also have one main video under its cover.</li><li><b>Simulator:</b> paste a Wokwi or Tinkercad project link and the circuit is embedded in the step, so a reader can run it in the page.</li><li><b>Interactive HTML:</b> paste a complete piece of HTML, CSS and JavaScript and it runs in a sandboxed frame inside the step with a Reset button. This is how an interactive visualizer or a small demo can live inside a project, and the frame grows to fit it.</li><li><b>Attachments</b> that readers can download.</li></ul><p>Every step also has a Mark Done button for progress tracking.</p><figure class="img sz-l"><img src="/uploads/projects/techarcanist-blog/08b-step-blocks.png" alt="Step editor with a Text block, a Code block with a language picker, a YouTube link field, a Simulator field for Wokwi or Tinkercad and an Interactive HTML block" loading="lazy"><figcaption>One step in the editor with every block type added: Text, Code, YouTube, Simulator and Interactive HTML.</figcaption></figure><h3 id="courses">Courses</h3><p>A course page has a banner, category, difficulty, number of projects and author, and the ordered list of its projects. For a signed-in learner each project shows done, partly done or not started, and a progress bar shows how many projects are finished.</p><figure class="img sz-l"><img src="/uploads/projects/techarcanist-blog/04-course-page.png" alt="ROS 2 course page with a wide banner, the course details and the list of projects in the course" loading="lazy"><figcaption>The ROS 2 course page with its wide banner and its one project.</figcaption></figure><h3 id="profiles-sharing-and-backup">Profiles, sharing and backup</h3><ul><li><b>Profiles:</b> avatar, name, @username, bio, location, website, social links (GitHub, X, YouTube, LinkedIn, Instagram), counts of projects, followers, following and likes, skill tags, badges and a Follow button.</li><li><b>Share:</b> where the browser supports it (mostly phones) the system share sheet opens; otherwise a small menu offers Copy Link, WhatsApp and X.</li><li><b>Export and Import:</b> Export downloads a project as a file, and Import (signed in) fills the new-project form from such a file, so an author can rebuild a project from their own copy.</li></ul><h3 id="phones-and-tablets">Phones and tablets</h3><p>Above 1024 px the full toolbar is shown. At 1024 px and below the site switches to scrolling category chips, a filter button that opens a full-screen filter panel (category, difficulty, type, sort), a bottom tab bar (Home, Projects, Courses, Following, Saved) and a floating plus button (New Project, New Course, Import Backup). Between 600 and 1024 px the project grid has two columns.</p><div class="cols cols-2"><div class="col"><figure class="img"><img src="/uploads/projects/techarcanist-blog/20-home-mobile.png" alt="Home page on a phone with scrolling category chips and the bottom tab bar" loading="lazy"><figcaption>The home page on a phone.</figcaption></figure></div><div class="col"><figure class="img"><img src="/uploads/projects/techarcanist-blog/21-filter-panel-mobile.png" alt="Full-screen filter panel with category, difficulty, type and sort" loading="lazy"><figcaption>The full-screen filter panel.</figcaption></figure></div></div><div class="cols cols-2"><div class="col"><figure class="img"><img src="/uploads/projects/techarcanist-blog/22-project-mobile.png" alt="Project page on a phone" loading="lazy"><figcaption>A project page on a phone.</figcaption></figure></div><div class="col"><figure class="img"><img src="/uploads/projects/techarcanist-blog/23-fab-menu-mobile.png" alt="Floating plus menu with New Project, New Course and Import Backup" loading="lazy"><figcaption>The floating plus menu.</figcaption></figure></div></div><h3 id="speed-and-sharing-set-up">Speed and sharing set-up</h3><p>Projects and courses load at the same time and without waiting for sign-in. A copy of the list is kept in the browser for 5 minutes so a repeat visit paints at once, Firestore's offline cache is on, grey skeleton cards show while data loads and card images load lazily. I did not measure load times, so there are no numbers for the gain. The page also has a title, description, Open Graph and Twitter card tags, a favicon and a web app manifest.</p></div><div class="col"><h2 id="features-for-signed-in-members">Features for signed-in members</h2><ul><li><b>Sign-in:</b> Google, or email and password (8 or more characters with upper case, lower case, a number and a special character, and a password reset email). The first sign-in opens a short profile set-up: display name, a username of 3 to 20 characters that is checked live for availability, bio and location.</li><li><b>Create or edit a project:</b> five sections: Project Info (title, description, author, time, category with a custom "Other", difficulty and a course-only tickbox), Cover Image, YouTube Video, Materials and Tools (name, link, price) and Steps. Save Draft, Preview and Publish; publishing needs a title, a description and at least one step.</li></ul><figure class="img sz-l"><img src="/uploads/projects/techarcanist-blog/07-create-project.png" alt="New Project form with project info fields and the cover image upload area" loading="lazy"><figcaption>The top of the New Project form, empty.</figcaption></figure><figure class="img sz-l"><img src="/uploads/projects/techarcanist-blog/08-steps-editor.png" alt="Steps section of the form with a step title, photos, a text block and buttons to add Text, Code, YouTube, Simulator, HTML and Attachments" loading="lazy"><figcaption>The step editor: photos, content blocks in any order and attachments. Steps can be dragged to reorder.</figcaption></figure><ul><li><b>Cover image editor:</b> drag and zoom (mouse wheel, slider or pinch on a phone) inside a 3:2 frame, with Edit Crop and Replace buttons. The recommended size is 900 by 600 px, and the "How it will look" preview uses the same frame as the real card.</li><li><b>Course-only projects:</b> one tick hides a project from the Projects page and the home grid so it shows only inside courses.</li><li><b>Fork:</b> copies another maker's project into a private draft titled "(Fork)" that links back to the original.</li><li><b>Likes, saved projects, I Made This, difficulty votes, comments and follows,</b> plus a "My Builds" row on the home page for projects that are started but not finished, and Saved and Following pages.</li><li><b>Create or edit a course:</b> title, description, category and difficulty, a card image (3:2) and a separate optional banner image (wide 7:2) with their own crop editors, then pick projects from a list and reorder them. Save Draft or Publish.</li></ul><figure class="img sz-l"><img src="/uploads/projects/techarcanist-blog/09-create-course.png" alt="New Course form with course info, card image and banner image upload areas and the projects list" loading="lazy"><figcaption>The New Course form: a card image and a separate banner image, each with its own crop.</figcaption></figure><ul><li><b>Badges,</b> awarded automatically: First Project, 5 Projects, 10 Likes, 50 Likes, 100 Views and First Fork.</li><li><b>Edit profile:</b> name, username, bio, location, website, five social links, skills and photo.</li></ul><p>Signed in, the top bar shows the maker's avatar and name, and the pages gain their member controls.</p><figure class="img sz-l"><img src="/uploads/projects/techarcanist-blog/10-home-signed-in.png" alt="Home page signed in, with the avatar, name and Sign out in the top bar" loading="lazy"><figcaption>The home page signed in: New Project, Course and Import buttons, and the avatar with Sign out.</figcaption></figure><div class="cols cols-2"><div class="col"><figure class="img"><img src="/uploads/projects/techarcanist-blog/11-own-profile.png" alt="Own profile with the avatar, username, counts, a badge and the Edit Profile button" loading="lazy"><figcaption>A maker's own profile, with a badge and the Edit Profile button.</figcaption></figure></div><div class="col"><figure class="img sz-m"><img src="/uploads/projects/techarcanist-blog/12-edit-profile.png" alt="Edit Profile window with display name, username, bio, location, website and social links" loading="lazy"><figcaption>Edit Profile: name, username, bio, location, website and social links.</figcaption></figure></div></div><div class="cols cols-2"><div class="col"><figure class="img"><img src="/uploads/projects/techarcanist-blog/13-project-signed-in.png" alt="Project page signed in with Likes, Save, I Made This, Fork, Share and Export buttons" loading="lazy"><figcaption>A project page signed in as another maker: Fork is shown here.</figcaption></figure></div><div class="col"><figure class="img"><img src="/uploads/projects/techarcanist-blog/14-course-signed-in.png" alt="Course page signed in with the projects completed progress bar" loading="lazy"><figcaption>A course page signed in, with the progress bar.</figcaption></figure></div></div><figure class="img sz-s al-l"><img src="/uploads/projects/techarcanist-blog/06-signin-modal.png" alt="Sign-in window with Google and Email tabs" loading="lazy"><figcaption>The sign-in window.</figcaption></figure></div><div class="col"><h2 id="admin-features">Admin features</h2><p>There is no separate admin dashboard. One admin is set by a fixed list of user IDs in the code. For the admin, projects and courses show a Feature or Unfeature button, and the Featured filter then lists the featured ones. Everything else, such as editing and deleting, is limited to the author of each project or course. The admin account is also the author of the one project and course on the site, so it sees both the admin and the author controls.</p><figure class="img sz-m al-l"><img src="/uploads/projects/techarcanist-blog/30-admin-feature-project.png" alt="Project page as the admin, with a Feature button in the action bar next to Share and Export" loading="lazy"><figcaption>A project page as the admin: the Feature button sits in the action bar. Fork is only shown to other people.</figcaption></figure><figure class="img sz-m al-l"><img src="/uploads/projects/techarcanist-blog/31-owner-buttons-project.png" alt="Bottom of a project page with Edit Project and Delete buttons for the author" loading="lazy"><figcaption>At the bottom of a project, its author gets Edit Project and Delete.</figcaption></figure><figure class="img sz-m al-l"><img src="/uploads/projects/techarcanist-blog/32-owner-buttons-course.png" alt="Bottom of a course page with Edit Course, Delete and Feature buttons" loading="lazy"><figcaption>A course page for its author and admin: Edit Course, Delete and Feature.</figcaption></figure><figure class="img sz-m al-l"><img src="/uploads/projects/techarcanist-blog/33-course-editor-images.png" alt="Edit Course form with the card image and the wide banner image, each with Edit Crop and Replace buttons" loading="lazy"><figcaption>Edit Course: the card image and the separate wide banner, each with Edit Crop and Replace.</figcaption></figure></div><div class="col"><h2 id="data-model">Data model</h2><p>Cloud Firestore, 4 groups of data:</p><div class="table-wrap"><table><tbody><tr><td>Collection</td><td>What it holds</td></tr><tr><td>projects</td><td>Title, description, author, category, difficulty, time, tags, materials (name, link, price), steps (title, content blocks, images, files), cover, YouTube link, course-only flag, published and featured flags, likes, views, made-it count, difficulty votes, comments, the project it was forked from, dates</td></tr><tr><td>courses</td><td>Title, description, category, difficulty, author, card image, banner image, the ordered list of project IDs, published and featured flags, date</td></tr><tr><td>userProfiles</td><td>Display name, username, bio, location, website, five social links, skills, photo, badges, follower count, date</td></tr><tr><td>users, private state</td><td>One private document per user: likes, saved projects, projects marked as made, finished steps for each project, difficulty votes, who they follow</td></tr></tbody></table></div></div><div class="col"><h2 id="problems-solved">Problems solved</h2><h3 id="filters-that-fit-a-phone">Filters that fit a phone</h3><p>The first mobile toolbar wrapped into many rows and pushed the projects off the screen. A bottom sheet was tried and rejected. The final design keeps the full toolbar on desktop and uses scrolling category chips plus a full-screen filter panel on phones and tablets, in the site's own black, grey and purple palette (a first version borrowed another site's yellow and was redone).</p><h3 id="where-phone-ends">Where "phone" ends</h3><p>On a tablet-sized window the desktop bar showed with the Sign In button cut off. The breakpoint moved from 640 to 900 and finally to 1024 px, with a separate two-column grid for tablets.</p><h3 id="a-slow-first-load">A slow first load</h3><p>Loading projects and courses together, before sign-in finishes, a 5 minute browser copy of the list, Firestore's offline cache, skeleton cards instead of a spinner and lazy images made the page feel faster. No before and after timing was measured.</p><h3 id="projects-that-belong-only-inside-a-course">Projects that belong only inside a course</h3><p>A course is a step-by-step guide, so its projects should not always appear in the public list. A "course only" option hides a project from the normal lists while courses can still include it.</p><h3 id="a-crop-frame-that-did-not-match-the-card">A crop frame that did not match the card</h3><p>The cover editor frame was 2:1 while the cards used a fixed height, so an image designed at the recommended size ran out of the editor and the preview did not match the published card. The editor, the cards, the previews and the recommended size now all use 3:2. The course banner got its own 7:2 editor, and both course images can be re-cropped.</p><h3 id="losing-work-if-the-site-breaks">Losing work if the site breaks</h3><p>Export and Import turn a project into a file the author keeps, so a project can be rebuilt from their own copy if anything goes wrong.</p><h3 id="photos-without-a-paid-storage-plan">Photos without a paid storage plan</h3><p>Images are stored inside the Firestore documents, so there is no storage service to pay for. The cost is that a project with many large photos can reach Firestore's size limit for one document.</p><h3 id="the-phone-s-own-share-sheet">The phone's own share sheet</h3><p>Where the browser supports the Web Share API, which is mostly on phones, the Share button opens the real share sheet with all the installed apps. Other browsers get a small menu with Copy Link, WhatsApp and X.</p></div>
+    </article>
+  </div>
+</section>
+
+<section class="wrap">
+  <nav class="pager" aria-label="More projects">
+<a href="/project/maker-buddies/"><span class="mono">Previous</span>Maker Buddies: A Gamified DIY Platform for Makers</a><a class="nx" href="/project/pcb-turtlebot/"><span class="mono">Next</span>PCB for Turtle Bot</a>  </nav>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <p class="label">Related work</p>
+    <div class="grid3"><a class="pcard" href="/project/techarcanist-com/" data-cats="web" data-search="tech arcanist website: a static site with its own admin and interactive lessons the current techarcanist.com, rebuilt from the wordpress site as plain content files, a python build, a local admin with drafts, history and interactive lesson visualizers and free publishing to github pages. software &amp; web">
+  <div class="pcard-media">
+<img src="/thumbs/631ecd8d5dca-720.webp" alt="" loading="lazy">    <span class="pcard-kind mono">Project</span>
+  </div>
+  <div class="pcard-body">
+    <p class="pcard-cats mono">Software &amp; Web</p>
+    <h3>Tech Arcanist Website: A Static Site with Its Own Admin and Interactive Lessons</h3>
+    <p class="pcard-sum">The current techarcanist.com, rebuilt from the WordPress site as plain content files, a Python build, a local admin with drafts, history and interactive lesson visualizers and free publishing to GitHub Pages.</p>
+  </div>
+</a>
+<a class="pcard" href="/project/psit-vyomnauts/" data-cats="web" data-search="psit vyomnauts: club website, admin panel and diy lab a 3d, content-managed website for the aerospace, drone and robotics club of psit kanpur, with its own github-backed admin panel, 24 interactive engineering simulators, recruitment campaigns and a diy guide platform for members. software &amp; web">
+  <div class="pcard-media">
+<img src="/uploads/projects/psit-vyomnauts/02-home-hero.png" alt="" loading="lazy">    <span class="pcard-kind mono">Project</span>
+  </div>
+  <div class="pcard-body">
+    <p class="pcard-cats mono">Software &amp; Web</p>
+    <h3>PSIT Vyomnauts: Club Website, Admin Panel and DIY Lab</h3>
+    <p class="pcard-sum">A 3D, content-managed website for the aerospace, drone and robotics club of PSIT Kanpur, with its own GitHub-backed admin panel, 24 interactive engineering simulators, recruitment campaigns and a DIY guide platform for members.</p>
+  </div>
+</a>
+<a class="pcard" href="/project/rrai/" data-cats="web" data-search="portfolio for raman research and innovation a modern website for an industry 4.0 and 5.0 technology company, with a password-free google-login admin panel to edit products, portfolio, team, partners and seo and to read enquiries, all on firebase&#39;s free plan. software &amp; web">
+  <div class="pcard-media">
+<img src="/thumbs/b3be264667e0-720.webp" alt="" loading="lazy">    <span class="pcard-kind mono">Project</span>
+  </div>
+  <div class="pcard-body">
+    <p class="pcard-cats mono">Software &amp; Web</p>
+    <h3>Portfolio for Raman Research and Innovation</h3>
+    <p class="pcard-sum">A modern website for an Industry 4.0 and 5.0 technology company, with a password-free Google-login admin panel to edit products, portfolio, team, partners and SEO and to read enquiries, all on Firebase&#39;s free plan.</p>
+  </div>
+</a>
+</div>
+  </div>
+</section>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a><a href="/documented-software-learnings/ultimaker-cura/">Ultimaker Cura</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=e43b0871b9" defer></script>
+<script data-goatcounter="https://techarcanist.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script><script src="/assets/home.js?v=e43b0871b9" defer></script>
+</body>
+</html>

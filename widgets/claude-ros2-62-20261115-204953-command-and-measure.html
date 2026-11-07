@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Command and Measure</title>
+<style>
+html,body{margin:0;background:#0e182c;color:#e8eef7;font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+.w{padding:16px;max-width:980px;margin:0 auto}
+h1{font-size:18px;margin:0 0 4px}.sub{color:#a9b8cc;font-size:14px;margin:0 0 12px}
+.card{background:#13213a;border:1px solid #23395c;border-radius:12px;padding:14px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:8px 0}
+.btn{background:#1b2c4a;color:#e8eef7;border:1px solid #2b4366;border-radius:8px;padding:6px 12px;font:600 13px system-ui,sans-serif;cursor:pointer}
+.btn:hover,.btn.on{border-color:#ff8a3d}
+label.ck{display:flex;align-items:center;gap:6px;font-size:14px;color:#cfe0f5}
+label.sl{display:block;font-size:14px;color:#cfe0f5;margin:6px 0}
+input[type=range]{width:100%;accent-color:#ff8a3d}
+svg{width:100%;height:auto;display:block}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+@media (max-width:640px){.cols{grid-template-columns:1fr}}
+.say{background:#0f1b31;border:1px solid #23395c;border-radius:10px;padding:10px 12px;font-size:14px}
+.say h2{font-size:14.5px;margin:0 0 6px;color:#ff8a3d}
+.mono{font:12.5px/1.6 ui-monospace,Consolas,monospace;color:#cfe0f5;word-break:break-word}
+.ok{color:#66e3b0}.bad{color:#ff6b6b}.warn{color:#ffd24a}.dim{color:#6b7f96}
+</style></head><body><div class="w">
+<h1>One matrix, two directions: command the wheels, then measure the robot</h1>
+<p class="sub">Pick a driving speed V and a turning speed ω. velCallback turns them into wheel speeds with the inverse matrix. The wheels turn, joint_states reports their angles, and jointCallback turns them back into V and ω. Press Play to watch the robot from above.</p>
+<div class="card">
+<label class="sl">command V (linear x): <b id="vv"></b> m/s<input type="range" id="v" min="-0.3" max="0.3" step="0.05" value="0" aria-label="driving speed"></label>
+<label class="sl">command ω (angular z): <b id="wv"></b> rad/s<input type="range" id="wq" min="-1" max="1" step="0.1" value="0.5" aria-label="turning speed"></label>
+<div class="row"><button class="btn" id="pl">Play</button><button class="btn" id="rs">Reset</button><span class="dim">time: <b id="tv"></b> s</span></div>
+<input type="range" id="t" min="0" max="6" step="0.05" value="0" aria-label="time">
+<div class="row"><label class="ck"><input type="checkbox" id="brk"> wrong parameter: the node is given wheel_radius 0.05, the real wheels are 0.033 m</label></div>
+<svg id="sv" viewBox="0 0 640 346" role="img" aria-label="The robot seen from above, with the path it drives"></svg>
+<div class="cols"><div class="say" id="cmd"></div><div class="say" id="mes"></div></div>
+<div class="say" id="say" style="margin-top:10px"></div>
+</div>
+</div>
+<script>
+(function(){
+var S={t:0,play:0,id:null},RREAL=0.033,SEP=0.17;
+function $(i){return document.getElementById(i)}
+function f(v,d){var s=v.toFixed(d===undefined?4:d);return /^-0\.0+$/.test(s)?s.slice(1):s}
+function calc(){
+  var V=+$('v').value,W=+$('wq').value,rn=$('brk').checked?0.05:RREAL;
+  var wR=(V+W*SEP/2)/rn,wL=(V-W*SEP/2)/rn;
+  var Vr=(RREAL*wR+RREAL*wL)/2,Wr=(RREAL*wR-RREAL*wL)/SEP;
+  var Vm=(rn*wR+rn*wL)/2,Wm=(rn*wR-rn*wL)/SEP;
+  return {V:V,W:W,rn:rn,wR:wR,wL:wL,Vr:Vr,Wr:Wr,Vm:Vm,Wm:Wm}}
+function pose(V,W,t){var n=Math.max(1,Math.round(t/0.01)),dt=t/n,x=0,y=0,th=0,pts=[[0,0]];
+  for(var i=0;i<n;i++){x+=V*Math.cos(th)*dt;y+=V*Math.sin(th)*dt;th+=W*dt;if(i%4===3)pts.push([x,y])}
+  return {x:x,y:y,th:th,pts:pts}}
+function draw(){
+  var c=calc(),t=S.t,b=$('brk').checked;
+  $('vv').textContent=f(c.V,2);$('wv').textContent=f(c.W,1);$('tv').textContent=t.toFixed(2);
+  var p=pose(c.Vr,c.Wr,t),SC=200,OX=320,OY=190,g='';
+  for(var gx=-1.5;gx<=1.51;gx+=0.5)g+='<line x1="'+(OX+gx*SC)+'" y1="20" x2="'+(OX+gx*SC)+'" y2="300" stroke="#1b2c4a"/>';
+  for(var gy=-0.5;gy<=0.51;gy+=0.5)g+='<line x1="20" y1="'+(OY-gy*SC)+'" x2="620" y2="'+(OY-gy*SC)+'" stroke="#1b2c4a"/>';
+  g+='<line x1="'+OX+'" y1="'+(OY+60)+'" x2="'+(OX+SC*0.5)+'" y2="'+(OY+60)+'" stroke="#a9b8cc" stroke-width="2"/><text x="'+(OX+SC*0.25)+'" y="'+(OY+78)+'" fill="#a9b8cc" font-size="12" text-anchor="middle">0.5 m</text>';
+  g+='<circle cx="'+OX+'" cy="'+OY+'" r="4" fill="#ffd24a"/>'+(Math.hypot(p.x,p.y)>0.3?'<text x="'+(OX-8)+'" y="'+(OY-8)+'" fill="#ffd24a" font-size="12" text-anchor="end">start</text>':'');
+  g+='<polyline fill="none" stroke="#ff8a3d" stroke-opacity=".55" stroke-width="2" points="'+p.pts.concat([[p.x,p.y]]).map(function(q){return (OX+q[0]*SC).toFixed(1)+','+(OY-q[1]*SC).toFixed(1)}).join(' ')+'"/>';
+  var bx=OX+p.x*SC,by=OY-p.y*SC,ca=Math.cos(p.th),sa=Math.sin(p.th),L=0.2*SC,Wd=0.085*SC;
+  function P(a,b2){return (bx+a*ca-b2*sa).toFixed(1)+','+(by-(a*sa+b2*ca)).toFixed(1)}
+  g+='<polygon points="'+P(-L/2,-Wd)+' '+P(L/2,-Wd)+' '+P(L/2,Wd)+' '+P(-L/2,Wd)+'" fill="rgba(255,138,61,.2)" stroke="#ff8a3d" stroke-width="2"/>';
+  var lw=P(0,Wd).split(','),rw=P(0,-Wd).split(',');
+  g+='<circle cx="'+lw[0]+'" cy="'+lw[1]+'" r="6" fill="#5ab4ff"/><circle cx="'+rw[0]+'" cy="'+rw[1]+'" r="6" fill="#66e3b0"/>';
+  var hx=P(L/2+18,0).split(',');g+='<line x1="'+bx.toFixed(1)+'" y1="'+by.toFixed(1)+'" x2="'+hx[0]+'" y2="'+hx[1]+'" stroke="#ff8a3d" stroke-width="3"/>';
+  g+='<text x="24" y="318" fill="#6b7f96" font-size="12">seen from above · blue dot: left wheel · green dot: right wheel · orange line: the way the robot faces</text><text x="24" y="335" fill="#6b7f96" font-size="12">the box is not to scale; the wheels are 0.17 m apart</text>';
+  $('sv').innerHTML=g;
+  $('cmd').innerHTML='<h2>Command side: velCallback (inverse)</h2><div class="mono">right = (V + ω × s ÷ 2) ÷ r<br>= ('+f(c.V,2)+' + '+f(c.W,1)+' × 0.085) ÷ '+c.rn+' = <b>'+f(c.wR)+' rad/s</b><br>left = (V minus ω × s ÷ 2) ÷ r<br>= ('+f(c.V,2)+' minus '+f(c.W,1)+' × 0.085) ÷ '+c.rn+' = <b>'+f(c.wL)+' rad/s</b><br>sent as data = [left, right]</div>';
+  var dpl=c.wL*0.01,dpr=c.wR*0.01;
+  $('mes').innerHTML='<h2>Measurement side: jointCallback (matrix)</h2><div class="mono">in 0.01 s: dp_left = '+f(c.wL)+' × 0.01 = '+f(dpl,6)+' rad, dp_right = '+f(dpr,6)+' rad<br>fi = dp ÷ 0.01: '+f(c.wL)+' and '+f(c.wR)+' rad/s<br>linear = ('+c.rn+' × '+f(c.wR)+' + '+c.rn+' × '+f(c.wL)+') ÷ 2 = <b>'+f(c.Vm)+' m/s</b><br>angular = ('+c.rn+' × '+f(c.wR)+' minus '+c.rn+' × '+f(c.wL)+') ÷ 0.17 = <b>'+f(c.Wm)+' rad/s</b></div>';
+  var kind=Math.abs(c.W)<1e-9?(Math.abs(c.V)<1e-9?'standing still':'driving straight'):Math.abs(c.V)<1e-9?'turning on the spot':'driving a curve';
+  $('say').innerHTML=b?'<span class="bad">Broken, and the log does not show it:</span> the node uses r = 0.05 both ways, so it measures exactly the command ('+f(c.Vm,3)+' m/s, '+f(c.Wm,3)+' rad/s). The real 0.033 m wheels make the robot move at '+f(c.Vr,3)+' m/s and '+f(c.Wr,3)+' rad/s (0.033 ÷ 0.05 = 0.66 of the command). The robot in the picture drives the real path.'
+    :'<span class="ok">Working:</span> the robot is '+kind+'. The measurement gives back the command: V '+f(c.Vm,3)+' m/s and ω '+f(c.Wm,3)+' rad/s, because the matrix undoes its inverse. After '+t.toFixed(2)+' s it has turned '+f(p.th,2)+' rad ('+f(p.th*180/Math.PI,1)+'°) and sits '+f(Math.hypot(p.x,p.y),2)+' m from the start.'}
+function stop(){if(S.id){clearInterval(S.id);S.id=null}S.play=0;$('pl').textContent='Play'}
+$('pl').onclick=function(){if(S.play){stop();return}S.play=1;this.textContent='Pause';if(S.t>=6)S.t=0;var last=Date.now();
+  S.id=setInterval(function(){var n=Date.now();S.t=Math.min(6,S.t+(n-last)/1000);last=n;$('t').value=S.t;draw();if(S.t>=6)stop()},50)};
+$('rs').onclick=function(){stop();S.t=0;$('t').value=0;draw()};
+$('t').oninput=function(){S.t=+this.value;draw()};
+['v','wq'].forEach(function(i){$(i).oninput=draw});
+$('brk').onchange=draw;
+draw();
+})();
+</script>
+<script>
+(function(){function s(){parent.postMessage({taWidget:location.pathname,h:document.documentElement.scrollHeight},'*')}
+new ResizeObserver(s).observe(document.documentElement);addEventListener('load',s);setInterval(s,1500);})();
+</script></body></html>

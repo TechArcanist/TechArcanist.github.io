@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Forty noisy robots, one drive</title>
+<style>
+html,body{margin:0;background:#0e182c;color:#e8eef7;font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+.w{padding:12px 14px;max-width:1100px;margin:0 auto;background:#0e182c}
+.w.fs{max-width:none;height:100vh;overflow:auto;padding:14px 20px}
+.top{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+h1{font-size:18px;margin:0 0 4px}.sub{color:#a9b8cc;font-size:14px;margin:0 0 10px}
+a{color:#7fc4ff}
+.card{background:#13213a;border:1px solid #23395c;border-radius:12px;padding:12px 14px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:6px 0}
+.btn{background:#1b2c4a;color:#e8eef7;border:1px solid #2b4366;border-radius:8px;padding:6px 12px;font:600 13px system-ui,sans-serif;cursor:pointer}
+.btn:hover,.btn.on{border-color:#ff8a3d}
+label.ck{display:flex;align-items:center;gap:6px;font-size:14px;color:#cfe0f5}
+.sl{display:block;font-size:13.5px;color:#cfe0f5;margin:4px 0}
+input[type=range]{width:100%;accent-color:#ff8a3d}
+svg{width:100%;height:auto;display:block;max-height:270px}
+.w.fs svg{max-height:56vh}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:700px){.cols{grid-template-columns:1fr}}
+.say{background:#0f1b31;border:1px solid #23395c;border-radius:10px;padding:8px 12px;margin-top:8px;font-size:12.5px;white-space:pre-wrap;font-family:ui-monospace,Consolas,monospace;color:#cfe0f5;line-height:1.55}
+.dim{color:#6b7f96}
+</style></head><body><div class="w" id="wrap">
+<div class="top"><div><h1>Forty noisy robots, one drive</h1>
+<p class="sub">Every robot drives the same straight line. Each one adds a different random error to its wheel angles (lines 70 and 71), so each one ends up in a slightly different place. Drag the time and watch the errors add up. See chapter 67: <a href="/documented-software-learnings/ros2/ros2-67/#sd-s2x" target="_blank" rel="noopener">A small wrong size becomes a wrong position</a>.</p></div>
+<button class="btn" id="fsb" aria-label="Show full screen. Press Escape to exit.">Full screen</button></div>
+<div class="card">
+<div class="cols"><div>
+<label class="sl">noise standard deviation: <b id="sv"></b> rad<input type="range" id="S" min="0" max="0.03" step="0.001" value="0.005"></label>
+<div class="row"><button class="btn" id="nw">New random numbers</button><label class="ck"><input type="checkbox" id="cone" checked> cone: one standard deviation of the heading (a rough guide, the real paths bend there slowly)</label></div></div><div>
+<div class="row"><button class="btn" id="pl">Play</button><button class="btn" id="rs">Reset</button><span class="dim">1 reading = 0.01 s, V = 0.5 m/s</span></div>
+<label class="sl">readings so far: <b id="kv"></b> (<b id="tv"></b> s, <b id="dv"></b> m driven)<input type="range" id="K" min="1" max="1000" step="1" value="400"></label></div></div>
+<svg id="sv2" viewBox="0 0 640 250" role="img" aria-label="Forty robots drive the same line; their estimated positions spread out sideways"></svg>
+<div class="say" id="say"></div>
+</div></div>
+<script>
+(function(){
+var RR=0.033,SS=0.17,V=0.5,TW=2*Math.PI,NR=40,KM=1000,S={sig:0.005,k:400,seed:3,cone:1,play:0,id:null};
+function $(i){return document.getElementById(i)}
+function g6(v,d){var s=v.toFixed(d===undefined?4:d);return /^-0\.0+$/.test(s)?s.slice(1):s}
+function mb(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function gs(r){var u=0,v;while(u===0)u=r();v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(TW*v)}
+// the node's jointCallback for a straight drive: both wheels turn V*0.01/r per reading; the noise is sig times a bell-curve number
+function sim(){var run=[],i,k,dp=V*0.01/RR;
+  for(i=0;i<NR;i++){var r=mb(S.seed*1000+i),L=0,R=0,pl=0,pr=0,x=0,y=0,th=0,xs=[0],ys=[0],ts=[0];
+    for(k=1;k<=KM;k++){L=dp*k;R=dp*k;var EL=L+S.sig*gs(r),ER=R+S.sig*gs(r),dl=EL-pl,dr=ER-pr;pl=L;pr=R;
+      var ds=(RR*dr+RR*dl)/2,dth=(RR*dr-RR*dl)/SS;th+=dth;x+=ds*Math.cos(th);y+=ds*Math.sin(th);xs.push(x);ys.push(y);ts.push(th)}
+    run.push({x:xs,y:ys,t:ts})}
+  return run}
+var RUN=sim();
+function sd(a){var m=0,i;for(i=0;i<a.length;i++)m+=a[i];m/=a.length;var s=0;for(i=0;i<a.length;i++)s+=(a[i]-m)*(a[i]-m);return Math.sqrt(s/a.length)}
+function draw(){
+  var k=S.k,ys=RUN.map(function(r){return r.y[k]}),ts=RUN.map(function(r){return r.t[k]}),syy=sd(ys),stt=sd(ts),dist=V*0.01*k,one=RR*S.sig*Math.SQRT2/SS,form=one*Math.sqrt(k);
+  $('sv').textContent=S.sig.toFixed(3);$('kv').textContent=k;$('tv').textContent=(k/100).toFixed(2);$('dv').textContent=dist.toFixed(2);
+  var full=sd(RUN.map(function(r){return r.y[KM]})),ymax=Math.max(full*2.6,0.04),xs=560/5.2,ysc=Math.min(110/ymax,xs*40),stretch=ysc/xs;
+  function X(m){return 40+m*xs}function Y(m){return 125-m*ysc}
+  var g='<rect x="1" y="1" width="638" height="248" rx="10" fill="#0b1626" stroke="#2b4366"/><line x1="'+X(0)+'" y1="'+Y(0)+'" x2="'+X(5)+'" y2="'+Y(0)+'" stroke="#66e3b0" stroke-width="2" stroke-dasharray="6 4"/>';
+  if(S.cone){var a=form,x2=dist;g+='<polygon points="'+X(0)+','+Y(0)+' '+X(x2).toFixed(1)+','+Y(x2*Math.tan(a)).toFixed(1)+' '+X(x2).toFixed(1)+','+Y(-x2*Math.tan(a)).toFixed(1)+'" fill="#ffd24a" opacity="0.14"/>'}
+  RUN.forEach(function(r){var p=[],j,st=Math.max(1,Math.floor(k/80));for(j=0;j<=k;j+=st)p.push(X(r.x[j]).toFixed(1)+','+Y(r.y[j]).toFixed(1));p.push(X(r.x[k]).toFixed(1)+','+Y(r.y[k]).toFixed(1));
+    g+='<polyline fill="none" stroke="#ff8a3d" stroke-width="1" opacity="0.35" points="'+p.join(' ')+'"/><circle cx="'+X(r.x[k]).toFixed(1)+'" cy="'+Y(r.y[k]).toFixed(1)+'" r="3.5" fill="#ff8a3d"/>'});
+  g+='<circle cx="'+X(0)+'" cy="'+Y(0)+'" r="5" fill="#66e3b0"/><text x="12" y="20" fill="#a9b8cd" font-size="11">from above: x to the right (0 to 5 m), sideways stretched '+stretch.toFixed(0)+' times so that the developer can see it; green dashed = the true path</text>';
+  $('sv2').innerHTML=g;
+  $('say').textContent='after '+k+' readings ('+g6(dist,2)+' m): heading error of one reading = r × σ × √2 ÷ s = 0.033 × '+S.sig+' × 1.4142 ÷ 0.17 = '+g6(one,6)+' rad\nrandom walk: heading spread = '+g6(one,6)+' × √'+k+' = '+g6(one,6)+' × '+g6(Math.sqrt(k),3)+' = '+g6(form,5)+' rad ('+g6(form*180/Math.PI,2)+' degrees)   measured in the 40 robots: '+g6(stt,5)+' rad\nsideways spread of the 40 robots (measured): '+g6(syy,4)+' m after '+g6(dist,2)+' m driven'
+   +(S.sig===0?'\nσ = 0: no noise, all forty robots sit on the true path (this is the simple controller).':'')}
+function stop(){if(S.id){clearInterval(S.id);S.id=null}S.play=0;$('pl').textContent='Play'}
+$('pl').onclick=function(){if(S.play){stop();return}S.play=1;this.textContent='Pause';if(S.k>=KM)S.k=1;S.id=setInterval(function(){S.k=Math.min(KM,S.k+8);$('K').value=S.k;draw();if(S.k>=KM)stop()},50)};
+$('rs').onclick=function(){stop();S.k=1;$('K').value=1;draw()};
+$('K').oninput=function(){S.k=+this.value;draw()};
+$('S').oninput=function(){S.sig=+this.value;RUN=sim();draw()};
+$('nw').onclick=function(){S.seed++;RUN=sim();draw()};
+$('cone').onchange=function(){S.cone=this.checked?1:0;draw()};
+draw();
+(function(){
+  var W=$('wrap'),B=$('fsb'),pseudo=false;
+  function isFs(){return !!(document.fullscreenElement||document.webkitFullscreenElement)}
+  function on(p){W.classList.add('fs');if(p){W.style.position='fixed';W.style.inset='0';W.style.zIndex='99';pseudo=true}B.textContent='Exit full screen'}
+  function off(){W.classList.remove('fs');W.style.position='';W.style.inset='';W.style.zIndex='';pseudo=false;B.textContent='Full screen'}
+  B.onclick=function(){
+    if(W.classList.contains('fs')){if(isFs())(document.exitFullscreen||document.webkitExitFullscreen).call(document);off();return}
+    var f=W.requestFullscreen||W.webkitRequestFullscreen;
+    if(f){try{var r=f.call(W);if(r&&r.then)r.then(function(){on(false)},function(){on(true)});else on(false)}catch(e){on(true)}}else on(true)};
+  document.addEventListener('fullscreenchange',function(){if(!isFs()&&!pseudo)off()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&pseudo)off()});
+})();
+})();
+</script>
+<script>
+(function(){function s(){parent.postMessage({taWidget:location.pathname,h:document.documentElement.scrollHeight},'*')}
+new ResizeObserver(s).observe(document.documentElement);addEventListener('load',s);setInterval(s,1500);})();
+</script></body></html>

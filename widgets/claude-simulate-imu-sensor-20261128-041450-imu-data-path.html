@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The path of one IMU reading</title>
+<style>
+html,body{margin:0;background:#0e182c;color:#e8eef7;font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+.w{padding:12px 14px;max-width:1100px;margin:0 auto;background:#0e182c}
+.w.fs{max-width:none;height:100vh;overflow:auto;padding:14px 20px}
+.top{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+h1{font-size:18px;margin:0 0 4px}.sub{color:#a9b8cc;font-size:14px;margin:0 0 10px}
+.card{background:#13213a;border:1px solid #23395c;border-radius:12px;padding:12px 14px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin:6px 0}
+.btn{background:#1b2c4a;color:#e8eef7;border:1px solid #2b4366;border-radius:8px;padding:6px 12px;font:600 13px system-ui,sans-serif;cursor:pointer}
+.btn:hover,.btn.on{border-color:#ff8a3d}
+label.ck{display:flex;align-items:center;gap:6px;font-size:13.5px;color:#cfe0f5}
+svg{width:100%;height:auto;display:block;max-height:300px;cursor:pointer}
+.w.fs svg{max-height:55vh}
+.say{background:#0f1b31;border:1px solid #23395c;border-radius:10px;padding:9px 12px;margin-top:8px;font-size:14px;min-height:96px}
+.term{background:#060c18;border:1px solid #1f3352;border-radius:8px;padding:8px 10px;font:12.5px/1.55 ui-monospace,Consolas,monospace;white-space:pre-wrap;word-break:break-all;color:#cfe0f5;margin-top:8px;min-height:58px}
+.ok{color:#66e3b0}.bad{color:#ff6b6b}.warn{color:#ffd24a}.dim{color:#8aa0bd}
+code{font:12.5px ui-monospace,Consolas,monospace;color:#ffd24a}
+</style></head><body><div class="w" id="wrap">
+<div class="top"><div><h1>The path of one IMU reading, from Gazebo to ROS 2</h1>
+<p class="sub">Press Play to send readings (slowed down from 100 per second). Click a box for details, or tick a box below to break one piece and see where the readings stop.</p></div>
+<button class="btn" id="fsb" aria-label="Show full screen. Press Escape to exit.">Full screen</button></div>
+<div class="card">
+<div class="row"><button class="btn" id="pl">Play</button>
+<label class="ck"><input type="checkbox" data-b="plug"> no IMU plugin</label>
+<label class="ck"><input type="checkbox" data-b="arg"> no /imu argument in the bridge</label>
+<label class="ck"><input type="checkbox" data-b="remap"> no remapping</label>
+<label class="ck"><input type="checkbox" data-b="dep"> no exec_depend in package.xml</label></div>
+<svg id="sv" viewBox="0 0 760 250" role="img" aria-label="Boxes from the Gazebo IMU sensor through the bridge to the ROS 2 topic /imu/out and its readers"></svg>
+<div class="say" id="say"></div>
+<div class="term" id="term"></div>
+</div>
+</div>
+<script>
+(function(){
+var BOX=[
+ {id:'sen',x:12,y:70,w:150,t:'IMU sensor',s:'on imu_link, 100 Hz',d:'The <code>&lt;sensor type="imu"&gt;</code> block in bumperbot_gazebo.xacro, attached to <code>imu_link</code>. With the IMU system plugin loaded, Gazebo measures the angular velocity and the linear acceleration 100 times per second (one reading every 1 ÷ 100 = 0.01 s) and adds the gaussian noise.'},
+ {id:'gz',x:190,y:70,w:140,t:'Gazebo topic',s:'imu, gz.msgs.IMU',d:'The readings go out on the Gazebo topic <code>imu</code> (the <code>&lt;topic&gt;</code> setting) as Gazebo messages of type <code>gz.msgs.IMU</code>. ROS 2 nodes cannot read Gazebo topics directly.'},
+ {id:'br',x:358,y:70,w:150,t:'ros_gz_bridge',s:'parameter_bridge',d:'The bridge node in gazebo.launch.py. The argument <code>/imu@sensor_msgs/msg/Imu[gz.msgs.IMU</code> means: topic <code>/imu</code>, ROS 2 type <code>sensor_msgs/msg/Imu</code>, and (as far as I know) <code>[</code> for one way only, Gazebo to ROS 2. It turns each Gazebo message into a ROS 2 message.'},
+ {id:'ros',x:536,y:70,w:150,t:'ROS 2 topic',s:'/imu/out',d:'The remapping <code>(\'/imu\', \'/imu/out\')</code> renames the ROS 2 side of the bridge, so the messages of type <code>sensor_msgs/msg/Imu</code> arrive on <code>/imu/out</code>.'},
+ {id:'echo',x:470,y:182,w:130,t:'ros2 topic echo',s:'prints each message',d:'<code>ros2 topic echo /imu/out</code> prints every message: angular_velocity, linear_acceleration and their covariances.'},
+ {id:'pj',x:620,y:182,w:130,t:'PlotJuggler',s:'draws the z line',d:'PlotJuggler subscribes to <code>/imu/out</code> and draws any field over time, for example angular_velocity z.'}];
+var S={play:0,id:null,t:0,sel:'sen',dots:[]};
+function $(i){return document.getElementById(i)}
+function brk(k){var e=document.querySelector('[data-b="'+k+'"]');return e&&e.checked}
+/* how far a reading gets: 0 sensor, 1 gazebo topic, 2 bridge, 3 ros topic, 4 readers */
+function reach(){if(brk('plug'))return 0;if(brk('arg'))return 1.5;if(brk('remap'))return 3.4;return 4}
+function cx(b){return b.x+b.w/2}
+function path(p){var A=[[cx(BOX[0]),95],[cx(BOX[1]),95],[cx(BOX[2]),95],[cx(BOX[3]),95],[cx(BOX[3]),150]],i=Math.floor(p),f=p-i;if(i>=4)return A[4];return[A[i][0]+(A[i+1][0]-A[i][0])*f,A[i][1]+(A[i+1][1]-A[i][1])*f]}
+function draw(){var g='',r=reach(),i;
+ g+='<text x="12" y="40" fill="#a9b8cc" font-size="12">inside Gazebo</text><text x="358" y="40" fill="#a9b8cc" font-size="12">the bridge</text><text x="536" y="40" fill="#a9b8cc" font-size="12">inside ROS 2</text>';
+ g+='<line x1="346" y1="50" x2="346" y2="240" stroke="#2b4366" stroke-dasharray="5 5"/><line x1="522" y1="50" x2="522" y2="240" stroke="#2b4366" stroke-dasharray="5 5"/>';
+ for(i=0;i<3;i++){var a=BOX[i],b=BOX[i+1],live=r>i+0.9;g+='<line x1="'+(a.x+a.w)+'" y1="95" x2="'+(b.x-4)+'" y2="95" stroke="'+(live?'#ff8a3d':'#3a4a63')+'" stroke-width="3"/><polygon points="'+b.x+',95 '+(b.x-10)+',89 '+(b.x-10)+',101" fill="'+(live?'#ff8a3d':'#3a4a63')+'"/>'}
+ var lv=r>=4;g+='<path d="M'+cx(BOX[3])+' 120 V 160 H '+cx(BOX[4])+' V 180 M '+cx(BOX[3])+' 160 H '+cx(BOX[5])+' V 180" fill="none" stroke="'+(lv?'#ff8a3d':'#3a4a63')+'" stroke-width="3"/>';
+ BOX.forEach(function(b,k){var y=b.y,h=50,dead=(k===0&&brk('plug'))||(k===1&&brk('plug'))||(k===2&&brk('arg'))||(k===3&&(brk('arg')||brk('remap')))||(k>3&&r<4);
+  g+='<g data-id="'+b.id+'"><rect x="'+b.x+'" y="'+y+'" width="'+b.w+'" height="'+h+'" rx="10" fill="'+(S.sel===b.id?'#2a2016':'#0f1b31')+'" stroke="'+(dead?'#ff6b6b':S.sel===b.id?'#ff8a3d':'#2b4366')+'" stroke-width="2"/>'+
+   '<text x="'+cx(b)+'" y="'+(y+21)+'" fill="'+(dead?'#ff6b6b':'#e8eef7')+'" font-size="13" font-weight="700" text-anchor="middle">'+b.t+'</text><text x="'+cx(b)+'" y="'+(y+39)+'" fill="#a9b8cc" font-size="11" text-anchor="middle">'+b.s+'</text></g>'});
+ if(brk('remap'))g+='<text x="611" y="140" fill="#ffd24a" font-size="11" text-anchor="middle">arrives on /imu</text>';
+ S.dots.forEach(function(p){var q=path(Math.min(p,4));g+='<circle cx="'+q[0].toFixed(1)+'" cy="'+q[1].toFixed(1)+'" r="6" fill="#ffd24a"/>'});
+ $('sv').innerHTML=g;
+ [].forEach.call($('sv').querySelectorAll('g[data-id]'),function(e){e.onclick=function(){S.sel=e.getAttribute('data-id');draw()}});
+ var b=BOX.filter(function(x){return x.id===S.sel})[0],st='';
+ if(brk('plug'))st='<br><span class="bad">Broken: without the IMU system plugin, Gazebo does not run the sensor, so no reading is ever made.</span>';
+ else if(brk('arg'))st='<br><span class="bad">Broken: the readings stay inside Gazebo. Without the /imu argument the bridge does not carry them, so /imu/out never appears in ROS 2.</span>';
+ else if(brk('remap'))st='<br><span class="warn">Half broken: the readings reach ROS 2, but on /imu, not on /imu/out. Echoing /imu/out shows nothing, echoing /imu works.</span>';
+ else if(brk('dep'))st='<br><span class="warn">Still works here: ros_gz_bridge is already installed on this computer. As far as I know, the missing line shows up on another computer, where installing the dependencies from package.xml leaves ros_gz_bridge out and the launch fails.</span>';
+ $('say').innerHTML='<b>'+b.t+'</b>: '+b.d+st;
+ var tm='simulated terminal, wording approximate\n';
+ if(r>=4)tm+='$ ros2 topic echo /imu/out\nangular_velocity:\n  z: 0.00053...   (a new message every 0.01 s)';
+ else if(brk('remap'))tm+='$ ros2 topic echo /imu/out\nWARNING: topic [/imu/out] does not appear to be published yet\n(the messages are on /imu instead)';
+ else tm+='$ ros2 topic echo /imu/out\nWARNING: topic [/imu/out] does not appear to be published yet\n(nothing arrives)';
+ $('term').textContent=tm}
+function tick(dt){S.t+=dt;if(S.t>0.45){S.t=0;S.dots.push(0)}var r=reach();S.dots=S.dots.map(function(p){return Math.min(p+dt*1.6,r)}).filter(function(p,i,a){return !(p>=r&&a.length>6&&i===0)});if(S.dots.length>12)S.dots.shift();draw()}
+function stop(){if(S.id){clearInterval(S.id);S.id=null}S.play=0;$('pl').textContent='Play'}
+$('pl').onclick=function(){if(S.play){stop();return}S.play=1;this.textContent='Pause';var last=Date.now();S.id=setInterval(function(){var n=Date.now();tick(Math.min(0.1,(n-last)/1000));last=n},40)};
+[].forEach.call(document.querySelectorAll('[data-b]'),function(c){c.onchange=function(){S.dots=[];draw()}});
+draw();
+(function(){
+ var W=$('wrap'),B=$('fsb'),pseudo=false;
+ function isFs(){return !!(document.fullscreenElement||document.webkitFullscreenElement)}
+ function on(p){W.classList.add('fs');if(p){W.style.position='fixed';W.style.inset='0';W.style.zIndex='99';pseudo=true}B.textContent='Exit full screen'}
+ function off(){W.classList.remove('fs');W.style.position='';W.style.inset='';W.style.zIndex='';pseudo=false;B.textContent='Full screen'}
+ B.onclick=function(){
+  if(W.classList.contains('fs')){if(isFs())(document.exitFullscreen||document.webkitExitFullscreen).call(document);off();return}
+  var f=W.requestFullscreen||W.webkitRequestFullscreen;
+  if(f){try{var r=f.call(W);if(r&&r.then)r.then(function(){on(false)},function(){on(true)});else on(false)}catch(e){on(true)}}else on(true)};
+ document.addEventListener('fullscreenchange',function(){if(!isFs()&&!pseudo)off()});
+ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&pseudo)off()});
+})();
+})();
+</script>
+<script>
+(function(){function s(){parent.postMessage({taWidget:location.pathname,h:document.documentElement.scrollHeight},'*')}
+new ResizeObserver(s).observe(document.documentElement);addEventListener('load',s);setInterval(s,1500);})();
+</script></body></html>

@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Odometry Comparison | ROS 2 | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="Introduction Chapter 69 wrote a noisy controller: a copy of the simple controller that adds a small random number to every wheel angle it reads and publishes…">
+<link rel="canonical" href="https://techarcanist.com/documented-software-learnings/ros2/ros2-71/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="Odometry Comparison | ROS 2">
+<meta property="og:description" content="Introduction Chapter 69 wrote a noisy controller: a copy of the simple controller that adds a small random number to every wheel angle it reads and publishes…">
+<meta property="og:url" content="https://techarcanist.com/documented-software-learnings/ros2/ros2-71/">
+<meta property="og:image" content="https://techarcanist.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=e43b0871b9">
+<link rel="stylesheet" href="/assets/home.css?v=e43b0871b9">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/" aria-current="page">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap reader wide">
+  <aside class="rd-nav" id="rd-nav">
+    <a class="rd-series" href="/documented-software-learnings/ros2/"><span class="label">Series</span>ROS 2</a>
+    <ol>
+      <li><a href="/documented-software-learnings/ros2/ros2_a/"><span class="mono">01</span>Installing Ubuntu Desktop (Dual Boot with Windows)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_b/"><span class="mono">02</span>ROS 2 Jazzy Installation on Ubuntu (Step-by-Step)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_c/"><span class="mono">03</span>Development Environment Setup for ROS 2 Jazzy on Ubuntu (With Clear Explanations)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_d/"><span class="mono">04</span>ROS 2 Fundamentals: Architecture, Communication, Packages, and Workspaces</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_e/"><span class="mono">05</span>ROS 2 Workspace &amp; Package Creation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_f/"><span class="mono">06</span>ROS 2 Python Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_g/"><span class="mono">07</span>ROS 2 C++ Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_h/"><span class="mono">08</span>ROS 2 Python Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_i/"><span class="mono">09</span>ROS 2 C++ Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_j/"><span class="mono">10</span>Robot Locomotion: Introduction</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_k/"><span class="mono">11</span>Wheeled Locomotion Architectures</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_l/"><span class="mono">12</span>Rolling Friction &amp; Wheeled Locomotion Efficiency</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_m/"><span class="mono">13</span>Introduction to Robot Simulation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_n/"><span class="mono">14</span>URDF</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_o/"><span class="mono">15</span>Create a URDF Model</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_p/"><span class="mono">16</span>Rviz</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_q/"><span class="mono">17</span>Node Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_r/"><span class="mono">18</span>Python Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_s/"><span class="mono">19</span>C++ Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_t/"><span class="mono">20</span>ROS 2 Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-u/"><span class="mono">21</span>Visualize The Robot In RVIZ2</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-v/"><span class="mono">22</span>Launch Files</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-w/"><span class="mono">23</span>ROS 2 Launch Files: Visualizing the Robot with One Command</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-x/"><span class="mono">24</span>Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-y/"><span class="mono">25</span>Simulating the Robot in Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-z/"><span class="mono">26</span>ROS 2 Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-aa/"><span class="mono">27</span>Control Types</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ab/"><span class="mono">28</span>ROS 2 Control: Prepare the Robot for Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ac/"><span class="mono">29</span>Understanding ROS 2 Control | Explanation of Chapter 28</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ad/"><span class="mono">30</span>ROS 2 Control: Moving the BumperBot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ae/"><span class="mono">31</span>Robot Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-af/"><span class="mono">32</span>Pose of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_af/"><span class="mono">33</span>Translation Vector</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ag/"><span class="mono">34</span>Introduction to Turtlesim</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ah/"><span class="mono">35</span>Translation Vector Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ai/"><span class="mono">36</span>Translation Vector Between Two Turtles: CPP</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_aj/"><span class="mono">37</span>Rotation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ak/"><span class="mono">38</span>Rotation Matrix Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_al/"><span class="mono">39</span>Transformation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_am/"><span class="mono">40</span>Differential Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-41/"><span class="mono">41</span>Velocity of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-42/"><span class="mono">42</span>Simple Speed Controller: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-43/"><span class="mono">43</span>Launch the Simple Speed Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-44/"><span class="mono">44</span>Teleoperating the BumperBot with a Joystick</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-45/"><span class="mono">45</span>ROS 2 Diff Drive Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-46/"><span class="mono">46</span>TF 2 Library</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-47/"><span class="mono">47</span>Operation With Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-48/"><span class="mono">48</span>Static &amp; Dynamic Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-49/"><span class="mono">49</span>Simple TF2 Static Broadcaster</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-50/"><span class="mono">50</span>Simple TF2 Broadcaster: Static and Dynamic Transforms</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-51/"><span class="mono">51</span>ROS 2 Services</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-52/"><span class="mono">52</span>Service Server in Python: AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-53/"><span class="mono">53</span>Service Client in Python: Calling AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-54/"><span class="mono">54</span>Simple TF2 Listener in Python: a get_transform Service</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-55/"><span class="mono">55</span>Euler Angles and Quaternions</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-56/"><span class="mono">56</span>Euler to Quaternion: Turning the Robot with tf_transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-57/"><span class="mono">57</span>tf2 Tools: view_frames and tf2_echo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-58/"><span class="mono">58</span>Where Is the Robot? Local and Global Localization</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-59/"><span class="mono">59</span>Odometry: Counting Steps to Know Where the Robot Is</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-60/"><span class="mono">60</span>Wheel Odometry and Encoders</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-61/"><span class="mono">61</span>Robot Speed from Wheel Encoders</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-62/"><span class="mono">62</span>Simple Controller: Robot Speed from Joint States</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-63/"><span class="mono">63</span>Robot Position and Orientation from the Wheels</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-64/"><span class="mono">64</span>Wheel Odometry: x, y and theta in the Simple Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-65/"><span class="mono">65</span>Publish Odometry Message</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-66/"><span class="mono">66</span>Broadcast Odometry Transform</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-67/"><span class="mono">67</span>Probability Introduction</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-68/"><span class="mono">68</span>Probability Tools for Localization</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-69/"><span class="mono">69</span>Adding Noise to Robot Motion: the Noisy Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-70/"><span class="mono">70</span>Launch Noisy Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-71/" aria-current="page"><span class="mono">71</span>Odometry Comparison</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-72/"><span class="mono">72</span>Advantages of Having Multiple Sensors</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-73/"><span class="mono">73</span>Gyroscope</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-74/"><span class="mono">74</span>Accelerometer and IMU</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-75/"><span class="mono">75</span>Simulate IMU Sensor</a></li>
+    </ol>
+  </aside>
+  <article class="rd-main">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/documented-software-learnings/">Library</a><span>/</span><a href="/documented-software-learnings/ros2/">ROS 2</a><span>/</span><span>71</span></nav>
+    <button class="btn btn-sm btn-line rd-tg" type="button" id="rd-tg">All chapters</button>
+<p class="sh-label mono"><span>71</span>Chapter 71 of 75</p>    <h1>Odometry Comparison</h1>
+<div class="rd-prog" aria-hidden="true"><i style="width:94.7%"></i></div>    <div class="prose"><div class="col"><h2 id="introduction">Introduction</h2><p>Chapter 69 wrote a noisy controller: a copy of the simple controller that adds a small random number to every wheel angle it reads and publishes its own odometry on <code>bumperbot_controller/odom_noisy</code>. Chapter 70 started it from <code>controller.launch.py</code>, so it now runs next to the simple controller, which publishes the exact odometry on <code>bumperbot_controller/odom</code>.</p><p>This chapter puts the two odometries side by side. No code changes. In six terminals the robot is simulated, the two odometries are <b>plotted</b> in PlotJuggler, and the two frames are <b>watched</b> in RViz, first with the robot standing still and then while it is driven with the joystick. The noise is easy to see: the exact numbers stay calm, the noisy numbers vibrate.</p><p class="note">Chapters 69 and 70 must already be built and working, and the joystick launch file of chapter 44 must exist. The commands use ROS 2 Jazzy, as in your notes: replace <code>jazzy</code> with the name of your distribution if it is different.</p><h3 id="where-the-pieces-come-from">Where the pieces come from</h3><div class="table-wrap"><table><tbody><tr><td>Idea</td><td>Where it was met</td><td>Section</td></tr><tr><td>starting the simulation and the controllers</td><td>chapters 43 and 70</td><td><a href="/documented-software-learnings/ros2/ros2-43/#start-the-gazebo-simulation">Start the Gazebo simulation</a></td></tr><tr><td>the noisy controller and its odometry topic</td><td>chapters 69 and 70</td><td>the noisy node and its launch file</td></tr><tr><td>RViz with the fixed frame odom and the TF display</td><td>chapter 49</td><td><a href="/documented-software-learnings/ros2/ros2-49/#set-the-fixed-frame">Set the fixed frame</a>, <a href="/documented-software-learnings/ros2/ros2-49/#add-the-tf-display">Add the TF display</a> and <a href="/documented-software-learnings/ros2/ros2-49/#show-the-frame-names">Show the frame names</a></td></tr><tr><td>driving the robot with the joystick</td><td>chapter 44</td><td><a href="/documented-software-learnings/ros2/ros2-44/#connect-and-launch-the-joystick">Connect and launch the joystick</a> and <a href="/documented-software-learnings/ros2/ros2-44/#teleoperate-the-bumperbot">Teleoperate the BumperBot</a></td></tr><tr><td>why odometry is never exact</td><td>chapter 60</td><td><a href="/documented-software-learnings/ros2/ros2-60/#sd-s4x">When odometry goes wrong</a></td></tr></tbody></table></div></div><div class="col"><h2 id="starting-the-robot">Starting the robot</h2><h3 id="terminal-1-build">Terminal 1: build</h3><p>Open a terminal and build the workspace:</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln"><span class="tok-typeName">cd</span> bumperbot_ws</span></code></pre></div><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">colcon build</span></code></pre></div><figure class="img sz-s al-l"><img src="/uploads/2026/11/image-101.png" alt="A terminal after colcon build. Five packages are finished and the last line reads Summary: 5 packages finished [3.15s]." loading="lazy"><figcaption>The build: five packages finished.</figcaption></figure><p class="caption">What you should see</p><div class="codeblock" data-lang="Plain text"><pre class="code"><code>Starting &gt;&gt;&gt; bumperbot_msgs
+Starting &gt;&gt;&gt; bumperbot_controller
+Starting &gt;&gt;&gt; bumperbot_cpp_examples
+Starting &gt;&gt;&gt; bumperbot_description
+Finished &lt;&lt;&lt; bumperbot_description [0.26s]
+Finished &lt;&lt;&lt; bumperbot_cpp_examples [0.36s]
+Finished &lt;&lt;&lt; bumperbot_controller [0.95s]
+Finished &lt;&lt;&lt; bumperbot_msgs [0.99s]
+Starting &gt;&gt;&gt; bumperbot_py_examples
+Finished &lt;&lt;&lt; bumperbot_py_examples [1.97s]
+
+Summary: 5 packages finished [3.15s]</code></pre></div><h3 id="terminal-2-the-simulation">Terminal 2: the simulation</h3><p>Open a second terminal, source the workspace and start Gazebo with the robot:</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">. install/setup.bash</span></code></pre></div><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">ros2 launch bumperbot_description gazebo.launch.py</span></code></pre></div><figure class="img sz-m al-l"><img src="/uploads/2026/11/image-102.png" alt="Two terminals. The top one shows the build summary. In the bottom one, install/setup.bash is sourced and ros2 launch bumperbot_description gazebo.launch.py is typed." loading="lazy"><figcaption>Terminal 2: the Gazebo launch command.</figcaption></figure><h3 id="terminal-3-the-controllers">Terminal 3: the controllers</h3><p>Open a third terminal, source the workspace and launch the controllers. This also starts the simple controller and the noisy controller (chapter 70):</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">. install/setup.bash</span></code></pre></div><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">ros2 launch bumperbot_controller controller.launch.py use_simple_controller:<span class="tok-operator">=</span>false</span></code></pre></div><figure class="img"><img src="/uploads/2026/11/image-117.png" alt="" loading="lazy"><figcaption><figure><figcaption>Terminal 3: the controllers start, with both the simple controller and the noisy controller.</figcaption></figure></figcaption></figure></div><div class="col"><h2 id="plotting-the-two-odometries">Plotting the two odometries</h2><h3 id="terminal-4-install-plotjuggler">Terminal 4: install PlotJuggler</h3><p>PlotJuggler draws graphs of ROS 2 topics. Open a fourth terminal and install it:</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">sudo apt-get install ros-jazzy-plotjuggler*</span></code></pre></div><figure class="img sz-l"><img src="/uploads/2026/11/image-105.png" alt="Four terminals. In the bottom one, the command sudo apt-get install ros-jazzy-plotjuggler* is typed and the package manager lists the packages it selects." loading="lazy"><figcaption>Terminal 4: installing PlotJuggler. The name must match the ROS 2 distribution: with a misspelled distribution name apt says it cannot find the package.</figcaption></figure><p>When the installation is finished, start it in the same terminal:</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">ros2 run plotjuggler plotjuggler</span></code></pre></div><figure class="img "><img src="/uploads/2026/11/image-106.png" alt="Four terminals. In the bottom one, ros2 run plotjuggler plotjuggler is typed with a yellow arrow, and below it PlotJuggler prints that it is loading plugins." loading="lazy"><figcaption>Terminal 4: starting PlotJuggler.</figcaption></figure><h3 id="connect-plotjuggler-to-ros-2">Connect PlotJuggler to ROS 2</h3><p>PlotJuggler opens with an empty graph:</p><figure class="img sz-l"><img src="/uploads/2026/11/image-107.png" alt="The PlotJuggler window with an empty graph, a Streaming panel on the left and a Timeseries list that is empty." loading="lazy"><figcaption>PlotJuggler at the start: nothing is plotted yet.</figcaption></figure><ol><li>In the <b>Streaming</b> panel, open the list of data sources and choose <b>ROS2 Topic Subscriber</b>.</li></ol><figure class="img sz-l"><img src="/uploads/2026/11/image-108.png" alt="PlotJuggler with the Streaming list open. A yellow arrow numbered 1 marks the entry ROS2 Topic Subscriber." loading="lazy"><figcaption>Step 1: choose ROS2 Topic Subscriber.</figcaption></figure><ol start="2"><li>Click <b>Start</b>.</li></ol><figure class="img sz-m al-l"><img src="/uploads/2026/11/image-109.png" alt="PlotJuggler with ROS2 Topic Subscriber selected and a yellow arrow at the Start button." loading="lazy"><figcaption>Step 2: Start.</figcaption></figure><ol start="3"><li>A list of topics opens. Select <code>/bumperbot_controller/odom</code> and <code>/bumperbot_controller/odom_noisy</code>, then click <b>OK</b>.</li></ol><figure class="img sz-m al-l"><img src="/uploads/2026/11/image-111.png" alt="The Select ROS messages dialog with a list of topics. The two rows /bumperbot_controller/odom and /bumperbot_controller/odom_noisy are highlighted and marked by yellow arrows, and another arrow marks the OK button." loading="lazy"><figcaption>Step 3: select the two odometry topics and press OK.</figcaption></figure><h3 id="put-the-two-speeds-in-the-graph">Put the two speeds in the graph</h3><p>The topics appear in the Timeseries list on the left. Open the exact odometry and drag its linear speed into the graph. The path is the same every time: <code>odom</code>, then <code>twist</code>, then <code>twist</code> again, then <code>linear</code>, then <code>x</code>.</p><figure class="img sz-s al-l"><img src="/uploads/2026/11/image-112-crop.png" alt="The Timeseries list of PlotJuggler, cropped. Yellow arrows numbered 1 to 5 follow the tree odom, twist, twist, linear and x." loading="lazy"><figcaption>The tree of the exact odometry: 1 odom, 2 twist, 3 twist, 4 linear, 5 x. Drag x into the graph.</figcaption></figure><p>Do the same for the noisy odometry: open <code>odom_noisy</code>, then <code>twist</code>, <code>twist</code>, <code>linear</code> and drag <code>x</code> into the same graph.</p><figure class="img sz-l"><img src="/uploads/2026/11/image-113.png" alt="PlotJuggler with a graph. A blue line jumps up and down between about minus 0.04 and plus 0.06 around zero, and a red line stays near zero. A legend shows the two series odom twist linear x and odom_noisy twist linear x." loading="lazy"><figcaption>The two linear speeds with the robot standing still: the exact one (red) stays near 0, the noisy one (blue) vibrates around it.</figcaption></figure><p>The robot is standing still, so the real speed is 0. The exact odometry says about 0. The noisy odometry jumps up and down around 0 by several centimetres per second. The robot did not move: the noise is only in the numbers of the noisy node. The picture below shows where this size of jumps comes from:</p><div class="widget"><iframe allow="fullscreen" allowfullscreen src="/widgets/claude-ros2-71-20261121-062533-noisy-speed-line.html?v=2acdf25f59" title="Why the noisy speed vibrates"></iframe></div></div><div class="col"><h2 id="watching-the-frames-in-rviz">Watching the frames in RViz</h2><h3 id="terminal-5-start-rviz">Terminal 5: start RViz</h3><p>Open a fifth terminal, source the workspace and start RViz:</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">. install/setup.bash</span></code></pre></div><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">rviz2</span></code></pre></div><figure class="img sz-l"><img src="/uploads/2026/11/image-114.png" alt="Five terminals. In the bottom one install/setup.bash is sourced and rviz2 is typed, with a yellow arrow at the rviz2 command." loading="lazy"><figcaption>Terminal 5: rviz2.</figcaption></figure><h3 id="set-up-rviz">Set up RViz</h3><p>The numbers match the yellow numbers in the picture below.</p><ol><li>Change the <b>Fixed Frame</b> to <code>odom</code>.</li><li>Click <b>Add</b> and add the <b>TF</b> display.</li><li>Open the options of <b>TF</b> and tick <b>Show Names</b>.</li><li>Open <b>Frames</b>.</li><li>Tick <b>base_footprint</b>.</li><li>Tick <b>base_footprint_noisy</b>.</li></ol><figure class="img sz-l"><img src="/uploads/2026/11/image-115.png" alt="RViz with six yellow numbers: 1 the Fixed Frame odom, 2 the Add button, 3 Show Names ticked, 4 the Frames list, 5 and 6 the two frames base_footprint and base_footprint_noisy ticked. The 3D view shows the two frame names on top of each other." loading="lazy"><figcaption>RViz with the fixed frame odom and the two frames ticked.</figcaption></figure><p>The two frames start in the same place. When the robot moves, <code>base_footprint</code> follows the exact odometry and <code>base_footprint_noisy</code> follows the noisy one. Watch the noisy frame:</p><figure class="video"><div class="embed"><iframe src="https://www.youtube-nocookie.com/embed/hI8eM4D8iDU?rel=0&amp;modestbranding=1&amp;playsinline=1" loading="lazy" title="Video" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div><figcaption>The frame base_footprint_noisy vibrates because of the noise.</figcaption></figure></div><div class="col"><h2 id="driving-with-the-joystick">Driving with the joystick</h2><h3 id="terminal-6-the-joystick">Terminal 6: the joystick</h3><p>Open a sixth terminal, source the workspace and launch the joystick teleoperation of chapter 44:</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">. install/setup.bash</span></code></pre></div><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">ros2 launch bumperbot_controller joystick_teleop.launch.py</span></code></pre></div><figure class="img "><img src="/uploads/2026/11/image-116.png" alt="Six terminals. In the bottom one the command ros2 launch bumperbot_controller joystick_teleop.launch.py is typed with a yellow arrow." loading="lazy"><figcaption>Terminal 6: the joystick launch command. If launch says the file was not found, check the spelling of the file name.</figcaption></figure><p>Connect the joystick and start driving. Watch the graph in PlotJuggler and the two frames in RViz while the robot moves:</p><figure class="video"><div class="embed"><iframe src="https://www.youtube-nocookie.com/embed/fXNXv_WZ__c?rel=0&amp;modestbranding=1&amp;playsinline=1" loading="lazy" title="Video" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div></figure><p>The real robot moves in Gazebo as before. Both odometries follow it, but the noisy one also jitters on top. Later chapters use probability tools and filtering to deal with this kind of noise.</p></div><div class="col"><h2 id="remember">Remember</h2><ul><li>The simple controller publishes the exact odometry on <code>bumperbot_controller/odom</code> and the noisy controller publishes the noisy one on <code>bumperbot_controller/odom_noisy</code>. Both start from <code>controller.launch.py</code>.</li><li><b>PlotJuggler</b> (ROS2 Topic Subscriber, then Start) draws the topics. Plot <code>twist</code>, <code>twist</code>, <code>linear</code>, <code>x</code> of both odometries in one graph to compare them.</li><li>With the robot standing still the exact speed stays near 0 and the noisy speed vibrates around it. The robot is not moving: the noise lives in the numbers of the noisy node.</li><li>A small noise on the wheel angles becomes a big jump in the speed, because the speed is a change of angle divided by a short time.</li><li>In <b>RViz</b>, with the fixed frame odom and both frames ticked, <code>base_footprint</code> follows the exact odometry and <code>base_footprint_noisy</code> follows the noisy one and vibrates.</li><li>The joystick launch file drives the robot while both odometries are watched. Noise like this is the reason the next chapters turn to probability tools and filtering.</li></ul></div></div>
+    <nav class="pager" aria-label="Chapters">
+<a href="/documented-software-learnings/ros2/ros2-70/"><span class="mono">Chapter 70</span>Launch Noisy Controller</a><a class="nx" href="/documented-software-learnings/ros2/ros2-72/"><span class="mono">Chapter 72</span>Advantages of Having Multiple Sensors</a>    </nav>
+  </article>
+</div>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a><a href="/documented-software-learnings/ultimaker-cura/">Ultimaker Cura</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=e43b0871b9" defer></script>
+<script data-goatcounter="https://techarcanist.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script><script src="/assets/home.js?v=e43b0871b9" defer></script>
+</body>
+</html>

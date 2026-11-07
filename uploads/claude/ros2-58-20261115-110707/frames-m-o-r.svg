@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 360" role="img" aria-label="Three frames: M is the map origin, O is where the robot started, R moves with the robot. T_MO links M to O, T_OR links O to R, and together they give T_MR">
+<rect width="760" height="360" rx="14" fill="#0e182c"/>
+<defs>
+<marker id="ao" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#ff8a3d"/></marker>
+<marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5ab4ff"/></marker>
+<marker id="ay" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#ffd24a"/></marker>
+<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#ff6b6b"/></marker>
+<marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#66e3b0"/></marker>
+</defs>
+<g font-family="system-ui,Segoe UI,Roboto,sans-serif">
+<text x="24" y="34" fill="#a9b8cc" font-size="14">x axis in red, y axis in green</text>
+<g transform="translate(110,280)">
+<line x1="0" y1="0" x2="56" y2="0" stroke="#ff6b6b" stroke-width="3" marker-end="url(#ar)"/>
+<line x1="0" y1="0" x2="0" y2="-56" stroke="#66e3b0" stroke-width="3" marker-end="url(#ag)"/>
+<circle r="6" fill="#e8eef7"/>
+<text x="-16" y="30" fill="#e8eef7" font-size="22" font-weight="700">M</text>
+<text x="-46" y="52" fill="#a9b8cc" font-size="13">map origin, fixed</text>
+</g>
+<g transform="translate(380,250) rotate(-35)">
+<line x1="0" y1="0" x2="56" y2="0" stroke="#ff6b6b" stroke-width="3" marker-end="url(#ar)"/>
+<line x1="0" y1="0" x2="0" y2="-56" stroke="#66e3b0" stroke-width="3" marker-end="url(#ag)"/>
+<circle r="6" fill="#e8eef7"/>
+</g>
+<text x="372" y="290" fill="#e8eef7" font-size="22" font-weight="700">O</text>
+<text x="322" y="312" fill="#a9b8cc" font-size="13">where the robot started</text>
+<g transform="translate(620,120) rotate(-80)">
+<line x1="0" y1="0" x2="56" y2="0" stroke="#ff6b6b" stroke-width="3" marker-end="url(#ar)"/>
+<line x1="0" y1="0" x2="0" y2="-56" stroke="#66e3b0" stroke-width="3" marker-end="url(#ag)"/>
+<circle r="6" fill="#e8eef7"/>
+</g>
+<text x="644" y="140" fill="#e8eef7" font-size="22" font-weight="700">R</text>
+<text x="600" y="162" fill="#a9b8cc" font-size="13">moves with the robot</text>
+<path d="M128 272 Q250 200 364 244" fill="none" stroke="#ff8a3d" stroke-width="3" marker-end="url(#ao)"/>
+<text x="196" y="208" fill="#ff8a3d" font-size="16" font-weight="700">T_MO</text>
+<text x="160" y="228" fill="#ff8a3d" font-size="12.5">global localization</text>
+<path d="M394 238 Q520 210 604 132" fill="none" stroke="#5ab4ff" stroke-width="3" marker-end="url(#ab)"/>
+<text x="520" y="232" fill="#5ab4ff" font-size="16" font-weight="700">T_OR</text>
+<text x="500" y="252" fill="#5ab4ff" font-size="12.5">local localization</text>
+<path d="M120 262 Q300 40 600 112" fill="none" stroke="#ffd24a" stroke-width="2.5" stroke-dasharray="8 6" marker-end="url(#ay)"/>
+<text x="250" y="92" fill="#ffd24a" font-size="16" font-weight="700">T_MR = T_MO × T_OR</text>
+<text x="250" y="112" fill="#ffd24a" font-size="12.5">where the robot is in the map</text>
+</g>
+</svg>

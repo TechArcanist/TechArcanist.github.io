@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Launch Noisy Controller | ROS 2 | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="Introduction The noisy controller of chapter 69 works out odometry with wheel sizes that carry a small mistake, so that it can be compared with the exact…">
+<link rel="canonical" href="https://techarcanist.com/documented-software-learnings/ros2/ros2-70/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="Launch Noisy Controller | ROS 2">
+<meta property="og:description" content="Introduction The noisy controller of chapter 69 works out odometry with wheel sizes that carry a small mistake, so that it can be compared with the exact…">
+<meta property="og:url" content="https://techarcanist.com/documented-software-learnings/ros2/ros2-70/">
+<meta property="og:image" content="https://techarcanist.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=e43b0871b9">
+<link rel="stylesheet" href="/assets/home.css?v=e43b0871b9">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/" aria-current="page">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap reader wide">
+  <aside class="rd-nav" id="rd-nav">
+    <a class="rd-series" href="/documented-software-learnings/ros2/"><span class="label">Series</span>ROS 2</a>
+    <ol>
+      <li><a href="/documented-software-learnings/ros2/ros2_a/"><span class="mono">01</span>Installing Ubuntu Desktop (Dual Boot with Windows)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_b/"><span class="mono">02</span>ROS 2 Jazzy Installation on Ubuntu (Step-by-Step)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_c/"><span class="mono">03</span>Development Environment Setup for ROS 2 Jazzy on Ubuntu (With Clear Explanations)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_d/"><span class="mono">04</span>ROS 2 Fundamentals: Architecture, Communication, Packages, and Workspaces</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_e/"><span class="mono">05</span>ROS 2 Workspace &amp; Package Creation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_f/"><span class="mono">06</span>ROS 2 Python Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_g/"><span class="mono">07</span>ROS 2 C++ Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_h/"><span class="mono">08</span>ROS 2 Python Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_i/"><span class="mono">09</span>ROS 2 C++ Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_j/"><span class="mono">10</span>Robot Locomotion: Introduction</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_k/"><span class="mono">11</span>Wheeled Locomotion Architectures</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_l/"><span class="mono">12</span>Rolling Friction &amp; Wheeled Locomotion Efficiency</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_m/"><span class="mono">13</span>Introduction to Robot Simulation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_n/"><span class="mono">14</span>URDF</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_o/"><span class="mono">15</span>Create a URDF Model</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_p/"><span class="mono">16</span>Rviz</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_q/"><span class="mono">17</span>Node Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_r/"><span class="mono">18</span>Python Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_s/"><span class="mono">19</span>C++ Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_t/"><span class="mono">20</span>ROS 2 Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-u/"><span class="mono">21</span>Visualize The Robot In RVIZ2</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-v/"><span class="mono">22</span>Launch Files</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-w/"><span class="mono">23</span>ROS 2 Launch Files: Visualizing the Robot with One Command</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-x/"><span class="mono">24</span>Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-y/"><span class="mono">25</span>Simulating the Robot in Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-z/"><span class="mono">26</span>ROS 2 Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-aa/"><span class="mono">27</span>Control Types</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ab/"><span class="mono">28</span>ROS 2 Control: Prepare the Robot for Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ac/"><span class="mono">29</span>Understanding ROS 2 Control | Explanation of Chapter 28</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ad/"><span class="mono">30</span>ROS 2 Control: Moving the BumperBot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ae/"><span class="mono">31</span>Robot Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-af/"><span class="mono">32</span>Pose of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_af/"><span class="mono">33</span>Translation Vector</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ag/"><span class="mono">34</span>Introduction to Turtlesim</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ah/"><span class="mono">35</span>Translation Vector Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ai/"><span class="mono">36</span>Translation Vector Between Two Turtles: CPP</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_aj/"><span class="mono">37</span>Rotation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ak/"><span class="mono">38</span>Rotation Matrix Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_al/"><span class="mono">39</span>Transformation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_am/"><span class="mono">40</span>Differential Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-41/"><span class="mono">41</span>Velocity of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-42/"><span class="mono">42</span>Simple Speed Controller: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-43/"><span class="mono">43</span>Launch the Simple Speed Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-44/"><span class="mono">44</span>Teleoperating the BumperBot with a Joystick</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-45/"><span class="mono">45</span>ROS 2 Diff Drive Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-46/"><span class="mono">46</span>TF 2 Library</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-47/"><span class="mono">47</span>Operation With Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-48/"><span class="mono">48</span>Static &amp; Dynamic Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-49/"><span class="mono">49</span>Simple TF2 Static Broadcaster</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-50/"><span class="mono">50</span>Simple TF2 Broadcaster: Static and Dynamic Transforms</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-51/"><span class="mono">51</span>ROS 2 Services</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-52/"><span class="mono">52</span>Service Server in Python: AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-53/"><span class="mono">53</span>Service Client in Python: Calling AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-54/"><span class="mono">54</span>Simple TF2 Listener in Python: a get_transform Service</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-55/"><span class="mono">55</span>Euler Angles and Quaternions</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-56/"><span class="mono">56</span>Euler to Quaternion: Turning the Robot with tf_transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-57/"><span class="mono">57</span>tf2 Tools: view_frames and tf2_echo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-58/"><span class="mono">58</span>Where Is the Robot? Local and Global Localization</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-59/"><span class="mono">59</span>Odometry: Counting Steps to Know Where the Robot Is</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-60/"><span class="mono">60</span>Wheel Odometry and Encoders</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-61/"><span class="mono">61</span>Robot Speed from Wheel Encoders</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-62/"><span class="mono">62</span>Simple Controller: Robot Speed from Joint States</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-63/"><span class="mono">63</span>Robot Position and Orientation from the Wheels</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-64/"><span class="mono">64</span>Wheel Odometry: x, y and theta in the Simple Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-65/"><span class="mono">65</span>Publish Odometry Message</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-66/"><span class="mono">66</span>Broadcast Odometry Transform</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-67/"><span class="mono">67</span>Probability Introduction</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-68/"><span class="mono">68</span>Probability Tools for Localization</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-69/"><span class="mono">69</span>Adding Noise to Robot Motion: the Noisy Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-70/" aria-current="page"><span class="mono">70</span>Launch Noisy Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-71/"><span class="mono">71</span>Odometry Comparison</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-72/"><span class="mono">72</span>Advantages of Having Multiple Sensors</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-73/"><span class="mono">73</span>Gyroscope</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-74/"><span class="mono">74</span>Accelerometer and IMU</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-75/"><span class="mono">75</span>Simulate IMU Sensor</a></li>
+    </ol>
+  </aside>
+  <article class="rd-main">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/documented-software-learnings/">Library</a><span>/</span><a href="/documented-software-learnings/ros2/">ROS 2</a><span>/</span><span>70</span></nav>
+    <button class="btn btn-sm btn-line rd-tg" type="button" id="rd-tg">All chapters</button>
+<p class="sh-label mono"><span>70</span>Chapter 70 of 75</p>    <h1>Launch Noisy Controller</h1>
+<div class="rd-prog" aria-hidden="true"><i style="width:93.3%"></i></div>    <div class="prose"><div class="col"><h2 id="introduction">Introduction</h2><p>The noisy controller of chapter 69 works out odometry with wheel sizes that carry a small mistake, so that it can be compared with the exact odometry of the simple controller. It is ready as a node, but nothing starts it yet. It should start every time the control system of the robot starts, so it goes into <code>controller.launch.py</code>, the launch file of the controllers.</p><p>It should start <b>whichever wheel controller is used</b>: the simple controller or the differential drive controller. And its two mistakes should be easy to change, so the launch file gets two new launch arguments:</p><ul><li><code>wheel_radius_error</code>, the mistake added to the wheel radius (default 0.005 m, that is 5 mm),</li><li><code>wheel_separation_error</code>, the mistake added to the distance between the wheels (default 0.02 m, that is 20 mm).</li></ul><p>The values must be added to the exact sizes before the node starts. Launch arguments are only text, and placeholders cannot be added together, so the sums are made in a small Python function that the launch service runs while it is launching, wrapped in an <code>OpaqueFunction</code>.</p><p class="note">The node <code>noisy_controller.py</code> from chapter 69 must already exist and be installed, and the controller launch file of chapter 45 must already work. This chapter only changes <code>controller.launch.py</code>.</p><h3 id="where-the-pieces-come-from">Where the pieces come from</h3><div class="table-wrap"><table><tbody><tr><td>Idea</td><td>Where it was met</td><td>Section</td></tr><tr><td>the noisy node and its parameters wheel_radius and wheel_separation</td><td>chapter 69</td><td>the code of noisy_controller.py</td></tr><tr><td>this launch file, launch arguments and placeholders, GroupAction and conditions</td><td>chapter 45</td><td><a href="/documented-software-learnings/ros2/ros2-45/#update-the-controller-launch-file">Update the controller launch file</a> and <a href="/documented-software-learnings/ros2/ros2-45/#inspect-the-available-launch-arguments">Inspect the available launch arguments</a></td></tr><tr><td>starting a Python node from a launch file</td><td>chapter 43</td><td><a href="/documented-software-learnings/ros2/ros2-43/#launch-the-python-controller">Launch the Python controller</a></td></tr><tr><td>how the wheel sizes enter the odometry</td><td>chapter 64</td><td><a href="/documented-software-learnings/ros2/ros2-64/#the-formulas">The formulas</a></td></tr><tr><td>why wrong sizes spoil the odometry</td><td>chapter 60</td><td><a href="/documented-software-learnings/ros2/ros2-60/#sd-s4x">When odometry goes wrong</a></td></tr></tbody></table></div></div><div class="col"><h2 id="writing-the-code">Writing the code</h2><h3 id="open-the-file">Open the file</h3><p>In VS Code, open <code>src</code>, the <code>bumperbot_controller</code> package folder, then the <code>launch</code> folder inside it, and open <code>controller.launch.py</code>.</p><figure class="img sz-s al-l"><img src="/uploads/2026/11/image-99.png" alt="The VS Code explorer. bumperbot_controller is open down to the launch folder, and a yellow arrow marks controller.launch.py next to joystick_teleop.launch.py." loading="lazy"><figcaption>The file to edit: controller.launch.py in the launch folder.</figcaption></figure><h3 id="the-code">The code</h3><p>The whole file, with the new lines added to the launch file of chapter 45:</p><div class="codeblock" data-lang="Python"><pre class="code numbered"><code><span class="ln"></span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">launch</span> <span class="tok-keyword">import</span> LaunchDescription</span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">launch</span><span class="tok-namespace">.</span><span class="tok-namespace">actions</span> <span class="tok-keyword">import</span> DeclareLaunchArgument<span class="tok-punctuation">,</span> GroupAction<span class="tok-punctuation">,</span> OpaqueFunction</span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">launch_ros</span><span class="tok-namespace">.</span><span class="tok-namespace">actions</span> <span class="tok-keyword">import</span> Node</span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">launch</span><span class="tok-namespace">.</span><span class="tok-namespace">substitutions</span> <span class="tok-keyword">import</span> LaunchConfiguration</span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">launch</span><span class="tok-namespace">.</span><span class="tok-namespace">conditions</span> <span class="tok-keyword">import</span> UnlessCondition<span class="tok-punctuation">,</span> IfCondition</span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">def</span> <span class="tok-definition">noisy_controller</span><span class="tok-punctuation">(</span>context<span class="tok-punctuation">,</span> <span class="tok-operator">*</span>args<span class="tok-punctuation">,</span> <span class="tok-operator">*</span><span class="tok-operator">*</span>kwargs<span class="tok-punctuation">)</span><span class="tok-punctuation">:</span></span>
+<span class="ln">    use_sim_time <span class="tok-operator">=</span> LaunchConfiguration<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">use_sim_time</span><span class="tok-string">"</span><span class="tok-punctuation">)</span></span>
+<span class="ln">    wheel_radius <span class="tok-operator">=</span> <span class="tok-typeName">float</span><span class="tok-punctuation">(</span>LaunchConfiguration<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">wheel_radius</span><span class="tok-string">"</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>perform<span class="tok-punctuation">(</span>context<span class="tok-punctuation">)</span><span class="tok-punctuation">)</span></span>
+<span class="ln">    wheel_separation <span class="tok-operator">=</span> <span class="tok-typeName">float</span><span class="tok-punctuation">(</span>LaunchConfiguration<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">wheel_separation</span><span class="tok-string">"</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>perform<span class="tok-punctuation">(</span>context<span class="tok-punctuation">)</span><span class="tok-punctuation">)</span></span>
+<span class="ln">    wheel_radius_error <span class="tok-operator">=</span> <span class="tok-typeName">float</span><span class="tok-punctuation">(</span>LaunchConfiguration<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">wheel_radius_error</span><span class="tok-string">"</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>perform<span class="tok-punctuation">(</span>context<span class="tok-punctuation">)</span><span class="tok-punctuation">)</span></span>
+<span class="ln">    wheel_separation_error <span class="tok-operator">=</span> <span class="tok-typeName">float</span><span class="tok-punctuation">(</span>LaunchConfiguration<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">wheel_separation_error</span><span class="tok-string">"</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>perform<span class="tok-punctuation">(</span>context<span class="tok-punctuation">)</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    noisy_controller_py <span class="tok-operator">=</span> Node<span class="tok-punctuation">(</span></span>
+<span class="ln">        package<span class="tok-operator">=</span><span class="tok-string">"</span><span class="tok-string">bumperbot_controller</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        executable<span class="tok-operator">=</span><span class="tok-string">"</span><span class="tok-string">noisy_controller.py</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        parameters<span class="tok-operator">=</span><span class="tok-punctuation">[</span></span>
+<span class="ln">            <span class="tok-punctuation">{</span></span>
+<span class="ln">                <span class="tok-string">"</span><span class="tok-string">wheel_radius</span><span class="tok-string">"</span><span class="tok-punctuation">:</span> wheel_radius <span class="tok-operator">+</span> wheel_radius_error<span class="tok-punctuation">,</span></span>
+<span class="ln">                <span class="tok-string">"</span><span class="tok-string">wheel_separation</span><span class="tok-string">"</span><span class="tok-punctuation">:</span> wheel_separation <span class="tok-operator">+</span> wheel_separation_error<span class="tok-punctuation">,</span></span>
+<span class="ln">                <span class="tok-string">"</span><span class="tok-string">use_sim_time</span><span class="tok-string">"</span><span class="tok-punctuation">:</span> use_sim_time<span class="tok-punctuation">,</span></span>
+<span class="ln">            <span class="tok-punctuation">}</span></span>
+<span class="ln">        <span class="tok-punctuation">]</span></span>
+<span class="ln">    <span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-keyword">return</span> <span class="tok-punctuation">[</span>noisy_controller_py<span class="tok-punctuation">]</span></span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">def</span> <span class="tok-definition">generate_launch_description</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span></span>
+<span class="ln"></span>
+<span class="ln">    use_sim_time_arg <span class="tok-operator">=</span> DeclareLaunchArgument<span class="tok-punctuation">(</span></span>
+<span class="ln">        <span class="tok-string">"</span><span class="tok-string">use_sim_time</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        default_value<span class="tok-operator">=</span><span class="tok-string">"</span><span class="tok-string">True</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">    <span class="tok-punctuation">)</span></span>
+<span class="ln">    use_simple_controller_arg <span class="tok-operator">=</span> DeclareLaunchArgument<span class="tok-punctuation">(</span></span>
+<span class="ln">        <span class="tok-string">"</span><span class="tok-string">use_simple_controller</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        default_value<span class="tok-operator">=</span><span class="tok-string">"</span><span class="tok-string">True</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">    <span class="tok-punctuation">)</span></span>
+<span class="ln">    wheel_radius_arg <span class="tok-operator">=</span> DeclareLaunchArgument<span class="tok-punctuation">(</span></span>
+<span class="ln">        <span class="tok-string">"</span><span class="tok-string">wheel_radius</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        default_value<span class="tok-operator">=</span><span class="tok-string">"</span><span class="tok-string">0.033</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">    <span class="tok-punctuation">)</span></span>
+<span class="ln">    wheel_separation_arg <span class="tok-operator">=</span> DeclareLaunchArgument<span class="tok-punctuation">(</span></span>
+<span class="ln">        <span class="tok-string">"</span><span class="tok-string">wheel_separation</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        default_value<span class="tok-operator">=</span><span class="tok-string">"</span><span class="tok-string">0.17</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">    <span class="tok-punctuation">)</span></span>
+<span class="ln">    wheel_radius_error_arg <span class="tok-operator">=</span> DeclareLaunchArgument<span class="tok-punctuation">(</span></span>
+<span class="ln">        <span class="tok-string">"</span><span class="tok-string">wheel_radius_error</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        default_value<span class="tok-operator">=</span><span class="tok-string">"</span><span class="tok-string">0.005</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">    <span class="tok-punctuation">)</span></span>
+<span class="ln">    wheel_separation_error_arg <span class="tok-operator">=</span> DeclareLaunchArgument<span class="tok-punctuation">(</span></span>
+<span class="ln">        <span class="tok-string">"</span><span class="tok-string">wheel_separation_error</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        default_value<span class="tok-operator">=</span><span class="tok-string">"</span><span class="tok-string">0.02</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">    <span class="tok-punctuation">)</span></span>
+<span class="ln">    use_sim_time <span class="tok-operator">=</span> LaunchConfiguration<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">use_sim_time</span><span class="tok-string">"</span><span class="tok-punctuation">)</span></span>
+<span class="ln">    use_simple_controller <span class="tok-operator">=</span> LaunchConfiguration<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">use_simple_controller</span><span class="tok-string">"</span><span class="tok-punctuation">)</span></span>
+<span class="ln">    wheel_radius <span class="tok-operator">=</span> LaunchConfiguration<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">wheel_radius</span><span class="tok-string">"</span><span class="tok-punctuation">)</span></span>
+<span class="ln">    wheel_separation <span class="tok-operator">=</span> LaunchConfiguration<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">wheel_separation</span><span class="tok-string">"</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    joint_state_broadcaster_spawner <span class="tok-operator">=</span> Node<span class="tok-punctuation">(</span></span>
+<span class="ln">        package<span class="tok-operator">=</span><span class="tok-string">"</span><span class="tok-string">controller_manager</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        executable<span class="tok-operator">=</span><span class="tok-string">"</span><span class="tok-string">spawner</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        arguments<span class="tok-operator">=</span><span class="tok-punctuation">[</span></span>
+<span class="ln">            <span class="tok-string">"</span><span class="tok-string">joint_state_broadcaster</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">            <span class="tok-string">"</span><span class="tok-string">--controller-manager</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">            <span class="tok-string">"</span><span class="tok-string">/controller_manager</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        <span class="tok-punctuation">]</span><span class="tok-punctuation">,</span></span>
+<span class="ln">    <span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    wheel_controller_spawner <span class="tok-operator">=</span> Node<span class="tok-punctuation">(</span></span>
+<span class="ln">        package<span class="tok-operator">=</span><span class="tok-string">"</span><span class="tok-string">controller_manager</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        executable<span class="tok-operator">=</span><span class="tok-string">"</span><span class="tok-string">spawner</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        arguments<span class="tok-operator">=</span><span class="tok-punctuation">[</span></span>
+<span class="ln">            <span class="tok-string">"</span><span class="tok-string">bumperbot_controller</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">            <span class="tok-string">"</span><span class="tok-string">--controller-manager</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">            <span class="tok-string">"</span><span class="tok-string">/controller_manager</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        <span class="tok-punctuation">]</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        condition<span class="tok-operator">=</span>UnlessCondition<span class="tok-punctuation">(</span>use_simple_controller<span class="tok-punctuation">)</span><span class="tok-punctuation">,</span></span>
+<span class="ln">    <span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    simple_controller <span class="tok-operator">=</span> GroupAction<span class="tok-punctuation">(</span></span>
+<span class="ln">        condition<span class="tok-operator">=</span>IfCondition<span class="tok-punctuation">(</span>use_simple_controller<span class="tok-punctuation">)</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        actions<span class="tok-operator">=</span><span class="tok-punctuation">[</span></span>
+<span class="ln">            Node<span class="tok-punctuation">(</span></span>
+<span class="ln">                package<span class="tok-operator">=</span><span class="tok-string">"</span><span class="tok-string">controller_manager</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">                executable<span class="tok-operator">=</span><span class="tok-string">"</span><span class="tok-string">spawner</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">                arguments<span class="tok-operator">=</span><span class="tok-punctuation">[</span></span>
+<span class="ln">                    <span class="tok-string">"</span><span class="tok-string">simple_velocity_controller</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">                    <span class="tok-string">"</span><span class="tok-string">--controller-manager</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">                    <span class="tok-string">"</span><span class="tok-string">/controller_manager</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">                <span class="tok-punctuation">]</span><span class="tok-punctuation">,</span></span>
+<span class="ln">            <span class="tok-punctuation">)</span><span class="tok-punctuation">,</span></span>
+<span class="ln">            Node<span class="tok-punctuation">(</span></span>
+<span class="ln">                package<span class="tok-operator">=</span><span class="tok-string">"</span><span class="tok-string">bumperbot_controller</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">                executable<span class="tok-operator">=</span><span class="tok-string">"</span><span class="tok-string">simple_controller.py</span><span class="tok-string">"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">                parameters<span class="tok-operator">=</span><span class="tok-punctuation">[</span></span>
+<span class="ln">                    <span class="tok-punctuation">{</span></span>
+<span class="ln">                        <span class="tok-string">"</span><span class="tok-string">wheel_radius</span><span class="tok-string">"</span><span class="tok-punctuation">:</span> wheel_radius<span class="tok-punctuation">,</span></span>
+<span class="ln">                        <span class="tok-string">"</span><span class="tok-string">wheel_separation</span><span class="tok-string">"</span><span class="tok-punctuation">:</span> wheel_separation<span class="tok-punctuation">,</span></span>
+<span class="ln">                        <span class="tok-string">"</span><span class="tok-string">use_sim_time</span><span class="tok-string">"</span><span class="tok-punctuation">:</span> use_sim_time<span class="tok-punctuation">,</span></span>
+<span class="ln">                    <span class="tok-punctuation">}</span></span>
+<span class="ln">                <span class="tok-punctuation">]</span><span class="tok-punctuation">,</span></span>
+<span class="ln">            <span class="tok-punctuation">)</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        <span class="tok-punctuation">]</span><span class="tok-punctuation">,</span></span>
+<span class="ln">    <span class="tok-punctuation">)</span></span>
+<span class="ln">    noisy_controller_launch <span class="tok-operator">=</span> OpaqueFunction<span class="tok-punctuation">(</span>function<span class="tok-operator">=</span>noisy_controller<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-keyword">return</span> LaunchDescription<span class="tok-punctuation">(</span></span>
+<span class="ln">        <span class="tok-punctuation">[</span></span>
+<span class="ln">            use_sim_time_arg<span class="tok-punctuation">,</span></span>
+<span class="ln">            use_simple_controller_arg<span class="tok-punctuation">,</span></span>
+<span class="ln">            wheel_radius_arg<span class="tok-punctuation">,</span></span>
+<span class="ln">            wheel_separation_arg<span class="tok-punctuation">,</span></span>
+<span class="ln">            wheel_radius_error_arg<span class="tok-punctuation">,</span></span>
+<span class="ln">            wheel_separation_error_arg<span class="tok-punctuation">,</span></span>
+<span class="ln">            joint_state_broadcaster_spawner<span class="tok-punctuation">,</span></span>
+<span class="ln">            wheel_controller_spawner<span class="tok-punctuation">,</span></span>
+<span class="ln">            simple_controller<span class="tok-punctuation">,</span></span>
+<span class="ln">            noisy_controller_launch</span>
+<span class="ln">        <span class="tok-punctuation">]</span></span>
+<span class="ln">    <span class="tok-punctuation">)</span></span></code></pre></div><h3 id="what-is-new">What is new</h3><ul><li><b>Line 3:</b> <code>OpaqueFunction</code> is added to the imports from <code>launch.actions</code>.</li><li><b>Lines 8 to 27:</b> the function <code>noisy_controller(context, ...)</code>. It reads the four sizes and errors as numbers (lines 10 to 13), describes the noisy <code>Node</code> with the sizes plus their errors (lines 15 to 25) and returns it in a list (line 27).</li><li><b>Lines 48 to 55:</b> the two new launch arguments, <code>wheel_radius_error</code> and <code>wheel_separation_error</code>, with the defaults "0.005" and "0.02".</li><li><b>Line 107:</b> <code>noisy_controller_launch = OpaqueFunction(function=noisy_controller)</code> wraps the function in an action.</li><li><b>Lines 115, 116 and 120:</b> the two new arguments and the new action are added to the <code>LaunchDescription</code> list. Line 120 has no condition, so the noisy controller starts with both wheel controllers.</li></ul><p>Everything else is the launch file of chapter 45, unchanged.</p><h3 id="from-text-to-numbers">From text to numbers</h3><p>A launch argument is a text. <code>LaunchConfiguration("wheel_radius")</code> is only a placeholder for it. To add the error to the size, the placeholder has to become a number in three small steps (lines 10 to 13):</p><ol><li><code>LaunchConfiguration("wheel_radius")</code>: the placeholder,</li><li><code>.perform(context)</code>: ask the launch context for its real value, the text <code>"0.033"</code>,</li><li><code>float(...)</code>: turn the text into the number 0.033.</li></ol><p>Then lines 20 and 21 add the errors:</p><ul><li>wheel radius: 0.033 + 0.005 = <b>0.038 m</b>,</li><li>wheel separation: 0.17 + 0.02 = <b>0.19 m</b>.</li></ul><p>The simple controller (lines 94 to 104) still gets the exact 0.033 and 0.17. That is the point: one odometry is exact, the other is worked out with sizes that are a little wrong. The radius is wrong by 0.005 ÷ 0.033 = 15%, and the separation by 0.02 ÷ 0.17 = 12%. Drag the two errors to see what this does to a drive and a turn:</p><div class="widget"><iframe allow="fullscreen" allowfullscreen src="/widgets/claude-ros2-70-20261121-062246-noisy-sizes-path.html?v=e439379ba8" title="Wrong wheel sizes, wrong path"></iframe></div><h3 id="code-visualizer">Code visualizer</h3><p>Every line explained, with a step-by-step launch, a map, bugs to try and a live picture of the arguments turning into numbers and processes. Lines that did not change since chapter 45 keep their explanation; the new lines 3, 8 to 27, 48 to 55, 107 and 115 to 120 are the new part.</p><div class="widget"><iframe allow="fullscreen" allowfullscreen src="/widgets/claude-ros2-70-20261121-062246-controller-launch-noisy-visualizer.html?v=bd83c1468b" title="controller.launch.py with the noisy controller: code visualizer"></iframe></div></div><div class="col"><h2 id="building-and-running">Building and running</h2><h3 id="build">Build</h3><p>Open a terminal and build the workspace:</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln"><span class="tok-typeName">cd</span> bumperbot_ws</span></code></pre></div><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">colcon build</span></code></pre></div><figure class="img sz-s al-l"><img src="/uploads/2026/11/image-100.png" alt="A terminal after colcon build. Five packages are finished and the last line reads Summary: 5 packages finished [3.84s]." loading="lazy"><figcaption>The build: five packages finished.</figcaption></figure><p class="caption">What you should see</p><div class="codeblock" data-lang="Plain text"><pre class="code"><code>Starting &gt;&gt;&gt; bumperbot_msgs
+Starting &gt;&gt;&gt; bumperbot_controller
+Starting &gt;&gt;&gt; bumperbot_cpp_examples
+Starting &gt;&gt;&gt; bumperbot_description
+Finished &lt;&lt;&lt; bumperbot_description [0.34s]
+Finished &lt;&lt;&lt; bumperbot_cpp_examples [0.45s]
+Finished &lt;&lt;&lt; bumperbot_msgs [1.16s]
+Starting &gt;&gt;&gt; bumperbot_py_examples
+Finished &lt;&lt;&lt; bumperbot_controller [1.19s]
+Finished &lt;&lt;&lt; bumperbot_py_examples [2.38s]
+
+Summary: 5 packages finished [3.84s]</code></pre></div></div><div class="col"><h2 id="remember">Remember</h2><ul><li>The noisy controller is started from <code>controller.launch.py</code>, so it starts with the control system of the robot, <b>whichever wheel controller</b> is used: its action on line 120 has no condition.</li><li>Two new launch arguments, <code>wheel_radius_error</code> (0.005) and <code>wheel_separation_error</code> (0.02), are declared (lines 48 to 55) <b>and</b> listed in the <code>LaunchDescription</code> (lines 115 and 116). Both are metres, written as text.</li><li>A launch argument is text and <code>LaunchConfiguration</code> is a placeholder. To add numbers, use <code>.perform(context)</code> to get the text and <code>float(...)</code> to get the number.</li><li>An <code>OpaqueFunction</code> runs a Python function while the launch is running, with the launch context. The function returns a list of actions, here the noisy Node.</li><li>The noisy node gets the radius 0.033 + 0.005 = 0.038 m and the separation 0.17 + 0.02 = 0.19 m. The simple controller keeps the exact 0.033 and 0.17.</li><li>The new action has to be in the <code>LaunchDescription</code> list, otherwise the noisy node never starts and nothing complains.</li></ul></div></div>
+    <nav class="pager" aria-label="Chapters">
+<a href="/documented-software-learnings/ros2/ros2-69/"><span class="mono">Chapter 69</span>Adding Noise to Robot Motion: the Noisy Controller</a><a class="nx" href="/documented-software-learnings/ros2/ros2-71/"><span class="mono">Chapter 71</span>Odometry Comparison</a>    </nav>
+  </article>
+</div>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a><a href="/documented-software-learnings/ultimaker-cura/">Ultimaker Cura</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=e43b0871b9" defer></script>
+<script data-goatcounter="https://techarcanist.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script><script src="/assets/home.js?v=e43b0871b9" defer></script>
+</body>
+</html>

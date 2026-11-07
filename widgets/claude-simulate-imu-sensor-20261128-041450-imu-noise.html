@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IMU noise: what mean and stddev do</title>
+<style>
+html,body{margin:0;background:#0e182c;color:#e8eef7;font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+.w{padding:12px 14px;max-width:1100px;margin:0 auto;background:#0e182c}
+.w.fs{max-width:none;height:100vh;overflow:auto;padding:14px 20px}
+.top{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+h1{font-size:18px;margin:0 0 4px}.sub{color:#a9b8cc;font-size:14px;margin:0 0 10px}
+.card{background:#13213a;border:1px solid #23395c;border-radius:12px;padding:12px 14px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:6px 0}
+.btn{background:#1b2c4a;color:#e8eef7;border:1px solid #2b4366;border-radius:8px;padding:6px 12px;font:600 13px system-ui,sans-serif;cursor:pointer}
+.btn:hover,.btn.on{border-color:#ff8a3d}.btn.on{background:#2a2016}
+label.ck{display:flex;align-items:center;gap:6px;font-size:14px;color:#cfe0f5}
+.sl{display:grid;grid-template-columns:1fr 1fr;gap:4px 18px}
+.sl label{font-size:13px;color:#a9b8cc;display:flex;justify-content:space-between}
+input[type=range]{width:100%;accent-color:#ff8a3d}
+svg{width:100%;height:auto;display:block;max-height:330px}
+.w.fs svg{max-height:58vh}
+.say{background:#0f1b31;border:1px solid #23395c;border-radius:10px;padding:9px 12px;margin-top:8px;font-size:14px}
+.mono{font:13px/1.6 ui-monospace,Consolas,monospace}
+.ok{color:#66e3b0}.bad{color:#ff6b6b}.warn{color:#ffd24a}.dim{color:#8aa0bd}.or{color:#ff8a3d}
+@media(max-width:560px){.sl{grid-template-columns:1fr}}
+</style></head><body><div class="w" id="wrap">
+<div class="top"><div><h1>IMU noise: 100 readings per second around the true value</h1>
+<p class="sub">Pick a reading, press Play and watch each new reading land near the true value. Change the stddev to see the spread grow or shrink.</p></div>
+<button class="btn" id="fsb" aria-label="Show full screen. Press Escape to exit.">Full screen</button></div>
+<div class="card">
+<div class="row" id="kind"></div>
+<div class="sl">
+<div><label><span>True value (what the robot really does)</span><b id="tvv"></b></label><input type="range" id="tv" min="0" max="1" step="0.05" value="0"></div>
+<div><label><span>stddev, as a multiple of the setting in the sensor block</span><b id="sdv"></b></label><input type="range" id="sd" min="0" max="3" step="0.5" value="1"></div>
+</div>
+<div class="row"><button class="btn" id="pl">Play</button><button class="btn" id="rs">Clear</button><label class="ck"><input type="checkbox" id="off"> perfect sensor (no noise)</label></div>
+<svg id="sv" viewBox="0 0 720 300" role="img" aria-label="Readings over time on the left, how often each value came up on the right"></svg>
+<div class="say mono" id="say"></div>
+</div>
+</div>
+<script>
+(function(){
+var K=[{name:'Angular velocity z (gyroscope part)',unit:'rad/s',sd:0.0002,tmax:0.5,dec:5},{name:'Linear acceleration x (accelerometer part)',unit:'m/s²',sd:0.017,tmax:2,dec:4}];
+var S={k:0,tv:0,m:1,play:0,id:null,R:[],seed:7};
+function $(i){return document.getElementById(i)}
+function rnd(){S.seed=(S.seed*16807)%2147483647;return (S.seed-1)/2147483646}
+function gauss(){var u=Math.max(rnd(),1e-9),v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+function sdNow(){return $('off').checked?0:K[S.k].sd*S.m}
+function fx(v,d){var s=v.toFixed(d);return s.replace('-','−')}
+function kindRow(){var h='';K.forEach(function(k,i){h+='<button class="btn'+(i===S.k?' on':'')+'" data-i="'+i+'">'+k.name+'</button>'});$('kind').innerHTML=h;
+ [].forEach.call($('kind').querySelectorAll('button'),function(b){b.onclick=function(){S.k=+b.getAttribute('data-i');S.R=[];$('tv').max=K[S.k].tmax;$('tv').step=K[S.k].tmax/20;S.tv=0;$('tv').value=0;kindRow();draw()}})}
+function add(n){var i,sd=sdNow();for(i=0;i<n;i++){S.R.push(S.tv+sd*gauss());if(S.R.length>300)S.R.shift()}}
+function draw(){var k=K[S.k],sd=sdNow(),half=Math.max(7*k.sd,1e-9),lo=S.tv-half,hi=S.tv+half,X0=60,X1=470,Y0=40,Y1=260;
+ function Y(v){return Y1-(v-lo)/(hi-lo)*(Y1-Y0)}
+ $('tvv').textContent=fx(S.tv,k.dec>4?2:2)+' '+k.unit;$('sdv').textContent=($('off').checked?'off':S.m+' × '+k.sd+' = '+fx(k.sd*S.m,k.dec))+' '+($('off').checked?'':k.unit);
+ var g='<rect x="'+X0+'" y="'+Y0+'" width="'+(X1-X0)+'" height="'+(Y1-Y0)+'" fill="#0f1b31" stroke="#23395c"/>';
+ if(sd>0)g+='<rect x="'+X0+'" y="'+Y(S.tv+sd).toFixed(1)+'" width="'+(X1-X0)+'" height="'+(Y(S.tv-sd)-Y(S.tv+sd)).toFixed(1)+'" fill="#ff8a3d" fill-opacity=".12"/>';
+ g+='<line x1="'+X0+'" y1="'+Y(S.tv).toFixed(1)+'" x2="'+X1+'" y2="'+Y(S.tv).toFixed(1)+'" stroke="#66e3b0" stroke-width="2"/>';
+ var n=S.R.length,i,pts=[];for(i=0;i<n;i++){var x=X1-(n-1-i)*(X1-X0)/299,y=Math.min(Y1,Math.max(Y0,Y(S.R[i])));pts.push(x.toFixed(1)+','+y.toFixed(1))}
+ if(n>1)g+='<polyline points="'+pts.join(' ')+'" fill="none" stroke="#ff8a3d" stroke-width="1.5"/>';
+ if(n)g+='<circle cx="'+X1+'" cy="'+Math.min(Y1,Math.max(Y0,Y(S.R[n-1]))).toFixed(1)+'" r="4.5" fill="#ffd24a"/>';
+ g+='<text x="'+(X0-6)+'" y="'+(Y(S.tv)+4).toFixed(1)+'" fill="#66e3b0" font-size="11" text-anchor="end">true</text>';
+ g+='<text x="'+X0+'" y="'+(Y0-10)+'" fill="#a9b8cc" font-size="12">the last 3 s of readings (300 readings); orange band: true value plus or minus 1 stddev</text>';
+ g+='<text x="'+X1+'" y="'+(Y1+18)+'" fill="#8aa0bd" font-size="11" text-anchor="end">now</text><text x="'+X0+'" y="'+(Y1+18)+'" fill="#8aa0bd" font-size="11">3 s ago</text>';
+ /* histogram: how often each value came up */
+ var B=24,cnt=[],b;for(b=0;b<B;b++)cnt.push(0);for(i=0;i<n;i++){b=Math.floor((S.R[i]-lo)/(hi-lo)*B);if(b>=0&&b<B)cnt[b]++}
+ var mx=Math.max(1,Math.max.apply(null,cnt)),HX=500,HW=190;
+ g+='<rect x="'+HX+'" y="'+Y0+'" width="'+HW+'" height="'+(Y1-Y0)+'" fill="#0f1b31" stroke="#23395c"/>';
+ for(b=0;b<B;b++){if(!cnt[b])continue;var y0=Y1-(b+1)/B*(Y1-Y0),hh=(Y1-Y0)/B-1;g+='<rect x="'+HX+'" y="'+y0.toFixed(1)+'" width="'+(cnt[b]/mx*(HW-10)).toFixed(1)+'" height="'+hh.toFixed(1)+'" fill="#5ab4ff" fill-opacity=".75"/>'}
+ g+='<line x1="'+HX+'" y1="'+Y(S.tv).toFixed(1)+'" x2="'+(HX+HW)+'" y2="'+Y(S.tv).toFixed(1)+'" stroke="#66e3b0" stroke-width="2"/>';
+ g+='<text x="'+(HX+HW)+'" y="'+(Y1+18)+'" fill="#8aa0bd" font-size="11" text-anchor="end">how often each value came up</text>';
+ $('sv').innerHTML=g;
+ /* the working */
+ var t='',u=k.unit;
+ if(n){var last=S.R[n-1],nz=last-S.tv;t+='last reading = true value + noise = '+fx(S.tv,2)+' + ('+fx(nz,k.dec)+') = '+fx(last,k.dec)+' '+u+'<br>'}
+ else t+='press Play to start the readings<br>';
+ if(sd>0){var inb=0;for(i=0;i<n;i++)if(Math.abs(S.R[i]-S.tv)<=sd)inb++;
+  t+='covariance = stddev × stddev = '+fx(sd,k.dec)+' × '+fx(sd,k.dec)+' = '+String(Number((sd*sd).toPrecision(3))).replace('e-','e−')+'<br>';
+  if(n)t+='inside the orange band: '+inb+' of '+n+' readings = '+inb+' ÷ '+n+' × 100 = '+Math.round(inb/n*100)+' % (about 68 % for a bell curve)'}
+ else t+='<span class="warn">no noise: every reading equals the true value. Easy to read, but a real IMU never behaves like this.</span>';
+ $('say').innerHTML=t}
+function stop(){if(S.id){clearInterval(S.id);S.id=null}S.play=0;$('pl').textContent='Play'}
+$('pl').onclick=function(){if(S.play){stop();return}S.play=1;this.textContent='Pause';var last=Date.now(),acc=0;
+ S.id=setInterval(function(){var now=Date.now();acc+=(now-last)/1000*100;last=now;var k=Math.floor(acc);if(k>0){add(Math.min(k,50));acc-=k}draw()},50)};
+$('rs').onclick=function(){S.R=[];draw()};
+$('tv').oninput=function(){S.tv=+this.value;draw()};
+$('sd').oninput=function(){S.m=+this.value;draw()};
+$('off').onchange=draw;
+kindRow();add(120);draw();
+(function(){
+ var W=$('wrap'),B=$('fsb'),pseudo=false;
+ function isFs(){return !!(document.fullscreenElement||document.webkitFullscreenElement)}
+ function on(p){W.classList.add('fs');if(p){W.style.position='fixed';W.style.inset='0';W.style.zIndex='99';pseudo=true}B.textContent='Exit full screen'}
+ function off(){W.classList.remove('fs');W.style.position='';W.style.inset='';W.style.zIndex='';pseudo=false;B.textContent='Full screen'}
+ B.onclick=function(){
+  if(W.classList.contains('fs')){if(isFs())(document.exitFullscreen||document.webkitExitFullscreen).call(document);off();return}
+  var f=W.requestFullscreen||W.webkitRequestFullscreen;
+  if(f){try{var r=f.call(W);if(r&&r.then)r.then(function(){on(false)},function(){on(true)});else on(false)}catch(e){on(true)}}else on(true)};
+ document.addEventListener('fullscreenchange',function(){if(!isFs()&&!pseudo)off()});
+ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&pseudo)off()});
+})();
+})();
+</script>
+<script>
+(function(){function s(){parent.postMessage({taWidget:location.pathname,h:document.documentElement.scrollHeight},'*')}
+new ResizeObserver(s).observe(document.documentElement);addEventListener('load',s);setInterval(s,1500);})();
+</script></body></html>

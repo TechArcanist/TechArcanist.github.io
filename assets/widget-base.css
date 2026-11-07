@@ -1,0 +1,6 @@
+/* Base styles for embedded interactive guides (each runs isolated in an iframe). */
+html{overflow:hidden}
+body{margin:0;background:#0e1a2a;color:#e7edf6;font:16px/1.6 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+img{max-width:100%;height:auto}
+a{color:#38e1ff}
+*{box-sizing:border-box}

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Check the numbers on the screen</title>
+<style>
+html,body{margin:0;background:#0e182c;color:#e8eef7;font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+.w{padding:12px 14px;max-width:1100px;margin:0 auto;background:#0e182c}
+.w.fs{max-width:none;height:100vh;overflow:auto;padding:14px 20px}
+.top{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+h1{font-size:18px;margin:0 0 4px}.sub{color:#a9b8cc;font-size:14px;margin:0 0 10px}
+a{color:#7fc4ff}
+.card{background:#13213a;border:1px solid #23395c;border-radius:12px;padding:12px 14px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:6px 0}
+.btn{background:#1b2c4a;color:#e8eef7;border:1px solid #2b4366;border-radius:8px;padding:6px 12px;font:600 13px system-ui,sans-serif;cursor:pointer}
+.btn:hover,.btn.on{border-color:#ff8a3d}
+label.ck{display:flex;align-items:center;gap:6px;font-size:14px;color:#cfe0f5}
+select{background:#1b2c4a;color:#e8eef7;border:1px solid #2b4366;border-radius:8px;padding:6px 8px;font:14px system-ui,sans-serif;max-width:100%}
+table{border-collapse:collapse;width:100%;font:12.5px/1.5 ui-monospace,Consolas,monospace;margin-top:8px}
+th,td{border:1px solid #23395c;padding:4px 8px;text-align:right}th:first-child,td:first-child{text-align:left}
+th{background:#0f1b31;color:#a9b8cc;font-weight:600}
+.say{background:#0f1b31;border:1px solid #23395c;border-radius:10px;padding:8px 12px;margin-top:8px;font-size:13px;white-space:pre-wrap;font-family:ui-monospace,Consolas,monospace;color:#cfe0f5;line-height:1.6}
+.ok{color:#66e3b0}.bad{color:#ff6b6b}.warn{color:#ffd24a}.dim{color:#6b7f96}
+.tbl{overflow-x:auto}
+</style></head><body><div class="w" id="wrap">
+<div class="top"><div><h1>Check the numbers on the screen</h1>
+<p class="sub">Take two lines of the log from the screenshots. Use the first as "before", work out the second with lines 84 to 88, and compare it with what the node printed. Background: <a href="/documented-software-learnings/ros2/ros2-63/#sd-s5x" target="_blank" rel="noopener">chapter 63, Odometry, one reading at a time</a>.</p></div>
+<button class="btn" id="fsb" aria-label="Show full screen. Press Escape to exit.">Full screen</button></div>
+<div class="card">
+<div class="row"><label for="ts">Test:</label><select id="ts"></select></div>
+<div class="row" id="rd"></div>
+<div class="row"><label class="ck"><input type="checkbox" id="old"> use the old theta for x and y (as if line 86 came after line 88)</label><label class="ck"><input type="checkbox" id="swp"> cos and sin swapped</label></div>
+<div class="tbl"><table id="tb"></table></div>
+<div class="say" id="say"></div>
+</div></div>
+<script>
+(function(){
+function $(i){return document.getElementById(i)}
+// readings copied from the screenshots of the chapter (theta, x, y as printed by the node, six digits).
+// ds and dth are the step of one reading in that test: V x 0.01 s and omega x 0.01 s (the log shows theta changing by exactly 0.005 per line).
+var SETS=[
+ {n:'Drive and turn (V 0.5, ω 0.5), first screenshot',ds:0.005,dth:0.005,rows:[[-0.652450,1.817925,198.525],[-0.656549,1.815062,198.530],[-0.660634,1.812178,198.535],[-0.664705,1.809274,198.540]]},
+ {n:'Drive and turn (V 0.5, ω 0.5), second screenshot',ds:0.005,dth:0.005,rows:[[0.775213,1.511793,121.490],[0.772627,1.516072,121.495],[0.770019,1.520338,121.500],[0.767390,1.524591,121.505]]},
+ {n:'Turn left on the spot (ω 0.5)',ds:0,dth:0.005,rows:[[0,0,152.220],[0,0,152.225],[0,0,152.230],[0,0,152.235]]},
+ {n:'Turn right on the spot (ω -0.5)',ds:0,dth:-0.005,rows:[[0,0,209.335],[0,0,209.330],[0,0,209.325],[0,0,209.320]]}];
+var S={s:0,i:1,old:0,swp:0},TW=2*Math.PI;
+function g6(v){var s=v.toFixed(6);return /^-0\.0+$/.test(s)?s.slice(1):s}
+function ex(v){return Math.abs(v)<5e-13?'0':v.toExponential(1)}
+$('ts').innerHTML=SETS.map(function(s,i){return '<option value="'+i+'">'+s.n+'</option>'}).join('');
+$('ts').onchange=function(){S.s=+this.value;draw()};
+$('rd').innerHTML='<span class="dim">work out the line:</span>'+[1,2,3].map(function(i){return '<button class="btn" data-i="'+i+'">reading '+(i+1)+'</button>'}).join('');
+Array.prototype.forEach.call(document.querySelectorAll('#rd button'),function(b){b.onclick=function(){S.i=+b.dataset.i;draw()}});
+$('old').onchange=function(){S.old=this.checked?1:0;draw()};$('swp').onchange=function(){S.swp=this.checked?1:0;draw()};
+function draw(){
+  var D=SETS[S.s],a=D.rows[S.i-1],b=D.rows[S.i];
+  Array.prototype.forEach.call(document.querySelectorAll('#rd button'),function(q){q.classList.toggle('on',+q.dataset.i===S.i)});
+  var th=a[2]+D.dth,use=S.old?a[2]:th,c=Math.cos(use),s=Math.sin(use);if(S.swp){var t=c;c=s;s=t}
+  var x=a[0]+D.ds*c,y=a[1]+D.ds*s,dx=x-b[0],dy=y-b[1],dt=th-b[2];
+  var okx=Math.abs(dx)<1.5e-6,oky=Math.abs(dy)<1.5e-6,okt=Math.abs(dt)<1.5e-6;
+  function cell(v,ok){return '<td class="'+(ok?'ok':'bad')+'">'+ex(v)+'</td>'}
+  $('tb').innerHTML='<tr><th></th><th>before (screen)</th><th>worked out</th><th>after (screen)</th><th>difference</th></tr>'
+   +'<tr><td>theta</td><td>'+g6(a[2])+'</td><td>'+g6(th)+'</td><td>'+g6(b[2])+'</td>'+cell(dt,okt)+'</tr>'
+   +'<tr><td>x</td><td>'+g6(a[0])+'</td><td>'+g6(x)+'</td><td>'+g6(b[0])+'</td>'+cell(dx,okx)+'</tr>'
+   +'<tr><td>y</td><td>'+g6(a[1])+'</td><td>'+g6(y)+'</td><td>'+g6(b[1])+'</td>'+cell(dy,oky)+'</tr>';
+  var k=Math.floor(use/TW),r=use-k*TW,all=okx&&oky&&okt;
+  $('say').innerHTML='theta = '+g6(a[2])+' + '+g6(D.dth)+' = '+g6(th)+' rad'+'\nangle used for cos and sin = '+g6(use)+' rad'+(Math.abs(use)>TW?' = '+k+' × 2π + '+r.toFixed(4)+' rad':'')
+   +'\ncos = '+g6(Math.cos(use))+', sin = '+g6(Math.sin(use))+(S.swp?'  (swapped on purpose)':'')
+   +'\nx = '+g6(a[0])+' + '+g6(D.ds)+' × '+g6(c)+' = '+g6(x)+'\ny = '+g6(a[1])+' + '+g6(D.ds)+' × '+g6(s)+' = '+g6(y)
+   +'\n<span class="'+(all?'ok':'bad')+'">'+(all?'It matches the screen to the six digits printed (a difference of about 0.0000005 is only rounding).':S.old?'It does NOT match: with the old theta the numbers are off by about 0.00002. So the node uses the NEW theta: line 86 comes before lines 87 and 88.':S.swp?'It does NOT match: cos and sin are swapped.':'It does not match.')+'</span>'
+   +'\n<span class="dim">d_s = '+D.ds+' m and d_theta = '+D.dth+' rad per reading come from V × 0.01 s and ω × 0.01 s (my reading of the test: the log shows theta changing by exactly 0.005 per line).</span>'}
+draw();
+(function(){
+  var W=$('wrap'),B=$('fsb'),pseudo=false;
+  function isFs(){return !!(document.fullscreenElement||document.webkitFullscreenElement)}
+  function on(p){W.classList.add('fs');if(p){W.style.position='fixed';W.style.inset='0';W.style.zIndex='99';pseudo=true}B.textContent='Exit full screen'}
+  function off(){W.classList.remove('fs');W.style.position='';W.style.inset='';W.style.zIndex='';pseudo=false;B.textContent='Full screen'}
+  B.onclick=function(){
+    if(W.classList.contains('fs')){if(isFs())(document.exitFullscreen||document.webkitExitFullscreen).call(document);off();return}
+    var f=W.requestFullscreen||W.webkitRequestFullscreen;
+    if(f){try{var r=f.call(W);if(r&&r.then)r.then(function(){on(false)},function(){on(true)});else on(false)}catch(e){on(true)}}else on(true)};
+  document.addEventListener('fullscreenchange',function(){if(!isFs()&&!pseudo)off()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&pseudo)off()});
+})();
+})();
+</script>
+<script>
+(function(){function s(){parent.postMessage({taWidget:location.pathname,h:document.documentElement.scrollHeight},'*')}
+new ResizeObserver(s).observe(document.documentElement);addEventListener('load',s);setInterval(s,1500);})();
+</script></body></html>

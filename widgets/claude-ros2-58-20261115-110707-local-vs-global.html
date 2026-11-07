@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Local and global localization</title>
+<style>
+html,body{margin:0;background:#0e182c;color:#e8eef7;font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+.w{padding:16px;max-width:980px;margin:0 auto}
+h1{font-size:18px;margin:0 0 4px}.sub{color:#a9b8cc;font-size:14px;margin:0 0 12px}
+.card{background:#13213a;border:1px solid #23395c;border-radius:12px;padding:14px}
+.grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:14px}
+@media (max-width:760px){.grid{grid-template-columns:1fr}}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:6px 0}
+.btn{background:#1b2c4a;color:#e8eef7;border:1px solid #2b4366;border-radius:8px;padding:5px 10px;font:600 12.5px system-ui,sans-serif;cursor:pointer}
+.btn:hover,.btn.on{border-color:#ff8a3d}
+input[type=range]{width:100%;accent-color:#ff8a3d}
+svg{width:100%;height:auto;display:block}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:4px}
+td,th{border:1px solid #23395c;padding:5px 7px;text-align:left}
+th{background:#0f1b31;font-weight:700}
+.work{background:#060c18;border:1px solid #1f3352;border-radius:8px;padding:10px 12px;font:12.5px/1.75 ui-monospace,Consolas,monospace;color:#cfe0f5;white-space:pre-wrap;overflow-wrap:anywhere;margin-top:10px}
+.say{background:#0f1b31;border:1px solid #23395c;border-radius:10px;padding:10px 12px;margin-top:10px;font-size:14.5px}
+.or{color:#ff8a3d}.bl{color:#5ab4ff}.ye{color:#ffd24a}.dim{color:#6b7f96}
+</style></head><body><div class="w">
+<h1>Local and global localization: same drive, three starting points</h1>
+<p class="sub">The robot always drives the same way: 1.6 m forward, a quarter turn to the left, then 1.2 m forward. Pick where it starts in the map and press Play. Watch which numbers change with the start and which do not.</p>
+<div class="card">
+<div class="row"><span class="dim">start:</span><button class="btn" data-s="0">A: lower left</button><button class="btn" data-s="1">B: right side, facing up</button><button class="btn" data-s="2">C: upper left, facing down</button></div>
+<div class="row"><button class="btn" id="pl">Play</button><button class="btn" id="rs">Reset</button><span class="dim">time: <b id="tv"></b> s</span></div>
+<input type="range" id="t" min="0" max="10" step="0.1" value="0" aria-label="time">
+<div class="grid">
+<div><svg id="sv" viewBox="0 0 400 330" role="img" aria-label="The map with the start O and the robot R"></svg></div>
+<div>
+<table><tr><th></th><th>x (m)</th><th>y (m)</th><th>angle</th></tr>
+<tr><td class="bl">local: start → robot</td><td id="lx"></td><td id="ly"></td><td id="lt"></td></tr>
+<tr><td class="or">start in the map</td><td id="ox"></td><td id="oy"></td><td id="ot"></td></tr>
+<tr><td class="ye">global: map → robot</td><td id="gx"></td><td id="gy"></td><td id="gt"></td></tr></table>
+<div class="work" id="wk"></div>
+</div>
+</div>
+<div class="say" id="say"></div>
+</div>
+</div>
+<script>
+(function(){
+var STARTS=[{n:'A',x:0.6,y:0.6,t:0},{n:'B',x:3.0,y:0.8,t:90},{n:'C',x:0.6,y:3.3,t:-90}];
+var S={t:0,s:0,id:null};
+function $(i){return document.getElementById(i)}
+function r(v,d){var s=v.toFixed(d===undefined?2:d);if(/^-0\.?0*$/.test(s))s=s.slice(1);return s}
+function wrap(a){while(a>180)a-=360;while(a<=-180)a+=360;return a}
+function local(t){
+  if(t<=4)return {x:0.4*t,y:0,t:0,ph:'driving forward at 0.4 m/s'};
+  if(t<=6)return {x:1.6,y:0,t:45*(t-4),ph:'turning left on the spot at 45°/s'};
+  return {x:1.6,y:0.3*(t-6),t:90,ph:'driving forward at 0.3 m/s (now along the start’s y axis)'}}
+var X0=20,Y0=305,K=72;
+function P(x,y){return [X0+x*K,Y0-y*K]}
+function frame(x,y,t,lab,col,ox,oy){var p=P(x,y),c=Math.cos(t*Math.PI/180),s=Math.sin(t*Math.PI/180),L=26;
+  return '<line x1="'+p[0].toFixed(1)+'" y1="'+p[1].toFixed(1)+'" x2="'+(p[0]+c*L).toFixed(1)+'" y2="'+(p[1]-s*L).toFixed(1)+'" stroke="#ff6b6b" stroke-width="3"/>'+
+   '<line x1="'+p[0].toFixed(1)+'" y1="'+p[1].toFixed(1)+'" x2="'+(p[0]-s*L).toFixed(1)+'" y2="'+(p[1]-c*L).toFixed(1)+'" stroke="#66e3b0" stroke-width="3"/>'+
+   '<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="5" fill="'+col+'"/><text x="'+(p[0]+ox).toFixed(1)+'" y="'+(p[1]+oy).toFixed(1)+'" fill="'+col+'" font-size="14" font-weight="700">'+lab+'</text>'}
+function toMap(o,l){var c=Math.cos(o.t*Math.PI/180),s=Math.sin(o.t*Math.PI/180);return {x:o.x+c*l.x-s*l.y,y:o.y+s*l.x+c*l.y,t:wrap(o.t+l.t),c:c,s:s}}
+function draw(){
+  var o=STARTS[S.s],l=local(S.t),g=toMap(o,l);
+  $('tv').textContent=S.t.toFixed(1);$('t').value=S.t;
+  [].slice.call(document.querySelectorAll('[data-s]')).forEach(function(b){b.classList.toggle('on',+b.getAttribute('data-s')===S.s)});
+  var h='<rect x="2" y="2" width="396" height="326" rx="10" fill="#0b1626" stroke="#23395c"/>';
+  for(var i=0;i<=5;i++){var a=P(i,0);h+='<line x1="'+a[0]+'" y1="10" x2="'+a[0]+'" y2="320" stroke="#16263c"/>'}
+  for(var j=0;j<=4;j++){var b=P(0,j);h+='<line x1="10" y1="'+b[1]+'" x2="390" y2="'+b[1]+'" stroke="#16263c"/>'}
+  var wall='stroke="#c98a4b" stroke-width="5" stroke-linecap="round"';
+  h+='<rect x="'+P(0.1,4.1)[0]+'" y="'+P(0.1,4.1)[1]+'" width="'+(5*K)+'" height="'+(4*K)+'" fill="none" '+wall+'/>';
+  h+='<line x1="'+P(2.6,4.1)[0]+'" y1="'+P(2.6,4.1)[1]+'" x2="'+P(2.6,2.9)[0]+'" y2="'+P(2.6,2.9)[1]+'" '+wall+'/>';
+  h+='<line x1="'+P(3.8,1.9)[0]+'" y1="'+P(3.8,1.9)[1]+'" x2="'+P(5.1,1.9)[0]+'" y2="'+P(5.1,1.9)[1]+'" '+wall+'/>';
+  var pts=[];for(var k=0;k<=S.t+1e-9;k+=0.1){var q=toMap(o,local(Math.min(k,S.t)));var p=P(q.x,q.y);pts.push(p[0].toFixed(1)+','+p[1].toFixed(1))}
+  h+='<polyline fill="none" stroke="#ffd24a" stroke-width="2" stroke-dasharray="5 4" points="'+pts.join(' ')+'"/>';
+  h+=frame(0,0,0,'M','#e8eef7',6,-8)+frame(o.x,o.y,o.t,'O','#ff8a3d',8,18)+frame(g.x,g.y,g.t,'R','#5ab4ff',-24,-6);
+  h+='<text x="14" y="22" fill="#7f93ad" font-size="11">map seen from above, grid 1 m</text>';
+  $('sv').innerHTML=h;
+  $('lx').textContent=r(l.x);$('ly').textContent=r(l.y);$('lt').textContent=r(l.t,0)+'°';
+  $('ox').textContent=r(o.x,1);$('oy').textContent=r(o.y,1);$('ot').textContent=o.t+'°';
+  $('gx').textContent=r(g.x);$('gy').textContent=r(g.y);$('gt').textContent=r(g.t,0)+'°';
+  var c=r(g.c,3),s=r(g.s,3);
+  $('wk').innerHTML='<b>How the global row is worked out</b> <span class="dim">(start '+o.n+', angle of O = '+o.t+'°)</span>\n'+
+   '  cos('+o.t+'°) = '+c+'   sin('+o.t+'°) = '+s+'\n'+
+   '  x = x_O + cos × x_local − sin × y_local\n'+
+   '    = '+r(o.x,1)+' + '+c+' × '+r(l.x)+' − '+s+' × '+r(l.y)+' = <span class="ye">'+r(g.x)+'</span>\n'+
+   '  y = y_O + sin × x_local + cos × y_local\n'+
+   '    = '+r(o.y,1)+' + '+s+' × '+r(l.x)+' + '+c+' × '+r(l.y)+' = <span class="ye">'+r(g.y)+'</span>\n'+
+   '  angle = '+o.t+'° + '+r(l.t,0)+'° = <span class="ye">'+r(g.t,0)+'°</span>';
+  $('say').innerHTML='Now: '+l.ph+'. The <span class="bl">local</span> row is the same for A, B and C at the same time: it only describes the drive since the start. The <span class="ye">global</span> row changes with the start, because it also needs the <span class="or">start in the map</span>. Finding the local row is <b>local localization</b>; knowing the start in the map, and with it the global row, is <b>global localization</b>.'}
+function stop(){if(S.id){clearInterval(S.id);S.id=null}$('pl').textContent='Play'}
+$('pl').onclick=function(){if(S.id){stop();return}this.textContent='Pause';if(S.t>=10)S.t=0;var last=Date.now();
+  S.id=setInterval(function(){var n=Date.now();S.t=Math.min(10,S.t+(n-last)/1000);last=n;draw();if(S.t>=10)stop()},50)};
+$('rs').onclick=function(){stop();S.t=0;draw()};
+$('t').oninput=function(){S.t=+this.value;draw()};
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-s]');if(!b)return;S.s=+b.getAttribute('data-s');draw()});
+draw();
+})();
+</script>
+<script>
+(function(){function s(){parent.postMessage({taWidget:location.pathname,h:document.documentElement.scrollHeight},'*')}
+new ResizeObserver(s).observe(document.documentElement);addEventListener('load',s);setInterval(s,1500);})();
+</script></body></html>

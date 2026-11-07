@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="430" viewBox="0 0 960 430" font-family="system-ui,Segoe UI,Roboto,sans-serif">
+<rect width="960" height="430" rx="16" fill="#0e182c"/>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#ff8a3d"/></marker></defs>
+<g font-size="15" text-anchor="middle">
+<rect x="330" y="30" width="300" height="70" rx="10" fill="#13213a" stroke="#2b4366" stroke-width="2"/><text x="480" y="60" fill="#e8eef7">techarcanist.blog</text><text x="480" y="82" fill="#a9b8cc" font-size="12.5">Firebase Hosting: one HTML file</text>
+<rect x="330" y="150" width="300" height="70" rx="10" fill="#13213a" stroke="#ff8a3d" stroke-width="2"/><text x="480" y="180" fill="#e8eef7">The app in the browser</text><text x="480" y="202" fill="#a9b8cc" font-size="12.5">vanilla JavaScript, address router</text>
+<rect x="30" y="290" width="230" height="74" rx="10" fill="#13213a" stroke="#2b4366" stroke-width="2"/><text x="145" y="320" fill="#e8eef7">Firebase Auth</text><text x="145" y="342" fill="#a9b8cc" font-size="12.5">Google or email sign-in</text>
+<rect x="330" y="290" width="300" height="74" rx="10" fill="#13213a" stroke="#2b4366" stroke-width="2"/><text x="480" y="320" fill="#e8eef7">Cloud Firestore</text><text x="480" y="342" fill="#a9b8cc" font-size="12.5">projects, courses, profiles, private state</text>
+<rect x="700" y="290" width="230" height="74" rx="10" fill="#13213a" stroke="#2b4366" stroke-width="2"/><text x="815" y="320" fill="#e8eef7">Browser cache</text><text x="815" y="342" fill="#a9b8cc" font-size="12.5">list kept 5 min, offline copy</text>
+<rect x="700" y="150" width="230" height="70" rx="10" fill="#13213a" stroke="#2b4366" stroke-width="2"/><text x="815" y="180" fill="#e8eef7">YouTube, Wokwi, Tinkercad</text><text x="815" y="202" fill="#a9b8cc" font-size="12.5">embedded inside steps</text>
+<rect x="30" y="150" width="230" height="70" rx="10" fill="#13213a" stroke="#2b4366" stroke-width="2"/><text x="145" y="180" fill="#e8eef7">highlight.js</text><text x="145" y="202" fill="#a9b8cc" font-size="12.5">colours the code blocks</text>
+</g>
+<path d="M480 100V146" stroke="#ff8a3d" stroke-width="2.5" marker-end="url(#a)"/><text x="490" y="128" fill="#a9b8cc" font-size="12.5">loads once</text>
+<path d="M400 220L190 286" stroke="#ff8a3d" stroke-width="2.5" marker-end="url(#a)"/><text x="230" y="250" fill="#a9b8cc" font-size="12.5">sign in</text>
+<path d="M480 220V286" stroke="#ff8a3d" stroke-width="2.5" marker-end="url(#a)"/><text x="490" y="258" fill="#a9b8cc" font-size="12.5">reads and writes</text>
+<path d="M560 220L770 286" stroke="#ff8a3d" stroke-width="2.5" marker-end="url(#a)"/><text x="672" y="262" fill="#a9b8cc" font-size="12.5">fast repeat visits</text>
+<path d="M630 185H696" stroke="#ff8a3d" stroke-width="2.5" marker-end="url(#a)"/>
+<path d="M330 185H264" stroke="#ff8a3d" stroke-width="2.5" marker-end="url(#a)"/>
+<text x="30" y="405" fill="#a9b8cc" font-size="12.5">Firebase is the backend (accounts, database, hosting) and there is no custom server code. The Firestore rules decide who may change what.</text>
+</svg>

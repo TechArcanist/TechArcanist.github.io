@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>From theta to z and w</title>
+<style>
+html,body{margin:0;background:#0e182c;color:#e8eef7;font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+.w{padding:12px 14px;max-width:1100px;margin:0 auto;background:#0e182c}
+.w.fs{max-width:none;height:100vh;overflow:auto;padding:14px 20px}
+.top{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+h1{font-size:18px;margin:0 0 4px}.sub{color:#a9b8cc;font-size:14px;margin:0 0 10px}
+.card{background:#13213a;border:1px solid #23395c;border-radius:12px;padding:14px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:8px 0}
+.btn{background:#1b2c4a;color:#e8eef7;border:1px solid #2b4366;border-radius:8px;padding:6px 12px;font:600 13px system-ui,sans-serif;cursor:pointer}
+.btn:hover,.btn.on{border-color:#ff8a3d}
+label.ck{display:flex;align-items:center;gap:6px;font-size:14px;color:#cfe0f5}
+input[type=range]{width:100%;accent-color:#ff8a3d}
+svg{width:100%;height:auto;display:block;max-height:300px}
+.w.fs svg{max-height:55vh}
+.say{background:#0f1b31;border:1px solid #23395c;border-radius:10px;padding:10px 12px;margin-top:10px;font-size:14.5px}
+.say code{font:13px ui-monospace,Consolas,monospace;color:#ffd9b8}
+.ok{color:#66e3b0}.bad{color:#ff6b6b}.warn{color:#ffd24a}.dim{color:#8ea2bb}
+.links{margin-top:10px;font-size:13.5px;color:#a9b8cc}.links a{color:#ff8a3d}
+</style></head><body><div class="w" id="wrap">
+<div class="top"><div><h1>From theta to the two numbers z and w</h1>
+<p class="sub">Drag the slider: the orange arrow is the way the robot faces (theta). The message stores the turn as z = sin(theta ÷ 2) and w = cos(theta ÷ 2).</p></div>
+<button class="btn" id="fsb" aria-label="Show full screen. Press Escape to exit.">Full screen</button></div>
+<div class="card">
+<div class="row"><span class="dim">theta = <b id="tv"></b> rad (<b id="dv"></b> degrees)</span>
+<button class="btn" id="b0">0</button><button class="btn" id="b1">90 degrees</button><button class="btn" id="b2">180 degrees</button><button class="btn" id="b3">Real message from the notes</button></div>
+<input type="range" id="t" min="-3.1416" max="6.2832" step="0.0005" value="1" aria-label="theta in radians">
+<div class="row"><label class="ck"><input type="checkbox" id="brk"> break it: use theta instead of theta ÷ 2 (line 102 only works because the function halves the angle)</label></div>
+<svg id="sv" viewBox="0 0 660 250" role="img" aria-label="A circle with the heading arrow of the robot, and bars for the four orientation numbers x, y, z and w"></svg>
+<div class="say" id="say"></div>
+</div>
+<div class="links">Earlier chapters:
+<a href="/documented-software-learnings/ros2/ros-55/#sd-s6x" target="_blank" rel="noopener">chapter 55: the quaternion, four numbers for a turn</a>,
+<a href="/documented-software-learnings/ros2/ros2-56/#one-yaw-four-numbers" target="_blank" rel="noopener">chapter 56: one yaw, four numbers</a>.</div>
+</div>
+<script>
+(function(){
+var S={t:1,brk:0};
+function $(i){return document.getElementById(i)}
+function f(v,d){var s=v.toFixed(d===undefined?6:d);return /^-0\.0+$/.test(s)?s.slice(1):s}
+function draw(){
+  var t=S.t,b=S.brk,half=t/2,used=b?t:half,z=Math.sin(used),w=Math.cos(used);
+  var back=2*Math.atan2(z,w);                      // the turn that the message says
+  $('tv').textContent=f(t,4);$('dv').textContent=f(t*180/Math.PI,1);
+  var cx=140,cy=125,R=95,g='';
+  g+='<circle cx="'+cx+'" cy="'+cy+'" r="'+R+'" fill="#0f1b31" stroke="#2b4366"/>';
+  g+='<line x1="'+(cx-R-10)+'" y1="'+cy+'" x2="'+(cx+R+10)+'" y2="'+cy+'" stroke="#2b4366"/><line x1="'+cx+'" y1="'+(cy-R-10)+'" x2="'+cx+'" y2="'+(cy+R+10)+'" stroke="#2b4366"/>';
+  g+='<text x="'+(cx+R+12)+'" y="'+(cy+4)+'" fill="#8ea2bb" font-size="12">x</text><text x="'+(cx-4)+'" y="'+(cy-R-14)+'" fill="#8ea2bb" font-size="12">y</text>';
+  function pt(a,r){return [cx+r*Math.cos(a),cy-r*Math.sin(a)]}
+  var p=pt(t,R),q=pt(used,R*0.62);
+  g+='<line x1="'+cx+'" y1="'+cy+'" x2="'+q[0]+'" y2="'+q[1]+'" stroke="#5ab4ff" stroke-width="2.5" stroke-dasharray="6 4"/>';
+  g+='<line x1="'+cx+'" y1="'+cy+'" x2="'+p[0]+'" y2="'+p[1]+'" stroke="#ff8a3d" stroke-width="4"/>';
+  g+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="6" fill="#ff8a3d"/>';
+  g+='<text x="20" y="236" fill="#ff8a3d" font-size="13">orange: theta (the way the robot faces)</text><text x="20" y="218" fill="#5ab4ff" font-size="13">blue dashed: the angle that goes into sin and cos</text>';
+  var rows=[['x',0],['y',0],['z',z],['w',w]],bx=400,bw=210;
+  g+='<text x="'+bx+'" y="22" fill="#e8eef7" font-size="13" font-weight="600">orientation in the message</text>';
+  rows.forEach(function(r,i){var y=48+i*46,len=r[1]*bw/2;
+    g+='<text x="'+(bx-24)+'" y="'+(y+14)+'" fill="#cfe0f5" font-size="14">'+r[0]+'</text>';
+    g+='<rect x="'+bx+'" y="'+y+'" width="'+bw+'" height="22" rx="4" fill="#0f1b31" stroke="#2b4366"/>';
+    g+='<line x1="'+(bx+bw/2)+'" y1="'+(y-3)+'" x2="'+(bx+bw/2)+'" y2="'+(y+25)+'" stroke="#2b4366"/>';
+    g+='<rect x="'+(len>=0?bx+bw/2:bx+bw/2+len)+'" y="'+(y+3)+'" width="'+Math.abs(len)+'" height="16" rx="3" fill="'+(i>1?'#ff8a3d':'#3a4f70')+'"/>';
+    g+='<text x="'+(bx+bw+8)+'" y="'+(y+16)+'" fill="#e8eef7" font-size="13">'+f(r[1])+'</text>'});
+  $('sv').innerHTML=g;
+  var h=f(half,6),mk=function(x){return '<code>'+x+'</code>'};
+  var work='Half the angle = theta ÷ 2 = '+f(t,4)+' ÷ 2 = '+h+' rad.<br>z = sin('+h+') = '+f(Math.sin(half))+'<br>w = cos('+h+') = '+f(Math.cos(half))+'<br>message orientation = (0, 0, '+f(Math.sin(half))+', '+f(Math.cos(half))+')';
+  if(!b){$('say').innerHTML='<span class="ok">Working.</span> '+work+'<br><span class="dim">Check: z × z + w × w = '+f(z*z+w*w)+', always 1 for a turn. Read back: 2 × atan2(z, w) = '+f(back,4)+' rad, the same turn as theta (a full turn more or less looks the same to the message).</span>'}
+  else{$('say').innerHTML='<span class="bad">Broken.</span> z = sin(theta) = sin('+f(t,4)+') = '+f(z)+', w = cos(theta) = '+f(w)+'. Reading the message back gives 2 × atan2(z, w) = '+f(back,4)+' rad, but the robot really turned '+f(t,4)+' rad. The message says the robot turned twice as far as it did, and no error is shown.'}}
+$('t').oninput=function(){S.t=+this.value;draw()};
+function set(v){S.t=v;$('t').value=v;draw()}
+$('b0').onclick=function(){set(0)};$('b1').onclick=function(){set(Math.PI/2)};$('b2').onclick=function(){set(Math.PI)};
+$('b3').onclick=function(){set(2*Math.atan2(0.9962109992506045,0.08696921853225967))};
+$('brk').onchange=function(){S.brk=this.checked?1:0;draw()};
+draw();
+(function(){
+  var W=$('wrap'),B=$('fsb'),pseudo=false;
+  function isFs(){return !!(document.fullscreenElement||document.webkitFullscreenElement)}
+  function on(p){W.classList.add('fs');if(p){W.style.position='fixed';W.style.inset='0';W.style.zIndex='99';pseudo=true}B.textContent='Exit full screen'}
+  function off(){W.classList.remove('fs');W.style.position='';W.style.inset='';W.style.zIndex='';pseudo=false;B.textContent='Full screen'}
+  B.onclick=function(){
+    if(W.classList.contains('fs')){if(isFs())(document.exitFullscreen||document.webkitExitFullscreen).call(document);off();return}
+    var fn=W.requestFullscreen||W.webkitRequestFullscreen;
+    if(fn){try{var r=fn.call(W);if(r&&r.then)r.then(function(){on(false)},function(){on(true)});else on(false)}catch(e){on(true)}}else on(true)};
+  document.addEventListener('fullscreenchange',function(){if(!isFs()&&!pseudo)off()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&pseudo)off()});
+})();
+})();
+</script>
+<script>
+(function(){function s(){parent.postMessage({taWidget:location.pathname,h:document.documentElement.scrollHeight},'*')}
+new ResizeObserver(s).observe(document.documentElement);addEventListener('load',s);setInterval(s,1500);})();
+</script></body></html>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="470" viewBox="0 0 960 470" font-family="system-ui,Segoe UI,Roboto,sans-serif">
+<rect width="960" height="470" rx="16" fill="#0e182c"/>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#ff8a3d"/></marker></defs>
+<g font-size="15" text-anchor="middle">
+<rect x="30" y="40" width="250" height="84" rx="10" fill="#13213a" stroke="#2b4366" stroke-width="2"/><text x="155" y="72" fill="#e8eef7">Content files</text><text x="155" y="94" fill="#a9b8cc" font-size="12.5">item.json + body.html per page</text><text x="155" y="112" fill="#a9b8cc" font-size="12.5">site.json, uploads, widgets</text>
+<rect x="355" y="40" width="250" height="84" rx="10" fill="#13213a" stroke="#ff8a3d" stroke-width="2"/><text x="480" y="72" fill="#e8eef7">Local admin</text><text x="480" y="94" fill="#a9b8cc" font-size="12.5">Python server on 127.0.0.1</text><text x="480" y="112" fill="#a9b8cc" font-size="12.5">editor, order, drafts, preview</text>
+<rect x="680" y="40" width="250" height="84" rx="10" fill="#13213a" stroke="#2b4366" stroke-width="2"/><text x="805" y="72" fill="#e8eef7">Claude exports</text><text x="805" y="94" fill="#a9b8cc" font-size="12.5">brief + files + lesson kit</text><text x="805" y="112" fill="#a9b8cc" font-size="12.5">result reviewed, then applied</text>
+<rect x="355" y="200" width="250" height="84" rx="10" fill="#13213a" stroke="#2b4366" stroke-width="2"/><text x="480" y="232" fill="#e8eef7">Build</text><text x="480" y="254" fill="#a9b8cc" font-size="12.5">tools/build.py + Jinja templates</text><text x="480" y="272" fill="#a9b8cc" font-size="12.5">plain HTML, CSS and JS</text>
+<rect x="355" y="360" width="250" height="84" rx="10" fill="#13213a" stroke="#2b4366" stroke-width="2"/><text x="480" y="392" fill="#e8eef7">GitHub Pages</text><text x="480" y="414" fill="#a9b8cc" font-size="12.5">techarcanist.com</text><text x="480" y="432" fill="#a9b8cc" font-size="12.5">preview first, then publish</text>
+<rect x="680" y="360" width="250" height="84" rx="10" fill="#13213a" stroke="#2b4366" stroke-width="2"/><text x="805" y="392" fill="#e8eef7">YouTube (unlisted)</text><text x="805" y="414" fill="#a9b8cc" font-size="12.5">large videos moved out</text><text x="805" y="432" fill="#a9b8cc" font-size="12.5">to keep the site small</text>
+<rect x="30" y="360" width="250" height="84" rx="10" fill="#13213a" stroke="#2b4366" stroke-width="2"/><text x="155" y="392" fill="#e8eef7">Private backup repo</text><text x="155" y="414" fill="#a9b8cc" font-size="12.5">copy of the content files</text><text x="155" y="432" fill="#a9b8cc" font-size="12.5">and every earlier version</text>
+</g>
+<g stroke="#ff8a3d" stroke-width="2" fill="none" marker-end="url(#a)">
+<path d="M355 82H282"/><path d="M605 82H678"/><path d="M480 124V198"/><path d="M480 284V358"/><path d="M155 124V358"/><path d="M605 402H678"/>
+</g>
+<g font-size="12" fill="#a9b8cc" text-anchor="middle">
+<text x="318" y="72">saves</text><text x="642" y="72">sends</text><text x="520" y="166">builds</text><text x="525" y="326">publishes</text><text x="190" y="246">backup</text><text x="642" y="392">embeds</text>
+</g>
+</svg>

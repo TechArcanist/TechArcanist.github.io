@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" role="img" aria-labelledby="t d" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
+  <title id="t">Frame tree: bumperbot_base to bumperbot_top</title>
+  <desc id="d">bumperbot_base is the parent frame. bumperbot_top is its child, fixed 0.3 along the Z axis with no rotation.</desc>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#38bdf8"/>
+    </marker>
+  </defs>
+  <rect width="720" height="340" rx="14" fill="#0e182c"/>
+
+  <!-- Left: frame tree -->
+  <text x="40" y="38" fill="#94a1c2" font-size="13" font-weight="600" letter-spacing="1">FRAME TREE</text>
+  <rect x="50" y="60" width="210" height="52" rx="10" fill="#131b33" stroke="#27335a" stroke-width="1.5"/>
+  <text x="155" y="82" fill="#e6ebf8" font-size="16" font-weight="700" text-anchor="middle" font-family="ui-monospace, Menlo, Consolas, monospace">bumperbot_base</text>
+  <text x="155" y="101" fill="#94a1c2" font-size="12" text-anchor="middle">parent (header.frame_id)</text>
+
+  <line x1="155" y1="112" x2="155" y2="196" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#ah)"/>
+  <text x="170" y="146" fill="#5eead4" font-size="13" font-weight="600">static transform</text>
+  <text x="170" y="164" fill="#94a1c2" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace">translation z = 0.3</text>
+  <text x="170" y="181" fill="#94a1c2" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace">rotation w = 1.0</text>
+
+  <rect x="50" y="200" width="210" height="52" rx="10" fill="#131b33" stroke="#38bdf8" stroke-width="1.5"/>
+  <text x="155" y="222" fill="#e6ebf8" font-size="16" font-weight="700" text-anchor="middle" font-family="ui-monospace, Menlo, Consolas, monospace">bumperbot_top</text>
+  <text x="155" y="241" fill="#94a1c2" font-size="12" text-anchor="middle">child (child_frame_id)</text>
+
+  <text x="50" y="296" fill="#94a1c2" font-size="12">Published once by the node on /tf_static.</text>
+  <text x="50" y="314" fill="#94a1c2" font-size="12">It never changes while the node runs.</text>
+
+  <!-- Divider -->
+  <line x1="350" y1="40" x2="350" y2="310" stroke="#27335a" stroke-dasharray="4 6"/>
+
+  <!-- Right: axes sketch -->
+  <text x="390" y="38" fill="#94a1c2" font-size="13" font-weight="600" letter-spacing="1">WHAT YOU SEE IN RVIZ2</text>
+
+  <!-- base axes at (520,265) -->
+  <line x1="520" y1="265" x2="520" y2="205" stroke="#60a5fa" stroke-width="4" stroke-linecap="round"/>
+  <line x1="520" y1="265" x2="470" y2="288" stroke="#f87171" stroke-width="4" stroke-linecap="round"/>
+  <line x1="520" y1="265" x2="572" y2="288" stroke="#4ade80" stroke-width="4" stroke-linecap="round"/>
+  <text x="590" y="274" fill="#e6ebf8" font-size="13" font-family="ui-monospace, Menlo, Consolas, monospace">bumperbot_base</text>
+
+  <!-- offset link -->
+  <line x1="520" y1="203" x2="520" y2="130" stroke="#facc15" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="532" y="172" fill="#facc15" font-size="13" font-family="ui-monospace, Menlo, Consolas, monospace">0.3 along Z</text>
+
+  <!-- top axes at (520,128) -->
+  <line x1="520" y1="128" x2="520" y2="68" stroke="#60a5fa" stroke-width="4" stroke-linecap="round"/>
+  <line x1="520" y1="128" x2="470" y2="151" stroke="#f87171" stroke-width="4" stroke-linecap="round"/>
+  <line x1="520" y1="128" x2="572" y2="151" stroke="#4ade80" stroke-width="4" stroke-linecap="round"/>
+  <text x="590" y="137" fill="#e6ebf8" font-size="13" font-family="ui-monospace, Menlo, Consolas, monospace">bumperbot_top</text>
+
+  <!-- legend -->
+  <g font-size="12" fill="#94a1c2">
+    <rect x="390" y="296" width="12" height="4" fill="#f87171"/><text x="408" y="301">X</text>
+    <rect x="432" y="296" width="12" height="4" fill="#4ade80"/><text x="450" y="301">Y</text>
+    <rect x="474" y="296" width="12" height="4" fill="#60a5fa"/><text x="492" y="301">Z</text>
+    <text x="520" y="301">Same orientation, shifted up</text>
+  </g>
+</svg>

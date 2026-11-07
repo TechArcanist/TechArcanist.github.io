@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>odom and base_footprint</title>
+<style>
+html,body{margin:0;background:#0e182c;color:#e8eef7;font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+.w{padding:12px 14px;max-width:1100px;margin:0 auto;background:#0e182c}
+.w.fs{max-width:none;height:100vh;overflow:auto;padding:14px 20px}
+.top{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+h1{font-size:18px;margin:0 0 4px}.sub{color:#a9b8cc;font-size:14px;margin:0 0 10px}
+.card{background:#13213a;border:1px solid #23395c;border-radius:12px;padding:14px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:8px 0}
+.btn{background:#1b2c4a;color:#e8eef7;border:1px solid #2b4366;border-radius:8px;padding:6px 12px;font:600 13px system-ui,sans-serif;cursor:pointer}
+.btn:hover,.btn.on{border-color:#ff8a3d}
+label.ck{display:flex;align-items:center;gap:6px;font-size:14px;color:#cfe0f5}
+input[type=range]{width:100%;accent-color:#ff8a3d}
+svg{width:100%;height:auto;display:block;max-height:280px}
+.w.fs svg{max-height:55vh}
+.say{background:#0f1b31;border:1px solid #23395c;border-radius:10px;padding:10px 12px;margin-top:10px;font-size:14.5px}
+.ok{color:#66e3b0}.bad{color:#ff6b6b}.warn{color:#ffd24a}.dim{color:#8ea2bb}
+.links{margin-top:10px;font-size:13.5px;color:#a9b8cc}.links a{color:#ff8a3d}
+</style></head><body><div class="w" id="wrap">
+<div class="top"><div><h1>The frame base_footprint moves, the frame odom stays</h1>
+<p class="sub">Like RViz with the fixed frame odom: the node sends x, y and the rotation q at every reading, and the frame of the robot follows them.</p></div>
+<button class="btn" id="fsb" aria-label="Show full screen. Press Escape to exit.">Full screen</button></div>
+<div class="card">
+<div class="row"><button class="btn on" id="c0">Turn on the spot (V 0, omega 0.5)</button><button class="btn" id="c1">Drive and turn (V 0.5, omega 0.5)</button><button class="btn" id="c2">Drive straight (V 0.5, omega 0)</button>
+<button class="btn" id="pl">Play</button><span class="dim">time: <b id="tv"></b> s</span></div>
+<input type="range" id="t" min="0" max="12" step="0.05" value="4" aria-label="time in seconds">
+<div class="row"><label class="ck"><input type="checkbox" id="b1"> break it: lines 122 to 125 deleted (no rotation)</label><label class="ck"><input type="checkbox" id="b2"> break it: RViz fixed frame left at map</label></div>
+<svg id="sv" viewBox="0 0 660 260" role="img" aria-label="Top view: the fixed axes of the frame odom and the moving axes of the frame base_footprint with the path it has driven"></svg>
+<div class="say" id="say"></div>
+</div>
+<div class="links">Earlier chapters:
+<a href="/documented-software-learnings/ros2/ros2-65/#theta-becomes-z-and-w" target="_blank" rel="noopener">chapter 65: theta becomes z and w</a>,
+<a href="/documented-software-learnings/ros2/ros2-50/#how-the-code-works" target="_blank" rel="noopener">chapter 50: moving transforms</a>,
+<a href="/documented-software-learnings/ros2/ros2-49/#set-the-fixed-frame" target="_blank" rel="noopener">chapter 49: set the fixed frame</a>.</div>
+</div>
+<script>
+(function(){
+var CMD=[[0,0.5],[0.5,0.5],[0.5,0]],S={c:0,t:4,play:0,id:null,b1:0,b2:0};
+function $(i){return document.getElementById(i)}
+function f(v,d){var s=v.toFixed(d===undefined?4:d);return /^-0\.0+$/.test(s)?s.slice(1):s}
+function pose(c,t){var V=CMD[c][0],W=CMD[c][1],th=W*t,x,y;
+  if(W===0){x=V*t;y=0}else{x=V/W*Math.sin(th);y=V/W*(1-Math.cos(th))}return {x:x,y:y,th:th}}
+var OX=70,OY=215,K=70;
+function P(x,y){return [OX+K*x,OY-K*y]}
+function axes(x,y,a,len,c1,c2,lab){var p=P(x,y),e=[p[0]+len*Math.cos(a),p[1]-len*Math.sin(a)],n=[p[0]-len*Math.sin(a),p[1]-len*Math.cos(a)];
+  return '<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+e[0]+'" y2="'+e[1]+'" stroke="'+c1+'" stroke-width="3.5"/><line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+n[0]+'" y2="'+n[1]+'" stroke="'+c2+'" stroke-width="3.5"/>'
+   +'<circle cx="'+p[0]+'" cy="'+p[1]+'" r="4" fill="#e8eef7"/><text x="'+(p[0]+8)+'" y="'+(p[1]+(lab==='odom'?18:-8))+'" fill="#e8eef7" font-size="13">'+lab+'</text>'}
+function draw(){
+  var c=S.c,t=S.t,r=pose(c,t),th=S.b1?0:r.th,hz=Math.sin(th/2),hw=Math.cos(th/2),g='';
+  $('tv').textContent=f(t,2);
+  g+='<rect x="0" y="0" width="660" height="260" fill="#0b1424"/>';
+  for(var i=0;i<=9;i++){var p=P(i-0.0,0);g+='<line x1="'+p[0]+'" y1="10" x2="'+p[0]+'" y2="250" stroke="#17294a"/>'}
+  for(var j=-1;j<=3;j++){var q=P(0,j);g+='<line x1="0" y1="'+q[1]+'" x2="660" y2="'+q[1]+'" stroke="#17294a"/>'}
+  var d='';for(var s=0;s<=t+1e-9;s+=0.1){var pp=pose(c,s),a=P(pp.x,pp.y);d+=(d?' L':'M')+a[0]+' '+a[1]}
+  g+='<path d="'+d+'" fill="none" stroke="#5ab4ff" stroke-width="2" stroke-dasharray="5 4"/>';
+  if(S.b2){g+='<text x="20" y="40" fill="#ff6b6b" font-size="15">Global Status: Error. Fixed Frame: Frame [map] does not exist</text><text x="20" y="62" fill="#a9b8cc" font-size="13">(wording approximate) The frames odom and base_footprint are not connected to map, so RViz draws none of them.</text>'}
+  else{g+=axes(0,0,0,38,'#ff6b6b','#66e3b0','odom')+axes(r.x,r.y,th,38,'#ff6b6b','#66e3b0','base_footprint')}
+  g+='<text x="20" y="246" fill="#8ea2bb" font-size="12">red: x axis, green: y axis, blue dashed: the path so far. One square = 1 m.</text>';
+  $('sv').innerHTML=g;
+  var V=CMD[c][0],W=CMD[c][1];
+  var work='Pose after '+f(t,2)+' s with V = '+V+' m/s and omega = '+W+' rad/s: theta = omega × t = '+W+' × '+f(t,2)+' = '+f(r.th)+' rad'+(W===0?'; x = V × t = '+V+' × '+f(t,2)+' = '+f(r.x)+' m, y = 0.':'; x = V ÷ omega × sin(theta) = '+f(r.x)+' m, y = V ÷ omega × (1 minus cos(theta)) = '+f(r.y)+' m.');
+  var msg='transform: translation (x '+f(r.x)+', y '+f(r.y)+', z 0), rotation (0, 0, z = sin('+f(th/2)+') = '+f(hz,6)+', w = cos('+f(th/2)+') = '+f(hw,6)+')';
+  if(S.b2)$('say').innerHTML='<span class="bad">Broken.</span> The node is fine and sends '+msg+', but RViz keeps map as the fixed frame, so nothing is drawn. Set Global Options, Fixed Frame to odom.';
+  else if(S.b1)$('say').innerHTML='<span class="warn">Broken, no error.</span> '+work+'<br>The rotation stays (0, 0, 0, 1) instead of z = '+f(Math.sin(r.th/2),6)+', w = '+f(Math.cos(r.th/2),6)+': the frame follows the path but its axes never turn. (If the rotation is left as an empty message, all zeros, tf2 may complain instead; as far as I know it is not a valid rotation.)';
+  else $('say').innerHTML='<span class="ok">Working.</span> '+work+'<br>The node sends '+msg+'. The Odometry message of chapter 65 carries the same numbers.'}
+function sel(c){S.c=c;['c0','c1','c2'].forEach(function(i,k){$(i).classList.toggle('on',k===c)});draw()}
+$('c0').onclick=function(){sel(0)};$('c1').onclick=function(){sel(1)};$('c2').onclick=function(){sel(2)};
+$('t').oninput=function(){S.t=+this.value;draw()};
+$('b1').onchange=function(){S.b1=this.checked?1:0;draw()};$('b2').onchange=function(){S.b2=this.checked?1:0;draw()};
+function stop(){if(S.id){clearInterval(S.id);S.id=null}S.play=0;$('pl').textContent='Play'}
+$('pl').onclick=function(){if(S.play){stop();return}S.play=1;this.textContent='Pause';if(S.t>=12)S.t=0;var last=Date.now();
+  S.id=setInterval(function(){var n=Date.now();S.t=Math.min(12,S.t+(n-last)/1000*1.5);last=n;$('t').value=S.t;draw();if(S.t>=12)stop()},50)};
+draw();
+(function(){
+  var W=$('wrap'),B=$('fsb'),pseudo=false;
+  function isFs(){return !!(document.fullscreenElement||document.webkitFullscreenElement)}
+  function on(p){W.classList.add('fs');if(p){W.style.position='fixed';W.style.inset='0';W.style.zIndex='99';pseudo=true}B.textContent='Exit full screen'}
+  function off(){W.classList.remove('fs');W.style.position='';W.style.inset='';W.style.zIndex='';pseudo=false;B.textContent='Full screen'}
+  B.onclick=function(){
+    if(W.classList.contains('fs')){if(isFs())(document.exitFullscreen||document.webkitExitFullscreen).call(document);off();return}
+    var fn=W.requestFullscreen||W.webkitRequestFullscreen;
+    if(fn){try{var r=fn.call(W);if(r&&r.then)r.then(function(){on(false)},function(){on(true)});else on(false)}catch(e){on(true)}}else on(true)};
+  document.addEventListener('fullscreenchange',function(){if(!isFs()&&!pseudo)off()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&pseudo)off()});
+})();
+})();
+</script>
+<script>
+(function(){function s(){parent.postMessage({taWidget:location.pathname,h:document.documentElement.scrollHeight},'*')}
+new ResizeObserver(s).observe(document.documentElement);addEventListener('load',s);setInterval(s,1500);})();
+</script></body></html>
