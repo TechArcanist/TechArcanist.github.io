@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Translation Vector Between Two Turtles: Python | ROS 2 | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="Introduction In the previous chapter, we used Turtlesim to explore ROS 2 nodes, topics, services, velocity commands, and the pose of a turtle in a 2D…">
+<link rel="canonical" href="https://techarcanist.com/documented-software-learnings/ros2/ros_ah/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="Translation Vector Between Two Turtles: Python | ROS 2">
+<meta property="og:description" content="Introduction In the previous chapter, we used Turtlesim to explore ROS 2 nodes, topics, services, velocity commands, and the pose of a turtle in a 2D…">
+<meta property="og:url" content="https://techarcanist.com/documented-software-learnings/ros2/ros_ah/">
+<meta property="og:image" content="https://techarcanist.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=a6e775a3ba">
+<link rel="stylesheet" href="/assets/home.css?v=a6e775a3ba">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/" aria-current="page">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap reader wide">
+  <aside class="rd-nav" id="rd-nav">
+    <a class="rd-series" href="/documented-software-learnings/ros2/"><span class="label">Series</span>ROS 2</a>
+    <ol>
+      <li><a href="/documented-software-learnings/ros2/ros2_a/"><span class="mono">01</span>Installing Ubuntu Desktop (Dual Boot with Windows)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_b/"><span class="mono">02</span>ROS 2 Jazzy Installation on Ubuntu (Step-by-Step)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_c/"><span class="mono">03</span>Development Environment Setup for ROS 2 Jazzy on Ubuntu (With Clear Explanations)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_d/"><span class="mono">04</span>ROS 2 Fundamentals: Architecture, Communication, Packages, and Workspaces</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_e/"><span class="mono">05</span>ROS 2 Workspace &amp; Package Creation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_f/"><span class="mono">06</span>ROS 2 Python Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_g/"><span class="mono">07</span>ROS 2 C++ Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_h/"><span class="mono">08</span>ROS 2 Python Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_i/"><span class="mono">09</span>ROS 2 C++ Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_j/"><span class="mono">10</span>Robot Locomotion: Introduction</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_k/"><span class="mono">11</span>Wheeled Locomotion Architectures</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_l/"><span class="mono">12</span>Rolling Friction &amp; Wheeled Locomotion Efficiency</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_m/"><span class="mono">13</span>Introduction to Robot Simulation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_n/"><span class="mono">14</span>URDF</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_o/"><span class="mono">15</span>Create a URDF Model</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_p/"><span class="mono">16</span>Rviz</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_q/"><span class="mono">17</span>Node Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_r/"><span class="mono">18</span>Python Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_s/"><span class="mono">19</span>C++ Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_t/"><span class="mono">20</span>ROS 2 Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-u/"><span class="mono">21</span>Visualize The Robot In RVIZ2</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-v/"><span class="mono">22</span>Launch Files</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-w/"><span class="mono">23</span>ROS 2 Launch Files: Visualizing the Robot with One Command</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-x/"><span class="mono">24</span>Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-y/"><span class="mono">25</span>Simulating the Robot in Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-z/"><span class="mono">26</span>ROS 2 Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-aa/"><span class="mono">27</span>Control Types</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ab/"><span class="mono">28</span>ROS 2 Control: Prepare the Robot for Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ac/"><span class="mono">29</span>Understanding ROS 2 Control | Explanation of Chapter 28</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ad/"><span class="mono">30</span>ROS 2 Control: Moving the BumperBot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ae/"><span class="mono">31</span>Robot Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-af/"><span class="mono">32</span>Pose of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_af/"><span class="mono">33</span>Translation Vector</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ag/"><span class="mono">34</span>Introduction to Turtlesim</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ah/" aria-current="page"><span class="mono">35</span>Translation Vector Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ai/"><span class="mono">36</span>Translation Vector Between Two Turtles: CPP</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_aj/"><span class="mono">37</span>Rotation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ak/"><span class="mono">38</span>Rotation Matrix Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_al/"><span class="mono">39</span>Transformation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_am/"><span class="mono">40</span>Differential Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-41/"><span class="mono">41</span>Velocity of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-42/"><span class="mono">42</span>Simple Speed Controller: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-43/"><span class="mono">43</span>Launch the Simple Speed Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-44/"><span class="mono">44</span>Teleoperating the BumperBot with a Joystick</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-45/"><span class="mono">45</span>ROS 2 Diff Drive Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-46/"><span class="mono">46</span>TF 2 Library</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-47/"><span class="mono">47</span>Operation With Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-48/"><span class="mono">48</span>Static &amp; Dynamic Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-49/"><span class="mono">49</span>Simple TF2 Static Broadcaster</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-50/"><span class="mono">50</span>Simple TF2 Broadcaster: Static and Dynamic Transforms</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-51/"><span class="mono">51</span>ROS 2 Services</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-52/"><span class="mono">52</span>Service Server in Python: AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-53/"><span class="mono">53</span>Service Client in Python: Calling AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-54/"><span class="mono">54</span>Simple TF2 Listener in Python: a get_transform Service</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-55/"><span class="mono">55</span>Euler Angles and Quaternions</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-56/"><span class="mono">56</span>Euler to Quaternion: Turning the Robot with tf_transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-57/"><span class="mono">57</span>tf2 Tools: view_frames and tf2_echo</a></li>
+    </ol>
+  </aside>
+  <article class="rd-main">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/documented-software-learnings/">Library</a><span>/</span><a href="/documented-software-learnings/ros2/">ROS 2</a><span>/</span><span>35</span></nav>
+    <button class="btn btn-sm btn-line rd-tg" type="button" id="rd-tg">All chapters</button>
+<p class="sh-label mono"><span>35</span>Chapter 35 of 57</p>    <h1>Translation Vector Between Two Turtles: Python</h1>
+<div class="rd-prog" aria-hidden="true"><i style="width:61.4%"></i></div>    <div class="prose"><div class="col">
+<h2 id="introduction">Introduction</h2>
+<p>In the previous chapter, we used Turtlesim to explore ROS 2 nodes, topics, services, velocity commands, and the pose of a turtle in a 2D environment.</p>
+<p>Now we will apply what we have learned about <strong>translation vectors</strong>.</p>
+<p>We will create a Python ROS 2 node that subscribes to the pose of two turtles and calculates the translation vector from <code>turtle1</code> to <code>turtle2</code>.</p>
+<p>The goal is to determine how far the second turtle is from the first turtle along the X and Y axes.</p>
+<p>By the end of this chapter, we will have a node that continuously calculates the translation vector and displays its values in the terminal.</p>
+<h2 id="open-turtlesim"><code>Open Turtlesim</code></h2>
+<p>First, we need to start the Turtlesim simulator.</p>
+<p>Open a terminal and run:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">ros2 run turtlesim turtlesim_node</span></code></pre></div>
+<figure class="img"><img alt="" decoding="async" height="570" loading="lazy" src="/uploads/wp/2026/10/image-15.png" width="1715"></figure>
+<p>Place your terminal screenshot here.</p>
+<p>The Turtlesim window will open with the default turtle, named <code>turtle1</code>.</p>
+<h2 id="spawn-another-turtle">Spawn Another Turtle</h2>
+<p>To calculate the translation vector between two turtles, we first need two turtles in the same environment.</p>
+<p>We can create another turtle using the ROS 2 <code>/spawn</code> service.</p>
+<p>Run and press tab twice and it will autocomplete</p>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln">ros2 service call /spawn turtlesim/srv/Spawn "</span></code></pre></div>
+<figure class="img"><img alt="" decoding="async" height="442" loading="lazy" src="/uploads/wp/2026/10/image-16.png" width="1705"></figure>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln">ros2 service call /spawn turtlesim/srv/Spawn "x: 1.0</span>
+<span class="ln">y: 4.0</span>
+<span class="ln">theta: 0.0</span>
+<span class="ln">name: 'turtle2'"</span></code></pre></div>
+<p>After the service call succeeds, you should see <code>turtle2</code> at approximately the coordinates <code>(1, 4)</code>.</p>
+<h2 id="list-the-available-topics">List the Available Topics</h2>
+<p>Now that we have two turtles, let’s inspect the topics available in ROS 2.</p>
+<p>Open another terminal and run:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">ros2 topic list</span></code></pre></div>
+<figure class="img"><img alt="" decoding="async" height="661" loading="lazy" src="/uploads/wp/2026/10/image-17.png" width="1688"></figure>
+<p>You should see topics associated with both turtles, including:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">/turtle1/cmd_vel</span>
+<span class="ln">/turtle1/color_sensor</span>
+<span class="ln">/turtle1/pose</span>
+<span class="ln">/turtle2/cmd_vel</span>
+<span class="ln">/turtle2/color_sensor</span>
+<span class="ln">/turtle2/pose</span></code></pre></div>
+<figure class="img"><img alt="" decoding="async" height="646" loading="lazy" src="/uploads/wp/2026/10/image-18.png" width="1719"></figure>
+<p>The <code>/turtle1/pose</code> topic contains information about the first turtle’s position and orientation in the Turtlesim world.</p>
+<p>Similarly, <code>/turtle2/pose</code> contains the pose of the second turtle.</p>
+<figure class="img"><img alt="" decoding="async" height="573" loading="lazy" src="/uploads/wp/2026/10/image-19.png" width="1713"></figure>
+<p>now lets create ros2 nodes to calculate translation vector betwen turtle 1 and turtle 2</p>
+
+<div class="widget"><iframe loading="lazy" scrolling="no" src="/widgets/documented-software-learnings__ros2__ros_ah-1.html" title="Interactive guide"></iframe></div></div>
+
+<div class="col">
+<h2 id="create-the-python-ros-2-node">Create the Python ROS 2 Node</h2>
+<p>Now we will create a Python node that automatically performs this calculation.</p>
+<p>Open VS Code.</p>
+<figure class="img sz-s al-l"><img alt="" decoding="async" height="878" loading="lazy" src="/uploads/wp/2026/10/image-21.png" width="482"></figure>
+<p>Inside the <code>bumperbot_py_examples</code> package, create the Python file at:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">bumperbot_py_examples/</span>
+<span class="ln">└── bumperbot_py_examples/</span>
+<span class="ln">    └── simple_turtlesim_kinematics.py</span></code></pre></div>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln">simple_turtlesim_kinematics.py</span></code></pre></div>
+<h2 id="write-the-python-code">Write the Python Code</h2>
+<p>Open <code>simple_turtlesim_kinematics.py</code> and add:</p>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln">import rclpy</span>
+<span class="ln">from rclpy.node import Node</span>
+<span class="ln">from turtlesim.msg import Pose</span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln">class SimpleTurtlesimKinematics(Node):</span>
+<span class="ln">    </span>
+<span class="ln">    def __init__(self):</span>
+<span class="ln">        super().__init__("simple_turtlesim_kinematics")</span>
+<span class="ln">        self.turtle1_pose_sub_ = self.create_subscription(Pose, "/turtle1/pose", self.turtle1PoseCallback, 10) </span>
+<span class="ln">        self.turtle2_pose_sub_ = self.create_subscription(Pose, "/turtle2/pose", self.turtle2PoseCallback, 10)</span>
+<span class="ln"></span>
+<span class="ln">        self.last_turtle1_pose_ = Pose()</span>
+<span class="ln">        self.last_turtle2_pose_ = Pose()</span>
+<span class="ln"></span>
+<span class="ln">    </span>
+<span class="ln">    def turtle1PoseCallback(self, msg):</span>
+<span class="ln">        self.last_turtle1_pose_ = msg</span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln">    def turtle2PoseCallback(self, msg):</span>
+<span class="ln">        self.last_turtle2_pose_ = msg</span>
+<span class="ln"></span>
+<span class="ln">        Tx = self.last_turtle2_pose_.x - self.last_turtle1_pose_.x</span>
+<span class="ln">        Ty = self.last_turtle2_pose_.y - self.last_turtle1_pose_.y</span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln">        self.get_logger().info("""\n</span>
+<span class="ln">                      Translation Vector turtle1 -&gt; turtle2\n</span>
+<span class="ln">                      Tx: %f\n</span>
+<span class="ln">                      Ty: %f\n""" % (Tx,Ty))</span>
+<span class="ln">        </span>
+<span class="ln"></span>
+<span class="ln">def main():</span>
+<span class="ln">    rclpy.init()</span>
+<span class="ln">    simple_turtlesim_kinematics = SimpleTurtlesimKinematics()</span>
+<span class="ln">    rclpy.spin(simple_turtlesim_kinematics)</span>
+<span class="ln">    simple_turtlesim_kinematics.destroy_node()</span>
+<span class="ln">    rclpy.shutdown()</span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln">if __name__ == '__main__':</span>
+<span class="ln">    main()</span></code></pre></div>
+
+<div class="widget"><iframe loading="lazy" scrolling="no" src="/widgets/documented-software-learnings__ros2__ros_ah-2.html" title="Interactive guide"></iframe></div></div>
+
+<div class="col">
+<h2 id="add-the-entry-point-to-setup-py">Add the Entry Point to <code>setup.py</code></h2>
+<figure class="img"><img alt="" decoding="async" height="808" loading="lazy" src="/uploads/wp/2026/10/image-30.png" width="1618"></figure>
+<p>Open <code>setup.py</code> inside the <code>bumperbot_py_examples</code> package.</p>
+<p>Inside the existing <code>console_scripts</code> list, add:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">'simple_turtlesim_kinematics = bumperbot_py_examples.simple_turtlesim_kinematics:main'</span></code></pre></div>
+<h2 id="add-the-dependency-to-package-xml">Add the Dependency to <code>package.xml</code></h2>
+<figure class="img"><img alt="" decoding="async" height="710" loading="lazy" src="/uploads/wp/2026/10/image-29.png" width="1543"></figure>
+<p>Open:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">bumperbot_py_examples/package.xml</span></code></pre></div>
+<p>Add:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">&lt;exec_depend&gt;turtlesim&lt;/exec_depend&gt;</span></code></pre></div>
+<h2 id="build-the-workspace">Build the Workspace</h2>
+<p>After changing the Python package, we need to build the workspace.</p>
+<figure class="img"><img alt="" decoding="async" height="475" loading="lazy" src="/uploads/wp/2026/10/image-22.png" width="1726"></figure>
+<p>Open a terminal and run:</p>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln">cd bumperbot_ws</span>
+<span class="ln">colcon build</span></code></pre></div>
+<p>Wait for the build to finish successfully.</p>
+<h2 id="run-the-translation-vector-node">Run the Translation Vector Node</h2>
+<p>Open a new terminal.</p>
+<figure class="img"><img alt="" decoding="async" height="504" loading="lazy" src="/uploads/wp/2026/10/image-24.png" width="3385"></figure>
+<p>Go to the workspace if necessary and source it and run:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">. install/setup.bash</span>
+<span class="ln">ros2 run bumperbot_py_examples simple_turtlesim_kinematics</span></code></pre></div>
+<figure class="img"><img alt="" decoding="async" height="357" loading="lazy" src="/uploads/wp/2026/10/image-25.png" width="1674"></figure>
+<p>This starts the node that calculates the translation vector between the two turtles.</p>
+<p>You should see output similar to:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">[simple_turtlesim_kinematics]:</span>
+<span class="ln"></span>
+<span class="ln">Translation Vector turtle1 -&gt; turtle2</span>
+<span class="ln"></span>
+<span class="ln">Tx: -4.544445</span>
+<span class="ln">Ty: -1.544445</span></code></pre></div>
+<p>The numbers shown here are examples from your run. They depend on the actual positions of the turtles.</p>
+<h2 id="what-do-the-negative-values-mean">What do the negative values mean?</h2>
+<p>For these values:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">Tx: -4.544445</span>
+<span class="ln">Ty: -1.544445</span></code></pre></div>
+<p>Turtle 2 is to the left of Turtle 1 and below it in the world coordinate system.</p>
+<p>The node keeps running and calculating the translation vector as new pose messages arrive.</p>
+<h2 id="move-turtle-1-and-observe-the-change">Move Turtle 1 and Observe the Change</h2>
+<p>Now let's see whether our calculation responds to changes in the turtle positions.</p>
+<p>Open another terminal.</p>
+<figure class="img"><img alt="" decoding="async" height="496" loading="lazy" src="/uploads/wp/2026/10/image-26.png" width="2486"></figure>
+<p>Run the keyboard teleoperation node:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">ros2 run turtlesim turtle_teleop_key</span></code></pre></div>
+<figure class="img sz-s al-l"><img alt="" decoding="async" height="525" loading="lazy" src="/uploads/wp/2026/10/image-27.png" width="487"></figure>
+<p>Make sure the teleoperation terminal is focused, then move Turtle 1 using the keyboard.</p>
+<p>As Turtle 1 moves, the translation vector printed by <code>simple_turtlesim_kinematics</code> changes.</p>
+<p>For example:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">Before movement:</span>
+<span class="ln"></span>
+<span class="ln">Tx: -4.544445</span>
+<span class="ln">Ty: -1.544445</span></code></pre></div>
+<p>After moving Turtle 1, the values may become:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">Tx: -3.200000</span>
+<span class="ln">Ty: -0.800000</span></code></pre></div>
+<p>These second values are illustrative; your actual results depend on how you move the turtle.</p>
+</div></div>
+    <nav class="pager" aria-label="Chapters">
+<a href="/documented-software-learnings/ros2/ros_ag/"><span class="mono">Chapter 34</span>Introduction to Turtlesim</a><a class="nx" href="/documented-software-learnings/ros2/ros_ai/"><span class="mono">Chapter 36</span>Translation Vector Between Two Turtles: CPP</a>    </nav>
+  </article>
+</div>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/plc/">PLC &amp; Industrial Automation</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=a6e775a3ba" defer></script>
+<script src="/assets/home.js?v=a6e775a3ba" defer></script>
+</body>
+</html>

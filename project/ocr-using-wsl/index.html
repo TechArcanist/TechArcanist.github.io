@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OCR Using WSL | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="The OCR with WSL repository documents my exploration of setting up WSL2 (Ubuntu on Windows) for machine learning with GPU acceleration, including TensorFlow …">
+<link rel="canonical" href="https://techarcanist.com/project/ocr-using-wsl/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="OCR Using WSL">
+<meta property="og:description" content="The OCR with WSL repository documents my exploration of setting up WSL2 (Ubuntu on Windows) for machine learning with GPU acceleration, including TensorFlow …">
+<meta property="og:url" content="https://techarcanist.com/project/ocr-using-wsl/">
+<meta property="og:image" content="/uploads/wp/2025/08/Copy-of-Untitled-Design-7-1024x576.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=a6e775a3ba">
+<link rel="stylesheet" href="/assets/home.css?v=a6e775a3ba">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/" aria-current="page">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<section class="cs-hero">
+  <div class="wrap">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/project/">Work</a><span>/</span><span>15 of 27</span></nav>
+    <h1>OCR Using WSL</h1>
+<div class="cs-lead"><p>The <span class="hl"><strong>OCR with WSL</strong></span> repository documents my exploration of setting up <span class="hl"><strong>WSL2 (Ubuntu on Windows)</strong></span> for <span class="hl"><strong>machine learning with GPU acceleration</strong></span>, including <span class="hl"><strong>TensorFlow</strong></span>, <span class="hl"><strong>RAPIDS</strong></span>, and <span class="hl"><strong>OCR model training</strong></span>. This project marks the beginning of my <span class="hl"><strong>deep learning OCR journey</strong></span> on Windows. Since Windows stopped supporting native GPU acceleration after TensorFlow v2.10, I switched to WSL2 and documented every step, so no one else has to struggle like I did.</p></div>  </div>
+  <div class="wrap">
+    <dl class="cs-spec mono">
+<div><dt>Discipline</dt><dd><a href="/project/#ai">Edge AI &amp; Vision</a></dd></div>      <div><dt>Contents</dt><dd>2 images</dd></div>
+<div><dt>Source</dt><dd><a href="https://github.com/TechArcanist/OCR-with-WSL-for-Enhanced-Machine-Learning" target="_blank" rel="noopener">OCR-with-WSL-for-Enhanced-Machine-Learning ↗</a></dd></div>    </dl>
+  </div>
+  <div class="wrap"><figure class="cs-cover"><img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-7-1024x576.png" alt="OCR Using WSL"><span class="corner tl"></span><span class="corner br"></span></figure></div>
+</section>
+
+<section class="sec tight">
+  <div class="wrap doc">
+    <aside class="toc" aria-label="On this page">
+      <p class="label">On this page</p>
+      <ol><li><a href="#project-context-how-this-started"><span class="mono">01</span>Project Context, How This Started</a></li><li><a href="#what-this-repository-includes"><span class="mono">02</span>What This Repository Includes</a></li><li><a href="#tools-technologies-used"><span class="mono">03</span>Tools &amp; Technologies Used</a></li><li><a href="#media-availability-important-note"><span class="mono">04</span>Media Availability (Important Note)</a></li><li><a href="#code-installation"><span class="mono">05</span>Code &amp; Installation</a></li><li><a href="#my-learnings"><span class="mono">06</span>My Learnings</a></li></ol>
+    </aside>
+    <article class="prose">
+      
+<div class="cols cols-2"><div class="col">
+<figure class="img"><img src="/uploads/wp/2025/11/Untitled-design-31-1024x576.jpg" alt="" loading="lazy" decoding="async" width="1024" height="576"></figure>
+</div><div class="col">
+<figure class="img"><img src="/uploads/wp/2025/11/Untitled-design-32-1024x576.jpg" alt="" loading="lazy" decoding="async" width="1024" height="576"></figure>
+</div></div>
+<div class="col">
+<h2 id="project-context-how-this-started">Project Context, How This Started</h2>
+<p class="note">I wanted to train machine learning OCR models on Windows, but:</p>
+<ul>
+<li>TensorFlow GPU stopped working on native Windows support,</li>
+<li>CUDA installation was messy,</li>
+<li>RAM constraints caused crashes,</li>
+<li>Some Python packages only worked in Linux.</li>
+</ul>
+<p class="note">So I moved to WSL2, configured Ubuntu on Windows, set up CUDA, Docker, RAPIDS, and finally trained my OCR model inside Jupyter notebook.<br><br>This repository contains every command, every setup step, and the exact procedure I used to run ML workloads smoothly on Windows.</p>
+</div>
+<div class="col">
+<h2 id="what-this-repository-includes">What This Repository Includes</h2>
+<ul>
+<li>WSL2 installation + moving WSL to <strong>D:/ drive</strong> (to save C:/ space)</li>
+<li>Setting default Ubuntu user</li>
+<li>Python 3.12 setup + virtual environment</li>
+<li>CUDA + cuDNN + NCCL setup for GPU acceleration</li>
+<li>RAPIDS AI installation using Docker</li>
+<li>TensorFlow GPU installation + GPU verification</li>
+<li>Running OCR training notebook</li>
+</ul>
+</div>
+<div class="col">
+<h2 id="tools-technologies-used">Tools &amp; Technologies Used</h2>
+<ul>
+<li><strong>WSL2, Ubuntu</strong></li>
+<li><strong>Python 3.12 + Virtual Environments</strong></li>
+<li><strong>TensorFlow (GPU)</strong></li>
+<li><strong>CUDA 12.6 / cuDNN / NCCL</strong></li>
+<li><strong>Docker + RAPIDS AI</strong></li>
+<li><strong>Jupyter Notebook</strong></li>
+<li><strong>OCR Notebook (trained by me)</strong></li>
+</ul>
+</div>
+<div class="col">
+<h2 id="media-availability-important-note">Media Availability (Important Note)</h2>
+<p class="note">This project was built a long time ago.<br>There are very limited photos/videos of the working system</p>
+</div>
+<div class="col">
+<h2 id="code-installation">Code &amp; Installation</h2>
+<p class="note">The complete source code is available in the GitHub repository.</p>
+<div class="btns">
+<a class="btn btn-ghost" href="https://github.com/TechArcanist/OCR-with-WSL-for-Enhanced-Machine-Learning" target=_blank rel=noopener>View on Github, &gt;</a>
+</div>
+</div>
+<div class="col">
+<h2 id="my-learnings">My Learnings</h2>
+<ul>
+<li>How to <strong>install WSL2 from scratch</strong> and configure Linux environment inside Windows</li>
+<li>Moving WSL to D:/ drive using export/import to <strong>manage storage efficiently</strong></li>
+<li>Configuring <strong>CUDA, cuDNN, NCCL</strong> inside WSL for deep learning</li>
+<li>Using Docker to run GPU accelerated RAPIDS AI images</li>
+<li>Installing TensorFlow GPU on WSL (TensorFlow 2.11+ Linux-only GPU support)</li>
+<li>Understanding TensorFlow GPU verification (<code>tf.config.list_physical_devices('GPU')</code>)</li>
+<li>Running ML workflows smoothly on Windows using <strong>Linux virtualization</strong></li>
+<li>Bonus learning:
+<ul>
+<li>WSL2 makes Windows feel like a Linux machine, with GPU, Docker, and terminal power.</li>
+</ul>
+</li>
+</ul>
+</div>
+
+    </article>
+  </div>
+</section>
+
+<section class="wrap">
+  <nav class="pager" aria-label="More projects">
+<a href="/project/autonomous-warehouse-project/"><span class="mono">Previous</span>Autonomous Warehouse Project</a><a class="nx" href="/project/thumbs-up-down-classification-using-jetson-nano/"><span class="mono">Next</span>Thumbs Up / Thumbs Down Gesture Classification</a>  </nav>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <p class="label">Related work</p>
+    <div class="grid3"><a class="pcard" href="/project/vaman-v3/" data-cats="robotics ai" data-search="vaman v3-3d-printed quadruped experiment (paused version) after vaman v2 successfully implemented ai-based movement (voice + gesture + object find/stop) , the next challenge was to move beyond wheels. vaman v3 explored legged… robotics edge ai &amp; vision">
+  <div class="pcard-media">
+<img src="/uploads/wp/2025/08/Untitled-design-34-1024x576.jpg" alt="" loading="lazy">    <span class="pcard-kind mono">Project</span>
+  </div>
+  <div class="pcard-body">
+    <p class="pcard-cats mono">Robotics / Edge AI &amp; Vision</p>
+    <h3>Vaman V3-3D-Printed Quadruped Experiment (Paused Version)</h3>
+    <p class="pcard-sum">After Vaman v2 successfully implemented AI-based movement (voice + gesture + object find/stop) , the next challenge was to move beyond wheels. Vaman v3 explored legged…</p>
+  </div>
+</a>
+<a class="pcard" href="/project/vaman-v2/" data-cats="robotics ai" data-search="vaman v2 after vaman v1 validated wi-fi controlled movement using the jetson nano , the next goal was to make the robot smarter, not just remotely controllable. vaman v2 evolved… robotics edge ai &amp; vision">
+  <div class="pcard-media">
+<img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-14-1024x576.png" alt="" loading="lazy">    <span class="pcard-kind mono">Project</span>
+  </div>
+  <div class="pcard-body">
+    <p class="pcard-cats mono">Robotics / Edge AI &amp; Vision</p>
+    <h3>Vaman v2</h3>
+    <p class="pcard-sum">After Vaman v1 validated Wi-Fi controlled movement using the Jetson Nano , the next goal was to make the robot smarter, not just remotely controllable. Vaman v2 evolved…</p>
+  </div>
+</a>
+<a class="pcard" href="/project/vaman-v1/" data-cats="robotics ai" data-search="vaman v1 the vaman v1 prototype was built to validate whether the jetson nano alone could handle wireless remote control over 5g wi-fi , real-time motor control , and live camera… robotics edge ai &amp; vision">
+  <div class="pcard-media">
+<img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-13-1024x576.png" alt="" loading="lazy">    <span class="pcard-kind mono">Project</span>
+  </div>
+  <div class="pcard-body">
+    <p class="pcard-cats mono">Robotics / Edge AI &amp; Vision</p>
+    <h3>Vaman v1</h3>
+    <p class="pcard-sum">The Vaman v1 prototype was built to validate whether the Jetson Nano alone could handle wireless remote control over 5G Wi-Fi , real-time motor control , and live camera…</p>
+  </div>
+</a>
+</div>
+  </div>
+</section>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/plc/">PLC &amp; Industrial Automation</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=a6e775a3ba" defer></script>
+<script src="/assets/home.js?v=a6e775a3ba" defer></script>
+</body>
+</html>

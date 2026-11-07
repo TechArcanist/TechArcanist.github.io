@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FlutterFlow Widgets Tree, Rows &amp; Columns (Beginner Guide) | FlutterFlow | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="PDF, Notes FlutterFlow Widgets Tree, Rows &amp; Columns (Beginner Guide) Open Download PDF preview unavailable. Open the PDF .">
+<link rel="canonical" href="https://techarcanist.com/documented-software-learnings/flutterflow/ff2/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="FlutterFlow Widgets Tree, Rows &amp; Columns (Beginner Guide) | FlutterFlow">
+<meta property="og:description" content="PDF, Notes FlutterFlow Widgets Tree, Rows &amp; Columns (Beginner Guide) Open Download PDF preview unavailable. Open the PDF .">
+<meta property="og:url" content="https://techarcanist.com/documented-software-learnings/flutterflow/ff2/">
+<meta property="og:image" content="https://techarcanist.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=a6e775a3ba">
+<link rel="stylesheet" href="/assets/home.css?v=a6e775a3ba">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/">Work</a>
+      <a href="/documented-software-learnings/" aria-current="page">Library</a>
+      <a href="/documented-software-learnings/ros2/">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap reader">
+  <aside class="rd-nav" id="rd-nav">
+    <a class="rd-series" href="/documented-software-learnings/flutterflow/"><span class="label">Series</span>FlutterFlow</a>
+    <ol>
+      <li><a href="/documented-software-learnings/flutterflow/ff1/"><span class="mono">01</span>Getting Started with FlutterFlow</a></li>
+      <li><a href="/documented-software-learnings/flutterflow/ff2/" aria-current="page"><span class="mono">02</span>FlutterFlow Widgets Tree, Rows &amp; Columns (Beginner Guide)</a></li>
+      <li><a href="/documented-software-learnings/flutterflow/ff3/"><span class="mono">03</span>Using Container in FlutterFlow</a></li>
+      <li><a href="/documented-software-learnings/flutterflow/ff4/"><span class="mono">04</span>Adding a Background to a Blank Page in FlutterFlow</a></li>
+      <li><a href="/documented-software-learnings/flutterflow/ff5/"><span class="mono">05</span>Exploring Text Options in FlutterFlow</a></li>
+      <li><a href="/documented-software-learnings/flutterflow/ff6/"><span class="mono">06</span>Using ListView in FlutterFlow</a></li>
+      <li><a href="/documented-software-learnings/flutterflow/ff7/"><span class="mono">07</span>Button &amp; Image Widget Basics in FlutterFlow</a></li>
+      <li><a href="/documented-software-learnings/flutterflow/ff8/"><span class="mono">08</span>Using Stack to Overlap Widgets in FlutterFlow</a></li>
+      <li><a href="/documented-software-learnings/flutterflow/ff9/"><span class="mono">09</span>Page Navigation Using Buttons in FlutterFlow</a></li>
+      <li><a href="/documented-software-learnings/flutterflow/ff10/"><span class="mono">10</span>Form, Validation &amp; Conditional Actions in FlutterFlow</a></li>
+      <li><a href="/documented-software-learnings/flutterflow/ff11/"><span class="mono">11</span>AppBar &amp; Bottom Navigation Bar in FlutterFlow</a></li>
+      <li><a href="/documented-software-learnings/flutterflow/ff12/"><span class="mono">12</span>Working with Widget State in FlutterFlow</a></li>
+      <li><a href="/documented-software-learnings/flutterflow/ff13/"><span class="mono">13</span>Combine Text with Widget State in FlutterFlow</a></li>
+      <li><a href="/documented-software-learnings/flutterflow/ff14/"><span class="mono">14</span>Conditional Text using Widget State in FlutterFlow</a></li>
+      <li><a href="/documented-software-learnings/flutterflow/ff15/"><span class="mono">15</span>Using Page State for Conditional UI Changes in FlutterFlow</a></li>
+      <li><a href="/documented-software-learnings/flutterflow/ff16/"><span class="mono">16</span>Using App State for Global UI Changes Across Pages in FlutterFlow</a></li>
+      <li><a href="/documented-software-learnings/flutterflow/ff17/"><span class="mono">17</span>Page Parameters in FlutterFlow (Passing Data Between Pages)</a></li>
+      <li><a href="/documented-software-learnings/flutterflow/ff18/"><span class="mono">18</span>Components in FlutterFlow (Reusable UI with Custom Parameters)</a></li>
+      <li><a href="/documented-software-learnings/flutterflow/ff19/"><span class="mono">19</span>Custom Bottom Navigation Bar using Stack and Components in FlutterFlow</a></li>
+      <li><a href="/documented-software-learnings/flutterflow/ff20/"><span class="mono">20</span>Rating Bar Widget in FlutterFlow</a></li>
+      <li><a href="/documented-software-learnings/flutterflow/ff21/"><span class="mono">21</span>Bottom Sheet in FlutterFlow</a></li>
+      <li><a href="/documented-software-learnings/flutterflow/ff22/"><span class="mono">22</span>Custom Dialog in FlutterFlow</a></li>
+      <li><a href="/documented-software-learnings/flutterflow/ff23/"><span class="mono">23</span>Supabase as Backend (Database Setup)</a></li>
+      <li><a href="/documented-software-learnings/flutterflow/ff24/"><span class="mono">24</span>Supabase Authentication Setup and Connecting Supabase with FlutterFlow</a></li>
+      <li><a href="/documented-software-learnings/flutterflow/ff25/"><span class="mono">25</span>Using Supabase Authentication with a Pre-Made FlutterFlow Template</a></li>
+      <li><a href="/documented-software-learnings/flutterflow/ff26/"><span class="mono">26</span>Login, Sign Up Navigation, and Logout using Supabase Authentication in FlutterFlow</a></li>
+      <li><a href="/documented-software-learnings/flutterflow/ff27/"><span class="mono">27</span>Creating a New Post and Inserting Data into Supabase (FlutterFlow)</a></li>
+    </ol>
+  </aside>
+  <article class="rd-main">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/documented-software-learnings/">Library</a><span>/</span><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><span>/</span><span>02</span></nav>
+    <button class="btn btn-sm btn-line rd-tg" type="button" id="rd-tg">All chapters</button>
+<p class="sh-label mono"><span>02</span>Chapter 2 of 27</p>    <h1>FlutterFlow Widgets Tree, Rows &amp; Columns (Beginner Guide)</h1>
+<div class="rd-prog" aria-hidden="true"><i style="width:7.4%"></i></div>    <div class="prose">
+<div class="col">
+<h2 id="pdf-notes">PDF, Notes</h2>
+<div class="pdf"><div class="pdf-bar"><span class="pdf-name">FlutterFlow Widgets Tree, Rows &amp; Columns (Beginner Guide)</span><a class="btn btn-sm" href="/uploads/wp/2026/01/FlutterFlow-Widgets-Tree-Rows-Columns-Beginner-Guide.pdf" target="_blank" rel="noopener">Open</a><a class="btn btn-sm btn-ghost" href="/uploads/wp/2026/01/FlutterFlow-Widgets-Tree-Rows-Columns-Beginner-Guide.pdf" download>Download</a></div><object data="/uploads/wp/2026/01/FlutterFlow-Widgets-Tree-Rows-Columns-Beginner-Guide.pdf#view=FitH" type="application/pdf" class="pdf-view"><p>PDF preview unavailable. <a href="/uploads/wp/2026/01/FlutterFlow-Widgets-Tree-Rows-Columns-Beginner-Guide.pdf">Open the PDF</a>.</p></object></div>
+</div>
+</div>
+    <nav class="pager" aria-label="Chapters">
+<a href="/documented-software-learnings/flutterflow/ff1/"><span class="mono">Chapter 1</span>Getting Started with FlutterFlow</a><a class="nx" href="/documented-software-learnings/flutterflow/ff3/"><span class="mono">Chapter 3</span>Using Container in FlutterFlow</a>    </nav>
+  </article>
+</div>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/plc/">PLC &amp; Industrial Automation</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=a6e775a3ba" defer></script>
+<script src="/assets/home.js?v=a6e775a3ba" defer></script>
+</body>
+</html>

@@ -1,0 +1,699 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="/assets/widget-base.css">
+</head><body><style>
+.highlight { color:#64FFDA; font-weight:600; }
+
+.highlight-bg {
+
+  background:#64FFDA33;
+
+  color:#0A192F;
+
+  padding:0.05em 0.25em;
+
+  border-radius:0.25em;
+
+}
+
+</style>
+
+html
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<title>What Are Launch Files? | Interactive Guide</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Sans+Condensed:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<style>
+    :root{
+    --bg:#0a121e;
+    --bg-1:#0e1a2a;
+    --panel:#122032;
+    --panel-2:#0d1826;
+    --terminal:#081120;
+
+    --ink:#e8eef7;
+    --ink-dim:#a9bbd0;
+    --ink-faint:#71859e;
+
+    --accent:#5ab4ff;
+    --accent-2:#7dc4ff;
+    --blue:#8acaff;
+    --purple:#c9a6ff;
+
+    --ok:#7cd992;
+    --red:#ff6b6b;
+
+    --accent-orange:#ff8a3d;
+
+    --line:rgba(224,234,245,0.10);
+    --line-strong:rgba(224,234,245,0.20);
+  }
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0; max-width:100%; overflow-x:hidden;}
+body{background:var(--bg); color:var(--ink); font-family:var(--sans); line-height:1.65; -webkit-font-smoothing:antialiased;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);}
+.lf-app{max-width:1140px; margin:0 auto; padding-bottom:60px;
+  background-image:linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size:34px 34px; background-position:-1px -1px;}
+code{font-family:var(--mono); color:var(--accent); background:rgba(255,138,61,0.1); padding:1px 6px; border-radius:2px; font-size:0.88em;}
+b.hl{color:var(--ink); font-weight:600;}
+img,svg{max-width:100%;}
+
+.lf-hero{display:grid; grid-template-columns:1.1fr 0.9fr; border-bottom:1px solid var(--line-strong); background:#0e1a2a;}
+@media (max-width:840px){ .lf-hero{grid-template-columns:1fr;} }
+.lf-titleblock{padding:40px 40px 32px; border-right:1px solid var(--line-strong);}
+@media (max-width:840px){ .lf-titleblock{border-right:none; border-bottom:1px solid var(--line-strong);} }
+@media (max-width:560px){ .lf-titleblock{padding:28px 20px 24px;} }
+.lf-eyebrow{font-family:var(--mono); font-size:11px; letter-spacing:0.14em; color:var(--accent-2); display:flex; align-items:center; gap:8px; margin-bottom:14px;}
+.lf-eyebrow::before{content:""; width:7px; height:7px; background:var(--accent-2); display:inline-block; transform:rotate(45deg);}
+.lf-hero h1{font-family:var(--cond); font-weight:700; font-size:2.5rem; line-height:1.12; margin:0 0 16px 0; letter-spacing:-0.01em;}
+@media (max-width:560px){ .lf-hero h1{font-size:1.8rem;} }
+.lf-hero h1 span{color:var(--accent);}
+.lf-lede{max-width:54ch; color:var(--ink); font-size:1.08rem; margin:0; font-weight:500;}
+@media (max-width:560px){ .lf-lede{font-size:0.98rem;} }
+.lf-hero-diagram{display:flex; align-items:center; justify-content:center; padding:26px;}
+@media (max-width:560px){ .lf-hero-diagram{padding:12px 20px 26px;} }
+
+.lf-section{padding:44px 40px 10px;}
+@media (max-width:768px){ .lf-section{padding:32px 24px 8px;} }
+@media (max-width:480px){ .lf-section{padding:26px 16px 6px;} }
+.lf-section-h{display:flex; align-items:baseline; gap:12px; margin-bottom:16px; flex-wrap:wrap;}
+.lf-section-h .num{font-family:var(--mono); font-size:12px; color:var(--ink-faint);}
+.lf-section-h h2{font-family:var(--cond); font-weight:700; font-size:1.55rem; margin:0;}
+@media (max-width:480px){ .lf-section-h h2{font-size:1.3rem;} }
+.lf-p{color:var(--ink-dim); font-size:0.98rem; max-width:74ch; margin:0 0 10px 0;}
+
+.lf-analogy{border:1px solid var(--line-strong); background:var(--panel); padding:20px 24px; display:grid; grid-template-columns:auto 1fr; gap:20px; align-items:center; margin-top:8px;}
+@media (max-width:600px){ .lf-analogy{grid-template-columns:1fr; padding:16px 18px;} }
+.lf-analogy-icon{width:56px; height:56px; border-radius:50%; background:var(--accent-2-soft); border:1px solid rgba(77,214,192,0.4); display:flex; align-items:center; justify-content:center; font-size:26px; flex-shrink:0;}
+.lf-analogy p{margin:0; font-size:0.96rem; color:var(--ink);}
+
+.lf-showcase{border:1px solid var(--line-strong); background:var(--panel); overflow:hidden; margin-top:14px;}
+.lf-showcase-head{display:flex; align-items:center; gap:14px; padding:16px 20px; border-bottom:1px solid var(--line); flex-wrap:wrap;}
+@media (max-width:480px){ .lf-showcase-head{padding:14px 16px;} }
+.lf-showcase-head h3{font-family:var(--cond); font-weight:700; font-size:1.15rem; margin:0; flex:1;}
+.lf-flag{font-family:var(--mono); font-size:9.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--accent); background:var(--accent-soft); padding:4px 8px; border-radius:2px;}
+.lf-btn{font-family:var(--mono); font-size:12px; color:var(--bg); background:var(--accent); border:none; padding:9px 16px; border-radius:2px; cursor:pointer; font-weight:600;}
+.lf-btn:hover{filter:brightness(1.08);}
+.lf-btn.ghost{background:transparent; color:var(--ink-dim); border:1px solid var(--line-strong);}
+.lf-btn.ghost:hover{color:var(--ink); border-color:var(--ink-dim);}
+.lf-btn:disabled{opacity:0.4; cursor:default;}
+.lf-showcase-body{padding:20px;}
+@media (max-width:480px){ .lf-showcase-body{padding:14px;} }
+
+/* terminal race */
+.lf-race-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+@media (max-width:760px){ .lf-race-grid{grid-template-columns:1fr;} }
+.lf-race-col-h{font-family:var(--mono); font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:8px; display:flex; justify-content:space-between;}
+.lf-race-col-h .badge{color:var(--red);}
+.lf-race-col-h.win .badge{color:var(--ok);}
+.lf-terms{display:flex; flex-direction:column; gap:8px; min-height:230px;}
+.lf-term{background:#0a0f0c; border:1px solid var(--line-strong); border-radius:2px; padding:10px 12px; font-family:var(--mono); font-size:11.5px; opacity:0; transform:translateY(6px); transition:opacity 0.35s ease, transform 0.35s ease; word-break:break-word;}
+.lf-term.show{opacity:1; transform:translateY(0);}
+.lf-term .cmd{color:var(--accent-2);}
+.lf-term .out{color:var(--ink-dim); margin-top:4px;}
+.lf-term .ok{color:var(--ok);}
+.lf-timer{font-family:var(--mono); font-size:12px; color:var(--ink-faint); margin-top:10px; text-align:center;}
+.lf-timer b{color:var(--accent);}
+
+/* build-your-own */
+.lf-build-grid{display:grid; grid-template-columns:0.9fr 1.1fr; gap:18px;}
+@media (max-width:780px){ .lf-build-grid{grid-template-columns:1fr;} }
+.lf-node-pick{border:1px solid var(--line-strong); background:var(--panel-2); padding:6px;}
+.lf-node-row{display:flex; align-items:center; gap:12px; padding:12px 12px; border-bottom:1px solid var(--line); cursor:pointer;}
+.lf-node-row:last-child{border-bottom:none;}
+.lf-node-row input{width:17px; height:17px; accent-color:var(--accent); flex-shrink:0;}
+.lf-node-row .nm{font-family:var(--mono); font-size:12.5px; color:var(--ink);}
+.lf-node-row .job{font-size:11px; color:var(--ink-faint); display:block; margin-top:2px;}
+.lf-code{background:#0a0f0c; border:1px solid var(--line-strong); padding:14px 16px; font-family:var(--mono); font-size:11.5px; line-height:1.7; color:var(--ink); white-space:pre; overflow-x:auto; margin:0 0 12px 0; min-height:160px; -webkit-overflow-scrolling:touch;}
+.lf-code .tk-kw{color:#e694ff;} .lf-code .tk-str{color:var(--accent);} .lf-code .tk-fn{color:var(--blue);} .lf-code .tk-cmt{color:var(--ink-faint); font-style:italic;}
+.lf-run-term{background:#0a0f0c; border:1px solid var(--line-strong); padding:10px 12px; font-family:var(--mono); font-size:11.5px; min-height:70px;}
+.lf-run-term .cmd{color:var(--accent-2);}
+.lf-run-term .out{color:var(--ink-dim); margin-top:3px;}
+.lf-run-term .ok{color:var(--ok);}
+.lf-run-term .empty{color:var(--ink-faint); font-style:italic;}
+
+/* order-matters demo */
+.lf-toggle{display:flex; flex-wrap:wrap; border:1px solid var(--line-strong); border-radius:3px; overflow:hidden; width:fit-content;}
+.lf-toggle button{font-family:var(--mono); font-size:12px; padding:9px 16px; background:transparent; color:var(--ink-dim); border:none; cursor:pointer; border-right:1px solid var(--line-strong); border-bottom:1px solid var(--line-strong);}
+.lf-toggle button:last-child{border-right:none;}
+@media (max-width:560px){ .lf-toggle{width:100%;} .lf-toggle button{flex:1 1 auto; font-size:11px; padding:9px 8px;} }
+.lf-toggle button.active{background:var(--accent); color:#0d1512; font-weight:600;}
+.lf-toggle button.active[data-mode="broken"]{background:var(--red); color:#1a0d0d;}
+.lf-timeline{margin-top:18px;}
+.lf-tl-axis{display:grid; grid-template-columns:150px 1fr; margin-bottom:4px;}
+.lf-tl-axis span{font-family:var(--mono); font-size:9.5px; color:var(--ink-faint);}
+.lf-tl-axis .axis-track{display:flex; justify-content:space-between;}
+.lf-tl-row{display:grid; grid-template-columns:150px 1fr; align-items:center; gap:12px; margin-bottom:12px;}
+.lf-tl-label{font-family:var(--mono); font-size:11.5px; color:var(--ink-dim);}
+@media (max-width:560px){
+  .lf-tl-axis{grid-template-columns:1fr;}
+  .lf-tl-axis > div:first-child{display:none;}
+  .lf-tl-row{grid-template-columns:1fr; gap:4px;}
+  .lf-tl-label{font-size:10.5px;}
+}
+.lf-tl-track{position:relative; height:28px; background:#0a0f0c; border:1px solid var(--line-strong); border-radius:2px; overflow:hidden;}
+.lf-tl-bar{position:absolute; top:2px; bottom:2px; left:0; width:0; background:var(--accent-2); border-radius:2px; transition:left 0.9s ease, width 0.9s ease, background 0.3s ease;}
+.lf-tl-bar.b{background:var(--purple);}
+.lf-tl-bar.err{background:var(--red);}
+.lf-tl-bar-label{position:absolute; inset:0; display:flex; align-items:center; padding-left:8px; font-family:var(--mono); font-size:9.5px; color:#0a0f0c; font-weight:700; white-space:nowrap; opacity:0; transition:opacity 0.3s ease; overflow:hidden; text-overflow:ellipsis;}
+.lf-tl-bar-label.show{opacity:1;}
+.lf-caption-box{border:1px solid var(--line-strong); background:var(--panel-2); padding:14px 16px; margin-top:14px; font-family:var(--mono); font-size:12.5px; color:var(--ink); min-height:20px;}
+.lf-caption-box b{color:var(--accent);}
+.lf-caption-box.err b{color:var(--red);}
+.lf-caption-box.ok b{color:var(--ok);}
+
+.lf-lib-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:14px;}
+@media (max-width:700px){ .lf-lib-grid{grid-template-columns:1fr;} }
+.lf-lib-card{border:1px solid var(--line-strong); background:var(--panel); padding:20px;}
+.lf-lib-card h4{font-family:var(--mono); margin:0 0 10px 0; font-size:14px;}
+.lf-lib-card.launch h4{color:var(--blue);}
+.lf-lib-card.launch_ros h4{color:var(--purple);}
+.lf-lib-card ul{margin:0; padding-left:18px; color:var(--ink-dim); font-size:0.9rem;}
+.lf-lib-card li{margin-bottom:6px;}
+
+.lf-comp-svg{width:100%; height:auto; display:block;}
+
+.lf-fmt-tabs{display:flex; gap:6px; margin-bottom:0; flex-wrap:wrap;}
+.lf-fmt-tabs button{font-family:var(--mono); font-size:11.5px; padding:8px 14px; background:var(--panel-2); color:var(--ink-dim); border:1px solid var(--line-strong); border-bottom:none; cursor:pointer;}
+.lf-fmt-tabs button.active{color:var(--accent); background:#0a0f0c;}
+.lf-fmt-pre{background:#0a0f0c; border:1px solid var(--line-strong); padding:16px 18px; font-family:var(--mono); font-size:12px; line-height:1.7; color:var(--ink); overflow-x:auto; margin:0; white-space:pre; -webkit-overflow-scrolling:touch;}
+.lf-fmt-pane{display:none;}
+.lf-fmt-pane.active{display:block;}
+.tk-kw{color:#e694ff;} .tk-str{color:var(--accent);} .tk-fn{color:var(--blue);} .tk-cmt{color:var(--ink-faint); font-style:italic;} .tk-tag{color:#e694ff;} .tk-attr{color:var(--blue);}
+
+.lf-card{border:1px solid var(--line-strong); border-radius:2px; padding:16px 18px; margin:16px 0;}
+.lf-card.concept{background:var(--accent-2-soft); border-color:rgba(77,214,192,0.35);}
+.lf-card-lbl{font-family:var(--mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:8px; color:var(--accent-2);}
+.lf-card p{margin:0; font-size:0.92rem; color:var(--ink);}
+.lf-card p+p{margin-top:8px;}
+
+.lf-footer{padding:26px 40px; border-top:1px solid var(--line-strong); font-size:12px; color:var(--ink-faint); margin-top:20px;}
+@media (max-width:480px){ .lf-footer{padding:20px 16px;} }
+</style>
+<div class="lf-app">
+
+<section class="lf-section">
+<div class="lf-section-h"><span class="num">01</span><h2>The problem launch files solve</h2></div>
+<p class="lf-p">In the previous RViz2 laboratory, we had to start several components manually: <code>robot_state_publisher</code>, <code>joint_state_publisher_gui</code>, and RViz2. We also had to source the workspace in the required terminals and configure the robot description and RViz2. This works for a small example, but as a robot application grows, repeating these steps becomes inconvenient and error-prone.</p>
+<div class="lf-card concept">
+<div class="lf-card-lbl">The problem</div>
+<p>A real robot may involve sensors, controllers, localization, navigation, visualization, and many parameters. Launch files let us describe this complete startup process once and reproduce it consistently.</p>
+</div>
+<div class="lf-analogy">
+<div class="lf-analogy-icon">🎥</div>
+<p>Think of a movie theater remote that has one “Start Movie” button. Press it once, and it turns on the projector, dims the lights, and starts the sound system together, in order. A launch file is that one button for your robot software.</p>
+</div>
+<div class="lf-showcase">
+<div class="lf-showcase-head">
+<h3>Watch both ways happen, side by side</h3>
+<span class="lf-flag">Interactive</span>
+<button class="lf-btn" id="race-btn">Run both</button>
+<button class="lf-btn ghost" id="race-reset">Reset</button>
+</div>
+<div class="lf-showcase-body">
+<div class="lf-race-grid">
+<div>
+<div class="lf-race-col-h">Without a launch file <span class="badge" id="race-left-badge"></span></div>
+<div class="lf-terms" id="race-left"></div>
+</div>
+<div>
+<div class="lf-race-col-h win">With a launch file <span class="badge" id="race-right-badge"></span></div>
+<div class="lf-terms" id="race-right"></div>
+</div>
+</div>
+<div class="lf-timer" id="race-timer">Press “Run both” to start.</div>
+</div>
+</div>
+</section>
+<section class="lf-section">
+<div class="lf-section-h"><span class="num">02</span><h2>A launch file is just a list</h2></div>
+<p class="lf-p">At its simplest, a launch file is a description of the operations that ROS 2 should perform. In a Python launch file, these operations are collected into a <b class="hl">LaunchDescription</b>. The description can contain nodes, processes, parameters, included launch files, and other launch actions.</p>
+<p class="lf-p">For our visualization example, think of the launch description as an instruction sheet: <b class="hl">start the robot state publisher, start the joint-state publisher, start RViz2, and give each component the configuration it needs.</b></p>
+<div class="lf-showcase">
+<div class="lf-showcase-head">
+<h3>Build your own launch file</h3>
+<span class="lf-flag">Interactive</span>
+</div>
+<div class="lf-showcase-body">
+<div class="lf-build-grid">
+<div>
+<div class="lf-node-pick" id="node-pick">
+<label class="lf-node-row"><input checked="" data-node="rsp" type="checkbox"/><span><span class="nm">robot_state_publisher</span><span class="job">reads the URDF, shares it with everyone else</span></span></label>
+<label class="lf-node-row"><input checked="" data-node="jsp" type="checkbox"/><span><span class="nm">joint_state_publisher</span><span class="job">lets the robot’s joints move</span></span></label>
+<label class="lf-node-row"><input checked="" data-node="rviz" type="checkbox"/><span><span class="nm">rviz2</span><span class="job">draws the robot on screen</span></span></label>
+</div>
+<div style="margin-top:12px;"><button class="lf-btn" id="build-run">Run this launch file</button></div>
+</div>
+<div>
+<pre class="lf-code" id="build-code"></pre>
+<div class="lf-run-term" id="build-term"><span class="empty">Nothing started yet. Press “Run this launch file”.</span></div>
+</div>
+</div>
+</div>
+</div>
+<div class="lf-card concept">
+<div class="lf-card-lbl">In short</div>
+<p>Uncheck <code>rviz2</code> and run it again. Notice the code shrinks, and only two nodes start. That is the entire idea of a LaunchDescription: it is a list, and only what is on the list runs.</p>
+</div>
+</section>
+<section class="lf-section">
+<div class="lf-section-h"><span class="num">03</span><h2>Sometimes startup order matters</h2></div>
+<p class="lf-p">Not every component needs to start at exactly the same moment. Some components can start independently, while others may depend on another component or event being available first. A launch description can express this startup behavior instead of leaving the entire sequence to manual terminal commands.</p>
+<div class="lf-card concept">
+<div class="lf-card-lbl">Important distinction</div>
+<p>Startup order and data availability are related, but they are not the same thing. Starting one process first does not automatically guarantee that all of its data is already available. ROS 2 components communicate asynchronously, so a dependency may need a suitable event or readiness mechanism rather than an arbitrary delay.</p>
+</div>
+<div class="lf-analogy">
+<div class="lf-analogy-icon">🏠</div>
+<p>Think of a workshop where one machine produces a part that another machine needs. You may want the first machine started before the second, but what really matters is whether the required part or signal is available. ROS 2 launch gives us tools to describe this kind of startup relationship more reliably than simply guessing with a fixed delay.</p>
+</div>
+<div class="lf-showcase">
+<div class="lf-showcase-head">
+<h3>Same dependency, three startup strategies</h3>
+<span class="lf-flag">Interactive</span>
+</div>
+<div class="lf-showcase-body">
+<div class="lf-toggle" id="dep-toggle">
+<button class="active" data-mode="broken">① Start together</button>
+<button data-mode="timer">② Wait a fixed time</button>
+<button data-mode="event">③ React to an event</button>
+</div>
+<div style="margin-top:14px;"><button class="lf-btn" id="dep-play">Play</button></div>
+<div class="lf-timeline">
+<div class="lf-tl-axis"><div></div><div class="axis-track"><span>0.0s</span><span>1.0s</span><span>2.0s</span></div></div>
+<div class="lf-tl-row"><div class="lf-tl-label">robot_state_publisher</div><div class="lf-tl-track"><div class="lf-tl-bar" id="tl-a"></div></div></div>
+<div class="lf-tl-row"><div class="lf-tl-label">rviz2</div><div class="lf-tl-track"><div class="lf-tl-bar b" id="tl-b"><span class="lf-tl-bar-label" id="tl-b-label"></span></div></div></div>
+</div>
+<div class="lf-caption-box" id="dep-caption">Pick a mode above, then press Play.</div>
+<div class="lf-card" style="margin-top:14px; margin-bottom:0;">
+<div class="lf-card-lbl" style="color:var(--ink-faint);">Important</div>
+<p>This animation illustrates the <b class="hl">idea of startup dependencies</b>. It is not claiming that RViz2 must always be started after <code>robot_state_publisher</code>, or that a process-start event automatically means its data is ready. The correct synchronization method depends on the actual dependency in the application.</p>
+</div>
+</div>
+</div>
+<div class="lf-card concept">
+<div class="lf-card-lbl">What each strategy actually means</div>
+<p><b class="hl">① Start together:</b> both operations are requested at approximately the same time. This can be completely appropriate when the components are independent. If one component provides information needed by another, however, that information may not be available immediately.</p>
+<p><b class="hl">② Wait a fixed time:</b> the second operation is delayed by a chosen amount of time. This is easy to understand, but the delay is only a guess about how long the first component will take to become ready. A delay that is too short may not solve the dependency; a delay that is too long simply adds unnecessary waiting.</p>
+<p><b class="hl">③ React to an event:</b> instead of guessing with a timer, the launch system can react to a meaningful launch event. This is useful when the application has a clearly defined event that should trigger the next operation. For data-level readiness, the correct solution depends on the specific ROS 2 components and dependency involved.</p>
+</div>
+</section>
+<section class="lf-section">
+<div class="lf-section-h"><span class="num">04</span><h2>What can a launch file actually do?</h2></div>
+<p class="lf-p">A launch file is more than a shortcut for opening several terminals. It describes how a complete application should be started and managed.</p>
+<div class="lf-lib-grid">
+<div class="lf-lib-card launch">
+<h4>Start components</h4>
+<ul>
+<li>Start multiple ROS 2 nodes</li>
+<li>Start non-ROS processes when required</li>
+<li>Start several components as one application</li>
+</ul>
+</div>
+<div class="lf-lib-card launch_ros">
+<h4>Configure the system</h4>
+<ul>
+<li>Provide ROS 2 parameters</li>
+<li>Describe startup dependencies and events</li>
+<li>Include and reuse other launch files</li>
+</ul>
+</div>
+</div>
+<div class="lf-card concept">
+<div class="lf-card-lbl">Mental model</div>
+<p>Think of a launch file as an <b class="hl">instruction sheet for bringing up a robot application</b> — not simply a list of terminal commands.</p>
+</div>
+</section>
+<section class="lf-section">
+<div class="lf-section-h"><span class="num">05</span><h2>Two helper libraries, two jobs</h2></div>
+<p class="lf-p">Writing a launch file uses two libraries. One rule of thumb: one handles the launch file itself, the other knows specifically about ROS 2.</p>
+<div class="lf-lib-grid">
+<div class="lf-lib-card launch">
+<h4>launch</h4>
+<ul>
+<li>Runs and manages the launch file itself</li>
+<li>Connects it to the user and to other launch files</li>
+<li>Can start programs that are not even part of ROS 2</li>
+</ul>
+</div>
+<div class="lf-lib-card launch_ros">
+<h4>launch_ros</h4>
+<ul>
+<li>The ROS 2 specific half</li>
+<li>Starts and manages ROS 2 <b class="hl" style="color:var(--ink);">nodes</b></li>
+<li>Sets ROS 2 <b class="hl" style="color:var(--ink);">parameters</b> for those nodes</li>
+</ul>
+</div>
+</div>
+</section>
+<section class="lf-section">
+<div class="lf-section-h"><span class="num">06</span><h2>Do not put everything in one file</h2></div>
+<p class="lf-p">A launch file can hold as many nodes as you want, so it is tempting to put your robot’s entire setup into one giant file. Do not. Keep each launch file focused on one job. One file for visualization, one for navigation, one for a sensor. Then a bigger launch file can simply include the smaller ones, in whatever order they need.</p>
+<div class="lf-showcase">
+<div class="lf-showcase-body">
+<svg class="lf-comp-svg" viewbox="0 0 700 220">
+<g font-family="IBM Plex Mono, monospace">
+<rect fill="rgba(125,196,255,0.1)" height="46" rx="4" stroke="#7dc4ff" stroke-width="1.3" width="160" x="20" y="20"></rect>
+<text fill="#7dc4ff" font-size="10.5" text-anchor="middle" x="100" y="40">display.launch.py</text>
+<text fill="#5c6c65" font-size="8.5" text-anchor="middle" x="100" y="54">robot_state_publisher</text>
+<rect fill="rgba(124,217,146,0.1)" height="46" rx="4" stroke="#7cd992" stroke-width="1.3" width="160" x="20" y="87"></rect>
+<text fill="#7cd992" font-size="10.5" text-anchor="middle" x="100" y="107">joints.launch.py</text>
+<text fill="#5c6c65" font-size="8.5" text-anchor="middle" x="100" y="121">joint_state_publisher</text>
+<rect fill="rgba(201,166,255,0.1)" height="46" rx="4" stroke="#c9a6ff" stroke-width="1.3" width="160" x="20" y="154"></rect>
+<text fill="#c9a6ff" font-size="10.5" text-anchor="middle" x="100" y="174">rviz.launch.py</text>
+<text fill="#5c6c65" font-size="8.5" text-anchor="middle" x="100" y="188">rviz2</text>
+<path d="M182,43 C260,43 260,110 340,110" fill="none" stroke="#5c6c65" stroke-dasharray="4 4" stroke-width="1.4"></path>
+<path d="M182,110 C260,110 260,110 340,110" fill="none" stroke="#5c6c65" stroke-dasharray="4 4" stroke-width="1.4"></path>
+<path d="M182,177 C260,177 260,110 340,110" fill="none" stroke="#5c6c65" stroke-dasharray="4 4" stroke-width="1.4"></path>
+<rect fill="rgba(255,138,61,0.14)" height="60" rx="5" stroke="#5ab4ff" stroke-width="1.6" width="180" x="345" y="80"></rect>
+<text fill="#5ab4ff" font-size="11.5" font-weight="700" text-anchor="middle" x="435" y="105">bringup.launch.py</text>
+<text fill="#fde9d9" font-size="8.5" text-anchor="middle" x="435" y="121">includes all three above,</text>
+<text fill="#fde9d9" font-size="8.5" text-anchor="middle" x="435" y="132">in the order they need</text>
+<path d="M527,110 H575" marker-end="url(#lfArrow)" stroke="#4dd6c0" stroke-width="1.8"></path>
+<rect fill="rgba(77,214,192,0.1)" height="48" rx="4" stroke="#4dd6c0" stroke-width="1.4" width="100" x="580" y="86"></rect>
+<text fill="#4dd6c0" font-size="9.5" text-anchor="middle" x="630" y="106">ros2 launch</text>
+<text fill="#4dd6c0" font-size="9.5" text-anchor="middle" x="630" y="120">bringup.launch.py</text>
+</g>
+</svg>
+</div>
+</div>
+</section>
+<section class="lf-section">
+<div class="lf-section-h"><span class="num">07</span><h2>Python, XML, or YAML?</h2></div>
+<p class="lf-p">Launch descriptions can be expressed using different formats. This course uses <b class="hl">Python</b> because Python gives us the full flexibility of a programming language when launch configurations become more advanced. It also makes concepts such as conditions, substitutions, event handling, and reusable launch logic easier to introduce.</p>
+<div class="lf-showcase">
+<div class="lf-showcase-head" style="border-bottom:none; padding-bottom:0;">
+<h3>The same idea, three formats</h3>
+</div>
+<div class="lf-showcase-body" style="padding-top:0;">
+<div class="lf-fmt-tabs" id="fmt-tabs">
+<button class="active" data-fmt="py">Python (used in this course)</button>
+<button data-fmt="xml">XML</button>
+<button data-fmt="yaml">YAML</button>
+</div>
+<div class="lf-fmt-pane active" id="fmt-py"><pre class="lf-fmt-pre"><span class="tk-kw">from</span> launch <span class="tk-kw">import</span> LaunchDescription
+<span class="tk-kw">from</span> launch_ros.actions <span class="tk-kw">import</span> Node
+
+<span class="tk-kw">def</span> <span class="tk-fn">generate_launch_description</span>():
+    <span class="tk-kw">return</span> LaunchDescription([
+        Node(
+            package=<span class="tk-str">"robot_state_publisher"</span>,
+            executable=<span class="tk-str">"robot_state_publisher"</span>,
+        )
+    ])</pre></div>
+<div class="lf-fmt-pane" id="fmt-xml"><pre class="lf-fmt-pre">&lt;<span class="tk-tag">launch</span>&gt;
+  &lt;<span class="tk-tag">node</span> <span class="tk-attr">pkg</span>=<span class="tk-str">"robot_state_publisher"</span>
+        <span class="tk-attr">exec</span>=<span class="tk-str">"robot_state_publisher"</span> /&gt;
+&lt;/<span class="tk-tag">launch</span>&gt;</pre></div>
+<div class="lf-fmt-pane" id="fmt-yaml"><pre class="lf-fmt-pre"><span class="tk-cmt"># launch.yaml</span>
+launch:
+  - node:
+      pkg: <span class="tk-str">robot_state_publisher</span>
+      exec: <span class="tk-str">robot_state_publisher</span></pre></div>
+<div class="lf-card" style="margin-top:14px; margin-bottom:0;">
+<div class="lf-card-lbl" style="color:var(--ink-faint);">Why Python in this course?</div>
+<p>Python is a general-purpose programming language, so it gives us a convenient way to express more advanced launch behavior as the project grows. XML and other declarative formats can still be useful when the launch description is simple and structured.</p>
+</div>
+</div>
+</div>
+</section>
+
+</div>
+<script>
+/* ============ Section 01: terminal race demo ============ */
+(function(){
+  var btn = document.getElementById('race-btn');
+  var resetBtn = document.getElementById('race-reset');
+  var leftEl = document.getElementById('race-left');
+  var rightEl = document.getElementById('race-right');
+  var leftBadge = document.getElementById('race-left-badge');
+  var rightBadge = document.getElementById('race-right-badge');
+  var timerEl = document.getElementById('race-timer');
+  var timers = [];
+  var running = false;
+
+  var LEFT_STEPS = [
+    { delay: 300,  cmd: '$ ros2 run robot_state_publisher robot_state_publisher', out: 'publishing robot_description...' },
+    { delay: 1900, cmd: '$ ros2 run joint_state_publisher joint_state_publisher', out: 'publishing /joint_states...' },
+    { delay: 1900, cmd: '$ ros2 run rviz2 rviz2', out: 'RViz2 window opened' }
+  ];
+  var RIGHT_STEPS = [
+    { delay: 300, cmd: '$ ros2 launch bumperbot_description display.launch.py', out: null }
+  ];
+  var RIGHT_FOLLOWUP = [
+    { delay: 500, out: 'robot_state_publisher: publishing robot_description...' },
+    { delay: 250, out: 'joint_state_publisher: publishing /joint_states...' },
+    { delay: 250, out: 'rviz2: RViz2 window opened', ok: true }
+  ];
+
+  function clearAll(){
+    timers.forEach(function(t){ clearTimeout(t); });
+    timers = [];
+    leftEl.innerHTML = '';
+    rightEl.innerHTML = '';
+    leftBadge.textContent = '';
+    rightBadge.textContent = '';
+    timerEl.textContent = 'Press "Run both" to start.';
+    running = false;
+    btn.disabled = false;
+  }
+
+  function addTerm(container, cmd, out, ok){
+    var div = document.createElement('div');
+    div.className = 'lf-term';
+    var html = '<div class="cmd">' + cmd + '</div>';
+    if(out) html += '<div class="out' + (ok ? ' ok' : '') + '">' + out + '</div>';
+    div.innerHTML = html;
+    container.appendChild(div);
+    requestAnimationFrame(function(){ div.classList.add('show'); });
+    return div;
+  }
+
+  function run(){
+    if(running) return;
+    clearAll();
+    running = true;
+    btn.disabled = true;
+
+    var t0 = performance.now();
+    var leftElapsed = 0, rightElapsed = 0, doneCount = 0;
+
+    var acc = 0;
+    LEFT_STEPS.forEach(function(step){
+      acc += step.delay;
+      timers.push(setTimeout(function(){
+        addTerm(leftEl, step.cmd, step.out);
+        leftElapsed = performance.now() - t0;
+        if(step === LEFT_STEPS[LEFT_STEPS.length-1]){
+          leftBadge.textContent = leftElapsed >= 1000 ? (leftElapsed/1000).toFixed(1) + 's, 3 terminals' : Math.round(leftElapsed) + 'ms, 3 terminals';
+          finishOne();
+        }
+      }, acc));
+    });
+
+    var acc2 = 0;
+    RIGHT_STEPS.forEach(function(step){
+      acc2 += step.delay;
+      timers.push(setTimeout(function(){ addTerm(rightEl, step.cmd, step.out); }, acc2));
+    });
+    var rightTermBody = null;
+    timers.push(setTimeout(function(){ rightTermBody = rightEl.lastElementChild; }, acc2 + 10));
+    RIGHT_FOLLOWUP.forEach(function(step){
+      acc2 += step.delay;
+      timers.push(setTimeout(function(){
+        var line = document.createElement('div');
+        line.className = 'out' + (step.ok ? ' ok' : '');
+        line.textContent = step.out;
+        (rightTermBody || rightEl.lastElementChild).appendChild(line);
+        if(step.ok){
+          rightElapsed = performance.now() - t0;
+          rightBadge.textContent = (rightElapsed/1000).toFixed(1) + 's, 1 terminal';
+          finishOne();
+        }
+      }, acc2));
+    });
+
+    function finishOne(){
+      doneCount++;
+      if(doneCount === 2){
+        timerEl.innerHTML = 'Same three nodes, same result. <b>' + (leftElapsed/1000).toFixed(1) + 's across 3 terminals</b> vs <b>' + (rightElapsed/1000).toFixed(1) + 's in 1</b>.';
+        running = false;
+        btn.disabled = false;
+      }
+    }
+  }
+
+  btn.addEventListener('click', run);
+  resetBtn.addEventListener('click', clearAll);
+})();
+
+/* ============ Section 02: build your own launch file ============ */
+(function(){
+  var pickEl = document.getElementById('node-pick');
+  var codeEl = document.getElementById('build-code');
+  var termEl = document.getElementById('build-term');
+  var runBtn = document.getElementById('build-run');
+
+  var NODES = {
+    rsp:  { pkg: 'robot_state_publisher', exe: 'robot_state_publisher', out: 'publishing robot_description...' },
+    jsp:  { pkg: 'joint_state_publisher', exe: 'joint_state_publisher', out: 'publishing /joint_states...' },
+    rviz: { pkg: 'rviz2', exe: 'rviz2', out: 'RViz2 window opened' }
+  };
+
+  function selected(){
+    var out = [];
+    pickEl.querySelectorAll('input[type=checkbox]').forEach(function(cb){
+      if(cb.checked) out.push(cb.dataset.node);
+    });
+    return out;
+  }
+
+  function renderCode(){
+    var picks = selected();
+    if(picks.length === 0){
+      codeEl.innerHTML = '<span class="tk-cmt"># no nodes selected, this launch file would start nothing</span>\n\n<span class="tk-kw">from</span> launch <span class="tk-kw">import</span> LaunchDescription\n\n<span class="tk-kw">def</span> <span class="tk-fn">generate_launch_description</span>():\n    <span class="tk-kw">return</span> LaunchDescription([])';
+      return;
+    }
+    var lines = [];
+    lines.push('<span class="tk-kw">from</span> launch <span class="tk-kw">import</span> LaunchDescription');
+    lines.push('<span class="tk-kw">from</span> launch_ros.actions <span class="tk-kw">import</span> Node');
+    lines.push('');
+    lines.push('<span class="tk-kw">def</span> <span class="tk-fn">generate_launch_description</span>():');
+    lines.push('    <span class="tk-kw">return</span> LaunchDescription([');
+    picks.forEach(function(key, i){
+      var n = NODES[key];
+      lines.push('        Node(');
+      lines.push('            package=<span class="tk-str">"' + n.pkg + '"</span>,');
+      lines.push('            executable=<span class="tk-str">"' + n.exe + '"</span>,');
+      lines.push('        )' + (i < picks.length - 1 ? ',' : ''));
+    });
+    lines.push('    ])');
+    codeEl.innerHTML = lines.join('\n');
+  }
+
+  function run(){
+    var picks = selected();
+    if(picks.length === 0){
+      termEl.innerHTML = '<span class="empty">This launch file has nothing in its list, so nothing starts.</span>';
+      return;
+    }
+    termEl.innerHTML = '<div class="cmd">$ ros2 launch my_robot bringup.launch.py</div>';
+    var acc = 400;
+    picks.forEach(function(key){
+      (function(key, delay){
+        setTimeout(function(){
+          var line = document.createElement('div');
+          line.className = 'out';
+          line.textContent = key + ': ' + NODES[key].out;
+          termEl.appendChild(line);
+        }, delay);
+      })(key, acc);
+      acc += 450;
+    });
+    setTimeout(function(){
+      var line = document.createElement('div');
+      line.className = 'out ok';
+      line.textContent = 'all ' + picks.length + ' node(s) running';
+      termEl.appendChild(line);
+    }, acc + 150);
+  }
+
+  pickEl.addEventListener('change', renderCode);
+  runBtn.addEventListener('click', run);
+  renderCode();
+})();
+
+/* ============ Section 03: order-matters demo (3 strategies, no code shown) ============ */
+(function(){
+  var toggle = document.getElementById('dep-toggle');
+  var playBtn = document.getElementById('dep-play');
+  var barA = document.getElementById('tl-a');
+  var barB = document.getElementById('tl-b');
+  var barBLabel = document.getElementById('tl-b-label');
+  var caption = document.getElementById('dep-caption');
+  var mode = 'broken';
+  var timers = [];
+
+  function clearTimers(){ timers.forEach(clearTimeout); timers = []; }
+
+  function resetBars(){
+    barA.className = 'lf-tl-bar';
+    barB.className = 'lf-tl-bar b';
+    barBLabel.classList.remove('show');
+    barA.style.transition = 'none'; barB.style.transition = 'none';
+    barA.style.left = '0%'; barA.style.width = '0%';
+    barB.style.left = '0%'; barB.style.width = '0%';
+    void barA.offsetWidth;
+    barA.style.transition = ''; barB.style.transition = '';
+  }
+
+  function setCaption(html, cls){
+    caption.className = 'lf-caption-box' + (cls ? ' ' + cls : '');
+    caption.innerHTML = html;
+  }
+
+  function play(){
+    clearTimers();
+    resetBars();
+    barA.style.left = '0%'; barA.style.width = '46%';
+
+    if(mode === 'broken'){
+      setCaption('<b>0.0s</b> both operations are requested at approximately the same time.');
+      barB.style.left = '0%'; barB.style.width = '46%';
+      timers.push(setTimeout(function(){
+        barBLabel.textContent = 'may need data later';
+        barBLabel.classList.add('show');
+        setCaption('<b>0.7s</b> the second component can start, but any required data may still be unavailable. ROS 2 communication is asynchronous.');
+      }, 700));
+    } else if(mode === 'timer'){
+      setCaption('<b>0.0s</b> the first operation starts. The second operation is deliberately delayed by a fixed amount of time.');
+      timers.push(setTimeout(function(){
+        barB.style.left = '46%'; barB.style.width = '46%';
+        barBLabel.textContent = 'started after 2.0s';
+        barBLabel.classList.add('show');
+        setCaption('<b>2.0s</b> the timer expired, so the second operation starts. The timer does not prove that the dependency is ready.', 'ok');
+      }, 900));
+    } else {
+      setCaption('<b>0.0s</b> the first operation starts. The launch system waits for a defined launch event before starting the second operation.');
+      timers.push(setTimeout(function(){
+        barB.style.left = '46%'; barB.style.width = '46%';
+        barBLabel.textContent = 'started after event';
+        barBLabel.classList.add('show');
+        setCaption('<b>Event received</b> the defined launch event occurred, so the second operation starts. A real application should choose an event or readiness mechanism that matches its dependency.', 'ok');
+      }, 900));
+    }
+  }
+
+  toggle.querySelectorAll('button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      mode = btn.dataset.mode;
+      toggle.querySelectorAll('button').forEach(function(b){ b.classList.toggle('active', b === btn); });
+      play();
+    });
+  });
+  playBtn.addEventListener('click', play);
+  play();
+})();
+
+/* ============ Section 07: format tabs ============ */
+(function(){
+  var tabs = document.getElementById('fmt-tabs');
+  tabs.querySelectorAll('button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var fmt = btn.dataset.fmt;
+      tabs.querySelectorAll('button').forEach(function(b){ b.classList.toggle('active', b === btn); });
+      document.querySelectorAll('.lf-fmt-pane').forEach(function(p){ p.classList.remove('active'); });
+      document.getElementById('fmt-' + fmt).classList.add('active');
+    });
+  });
+})();
+</script>
+
+<script>
+(function(){function send(){parent.postMessage({taWidget:location.pathname,h:document.documentElement.scrollHeight},'*')}
+new ResizeObserver(send).observe(document.documentElement);addEventListener('load',send);setInterval(send,1500);
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href]');if(a&&!a.target){a.target='_top'}});})();
+</script></body></html>

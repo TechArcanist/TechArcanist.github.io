@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jetson Nano: YOLOv5 Setup | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="This project documents the complete setup of YOLOv5 object detection with GPU acceleration on the Jetson Nano, including Python 3.8 environment creation, CUDA…">
+<link rel="canonical" href="https://techarcanist.com/project/jetson-nano-yolo-v5/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="Jetson Nano: YOLOv5 Setup">
+<meta property="og:description" content="This project documents the complete setup of YOLOv5 object detection with GPU acceleration on the Jetson Nano, including Python 3.8 environment creation, CUDA…">
+<meta property="og:url" content="https://techarcanist.com/project/jetson-nano-yolo-v5/">
+<meta property="og:image" content="/uploads/wp/2025/08/Untitled-design-23-1024x576.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=a6e775a3ba">
+<link rel="stylesheet" href="/assets/home.css?v=a6e775a3ba">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/" aria-current="page">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<section class="cs-hero">
+  <div class="wrap">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/project/">Work</a><span>/</span><span>17 of 27</span></nav>
+    <h1>Jetson Nano: YOLOv5 Setup</h1>
+<div class="cs-lead"><p>This project documents the complete setup of <span class="hl"><strong>YOLOv5 object detection</strong></span> with <span class="hl"><strong>GPU acceleration</strong></span> on the <span class="hl"><strong>Jetson Nano</strong></span>, including Python 3.8 environment creation, <span class="hl"><strong>CUDA + cuDNN configuration</strong></span>, installation of <span class="hl"><strong>Jetson-compatible PyTorch &amp; Torchvision</strong></span>, and camera testing. This repository is part of my Jetson learning journey where I documented everything, what worked and what didn’t, while setting up <span class="hl"><strong>YOLOv5 on Jetson Nano</strong></span>.</p></div>  </div>
+  <div class="wrap">
+    <dl class="cs-spec mono">
+<div><dt>Discipline</dt><dd><a href="/project/#ai">Edge AI &amp; Vision</a></dd></div>      <div><dt>Contents</dt><dd>2 images · 1 videos</dd></div>
+<div><dt>Source</dt><dd><a href="https://github.com/TechArcanist/Jetson-Nano-Yolo-v5" target="_blank" rel="noopener">Jetson-Nano-Yolo-v5 ↗</a></dd></div>    </dl>
+  </div>
+  <div class="wrap"><figure class="cs-cover"><img src="/uploads/wp/2025/08/Untitled-design-23-1024x576.jpg" alt="Jetson Nano: YOLOv5 Setup"><span class="corner tl"></span><span class="corner br"></span></figure></div>
+</section>
+
+<section class="sec tight">
+  <div class="wrap doc">
+    <aside class="toc" aria-label="On this page">
+      <p class="label">On this page</p>
+      <ol><li><a href="#background-purpose"><span class="mono">01</span>Background / Purpose</a></li><li><a href="#what-this-guide-covers"><span class="mono">02</span>What This Guide Covers</a></li><li><a href="#how-it-works"><span class="mono">03</span>How it Works</a></li><li><a href="#working"><span class="mono">04</span>Working</a></li><li><a href="#code-installation"><span class="mono">05</span>Code &amp; Installation</a></li><li><a href="#my-learnings"><span class="mono">06</span>My Learnings</a></li></ol>
+    </aside>
+    <article class="prose">
+      
+<div class="cols cols-2"><div class="col">
+<figure class="img"><img src="/uploads/wp/2025/11/Untitled-design-23-1024x576.jpg" alt="" loading="lazy" decoding="async" width="1024" height="576"></figure>
+</div><div class="col">
+<figure class="img"><img src="/uploads/wp/2025/11/Untitled-design-28-1024x576.jpg" alt="" loading="lazy" decoding="async" width="1024" height="576"></figure>
+</div></div>
+<div class="col">
+<h2 id="background-purpose">Background / Purpose</h2>
+<p class="note">When I started working with Jetson Nano, there was no single step-by-step guide that just works.<br>Most tutorials online were incomplete or outdated, so I decided to:<br><br>✅ Try every possible combination<br>✅ Solve every error manually<br>✅ Document it in this repository<br><br>This repo turned into a full installation guide that others can follow without struggling.</p>
+</div>
+<div class="col">
+<h2 id="what-this-guide-covers">What This Guide Covers</h2>
+<ul>
+<li>Updating Jetson Nano and installing correct JetPack version</li>
+<li>Configuring <strong>CUDA</strong> and <strong>cuDNN</strong></li>
+<li>Installing <strong>Python 3.8</strong> and fixing pip conflicts</li>
+<li>Creating a <strong>virtual environment</strong></li>
+<li>Installing Jetson-compatible <strong>PyTorch + Torchvision wheels</strong></li>
+<li>Enabling additional <strong>Swap memory</strong> so YOLOv5 can train/run smoothly</li>
+<li>Running YOLOv5 with:
+<ul>
+<li>Webcam / CSI camera feed</li>
+<li>USB camera feed</li>
+<li>Images + video feed</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="col">
+<h2 id="how-it-works">How it Works</h2>
+<ul>
+<li>Jetson Nano is set up with JetPack (NVIDIA drivers, CUDA, cuDNN)</li>
+<li>Python 3.8 virtual environment created (isolated environment)</li>
+<li>Torch + Torchvision <code>.whl</code> files installed (Jetson-compatible builds)</li>
+<li>YOLOv5 repo cloned → dependencies installed</li>
+<li>YOLOv5 executed using:
+<ul>
+<li>Static images</li>
+<li>Live camera feed</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="col">
+<h2 id="working">Working</h2>
+<div class="embed"><iframe src="https://www.youtube-nocookie.com/embed/4WT12-Ynt-0?rel=0&amp;modestbranding=1&amp;playsinline=1" loading="lazy" title="Video" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+<p><span class="hl"><strong>Yolo v5 Working</strong></span></p>
+</div>
+<div class="col">
+<h2 id="code-installation">Code &amp; Installation</h2>
+<p class="note">The complete source code is available in the GitHub repository.</p>
+<div class="btns">
+<a class="btn btn-ghost" href="https://github.com/TechArcanist/Jetson-Nano-Yolo-v5" target=_blank rel=noopener>View on Github, &gt;</a>
+</div>
+</div>
+<div class="col">
+<h2 id="my-learnings">My Learnings</h2>
+<ul>
+<li><strong>YOLOv5 Setup</strong>, Installing and configuring YOLOv5 for Jetson Nano</li>
+<li><strong>Python 3.8 Virtual Environment</strong>, Managing dependencies cleanly</li>
+<li><strong>JetPack / CUDA / cuDNN verification</strong>, Ensuring GPU acceleration works</li>
+<li><strong>Torch &amp; Torchvision installation</strong>, Using Jetson-compatible <code>.whl</code> files</li>
+<li><strong>Swap Memory Allocation</strong>, Improving performance with additional swap</li>
+<li><strong>Camera integration</strong>, Running live object detection using CSI / USB webcam</li>
+<li><strong>GPU-based detection</strong>, Running YOLO with <code>--device 0</code> for CUDA inference</li>
+</ul>
+</div>
+
+    </article>
+  </div>
+</section>
+
+<section class="wrap">
+  <nav class="pager" aria-label="More projects">
+<a href="/project/thumbs-up-down-classification-using-jetson-nano/"><span class="mono">Previous</span>Thumbs Up / Thumbs Down Gesture Classification</a><a class="nx" href="/project/jetson-nano-hacks/"><span class="mono">Next</span>Jetson Nano Hacks</a>  </nav>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <p class="label">Related work</p>
+    <div class="grid3"><a class="pcard" href="/project/vaman-v3/" data-cats="robotics ai" data-search="vaman v3-3d-printed quadruped experiment (paused version) after vaman v2 successfully implemented ai-based movement (voice + gesture + object find/stop) , the next challenge was to move beyond wheels. vaman v3 explored legged… robotics edge ai &amp; vision">
+  <div class="pcard-media">
+<img src="/uploads/wp/2025/08/Untitled-design-34-1024x576.jpg" alt="" loading="lazy">    <span class="pcard-kind mono">Project</span>
+  </div>
+  <div class="pcard-body">
+    <p class="pcard-cats mono">Robotics / Edge AI &amp; Vision</p>
+    <h3>Vaman V3-3D-Printed Quadruped Experiment (Paused Version)</h3>
+    <p class="pcard-sum">After Vaman v2 successfully implemented AI-based movement (voice + gesture + object find/stop) , the next challenge was to move beyond wheels. Vaman v3 explored legged…</p>
+  </div>
+</a>
+<a class="pcard" href="/project/vaman-v2/" data-cats="robotics ai" data-search="vaman v2 after vaman v1 validated wi-fi controlled movement using the jetson nano , the next goal was to make the robot smarter, not just remotely controllable. vaman v2 evolved… robotics edge ai &amp; vision">
+  <div class="pcard-media">
+<img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-14-1024x576.png" alt="" loading="lazy">    <span class="pcard-kind mono">Project</span>
+  </div>
+  <div class="pcard-body">
+    <p class="pcard-cats mono">Robotics / Edge AI &amp; Vision</p>
+    <h3>Vaman v2</h3>
+    <p class="pcard-sum">After Vaman v1 validated Wi-Fi controlled movement using the Jetson Nano , the next goal was to make the robot smarter, not just remotely controllable. Vaman v2 evolved…</p>
+  </div>
+</a>
+<a class="pcard" href="/project/vaman-v1/" data-cats="robotics ai" data-search="vaman v1 the vaman v1 prototype was built to validate whether the jetson nano alone could handle wireless remote control over 5g wi-fi , real-time motor control , and live camera… robotics edge ai &amp; vision">
+  <div class="pcard-media">
+<img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-13-1024x576.png" alt="" loading="lazy">    <span class="pcard-kind mono">Project</span>
+  </div>
+  <div class="pcard-body">
+    <p class="pcard-cats mono">Robotics / Edge AI &amp; Vision</p>
+    <h3>Vaman v1</h3>
+    <p class="pcard-sum">The Vaman v1 prototype was built to validate whether the Jetson Nano alone could handle wireless remote control over 5G Wi-Fi , real-time motor control , and live camera…</p>
+  </div>
+</a>
+</div>
+  </div>
+</section>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/plc/">PLC &amp; Industrial Automation</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=a6e775a3ba" defer></script>
+<script src="/assets/home.js?v=a6e775a3ba" defer></script>
+</body>
+</html>

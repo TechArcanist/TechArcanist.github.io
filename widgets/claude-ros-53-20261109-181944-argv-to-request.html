@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>From the command line to the request</title>
+<style>
+html,body{margin:0;background:#0e182c;color:#e8eef7;font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+.w{padding:16px;max-width:980px;margin:0 auto}
+h1{font-size:18px;margin:0 0 4px}.sub{color:#a9b8cc;font-size:14px;margin:0 0 12px}
+.card{background:#13213a;border:1px solid #23395c;border-radius:12px;padding:14px}
+.cmd{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font:14px ui-monospace,Consolas,monospace;background:#060c18;border:1px solid #1f3352;border-radius:8px;padding:10px}
+.cmd span{color:#8aa0bd}
+.cmd input{flex:1;min-width:120px;background:#0a1324;border:1px solid #2b4366;color:#ffd9bf;border-radius:6px;padding:6px 8px;font:14px ui-monospace,Consolas,monospace}
+.presets{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.presets button{background:transparent;color:#e8eef7;border:1px solid #2b4366;border-radius:7px;padding:5px 10px;font:13px ui-monospace,Consolas,monospace;cursor:pointer}
+.presets button:hover{border-color:#ff8a3d}
+.steps{display:grid;gap:8px;margin-top:6px}
+.st{display:grid;grid-template-columns:150px minmax(0,1fr);gap:10px;align-items:start;background:#0f1b31;border:1px solid #23395c;border-radius:10px;padding:9px 12px}
+@media (max-width:620px){.st{grid-template-columns:1fr}}
+.st b{color:#a9b8cc;font-size:12.5px;font-weight:600}
+.st .v{font:13.5px/1.6 ui-monospace,Consolas,monospace;word-break:break-word}
+.chip{display:inline-block;border:1px solid #2b4366;border-radius:6px;padding:1px 7px;margin:2px 4px 2px 0;background:#0a1324}
+.chip.n{border-color:#66e3b0;color:#66e3b0}.chip.t{border-color:#ffd24a;color:#ffd24a}.chip.x{color:#6b7f96}
+.ok{color:#66e3b0}.bad{color:#ff6b6b}.warn{color:#ffd24a}.dim{color:#6b7f96}
+.st.off{opacity:.35}
+</style></head><body><div class="w">
+<h1>From what you type to the request</h1>
+<p class="sub">Change the words after the program name and watch them travel: into <code>sys.argv</code>, through the check on line 29, through <code>int()</code> on line 33, into the request.</p>
+<div class="card">
+ <div class="cmd"><span>ros2 run bumperbot_py_examples simple_service_client</span><input id="args" value="5 3" aria-label="arguments"></div>
+ <div class="presets"><button data-v="5 3">5 3</button><button data-v="">(nothing)</button><button data-v="7">7</button><button data-v="5 3 1">5 3 1</button><button data-v="five 3">five 3</button><button data-v="2.5 1">2.5 1</button><button data-v="-4 10">-4 10</button></div>
+ <div class="steps" id="steps"></div>
+</div></div>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function row(t,v,off){return '<div class="st'+(off?' off':'')+'"><b>'+t+'</b><div class="v">'+v+'</div></div>'}
+function draw(){
+  var words=$('args').value.trim()?$('args').value.trim().split(/\s+/):[],argv=['.../simple_service_client'].concat(words),h='';
+  h+=row('1. sys.argv (line 1 imports sys)',argv.map(function(w,i){return '<span class="chip'+(i?' t':' x')+'">['+i+'] '+esc(JSON.stringify(w))+'</span>'}).join('')+'<br><span class="dim">Every word is text (a string). [0] is always the program itself.</span>');
+  var ok=argv.length===3;
+  h+=row('2. Line 29: len(sys.argv) != 3 ?','len(sys.argv) = '+argv.length+' → '+(ok?'<span class="ok">3, so the check passes</span>':'<span class="bad">not 3, so line 30 prints and line 31 returns</span>')+
+    (ok?'':'<br><span class="bad">Wrong number of arguments! Usage: simple_service_client A B</span><br><span class="dim">Note: rclpy.init() already ran on line 27, and this early return skips rclpy.shutdown(). Harmless here, because the program ends anyway.</span>'));
+  if(!ok){h+=row('3. int() on line 33','not reached',1)+row('4. The request','not made',1);$('steps').innerHTML=h;return}
+  var A=words[0],B=words[1],ia=/^[+-]?\d+$/.test(A),ib=/^[+-]?\d+$/.test(B);
+  h+=row('3. int() on line 33','int('+esc(JSON.stringify(A))+') → '+(ia?'<span class="chip n">'+BigInt(A)+'</span>':'<span class="bad">ValueError</span>')+'   int('+esc(JSON.stringify(B))+') → '+(ib?'<span class="chip n">'+BigInt(B)+'</span>':'<span class="bad">ValueError</span>')+
+    (ia&&ib?'<br><span class="dim">Text becomes whole numbers, which is what the int64 fields need.</span>':'<br><span class="bad">ValueError: invalid literal for int() with base 10: '+esc(JSON.stringify(ia?B:A))+'</span><br><span class="dim">The program stops with a traceback before the node is made. '+(/^[+-]?\d*\.\d+$/.test(ia?B:A)?'int() does not accept decimals written as text.':'')+'</span>'));
+  if(!(ia&&ib)){h+=row('4. The request','not made',1);$('steps').innerHTML=h;return}
+  var a=BigInt(A),b=BigInt(B),LO=-(2n**63n),HI=2n**63n-1n,inr=function(v){return v>=LO&&v<=HI};
+  if(!inr(a)||!inr(b)){h+=row('4. The request (lines 16 to 18)','<span class="bad">AssertionError: the &#39;a&#39; and &#39;b&#39; fields must be integers from '+LO+' to '+HI+'</span><br><span class="dim">Python&#39;s int has no limit, but the int64 fields of the request do. The program stops on line 17 or 18.</span>');$('steps').innerHTML=h;return}
+  h+=row('4. The request (lines 16 to 18)','AddTwoInts.Request(a=<span class="chip n">'+a+'</span>, b=<span class="chip n">'+b+'</span>)');
+  h+=row('5. The answer (line 23)',(inr(a+b)?'<span class="ok">[INFO] [simple_service_client]: Service Response '+(a+b)+'</span>':'<span class="bad">The sum '+(a+b)+' does not fit in the int64 field sum: as far as I know the server&#39;s callback raises an error and no answer comes back.</span>')+'<br><span class="dim">If the server is running. Otherwise the client waits on line 13 and prints "service not available, waiting again..." every second.</span>');
+  $('steps').innerHTML=h}
+$('args').oninput=draw;
+[].slice.call(document.querySelectorAll('.presets button')).forEach(function(b){b.onclick=function(){$('args').value=b.getAttribute('data-v');draw()}});
+draw();
+})();
+</script>
+<script>
+(function(){function s(){parent.postMessage({taWidget:location.pathname,h:document.documentElement.scrollHeight},'*')}
+new ResizeObserver(s).observe(document.documentElement);addEventListener('load',s);setInterval(s,1500);})();
+</script></body></html>

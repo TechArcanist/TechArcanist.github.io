@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Smart Cam Security Lock System | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="The SmartCam-Lock is an IoT-based security system combining Motion Detection , an ESP32-CAM , a Solenoid Door Lock , and Telegram Remote Control . It detects…">
+<link rel="canonical" href="https://techarcanist.com/project/smart-cam-security-lock-system/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="Smart Cam Security Lock System">
+<meta property="og:description" content="The SmartCam-Lock is an IoT-based security system combining Motion Detection , an ESP32-CAM , a Solenoid Door Lock , and Telegram Remote Control . It detects…">
+<meta property="og:url" content="https://techarcanist.com/project/smart-cam-security-lock-system/">
+<meta property="og:image" content="/uploads/wp/2025/08/Copy-of-Untitled-Design-3-1-1024x576.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=a6e775a3ba">
+<link rel="stylesheet" href="/assets/home.css?v=a6e775a3ba">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/" aria-current="page">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<section class="cs-hero">
+  <div class="wrap">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/project/">Work</a><span>/</span><span>22 of 27</span></nav>
+    <h1>Smart Cam Security Lock System</h1>
+<div class="cs-lead"><p>The <span class="hl"><strong>SmartCam-Lock</strong></span> is an IoT-based security system combining <span class="hl"><strong>Motion Detection</strong></span>, an <span class="hl"><strong>ESP32-CAM</strong></span>, a <span class="hl"><strong>Solenoid Door Lock</strong></span>, and <span class="hl"><strong>Telegram Remote Control</strong></span>. It detects motion, captures real-time images, and instantly sends them to the user via <span class="hl"><strong>Telegram</strong></span>. Along with monitoring, the system lets users remotely <span class="hl"><strong>lock/unlock the door</strong></span> directly from Telegram, enabling <span class="hl"><strong>Security + Surveillance + Remote Access Control</strong></span> in a compact and efficient system.</p></div>  </div>
+  <div class="wrap">
+    <dl class="cs-spec mono">
+<div><dt>Discipline</dt><dd><a href="/project/#iot">IoT &amp; Automation</a></dd></div>      <div><dt>Contents</dt><dd>2 images · 1 videos</dd></div>
+<div><dt>Source</dt><dd><a href="https://github.com/TechArcanist/SmartCam-Lock-Security-System" target="_blank" rel="noopener">SmartCam-Lock-Security-System ↗</a></dd></div>    </dl>
+  </div>
+  <div class="wrap"><figure class="cs-cover"><img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-3-1-1024x576.png" alt="Smart Cam Security Lock System"><span class="corner tl"></span><span class="corner br"></span></figure></div>
+</section>
+
+<section class="sec tight">
+  <div class="wrap doc">
+    <aside class="toc" aria-label="On this page">
+      <p class="label">On this page</p>
+      <ol><li><a href="#features"><span class="mono">01</span>Features</a></li><li><a href="#components-used"><span class="mono">02</span>Components Used</a></li><li><a href="#how-it-works"><span class="mono">03</span>How it Works</a></li><li><a href="#working"><span class="mono">04</span>Working</a></li><li><a href="#code-installation-circuit-diagram"><span class="mono">05</span>Code, Installation &amp; Circuit Diagram</a></li><li><a href="#my-learnings"><span class="mono">06</span>My Learnings</a></li></ol>
+    </aside>
+    <article class="prose">
+      
+<div class="cols cols-2"><div class="col">
+<figure class="img"><img src="/uploads/wp/2025/11/Untitled-design-18-1024x576.jpg" alt="" loading="lazy" decoding="async" width="1024" height="576"></figure>
+</div><div class="col">
+<figure class="img"><img src="/uploads/wp/2025/11/Untitled-design-19-1024x576.jpg" alt="" loading="lazy" decoding="async" width="1024" height="576"></figure>
+</div></div>
+<div class="col">
+<h2 id="features">Features</h2>
+<ul>
+<li><strong><strong>Motion-Triggered Image Capture</strong></strong>
+<ul>
+<li>PIR motion sensor detects movement and activates the camera.</li>
+</ul>
+</li>
+<li><strong><strong>Real-Time Telegram Alerts</strong></strong>
+<ul>
+<li>The ESP32-CAM sends captured photos directly to Telegram along with alert messages.</li>
+</ul>
+</li>
+<li><strong><strong>Remote Lock/Unlock Control</strong></strong>
+<ul>
+<li>Solenoid lock controlled through a relay, toggled via Telegram commands.</li>
+</ul>
+</li>
+<li><strong><strong>Instant Notifications</strong></strong>
+<ul>
+<li>Receive alerts on your phone when someone approaches or stands near the system.</li>
+</ul>
+</li>
+<li><strong><strong><strong>Secure Remote Access</strong></strong></strong>
+<ul>
+<li>User can verify the image and decide whether to lock or unlock the door.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="col">
+<h2 id="components-used">Components Used</h2>
+<ul>
+<li><strong>ESP32-CAM</strong>, Microcontroller with built-in camera module</li>
+<li><strong>PIR Motion Sensor</strong>, Detects motion and triggers camera capture</li>
+<li><strong>Solenoid Door Lock</strong>, Physical locking mechanism</li>
+<li><strong>Relay Module</strong>, Controls the solenoid lock through ESP32-CAM</li>
+<li><strong>Jumper Wires</strong>, Internal connections</li>
+<li><strong>Power Supply</strong>, Powering ESP32-CAM and solenoid lock</li>
+</ul>
+</div>
+<div class="col">
+<h2 id="how-it-works">How it Works</h2>
+<ul>
+<li><strong>Motion Detected</strong>
+<ul>
+<li>PIR motion sensor detects movement near the system.</li>
+</ul>
+</li>
+<li><strong>Camera Triggered</strong>
+<ul>
+<li>ESP32-CAM captures an image instantly.</li>
+</ul>
+</li>
+<li><strong>Telegram Notification</strong>
+<ul>
+<li>The captured image is sent to the user via Telegram along with a message.</li>
+</ul>
+</li>
+<li><strong>Remote Lock Control</strong>
+<ul>
+<li>Inside the Telegram chat, the user can send lock/unlock commands.</li>
+<li>ESP32-CAM activates the relay → relay controls the <strong>solenoid lock</strong>.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="col">
+<h2 id="working">Working</h2>
+<div class="embed"><iframe src="https://www.youtube-nocookie.com/embed/xVQ_V1xJZlU?rel=0&amp;modestbranding=1&amp;playsinline=1" loading="lazy" title="Video" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+<p><span class="hl"><strong><strong>Smart Cam Security Lock System</strong></strong></span></p>
+</div>
+<div class="col">
+<h2 id="code-installation-circuit-diagram">Code, Installation &amp; Circuit Diagram</h2>
+<p class="note"><strong>The complete source code is available in the GitHub repository.</strong></p>
+<div class="btns">
+<a class="btn btn-ghost" href="https://github.com/TechArcanist/SmartCam-Lock-Security-System" target=_blank rel=noopener>View on GitHub, &gt;</a>
+</div>
+</div>
+<div class="col">
+<h2 id="my-learnings">My Learnings</h2>
+<ul>
+<li>How to work with the <strong>ESP32-CAM</strong> module (camera initialization, image capture, handling frame buffer, JPEG compression)</li>
+<li>Interfacing and configuring the <strong>PIR motion sensor</strong> for motion-based triggering</li>
+<li>Sending messages and photos through the <strong>Telegram Bot API</strong>, including:
+<ul>
+<li>Chat ID authentication</li>
+<li>Handling HTTP requests to send images</li>
+</ul>
+</li>
+<li>Controlling a <strong>solenoid lock using relay switching</strong> while managing power isolation between logic (ESP32) and load (lock)</li>
+<li>Secure remote access workflow: <em>capture → notify → verify → control</em></li>
+<li>Managing Wi-Fi reconnection and avoiding blocking delays inside camera tasks</li>
+<li>Using <strong>non-blocking programming</strong> to handle:
+<ul>
+<li>Camera capture process</li>
+<li>Telegram commands</li>
+<li>PIR trigger events</li>
+</ul>
+</li>
+<li>Handling <strong>real-time IoT communication</strong> (Telegram commands → ESP32 actions)</li>
+</ul>
+</div>
+
+    </article>
+  </div>
+</section>
+
+<section class="wrap">
+  <nav class="pager" aria-label="More projects">
+<a href="/project/automated-touch-socket-panel/"><span class="mono">Previous</span>Automated Touch Socket Panel</a><a class="nx" href="/project/multisense-intellinest/"><span class="mono">Next</span>Multisense Intellinest</a>  </nav>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <p class="label">Related work</p>
+    <div class="grid3"><a class="pcard" href="/project/autonomous-warehouse-project/" data-cats="ai iot" data-search="autonomous warehouse project the autonomous warehouse project is a multi-module automation system combining ai + ocr + robotics + iot + automation to bring intelligence and autonomy into warehouse… edge ai &amp; vision iot &amp; automation">
+  <div class="pcard-media">
+<img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-1-1024x576.webp" alt="" loading="lazy">    <span class="pcard-kind mono">Project</span>
+  </div>
+  <div class="pcard-body">
+    <p class="pcard-cats mono">Edge AI &amp; Vision / IoT &amp; Automation</p>
+    <h3>Autonomous Warehouse Project</h3>
+    <p class="pcard-sum">The Autonomous Warehouse Project is a multi-module automation system combining AI + OCR + Robotics + IoT + Automation to bring intelligence and autonomy into warehouse…</p>
+  </div>
+</a>
+<a class="pcard" href="/project/multi-tier-secure-lock-system-2/" data-cats="iot" data-search="multi tier secure lock system the multi-tier secure lock system is an advanced secure door locking solution built using an esp32 , integrating multiple authentication layers used in enterprise access… iot &amp; automation">
+  <div class="pcard-media">
+<img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-1-1-1024x576.png" alt="" loading="lazy">    <span class="pcard-kind mono">Project</span>
+  </div>
+  <div class="pcard-body">
+    <p class="pcard-cats mono">IoT &amp; Automation</p>
+    <h3>Multi Tier Secure Lock System</h3>
+    <p class="pcard-sum">The Multi-Tier Secure Lock System is an advanced secure door locking solution built using an ESP32 , integrating multiple authentication layers used in enterprise access…</p>
+  </div>
+</a>
+<a class="pcard" href="/project/automated-touch-socket-panel/" data-cats="iot" data-search="automated touch socket panel the automated touch socket panel is a compact touch-based smart socket control system built using an esp32 . it replaces traditional switches with touch-based activation… iot &amp; automation">
+  <div class="pcard-media">
+<img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-4-1-1024x576.png" alt="" loading="lazy">    <span class="pcard-kind mono">Project</span>
+  </div>
+  <div class="pcard-body">
+    <p class="pcard-cats mono">IoT &amp; Automation</p>
+    <h3>Automated Touch Socket Panel</h3>
+    <p class="pcard-sum">The Automated Touch Socket Panel is a compact touch-based smart socket control system built using an ESP32 . It replaces traditional switches with touch-based activation…</p>
+  </div>
+</a>
+</div>
+  </div>
+</section>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/plc/">PLC &amp; Industrial Automation</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=a6e775a3ba" defer></script>
+<script src="/assets/home.js?v=a6e775a3ba" defer></script>
+</body>
+</html>

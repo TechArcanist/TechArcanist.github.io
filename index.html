@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="I’m Lavitra Sahu, I started with a small xerox business (my first earnings), tried trading (earned, learned, and lost), got obsessed with problem-solving &amp;…">
+<link rel="canonical" href="https://techarcanist.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="Tech Arcanist">
+<meta property="og:description" content="I’m Lavitra Sahu, I started with a small xerox business (my first earnings), tried trading (earned, learned, and lost), got obsessed with problem-solving &amp;…">
+<meta property="og:url" content="https://techarcanist.com/">
+<meta property="og:image" content="https://techarcanist.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=a6e775a3ba">
+<link rel="stylesheet" href="/assets/home.css?v=a6e775a3ba">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+<script>try{if(!sessionStorage.getItem('ta-booted')&&!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('booting')}catch(e){}</script><script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "name": "Lavitra Sahu", "alternateName": "Tech Arcanist", "url": "https://techarcanist.com", "email": "mailto:lavitra@techarcanist.com", "jobTitle": "Incubation Associate, PSIT Kanpur", "address": {"@type": "PostalAddress", "addressLocality": "Kanpur", "addressCountry": "IN"}, "sameAs": ["https://github.com/TechArcanist", "https://www.linkedin.com/in/tech-arcanist/", "https://www.instagram.com/tech_arcanist/"]}</script></head>
+<body class="home">
+<div class="boot" id="boot" aria-hidden="true">
+  <div class="boot-term mono">
+    <p class="boot-bar"><span>techarcanist</span><span>bash</span></p>
+    <div class="boot-out">
+      <p data-at="0"><b>lavitra@techarcanist:~$</b> source /opt/ros/jazzy/setup.bash</p>
+      <p data-at=".1"><b>lavitra@techarcanist:~$</b> colcon build --packages-select techarcanist</p>
+      <p data-at=".18">Starting &gt;&gt;&gt; techarcanist</p>
+      <p data-at=".35" class="dim">[ build ] 159 pieces of work, 6 learning series</p>
+      <p data-at=".6" class="dim">[ build ] waking up the robot</p>
+      <p data-at=".82" class="dim">[ build ] warming the thrusters</p>
+      <p data-at="1">Finished &lt;&lt;&lt; techarcanist <span id="boot-time"></span></p>
+      <p data-at="1" class="dim">Summary: 1 package finished</p>
+      <p data-at="1.01"><b>lavitra@techarcanist:~$</b> ros2 launch techarcanist home.launch.py<i class="boot-caret"></i></p>
+    </div>
+    <p class="boot-prog"><span class="boot-track"><i id="boot-fill"></i></span><span id="boot-pct">0%</span></p>
+  </div>
+</div>
+<script>
+(function () {
+  var d = document.documentElement, box = document.getElementById('boot');
+  if (!d.classList.contains('booting')) { box.parentNode.removeChild(box); return; }
+  var lines = [].slice.call(box.querySelectorAll('[data-at]')), fill = document.getElementById('boot-fill'), pct = document.getElementById('boot-pct');
+  var t0 = performance.now(), MIN = 1500, MAX = 8000, shown = 0, loaded = false, fonts = false, imgs = [], out = false;
+  window.addEventListener('load', function () { loaded = true; });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { fonts = true; }); else fonts = true;
+  function real() {
+    if (!imgs.length) imgs = [].slice.call(document.querySelectorAll('.fly-card img'));
+    var n = imgs.length, c = 0;
+    for (var i = 0; i < n; i++) if (imgs[i].complete) c++;
+    return Math.min(n ? c / n : 0, .96) * (fonts ? 1 : .9) + (loaded ? .04 : 0);
+  }
+  function finish() {
+    if (out) return; out = true;
+    // decode the work images now, so the flight never stalls to decode one mid-motion
+    Promise.all(imgs.map(function (im) { return im.decode ? im.decode().catch(function () {}) : 0; })).then(function () {
+      setTimeout(function () {
+        box.classList.add('boot-done');
+        try { sessionStorage.setItem('ta-booted', '1'); } catch (e) {}
+        setTimeout(function () { d.classList.remove('booting'); box.parentNode && box.parentNode.removeChild(box); window.dispatchEvent(new Event('resize')); }, 650);
+      }, 380);
+    });
+  }
+  function tick(now) {
+    var el = now - t0, goal = Math.min(el / MIN, real());
+    if (el > MAX) goal = 1;
+    shown += (goal - shown) * .12; if (goal >= 1 && shown > .995) shown = 1;
+    fill.style.width = (shown * 100).toFixed(1) + '%'; pct.textContent = Math.round(shown * 100) + '%';
+    for (var i = 0; i < lines.length; i++) if (!lines[i].classList.contains('on') && shown >= Math.min(1, +lines[i].dataset.at) && (+lines[i].dataset.at <= 1 || out)) lines[i].classList.add('on');
+    if (shown >= 1) {
+      document.getElementById('boot-time').textContent = '[' + (el / 1000).toFixed(2) + 's]';
+      lines.forEach(function (l) { l.classList.add('on'); });
+      finish(); return;
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/" aria-current="page">Home</a>
+      <a href="/project/">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<canvas class="dots" id="dots" aria-hidden="true"></canvas>
+<script src="/assets/dust.js?v=a6e775a3ba" defer></script>
+<section class="sig" id="top">
+  <canvas class="field" id="field2" aria-hidden="true"></canvas>
+  <div class="hero-glow" aria-hidden="true"></div>
+  <canvas class="rig" id="rig" aria-hidden="true"></canvas>
+  <div class="sig-meta mono">
+    <p><span>Currently</span>Incubation Associate, PSIT Kanpur</p>
+    <p><span>Based in</span>Kanpur, India <b id="sig-clock"></b></p>
+    <p><span>Built so far</span>30+ projects built<i>/</i>73+ technologies used<i>/</i>3,338+ students taught<i>/</i>122 learning chapters</p>
+  </div>
+  <div class="sig-lead">
+    <h1 class="sig-name"><span>Lavitra</span> <span>Sahu</span></h1>
+    <p class="sig-line">From Zero to Maker: <em>A Journey of Building, Breaking, and Rebuilding</em></p>
+    <p class="sig-sub">I’m Lavitra Sahu, I started with a small xerox business (my first earnings), tried trading (earned, learned, and lost), got obsessed with problem-solving &amp; coding, found my way into IoT, rocket avionics, robotics, PCB design, teaching, and constant experimentation. No filters, no perfect story, just learning through chaos, curiosity, and constant evolution.</p>
+    <p class="sig-hint mono">Click anywhere to send the robot. Click on the text and it sends a drone.</p>
+    <a class="sig-btn mono" href="#work">Fly through the work <span aria-hidden="true">&darr;</span></a>
+  </div>
+</section>
+
+<section class="fly" id="work" aria-label="All work">
+  <div class="fly-stage">
+    <div class="fly-space" id="fly-space">
+<a class="fly-card" href="/documented-software-learnings/flutterflow/ff13/" data-t="Combine Text with Widget State in FlutterFlow" data-k="FlutterFlow chapter" tabindex="-1"><img src="/thumbs/413562ab3225-440.webp" srcset="/thumbs/413562ab3225-440.webp 440w, /thumbs/413562ab3225-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2-43/" data-t="Launch the Simple Speed Controller" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/e08bb5b2383e-440.webp" srcset="/thumbs/e08bb5b2383e-440.webp 440w, /thumbs/e08bb5b2383e-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros_ah/" data-t="Translation Vector Between Two Turtles: Python" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/279f2406acc1-440.webp" srcset="/thumbs/279f2406acc1-440.webp 440w, /thumbs/279f2406acc1-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/inspace-isro-cansat-pcb/" data-t="Inspace ISRO Cansat PCB" data-k="Project" tabindex="-1"><img src="/thumbs/98c4c7e90e4e-440.webp" srcset="/thumbs/98c4c7e90e4e-440.webp 440w, /thumbs/98c4c7e90e4e-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/flutterflow/ff3/" data-t="Using Container in FlutterFlow" data-k="FlutterFlow chapter" tabindex="-1"><img src="/thumbs/ff9731b23914-440.webp" srcset="/thumbs/ff9731b23914-440.webp 440w, /thumbs/ff9731b23914-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/flutterflow/ff6/" data-t="Using ListView in FlutterFlow" data-k="FlutterFlow chapter" tabindex="-1"><img src="/thumbs/d2fa0ae995ea-440.webp" srcset="/thumbs/d2fa0ae995ea-440.webp 440w, /thumbs/d2fa0ae995ea-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/my-autodesk-fusion-journey/one-part-mold/" data-t="One-Part Mold" data-k="FUSION chapter" tabindex="-1"><img src="/thumbs/bcdfadcfc55f-440.webp" srcset="/thumbs/bcdfadcfc55f-440.webp 440w, /thumbs/bcdfadcfc55f-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/vaman-v1/" data-t="Vaman v1" data-k="Project" tabindex="-1"><img src="/thumbs/b48ff3d16ebe-440.webp" srcset="/thumbs/b48ff3d16ebe-440.webp 440w, /thumbs/b48ff3d16ebe-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/flutterflow/ff18/" data-t="Components in FlutterFlow (Reusable UI with Custom Parameters)" data-k="FlutterFlow chapter" tabindex="-1"><img src="/thumbs/1b785abe62c5-440.webp" srcset="/thumbs/1b785abe62c5-440.webp 440w, /thumbs/1b785abe62c5-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="https://makerbuddies.in/#home" target="_blank" rel="noopener" data-t="Gamified DIY Platform" data-k="Live site" tabindex="-1"><img src="/thumbs/b2949fbd20c1-440.webp" srcset="/thumbs/b2949fbd20c1-440.webp 440w, /thumbs/b2949fbd20c1-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="https://www.psitvyomnauts.com/" target="_blank" rel="noopener" data-t="Vyomnauts Club Website" data-k="Live site" tabindex="-1"><img src="/thumbs/5d84a4a05073-440.webp" srcset="/thumbs/5d84a4a05073-440.webp 440w, /thumbs/5d84a4a05073-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/flutterflow/ff1/" data-t="Getting Started with FlutterFlow" data-k="FlutterFlow chapter" tabindex="-1"><img src="/thumbs/639b6e90b0cc-440.webp" srcset="/thumbs/639b6e90b0cc-440.webp 440w, /thumbs/639b6e90b0cc-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ultimaker-cura/cura-2/" data-t="Opening an Existing File in CAD Software" data-k="CURA chapter" tabindex="-1"><img src="/thumbs/6dc18c6fcd97-440.webp" srcset="/thumbs/6dc18c6fcd97-440.webp 440w, /thumbs/6dc18c6fcd97-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2_m/" data-t="Introduction to Robot Simulation" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/a60754598225-440.webp" srcset="/thumbs/a60754598225-440.webp 440w, /thumbs/a60754598225-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/flutterflow/ff15/" data-t="Using Page State for Conditional UI Changes in FlutterFlow" data-k="FlutterFlow chapter" tabindex="-1"><img src="/thumbs/d4e94521add4-440.webp" srcset="/thumbs/d4e94521add4-440.webp 440w, /thumbs/d4e94521add4-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/flutterflow/ff24/" data-t="Supabase Authentication Setup and Connecting Supabase with FlutterFlow" data-k="FlutterFlow chapter" tabindex="-1"><img src="/thumbs/1ea682932365-440.webp" srcset="/thumbs/1ea682932365-440.webp 440w, /thumbs/1ea682932365-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2-48/" data-t="Static &amp; Dynamic Transformations" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/c88efc645bfb-440.webp" srcset="/thumbs/c88efc645bfb-440.webp 440w, /thumbs/c88efc645bfb-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/plc/plc_3/" data-t="AC vs DC" data-k="PLC &amp; Industrial Automation chapter" tabindex="-1"><img src="/thumbs/d9ce33b9c445-440.webp" srcset="/thumbs/d9ce33b9c445-440.webp 440w, /thumbs/d9ce33b9c445-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/innovation-and-design-thinking/" data-t="Innovation &amp; Design Thinking Program" data-k="Project" tabindex="-1"><img src="/thumbs/0df626d0d7c9-440.webp" srcset="/thumbs/0df626d0d7c9-440.webp 440w, /thumbs/0df626d0d7c9-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/flutterflow/ff12/" data-t="Working with Widget State in FlutterFlow" data-k="FlutterFlow chapter" tabindex="-1"><img src="/thumbs/6e4e518403a1-440.webp" srcset="/thumbs/6e4e518403a1-440.webp 440w, /thumbs/6e4e518403a1-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros_ag/" data-t="Introduction to Turtlesim" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/2a54d40fc3a0-440.webp" srcset="/thumbs/2a54d40fc3a0-440.webp 440w, /thumbs/2a54d40fc3a0-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/my-autodesk-fusion-journey/bulb/" data-t="Bulb" data-k="FUSION chapter" tabindex="-1"><img src="/thumbs/eabd8ac1b939-440.webp" srcset="/thumbs/eabd8ac1b939-440.webp 440w, /thumbs/eabd8ac1b939-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/teknofest-insights/" data-t="Teknofest Insights" data-k="Project" tabindex="-1"><img src="/thumbs/1d47a9fa2de6-440.webp" srcset="/thumbs/1d47a9fa2de6-440.webp 440w, /thumbs/1d47a9fa2de6-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2-46/" data-t="TF 2 Library" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/0e0f96770ca6-440.webp" srcset="/thumbs/0e0f96770ca6-440.webp 440w, /thumbs/0e0f96770ca6-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/my-autodesk-fusion-journey/hex-nut/" data-t="Hex Nut" data-k="FUSION chapter" tabindex="-1"><img src="/thumbs/ecf09afe551a-440.webp" srcset="/thumbs/ecf09afe551a-440.webp 440w, /thumbs/ecf09afe551a-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/flutterflow/ff16/" data-t="Using App State for Global UI Changes Across Pages in FlutterFlow" data-k="FlutterFlow chapter" tabindex="-1"><img src="/thumbs/9d7a6beb79e9-440.webp" srcset="/thumbs/9d7a6beb79e9-440.webp 440w, /thumbs/9d7a6beb79e9-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/thermalog-gun-v2/" data-t="ThermaLog Gun V2" data-k="Project" tabindex="-1"><img src="/thumbs/682b85f24612-440.webp" srcset="/thumbs/682b85f24612-440.webp 440w, /thumbs/682b85f24612-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/my-autodesk-fusion-journey/ice-tray/" data-t="ICE Tray" data-k="FUSION chapter" tabindex="-1"><img src="/thumbs/5736b941c11f-440.webp" srcset="/thumbs/5736b941c11f-440.webp 440w, /thumbs/5736b941c11f-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2_o/" data-t="Create a URDF Model" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/36f25f48effc-440.webp" srcset="/thumbs/36f25f48effc-440.webp 440w, /thumbs/36f25f48effc-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2-ab/" data-t="ROS 2 Control: Prepare the Robot for Control" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/4d2a5d5804f3-440.webp" srcset="/thumbs/4d2a5d5804f3-440.webp 440w, /thumbs/4d2a5d5804f3-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/vaman-v2/" data-t="Vaman v2" data-k="Project" tabindex="-1"><img src="/thumbs/c0ddcf1b14bd-440.webp" srcset="/thumbs/c0ddcf1b14bd-440.webp 440w, /thumbs/c0ddcf1b14bd-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2-56/" data-t="Euler to Quaternion: Turning the Robot with tf_transformations" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/0cf2e2882dcf-440.webp" srcset="/thumbs/0cf2e2882dcf-440.webp 440w, /thumbs/0cf2e2882dcf-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/jetson-nano-yolo-v5/" data-t="Jetson Nano: YOLOv5 Setup" data-k="Project" tabindex="-1"><img src="/thumbs/7ba445dc51d3-440.webp" srcset="/thumbs/7ba445dc51d3-440.webp 440w, /thumbs/7ba445dc51d3-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/my-autodesk-fusion-journey/mesh-editing-basics/" data-t="Mesh Editing Basics" data-k="FUSION chapter" tabindex="-1"><img src="/thumbs/760f5a6e75f4-440.webp" srcset="/thumbs/760f5a6e75f4-440.webp 440w, /thumbs/760f5a6e75f4-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/plc/plc_2/" data-t="Voltage, Current, Resistance and Power: Part 2" data-k="PLC &amp; Industrial Automation chapter" tabindex="-1"><img src="/thumbs/0fbb65dfed5a-440.webp" srcset="/thumbs/0fbb65dfed5a-440.webp 440w, /thumbs/0fbb65dfed5a-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/my-autodesk-fusion-journey/" data-t="Autodesk Fusion Journey" data-k="Series" tabindex="-1"><img src="/thumbs/1bf1cb2a12fa-440.webp" srcset="/thumbs/1bf1cb2a12fa-440.webp 440w, /thumbs/1bf1cb2a12fa-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros_ak/" data-t="Rotation Matrix Between Two Turtles: Python" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/0b9ac95053e8-440.webp" srcset="/thumbs/0b9ac95053e8-440.webp 440w, /thumbs/0b9ac95053e8-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros_ai/" data-t="Translation Vector Between Two Turtles: CPP" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/e3e2eccd9b2d-440.webp" srcset="/thumbs/e3e2eccd9b2d-440.webp 440w, /thumbs/e3e2eccd9b2d-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/my-autodesk-fusion-journey/as-built-joint-concepts-tripod-assembly/" data-t="As-Built Joint Concepts (Tripod Assembly)" data-k="FUSION chapter" tabindex="-1"><img src="/thumbs/849c39c9b0be-440.webp" srcset="/thumbs/849c39c9b0be-440.webp 440w, /thumbs/849c39c9b0be-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/pcb-turtlebot/" data-t="PCB for Turtle Bot" data-k="Project" tabindex="-1"><img src="/thumbs/931dec968470-440.webp" srcset="/thumbs/931dec968470-440.webp 440w, /thumbs/931dec968470-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/my-autodesk-fusion-journey/sketch-constraints/" data-t="Sketch Constraints" data-k="FUSION chapter" tabindex="-1"><img src="/thumbs/af849b81e965-440.webp" srcset="/thumbs/af849b81e965-440.webp 440w, /thumbs/af849b81e965-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2_f/" data-t="ROS 2 Python Publisher" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/34ce815a2a4b-440.webp" srcset="/thumbs/34ce815a2a4b-440.webp 440w, /thumbs/34ce815a2a4b-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2-45/" data-t="ROS 2 Diff Drive Controller" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/93f76d3e7a48-440.webp" srcset="/thumbs/93f76d3e7a48-440.webp 440w, /thumbs/93f76d3e7a48-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros-53/" data-t="Service Client in Python: Calling AddTwoInts" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/a47d5273747a-440.webp" srcset="/thumbs/a47d5273747a-440.webp 440w, /thumbs/a47d5273747a-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/flutterflow/ff9/" data-t="Page Navigation Using Buttons in FlutterFlow" data-k="FlutterFlow chapter" tabindex="-1"><img src="/thumbs/53c81a9d9cea-440.webp" srcset="/thumbs/53c81a9d9cea-440.webp 440w, /thumbs/53c81a9d9cea-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2-51/" data-t="ROS 2 Services" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/c38b09c45371-440.webp" srcset="/thumbs/c38b09c45371-440.webp 440w, /thumbs/c38b09c45371-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/my-autodesk-fusion-journey/phone-case-9/" data-t="Phone Case" data-k="FUSION chapter" tabindex="-1"><img src="/thumbs/4d5e3d0684b8-440.webp" srcset="/thumbs/4d5e3d0684b8-440.webp 440w, /thumbs/4d5e3d0684b8-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/plc/plc_4/" data-t="Three Phase System" data-k="PLC &amp; Industrial Automation chapter" tabindex="-1"><img src="/thumbs/48c63ec08527-440.webp" srcset="/thumbs/48c63ec08527-440.webp 440w, /thumbs/48c63ec08527-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/plc/" data-t="PLC" data-k="Series" tabindex="-1"><img src="/thumbs/aec3e346959f-440.webp" srcset="/thumbs/aec3e346959f-440.webp 440w, /thumbs/aec3e346959f-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2-47/" data-t="Operation With Transformations" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/36c50d0523db-440.webp" srcset="/thumbs/36c50d0523db-440.webp 440w, /thumbs/36c50d0523db-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/my-autodesk-fusion-journey/napkin-holder-sheet-metal/" data-t="Napkin Holder (Sheet Metal)" data-k="FUSION chapter" tabindex="-1"><img src="/thumbs/1f22072945c6-440.webp" srcset="/thumbs/1f22072945c6-440.webp 440w, /thumbs/1f22072945c6-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/flutterflow/ff2/" data-t="FlutterFlow Widgets Tree, Rows &amp; Columns (Beginner Guide)" data-k="FlutterFlow chapter" tabindex="-1"><img src="/thumbs/bcccf93c6406-440.webp" srcset="/thumbs/bcccf93c6406-440.webp 440w, /thumbs/bcccf93c6406-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/flutterflow/ff5/" data-t="Exploring Text Options in FlutterFlow" data-k="FlutterFlow chapter" tabindex="-1"><img src="/thumbs/39e9f771af52-440.webp" srcset="/thumbs/39e9f771af52-440.webp 440w, /thumbs/39e9f771af52-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/onshape/os3/" data-t="Onshape Modeling using Sketch, Offset Planes, Loft, Extrude, Shell, and Thread (Bottle)" data-k="Onshape chapter" tabindex="-1"><img src="/thumbs/b02d78d86f9f-440.webp" srcset="/thumbs/b02d78d86f9f-440.webp 440w, /thumbs/b02d78d86f9f-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/my-autodesk-fusion-journey/propellor-surface-modelling/" data-t="Propellor (Surface Modelling)" data-k="FUSION chapter" tabindex="-1"><img src="/thumbs/ed4ce5651ea3-440.webp" srcset="/thumbs/ed4ce5651ea3-440.webp 440w, /thumbs/ed4ce5651ea3-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/plc/plc_1/" data-t="Voltage, Current and Resistance: Part 1" data-k="PLC &amp; Industrial Automation chapter" tabindex="-1"><img src="/thumbs/90bc84971626-440.webp" srcset="/thumbs/90bc84971626-440.webp 440w, /thumbs/90bc84971626-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2_p/" data-t="Rviz" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/400c203aeb5c-440.webp" srcset="/thumbs/400c203aeb5c-440.webp 440w, /thumbs/400c203aeb5c-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2-41/" data-t="Velocity of a Mobile Robot" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/6cda8d390e23-440.webp" srcset="/thumbs/6cda8d390e23-440.webp 440w, /thumbs/6cda8d390e23-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2-af/" data-t="Pose of a Mobile Robot" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/0c9a20b18aac-440.webp" srcset="/thumbs/0c9a20b18aac-440.webp 440w, /thumbs/0c9a20b18aac-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2-44/" data-t="Teleoperating the BumperBot with a Joystick" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/a17e445ca339-440.webp" srcset="/thumbs/a17e445ca339-440.webp 440w, /thumbs/a17e445ca339-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/flutterflow/ff17/" data-t="Page Parameters in FlutterFlow (Passing Data Between Pages)" data-k="FlutterFlow chapter" tabindex="-1"><img src="/thumbs/1fd9092ebe8f-440.webp" srcset="/thumbs/1fd9092ebe8f-440.webp 440w, /thumbs/1fd9092ebe8f-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/my-autodesk-fusion-journey/two-part-mold/" data-t="Two-Part Mold" data-k="FUSION chapter" tabindex="-1"><img src="/thumbs/92e82f8ce6e9-440.webp" srcset="/thumbs/92e82f8ce6e9-440.webp 440w, /thumbs/92e82f8ce6e9-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/plant-watering-and-weather-monitoring-v2/" data-t="Plant &amp; Weather Monitoring System V2" data-k="Project" tabindex="-1"><img src="/thumbs/64b6c83516ed-440.webp" srcset="/thumbs/64b6c83516ed-440.webp 440w, /thumbs/64b6c83516ed-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros-52/" data-t="Service Server in Python: AddTwoInts" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/5173c07e29e4-440.webp" srcset="/thumbs/5173c07e29e4-440.webp 440w, /thumbs/5173c07e29e4-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros-55/" data-t="Euler Angles and Quaternions" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/a64a3a164e82-440.webp" srcset="/thumbs/a64a3a164e82-440.webp 440w, /thumbs/a64a3a164e82-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/ocr-using-wsl/" data-t="OCR Using WSL" data-k="Project" tabindex="-1"><img src="/thumbs/09e6290d6d4d-440.webp" srcset="/thumbs/09e6290d6d4d-440.webp 440w, /thumbs/09e6290d6d4d-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2-ae/" data-t="Robot Kinematics" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/c63147c9cca0-440.webp" srcset="/thumbs/c63147c9cca0-440.webp 440w, /thumbs/c63147c9cca0-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ultimaker-cura/cura-4/" data-t="Slicing Settings, Per Model Settings &amp; Supports in Ultimaker Cura" data-k="CURA chapter" tabindex="-1"><img src="/thumbs/6fdc9802a5a2-440.webp" srcset="/thumbs/6fdc9802a5a2-440.webp 440w, /thumbs/6fdc9802a5a2-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros_af/" data-t="Translation Vector" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/2d4dcb0d8282-440.webp" srcset="/thumbs/2d4dcb0d8282-440.webp 440w, /thumbs/2d4dcb0d8282-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/autonomous-warehouse-project/" data-t="Autonomous Warehouse Project" data-k="Project" tabindex="-1"><img src="/thumbs/61db7617ee74-440.webp" srcset="/thumbs/61db7617ee74-440.webp 440w, /thumbs/61db7617ee74-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/my-autodesk-fusion-journey/door-stop/" data-t="Door Stop" data-k="FUSION chapter" tabindex="-1"><img src="/thumbs/ae39a49d11fd-440.webp" srcset="/thumbs/ae39a49d11fd-440.webp 440w, /thumbs/ae39a49d11fd-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/jetson-nano-hacks/" data-t="Jetson Nano Hacks" data-k="Project" tabindex="-1"><img src="/thumbs/821411aecac6-440.webp" srcset="/thumbs/821411aecac6-440.webp 440w, /thumbs/821411aecac6-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2_i/" data-t="ROS 2 C++ Subscriber" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/1b6eda5e1abc-440.webp" srcset="/thumbs/1b6eda5e1abc-440.webp 440w, /thumbs/1b6eda5e1abc-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/onshape/os4/" data-t="Ice Tray Design in Onshape (Sketch, Extrude, Draft, Pattern, Shell, Sweep, Fillet)" data-k="Onshape chapter" tabindex="-1"><img src="/thumbs/abacdff0aa50-440.webp" srcset="/thumbs/abacdff0aa50-440.webp 440w, /thumbs/abacdff0aa50-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2_g/" data-t="ROS 2 C++ Publisher" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/19b6f37cc09e-440.webp" srcset="/thumbs/19b6f37cc09e-440.webp 440w, /thumbs/19b6f37cc09e-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="https://techarcanist.blog/" target="_blank" rel="noopener" data-t="DIY Platform Website" data-k="Live site" tabindex="-1"><img src="/thumbs/5dba1bc8282d-440.webp" srcset="/thumbs/5dba1bc8282d-440.webp 440w, /thumbs/5dba1bc8282d-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/my-autodesk-fusion-journey/smart-study-desk-planter-utility-maker-edition/" data-t="Smart Study Desk Planter (Utility + Maker Edition )" data-k="Design" tabindex="-1"><img src="/thumbs/9ce59253bd59-440.webp" srcset="/thumbs/9ce59253bd59-440.webp 440w, /thumbs/9ce59253bd59-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/flutterflow/ff22/" data-t="Custom Dialog in FlutterFlow" data-k="FlutterFlow chapter" tabindex="-1"><img src="/thumbs/0d62cd8072e7-440.webp" srcset="/thumbs/0d62cd8072e7-440.webp 440w, /thumbs/0d62cd8072e7-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/onshape/os1/" data-t="Getting Familiar with Onshape Tools (Sketch, Revolve, Shell, Fillet)" data-k="Onshape chapter" tabindex="-1"><img src="/thumbs/3d2f3f62197a-440.webp" srcset="/thumbs/3d2f3f62197a-440.webp 440w, /thumbs/3d2f3f62197a-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ultimaker-cura/cura-3/" data-t="Transform Tools in Ultimaker Cura (Move, Scale, Rotate, Mirror)" data-k="CURA chapter" tabindex="-1"><img src="/thumbs/ebde0df36d0e-440.webp" srcset="/thumbs/ebde0df36d0e-440.webp 440w, /thumbs/ebde0df36d0e-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/my-autodesk-fusion-journey/keyring-from-an-image-using-svg/" data-t="Keyring from an Image using SVG" data-k="FUSION chapter" tabindex="-1"><img src="/thumbs/f95aa814a14b-440.webp" srcset="/thumbs/f95aa814a14b-440.webp 440w, /thumbs/f95aa814a14b-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2-x/" data-t="Gazebo" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/79828e6c507a-440.webp" srcset="/thumbs/79828e6c507a-440.webp 440w, /thumbs/79828e6c507a-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/avionics-teknofest-rocket-competetion/" data-t="Avionics (Teknofest Rocket Competition)" data-k="Project" tabindex="-1"><img src="/thumbs/6b44bc8224b8-440.webp" srcset="/thumbs/6b44bc8224b8-440.webp 440w, /thumbs/6b44bc8224b8-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2_q/" data-t="Node Parameters" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/6bfa8ae3c16c-440.webp" srcset="/thumbs/6bfa8ae3c16c-440.webp 440w, /thumbs/6bfa8ae3c16c-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/flutterflow/ff20/" data-t="Rating Bar Widget in FlutterFlow" data-k="FlutterFlow chapter" tabindex="-1"><img src="/thumbs/1004c2eb3b32-440.webp" srcset="/thumbs/1004c2eb3b32-440.webp 440w, /thumbs/1004c2eb3b32-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/my-autodesk-fusion-journey/form-t-spline-tool-basics/" data-t="Form (T-Spline) Tool Basics" data-k="FUSION chapter" tabindex="-1"><img src="/thumbs/b2e1c618a81c-440.webp" srcset="/thumbs/b2e1c618a81c-440.webp 440w, /thumbs/b2e1c618a81c-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/flutterflow/ff14/" data-t="Conditional Text using Widget State in FlutterFlow" data-k="FlutterFlow chapter" tabindex="-1"><img src="/thumbs/4a129af9a5ee-440.webp" srcset="/thumbs/4a129af9a5ee-440.webp 440w, /thumbs/4a129af9a5ee-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/flutterflow/ff23/" data-t="Supabase as Backend (Database Setup)" data-k="FlutterFlow chapter" tabindex="-1"><img src="/thumbs/42c567924ba3-440.webp" srcset="/thumbs/42c567924ba3-440.webp 440w, /thumbs/42c567924ba3-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/pcb-teknofest-cansat-competetion/" data-t="PCB (Teknofest Model Satellite Competition)" data-k="Project" tabindex="-1"><img src="/thumbs/ca4b117f3a47-440.webp" srcset="/thumbs/ca4b117f3a47-440.webp 440w, /thumbs/ca4b117f3a47-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/my-autodesk-fusion-journey/flathead-screwdriver/" data-t="Flathead Screwdriver" data-k="FUSION chapter" tabindex="-1"><img src="/thumbs/9fa2ce5a6caa-440.webp" srcset="/thumbs/9fa2ce5a6caa-440.webp 440w, /thumbs/9fa2ce5a6caa-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/my-autodesk-fusion-journey/dog-bowl-surface-modelling/" data-t="Dog Bowl (Surface Modelling)" data-k="FUSION chapter" tabindex="-1"><img src="/thumbs/66d6d2039b99-440.webp" srcset="/thumbs/66d6d2039b99-440.webp 440w, /thumbs/66d6d2039b99-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2_d/" data-t="ROS 2 Fundamentals: Architecture, Communication, Packages, and Workspaces" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/e0adfa166a06-440.webp" srcset="/thumbs/e0adfa166a06-440.webp 440w, /thumbs/e0adfa166a06-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2_c/" data-t="Development Environment Setup for ROS 2 Jazzy on Ubuntu (With Clear Explanations)" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/118059824af7-440.webp" srcset="/thumbs/118059824af7-440.webp 440w, /thumbs/118059824af7-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/thermalog-gun-v1/" data-t="ThermaLog Gun v1" data-k="Project" tabindex="-1"><img src="/thumbs/23a57807ea64-440.webp" srcset="/thumbs/23a57807ea64-440.webp 440w, /thumbs/23a57807ea64-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2_j/" data-t="Robot Locomotion: Introduction" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/b1a1059fcfb0-440.webp" srcset="/thumbs/b1a1059fcfb0-440.webp 440w, /thumbs/b1a1059fcfb0-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/my-autodesk-fusion-journey/rubber-grip/" data-t="Rubber Grip" data-k="FUSION chapter" tabindex="-1"><img src="/thumbs/c7a95bd07f10-440.webp" srcset="/thumbs/c7a95bd07f10-440.webp 440w, /thumbs/c7a95bd07f10-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/" data-t="ROS 2 DIY" data-k="Series" tabindex="-1"><img src="/thumbs/e17bfafac092-440.webp" srcset="/thumbs/e17bfafac092-440.webp 440w, /thumbs/e17bfafac092-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2_e/" data-t="ROS 2 Workspace &amp; Package Creation" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/1137468b05b5-440.webp" srcset="/thumbs/1137468b05b5-440.webp 440w, /thumbs/1137468b05b5-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2-57/" data-t="tf2 Tools: view_frames and tf2_echo" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/0f2f43043bf2-440.webp" srcset="/thumbs/0f2f43043bf2-440.webp 440w, /thumbs/0f2f43043bf2-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2-z/" data-t="ROS 2 Control" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/571ed1c17d40-440.webp" srcset="/thumbs/571ed1c17d40-440.webp 440w, /thumbs/571ed1c17d40-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2_n/" data-t="URDF" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/5aee33b8a3a5-440.webp" srcset="/thumbs/5aee33b8a3a5-440.webp 440w, /thumbs/5aee33b8a3a5-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/vaman-v3/" data-t="Vaman V3-3D-Printed Quadruped Experiment (Paused Version)" data-k="Project" tabindex="-1"><img src="/thumbs/4841ca78318d-440.webp" srcset="/thumbs/4841ca78318d-440.webp 440w, /thumbs/4841ca78318d-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/automated-touch-socket-panel/" data-t="Automated Touch Socket Panel" data-k="Project" tabindex="-1"><img src="/thumbs/450a20dbd268-440.webp" srcset="/thumbs/450a20dbd268-440.webp 440w, /thumbs/450a20dbd268-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/my-autodesk-fusion-journey/printable-hinges/" data-t="3D Printable Hinges" data-k="FUSION chapter" tabindex="-1"><img src="/thumbs/f03f9a9dc4b4-440.webp" srcset="/thumbs/f03f9a9dc4b4-440.webp 440w, /thumbs/f03f9a9dc4b4-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/multi-tier-secure-lock-system-2/" data-t="Multi Tier Secure Lock System" data-k="Project" tabindex="-1"><img src="/thumbs/146876c4803c-440.webp" srcset="/thumbs/146876c4803c-440.webp 440w, /thumbs/146876c4803c-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/flutterflow/ff21/" data-t="Bottom Sheet in FlutterFlow" data-k="FlutterFlow chapter" tabindex="-1"><img src="/thumbs/bf18a06040ab-440.webp" srcset="/thumbs/bf18a06040ab-440.webp 440w, /thumbs/bf18a06040ab-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2_a/" data-t="Installing Ubuntu Desktop (Dual Boot with Windows)" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/4d742e41868a-440.webp" srcset="/thumbs/4d742e41868a-440.webp 440w, /thumbs/4d742e41868a-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2_h/" data-t="ROS 2 Python Subscriber" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/f231cfe0a5c9-440.webp" srcset="/thumbs/f231cfe0a5c9-440.webp 440w, /thumbs/f231cfe0a5c9-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/my-autodesk-fusion-journey/mesh-editing-converting-stl-to-editable-solid/" data-t="Mesh Editing &amp; Converting STL to Editable Solid" data-k="FUSION chapter" tabindex="-1"><img src="/thumbs/be91a841955d-440.webp" srcset="/thumbs/be91a841955d-440.webp 440w, /thumbs/be91a841955d-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2-aa/" data-t="Control Types" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/a548f463ef1a-440.webp" srcset="/thumbs/a548f463ef1a-440.webp 440w, /thumbs/a548f463ef1a-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/flutterflow/ff19/" data-t="Custom Bottom Navigation Bar using Stack and Components in FlutterFlow" data-k="FlutterFlow chapter" tabindex="-1"><img src="/thumbs/ddf9f202a02b-440.webp" srcset="/thumbs/ddf9f202a02b-440.webp 440w, /thumbs/ddf9f202a02b-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2-ad/" data-t="ROS 2 Control: Moving the BumperBot" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/0f251a8fee6e-440.webp" srcset="/thumbs/0f251a8fee6e-440.webp 440w, /thumbs/0f251a8fee6e-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2-w/" data-t="ROS 2 Launch Files: Visualizing the Robot with One Command" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/3331e73bfe89-440.webp" srcset="/thumbs/3331e73bfe89-440.webp 440w, /thumbs/3331e73bfe89-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2-49/" data-t="Simple TF2 Static Broadcaster" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/33b73955bcb4-440.webp" srcset="/thumbs/33b73955bcb4-440.webp 440w, /thumbs/33b73955bcb4-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2-50/" data-t="Simple TF2 Broadcaster: Static and Dynamic Transforms" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/43d4767afc07-440.webp" srcset="/thumbs/43d4767afc07-440.webp 440w, /thumbs/43d4767afc07-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/my-autodesk-fusion-journey/glass-bottle/" data-t="Glass Bottle" data-k="FUSION chapter" tabindex="-1"><img src="/thumbs/1e95be401f77-440.webp" srcset="/thumbs/1e95be401f77-440.webp 440w, /thumbs/1e95be401f77-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/inspace-isro-rocket-avionics-pcb/" data-t="Inspace ISRO Rocket Avionics PCB" data-k="Project" tabindex="-1"><img src="/thumbs/260211072b0f-440.webp" srcset="/thumbs/260211072b0f-440.webp 440w, /thumbs/260211072b0f-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/flutterflow/ff11/" data-t="AppBar &amp; Bottom Navigation Bar in FlutterFlow" data-k="FlutterFlow chapter" tabindex="-1"><img src="/thumbs/0ccb92785350-440.webp" srcset="/thumbs/0ccb92785350-440.webp 440w, /thumbs/0ccb92785350-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2-42/" data-t="Simple Speed Controller: Python" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/572228b2a032-440.webp" srcset="/thumbs/572228b2a032-440.webp 440w, /thumbs/572228b2a032-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/thumbs-up-down-classification-using-jetson-nano/" data-t="Thumbs Up / Thumbs Down Gesture Classification" data-k="Project" tabindex="-1"><img src="/thumbs/e33507eda178-440.webp" srcset="/thumbs/e33507eda178-440.webp 440w, /thumbs/e33507eda178-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/my-autodesk-fusion-journey/paper-clip/" data-t="Paper Clip" data-k="FUSION chapter" tabindex="-1"><img src="/thumbs/02a941a3f564-440.webp" srcset="/thumbs/02a941a3f564-440.webp 440w, /thumbs/02a941a3f564-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros_am/" data-t="Differential Kinematics" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/6676459ea24b-440.webp" srcset="/thumbs/6676459ea24b-440.webp 440w, /thumbs/6676459ea24b-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2_t/" data-t="ROS 2 Parameters" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/cec570091af7-440.webp" srcset="/thumbs/cec570091af7-440.webp 440w, /thumbs/cec570091af7-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/rrai/" data-t="Website &amp; Custom CMS for Raman Research &amp; Innovation" data-k="Project" tabindex="-1"><img src="/thumbs/9977204e9040-440.webp" srcset="/thumbs/9977204e9040-440.webp 440w, /thumbs/9977204e9040-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/flutterflow/ff25/" data-t="Using Supabase Authentication with a Pre-Made FlutterFlow Template" data-k="FlutterFlow chapter" tabindex="-1"><img src="/thumbs/77fd787d7251-440.webp" srcset="/thumbs/77fd787d7251-440.webp 440w, /thumbs/77fd787d7251-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2-v/" data-t="Launch Files" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/a07b6dd7c494-440.webp" srcset="/thumbs/a07b6dd7c494-440.webp 440w, /thumbs/a07b6dd7c494-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros-54/" data-t="Simple TF2 Listener in Python: a get_transform Service" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/29609e2ae039-440.webp" srcset="/thumbs/29609e2ae039-440.webp 440w, /thumbs/29609e2ae039-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2_l/" data-t="Rolling Friction &amp; Wheeled Locomotion Efficiency" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/354ba5071ddd-440.webp" srcset="/thumbs/354ba5071ddd-440.webp 440w, /thumbs/354ba5071ddd-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/flutterflow/ff4/" data-t="Adding a Background to a Blank Page in FlutterFlow" data-k="FlutterFlow chapter" tabindex="-1"><img src="/thumbs/2592b933cdc1-440.webp" srcset="/thumbs/2592b933cdc1-440.webp 440w, /thumbs/2592b933cdc1-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros_aj/" data-t="Rotation Matrix" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/d860490e2666-440.webp" srcset="/thumbs/d860490e2666-440.webp 440w, /thumbs/d860490e2666-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/flutterflow/ff26/" data-t="Login, Sign Up Navigation, and Logout using Supabase Authentication in FlutterFlow" data-k="FlutterFlow chapter" tabindex="-1"><img src="/thumbs/554b7f679b5e-440.webp" srcset="/thumbs/554b7f679b5e-440.webp 440w, /thumbs/554b7f679b5e-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/plc/plc-introduction/" data-t="Introduction" data-k="PLC &amp; Industrial Automation chapter" tabindex="-1"><img src="/thumbs/52f87990d254-440.webp" srcset="/thumbs/52f87990d254-440.webp 440w, /thumbs/52f87990d254-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ultimaker-cura/cura-1/" data-t="Adding a Non-Ultimaker Printer in Ultimaker Cura" data-k="CURA chapter" tabindex="-1"><img src="/thumbs/41cfec46d4e7-440.webp" srcset="/thumbs/41cfec46d4e7-440.webp 440w, /thumbs/41cfec46d4e7-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros_al/" data-t="Transformation Matrix" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/062a48ae0601-440.webp" srcset="/thumbs/062a48ae0601-440.webp 440w, /thumbs/062a48ae0601-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2_b/" data-t="ROS 2 Jazzy Installation on Ubuntu (Step-by-Step)" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/1b211329d8e4-440.webp" srcset="/thumbs/1b211329d8e4-440.webp 440w, /thumbs/1b211329d8e4-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/a4-polaroid-collage-generator/" data-t="A4 Polaroid Collage Generator" data-k="Project" tabindex="-1"><img src="/thumbs/b9800b850b16-440.webp" srcset="/thumbs/b9800b850b16-440.webp 440w, /thumbs/b9800b850b16-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2-ac/" data-t="Understanding ROS 2 Control | Explanation of Chapter 28" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/93b30a6bd5ce-440.webp" srcset="/thumbs/93b30a6bd5ce-440.webp 440w, /thumbs/93b30a6bd5ce-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2_r/" data-t="Python Parameters" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/7cb34afc8726-440.webp" srcset="/thumbs/7cb34afc8726-440.webp 440w, /thumbs/7cb34afc8726-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/smart-cam-security-lock-system/" data-t="Smart Cam Security Lock System" data-k="Project" tabindex="-1"><img src="/thumbs/fc94c6f7f452-440.webp" srcset="/thumbs/fc94c6f7f452-440.webp 440w, /thumbs/fc94c6f7f452-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/flutterflow/ff10/" data-t="Form, Validation &amp; Conditional Actions in FlutterFlow" data-k="FlutterFlow chapter" tabindex="-1"><img src="/thumbs/e076e8843f6c-440.webp" srcset="/thumbs/e076e8843f6c-440.webp 440w, /thumbs/e076e8843f6c-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/my-autodesk-fusion-journey/auger/" data-t="Auger" data-k="FUSION chapter" tabindex="-1"><img src="/thumbs/a6baf85f99cb-440.webp" srcset="/thumbs/a6baf85f99cb-440.webp 440w, /thumbs/a6baf85f99cb-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/flutterflow/ff7/" data-t="Button &amp; Image Widget Basics in FlutterFlow" data-k="FlutterFlow chapter" tabindex="-1"><img src="/thumbs/b7077d11d8e0-440.webp" srcset="/thumbs/b7077d11d8e0-440.webp 440w, /thumbs/b7077d11d8e0-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2_k/" data-t="Wheeled Locomotion Architectures" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/1ec14d9dc115-440.webp" srcset="/thumbs/1ec14d9dc115-440.webp 440w, /thumbs/1ec14d9dc115-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/onshape/" data-t="Onshape 3D Model DIY" data-k="Series" tabindex="-1"><img src="/thumbs/e88fae3a9faf-440.webp" srcset="/thumbs/e88fae3a9faf-440.webp 440w, /thumbs/e88fae3a9faf-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/flutterflow/ff27/" data-t="Creating a New Post and Inserting Data into Supabase (FlutterFlow)" data-k="FlutterFlow chapter" tabindex="-1"><img src="/thumbs/c8592b81b206-440.webp" srcset="/thumbs/c8592b81b206-440.webp 440w, /thumbs/c8592b81b206-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/flutterflow/" data-t="Flutterflow DIY" data-k="Series" tabindex="-1"><img src="/thumbs/adfff8daa573-440.webp" srcset="/thumbs/adfff8daa573-440.webp 440w, /thumbs/adfff8daa573-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2-y/" data-t="Simulating the Robot in Gazebo" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/795082cb79ef-440.webp" srcset="/thumbs/795082cb79ef-440.webp 440w, /thumbs/795082cb79ef-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/multisense-intellinest/" data-t="Multisense Intellinest" data-k="Project" tabindex="-1"><img src="/thumbs/3b8d61e64a4c-440.webp" srcset="/thumbs/3b8d61e64a4c-440.webp 440w, /thumbs/3b8d61e64a4c-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/my-autodesk-fusion-journey/loft-bottle/" data-t="Loft Bottle" data-k="FUSION chapter" tabindex="-1"><img src="/thumbs/e4ed04356760-440.webp" srcset="/thumbs/e4ed04356760-440.webp 440w, /thumbs/e4ed04356760-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/my-autodesk-fusion-journey/user-parameters-joints/" data-t="User Parameters &amp; Joints" data-k="FUSION chapter" tabindex="-1"><img src="/thumbs/7c2259764b26-440.webp" srcset="/thumbs/7c2259764b26-440.webp 440w, /thumbs/7c2259764b26-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/plant-watering-and-weather-monitoring/" data-t="My First Project (Plant &amp; Weather Monitoring System v1)" data-k="Project" tabindex="-1"><img src="/thumbs/8f898f6bdf13-440.webp" srcset="/thumbs/8f898f6bdf13-440.webp 440w, /thumbs/8f898f6bdf13-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/inspace-isro-insights/" data-t="Inspace ISRO Insights" data-k="Project" tabindex="-1"><img src="/thumbs/e1bf81e6286b-440.webp" srcset="/thumbs/e1bf81e6286b-440.webp 440w, /thumbs/e1bf81e6286b-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/payload-teknofest-rocket-competetion/" data-t="Payload (Teknofest Rocket Competition)" data-k="Project" tabindex="-1"><img src="/thumbs/a374c8e05bf3-440.webp" srcset="/thumbs/a374c8e05bf3-440.webp 440w, /thumbs/a374c8e05bf3-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2-u/" data-t="Visualize The Robot In RVIZ2" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/e2ba44f9f447-440.webp" srcset="/thumbs/e2ba44f9f447-440.webp 440w, /thumbs/e2ba44f9f447-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/flutterflow/ff8/" data-t="Using Stack to Overlap Widgets in FlutterFlow" data-k="FlutterFlow chapter" tabindex="-1"><img src="/thumbs/467719748cf1-440.webp" srcset="/thumbs/467719748cf1-440.webp 440w, /thumbs/467719748cf1-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/my-autodesk-fusion-journey/painters-tripod/" data-t="Painter’s Tripod" data-k="FUSION chapter" tabindex="-1"><img src="/thumbs/7a5081c358f0-440.webp" srcset="/thumbs/7a5081c358f0-440.webp 440w, /thumbs/7a5081c358f0-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/project/my-autodesk-fusion-journey/modular-smart-desk-planter-maker-edition/" data-t="Modular Smart Desk Planter ( Maker Edition )" data-k="Design" tabindex="-1"><img src="/thumbs/37c30fb4e1b4-440.webp" srcset="/thumbs/37c30fb4e1b4-440.webp 440w, /thumbs/37c30fb4e1b4-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/ros2/ros2_s/" data-t="C++ Parameters" data-k="ROS 2 chapter" tabindex="-1"><img src="/thumbs/ae6b60bbf101-440.webp" srcset="/thumbs/ae6b60bbf101-440.webp 440w, /thumbs/ae6b60bbf101-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a><a class="fly-card" href="/documented-software-learnings/onshape/os2/" data-t="Designing a Paper Clip in Onshape (Sketch + Sweep Workflow)" data-k="Onshape chapter" tabindex="-1"><img src="/thumbs/d59469912e52-440.webp" srcset="/thumbs/d59469912e52-440.webp 440w, /thumbs/d59469912e52-880.webp 880w" sizes="(max-width:700px) 185px, 350px" alt="" loading="eager" decoding="async"></a>    </div>
+    <div class="fly-bar"><i id="fly-bar"></i></div>
+  </div>
+  <div class="fly-hud">
+      <p class="fly-now"><span class="fly-n" id="fly-n">001</span><span class="fly-t"><b id="fly-t"></b><small class="mono" id="fly-k"></small></span></p>
+      <p class="fly-count mono"><span id="fly-c">0</span> of 159 works <a href="/project/">See all as a list</a></p>
+    </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="sh">
+  <p class="sh-label mono"><span>01</span>Firsts</p>
+  <div class="sh-row">
+    <h2>Where each journey started</h2>
+<a class="arrow-link" href="/project/">All 37 entries</a>  </div>
+<p class="sh-text">Three projects that opened a new door: my first IoT build, my first fully integrated system and my first rocket flight computer.</p></div>
+
+    <div class="cases">
+      <article class="case rv">
+        <a class="case-media" href="/project/plant-watering-and-weather-monitoring-v2/" tabindex="-1" aria-hidden="true">
+          <img src="/uploads/wp/2025/08/Untitled-design-5-3-1024x576.png" alt="" loading="lazy">
+          <span class="corner tl"></span><span class="corner br"></span>
+        </a>
+        <div class="case-body">
+          <p class="first-tag mono"><span>01</span>My first IoT project</p>
+          <h3><a href="/project/plant-watering-and-weather-monitoring-v2/">Plant &amp; Weather Monitoring System V2</a></h3>
+<p class="first-journey">Where my IoT journey started</p>          <p class="case-sum">This was my first IoT project from where my real core IoT journey started. It began as a basic Arduino experiment and gradually evolved into a professional IoT solution with cloud integration, custom PCB development, and mobile app control.</p>
+          <ul class="ticks"><li>Custom PCB design and manufacturing</li><li>Multiple sockets for different purposes (water pump, fertilizers, etc.)</li><li>End-to-end IoT solution from hardware to cloud integration</li></ul>
+          <div class="tags"><span>ESP32</span><span>PCB Design</span><span>Blynk</span><span>3D Printing</span><span>CAD</span><span>Google Spreadsheet</span></div>
+          <a class="arrow-link" href="/project/plant-watering-and-weather-monitoring-v2/">Open the project</a>
+        </div>
+      </article>
+      <article class="case rv">
+        <a class="case-media" href="/project/autonomous-warehouse-project/" tabindex="-1" aria-hidden="true">
+          <img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-1-1024x576.webp" alt="" loading="lazy">
+          <span class="corner tl"></span><span class="corner br"></span>
+        </a>
+        <div class="case-body">
+          <p class="first-tag mono"><span>02</span>My first fully integrated system</p>
+          <h3><a href="/project/autonomous-warehouse-project/">Autonomous Warehouse Project</a></h3>
+<p class="first-journey">Where AI, IoT and automation first came together</p>          <p class="case-sum">My first fully integrated project, where we combined everything we knew: AI + IoT + Automation + Computer Vision in one system. This project made me understand how different domains can work together to create a complete end-to-end product.</p>
+          <ul class="ticks"><li>Fruit Freshness Detection</li><li>Product Detection &amp; IR Counting</li><li>OCR Extraction of Expiry Date, MFG &amp; Price</li></ul>
+          <div class="tags"><span>ESP32</span><span>AI / ML (YOLO, CNN)</span><span>OCR (Tesseract / EasyOCR)</span><span>Python</span><span>Arduino IDE</span><span>OpenCV</span></div>
+          <a class="arrow-link" href="/project/autonomous-warehouse-project/">Open the project</a>
+        </div>
+      </article>
+      <article class="case rv">
+        <a class="case-media" href="/project/avionics-teknofest-rocket-competetion/" tabindex="-1" aria-hidden="true">
+          <img src="/uploads/wp/2025/08/Untitled-design-37-1024x576.jpg" alt="" loading="lazy">
+          <span class="corner tl"></span><span class="corner br"></span>
+        </a>
+        <div class="case-body">
+          <p class="first-tag mono"><span>03</span>My first rocket avionics PCB</p>
+          <h3><a href="/project/avionics-teknofest-rocket-competetion/">Avionics (Teknofest Rocket Competition)</a></h3>
+<p class="first-journey">Where my aerospace electronics journey started</p>          <p class="case-sum">My first rocket avionics PCB, the moment I officially entered the world of aerospace electronics. We designed a custom flight computer for our rocket competition (TEKNOFEST). It combined sensors, telemetry, power monitoring, and pyro deployment into one integrated board.</p>
+          <ul class="ticks"><li>Integrated multiple flight sensors and communication modules</li><li>Implemented a reliable MOSFET-based pyro ignition system</li></ul>
+          <div class="tags"><span>BNO085 IMU</span><span>BMP390 Altimeter</span><span>RTC</span><span>INA219</span><span>MOSFET Pyro Ignition</span><span>Custom PCB Design</span></div>
+          <a class="arrow-link" href="/project/avionics-teknofest-rocket-competetion/">Open the project</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="reel" aria-label="All projects">
+  <div class="reel-track">
+<a class="reel-item" href="/project/rrai/"><img src="/uploads/wp/2025/08/image-8.png" alt="Website &amp; Custom CMS for Raman Research &amp; Innovation" loading="lazy"><span class="mono">Website &amp; Custom CMS for Raman Research &amp; Innovation</span></a><a class="reel-item" href="/project/innovation-and-design-thinking/" tabindex="-1"><img src="/uploads/wp/2025/08/Untitled-design-3-1-1024x576.jpg" alt="Innovation &amp; Design Thinking Program" loading="lazy"><span class="mono">Innovation &amp; Design Thinking Program</span></a><a class="reel-item" href="/project/pcb-turtlebot/" tabindex="-1"><img src="/uploads/wp/2025/08/Untitled-design-2-1024x576.jpg" alt="PCB for Turtle Bot" loading="lazy"><span class="mono">PCB for Turtle Bot</span></a><a class="reel-item" href="/project/inspace-isro-insights/" tabindex="-1"><img src="/uploads/wp/2025/08/Inspace-1-1024x576.jpg" alt="Inspace ISRO Insights" loading="lazy"><span class="mono">Inspace ISRO Insights</span></a><a class="reel-item" href="/project/inspace-isro-rocket-avionics-pcb/" tabindex="-1"><img src="/uploads/wp/2025/08/Untitled-design-44-1024x576.jpg" alt="Inspace ISRO Rocket Avionics PCB" loading="lazy"><span class="mono">Inspace ISRO Rocket Avionics PCB</span></a><a class="reel-item" href="/project/inspace-isro-cansat-pcb/" tabindex="-1"><img src="/uploads/wp/2025/08/Untitled-design-41-1024x576.jpg" alt="Inspace ISRO Cansat PCB" loading="lazy"><span class="mono">Inspace ISRO Cansat PCB</span></a><a class="reel-item" href="/project/teknofest-insights/" tabindex="-1"><img src="/uploads/wp/2025/08/Power-House-Blackbox-3-1024x576.jpg" alt="Teknofest Insights" loading="lazy"><span class="mono">Teknofest Insights</span></a><a class="reel-item" href="/project/pcb-teknofest-cansat-competetion/" tabindex="-1"><img src="/uploads/wp/2025/08/Battery-and-Loadcell-Attched-3-1024x576.jpg" alt="PCB (Teknofest Model Satellite Competition)" loading="lazy"><span class="mono">PCB (Teknofest Model Satellite Competition)</span></a><a class="reel-item" href="/project/payload-teknofest-rocket-competetion/" tabindex="-1"><img src="/uploads/wp/2025/08/Untitled-design-39-1024x576.jpg" alt="Payload (Teknofest Rocket Competition)" loading="lazy"><span class="mono">Payload (Teknofest Rocket Competition)</span></a><a class="reel-item" href="/project/avionics-teknofest-rocket-competetion/" tabindex="-1"><img src="/uploads/wp/2025/08/Untitled-design-37-1024x576.jpg" alt="Avionics (Teknofest Rocket Competition)" loading="lazy"><span class="mono">Avionics (Teknofest Rocket Competition)</span></a><a class="reel-item" href="/project/vaman-v3/" tabindex="-1"><img src="/uploads/wp/2025/08/Untitled-design-34-1024x576.jpg" alt="Vaman V3-3D-Printed Quadruped Experiment (Paused Version)" loading="lazy"><span class="mono">Vaman V3-3D-Printed Quadruped Experiment (Paused Version)</span></a><a class="reel-item" href="/project/vaman-v2/" tabindex="-1"><img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-14-1024x576.png" alt="Vaman v2" loading="lazy"><span class="mono">Vaman v2</span></a><a class="reel-item" href="/project/vaman-v1/" tabindex="-1"><img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-13-1024x576.png" alt="Vaman v1" loading="lazy"><span class="mono">Vaman v1</span></a><a class="reel-item" href="/project/autonomous-warehouse-project/" tabindex="-1"><img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-1-1024x576.webp" alt="Autonomous Warehouse Project" loading="lazy"><span class="mono">Autonomous Warehouse Project</span></a><a class="reel-item" href="/project/ocr-using-wsl/" tabindex="-1"><img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-7-1024x576.png" alt="OCR Using WSL" loading="lazy"><span class="mono">OCR Using WSL</span></a><a class="reel-item" href="/project/thumbs-up-down-classification-using-jetson-nano/" tabindex="-1"><img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-6-1024x576.png" alt="Thumbs Up / Thumbs Down Gesture Classification" loading="lazy"><span class="mono">Thumbs Up / Thumbs Down Gesture Classification</span></a><a class="reel-item" href="/project/jetson-nano-yolo-v5/" tabindex="-1"><img src="/uploads/wp/2025/08/Untitled-design-23-1024x576.jpg" alt="Jetson Nano: YOLOv5 Setup" loading="lazy"><span class="mono">Jetson Nano: YOLOv5 Setup</span></a><a class="reel-item" href="/project/jetson-nano-hacks/" tabindex="-1"><img src="/uploads/wp/2025/11/Untitled-design-26-1024x576.jpg" alt="Jetson Nano Hacks" loading="lazy"><span class="mono">Jetson Nano Hacks</span></a><a class="reel-item" href="/project/a4-polaroid-collage-generator/" tabindex="-1"><img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-2-1-1024x576.png" alt="A4 Polaroid Collage Generator" loading="lazy"><span class="mono">A4 Polaroid Collage Generator</span></a><a class="reel-item" href="/project/multi-tier-secure-lock-system-2/" tabindex="-1"><img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-1-1-1024x576.png" alt="Multi Tier Secure Lock System" loading="lazy"><span class="mono">Multi Tier Secure Lock System</span></a><a class="reel-item" href="/project/automated-touch-socket-panel/" tabindex="-1"><img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-4-1-1024x576.png" alt="Automated Touch Socket Panel" loading="lazy"><span class="mono">Automated Touch Socket Panel</span></a><a class="reel-item" href="/project/smart-cam-security-lock-system/" tabindex="-1"><img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-3-1-1024x576.png" alt="Smart Cam Security Lock System" loading="lazy"><span class="mono">Smart Cam Security Lock System</span></a><a class="reel-item" href="/project/multisense-intellinest/" tabindex="-1"><img src="/uploads/wp/2025/08/Untitled-design-15-1024x576.jpg" alt="Multisense Intellinest" loading="lazy"><span class="mono">Multisense Intellinest</span></a><a class="reel-item" href="/project/thermalog-gun-v2/" tabindex="-1"><img src="/uploads/wp/2025/08/Untitled-design-7-1024x576.jpg" alt="ThermaLog Gun V2" loading="lazy"><span class="mono">ThermaLog Gun V2</span></a><a class="reel-item" href="/project/thermalog-gun-v1/" tabindex="-1"><img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-1024x576.png" alt="ThermaLog Gun v1" loading="lazy"><span class="mono">ThermaLog Gun v1</span></a><a class="reel-item" href="/project/plant-watering-and-weather-monitoring-v2/" tabindex="-1"><img src="/uploads/wp/2025/08/Untitled-design-5-3-1024x576.png" alt="Plant &amp; Weather Monitoring System V2" loading="lazy"><span class="mono">Plant &amp; Weather Monitoring System V2</span></a><a class="reel-item" href="/project/plant-watering-and-weather-monitoring/" tabindex="-1"><img src="/uploads/wp/2025/08/Untitled-design-1-1024x576.jpg" alt="My First Project (Plant &amp; Weather Monitoring System v1)" loading="lazy"><span class="mono">My First Project (Plant &amp; Weather Monitoring System v1)</span></a><a class="reel-item" href="/project/rrai/" tabindex="-1"><img src="/uploads/wp/2025/08/image-8.png" alt="Website &amp; Custom CMS for Raman Research &amp; Innovation" loading="lazy"><span class="mono">Website &amp; Custom CMS for Raman Research &amp; Innovation</span></a><a class="reel-item" href="/project/innovation-and-design-thinking/" tabindex="-1"><img src="/uploads/wp/2025/08/Untitled-design-3-1-1024x576.jpg" alt="Innovation &amp; Design Thinking Program" loading="lazy"><span class="mono">Innovation &amp; Design Thinking Program</span></a><a class="reel-item" href="/project/pcb-turtlebot/" tabindex="-1"><img src="/uploads/wp/2025/08/Untitled-design-2-1024x576.jpg" alt="PCB for Turtle Bot" loading="lazy"><span class="mono">PCB for Turtle Bot</span></a><a class="reel-item" href="/project/inspace-isro-insights/" tabindex="-1"><img src="/uploads/wp/2025/08/Inspace-1-1024x576.jpg" alt="Inspace ISRO Insights" loading="lazy"><span class="mono">Inspace ISRO Insights</span></a><a class="reel-item" href="/project/inspace-isro-rocket-avionics-pcb/" tabindex="-1"><img src="/uploads/wp/2025/08/Untitled-design-44-1024x576.jpg" alt="Inspace ISRO Rocket Avionics PCB" loading="lazy"><span class="mono">Inspace ISRO Rocket Avionics PCB</span></a><a class="reel-item" href="/project/inspace-isro-cansat-pcb/" tabindex="-1"><img src="/uploads/wp/2025/08/Untitled-design-41-1024x576.jpg" alt="Inspace ISRO Cansat PCB" loading="lazy"><span class="mono">Inspace ISRO Cansat PCB</span></a><a class="reel-item" href="/project/teknofest-insights/" tabindex="-1"><img src="/uploads/wp/2025/08/Power-House-Blackbox-3-1024x576.jpg" alt="Teknofest Insights" loading="lazy"><span class="mono">Teknofest Insights</span></a><a class="reel-item" href="/project/pcb-teknofest-cansat-competetion/" tabindex="-1"><img src="/uploads/wp/2025/08/Battery-and-Loadcell-Attched-3-1024x576.jpg" alt="PCB (Teknofest Model Satellite Competition)" loading="lazy"><span class="mono">PCB (Teknofest Model Satellite Competition)</span></a><a class="reel-item" href="/project/payload-teknofest-rocket-competetion/" tabindex="-1"><img src="/uploads/wp/2025/08/Untitled-design-39-1024x576.jpg" alt="Payload (Teknofest Rocket Competition)" loading="lazy"><span class="mono">Payload (Teknofest Rocket Competition)</span></a><a class="reel-item" href="/project/avionics-teknofest-rocket-competetion/" tabindex="-1"><img src="/uploads/wp/2025/08/Untitled-design-37-1024x576.jpg" alt="Avionics (Teknofest Rocket Competition)" loading="lazy"><span class="mono">Avionics (Teknofest Rocket Competition)</span></a><a class="reel-item" href="/project/vaman-v3/" tabindex="-1"><img src="/uploads/wp/2025/08/Untitled-design-34-1024x576.jpg" alt="Vaman V3-3D-Printed Quadruped Experiment (Paused Version)" loading="lazy"><span class="mono">Vaman V3-3D-Printed Quadruped Experiment (Paused Version)</span></a><a class="reel-item" href="/project/vaman-v2/" tabindex="-1"><img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-14-1024x576.png" alt="Vaman v2" loading="lazy"><span class="mono">Vaman v2</span></a><a class="reel-item" href="/project/vaman-v1/" tabindex="-1"><img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-13-1024x576.png" alt="Vaman v1" loading="lazy"><span class="mono">Vaman v1</span></a><a class="reel-item" href="/project/autonomous-warehouse-project/" tabindex="-1"><img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-1-1024x576.webp" alt="Autonomous Warehouse Project" loading="lazy"><span class="mono">Autonomous Warehouse Project</span></a><a class="reel-item" href="/project/ocr-using-wsl/" tabindex="-1"><img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-7-1024x576.png" alt="OCR Using WSL" loading="lazy"><span class="mono">OCR Using WSL</span></a><a class="reel-item" href="/project/thumbs-up-down-classification-using-jetson-nano/" tabindex="-1"><img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-6-1024x576.png" alt="Thumbs Up / Thumbs Down Gesture Classification" loading="lazy"><span class="mono">Thumbs Up / Thumbs Down Gesture Classification</span></a><a class="reel-item" href="/project/jetson-nano-yolo-v5/" tabindex="-1"><img src="/uploads/wp/2025/08/Untitled-design-23-1024x576.jpg" alt="Jetson Nano: YOLOv5 Setup" loading="lazy"><span class="mono">Jetson Nano: YOLOv5 Setup</span></a><a class="reel-item" href="/project/jetson-nano-hacks/" tabindex="-1"><img src="/uploads/wp/2025/11/Untitled-design-26-1024x576.jpg" alt="Jetson Nano Hacks" loading="lazy"><span class="mono">Jetson Nano Hacks</span></a><a class="reel-item" href="/project/a4-polaroid-collage-generator/" tabindex="-1"><img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-2-1-1024x576.png" alt="A4 Polaroid Collage Generator" loading="lazy"><span class="mono">A4 Polaroid Collage Generator</span></a><a class="reel-item" href="/project/multi-tier-secure-lock-system-2/" tabindex="-1"><img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-1-1-1024x576.png" alt="Multi Tier Secure Lock System" loading="lazy"><span class="mono">Multi Tier Secure Lock System</span></a><a class="reel-item" href="/project/automated-touch-socket-panel/" tabindex="-1"><img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-4-1-1024x576.png" alt="Automated Touch Socket Panel" loading="lazy"><span class="mono">Automated Touch Socket Panel</span></a><a class="reel-item" href="/project/smart-cam-security-lock-system/" tabindex="-1"><img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-3-1-1024x576.png" alt="Smart Cam Security Lock System" loading="lazy"><span class="mono">Smart Cam Security Lock System</span></a><a class="reel-item" href="/project/multisense-intellinest/" tabindex="-1"><img src="/uploads/wp/2025/08/Untitled-design-15-1024x576.jpg" alt="Multisense Intellinest" loading="lazy"><span class="mono">Multisense Intellinest</span></a><a class="reel-item" href="/project/thermalog-gun-v2/" tabindex="-1"><img src="/uploads/wp/2025/08/Untitled-design-7-1024x576.jpg" alt="ThermaLog Gun V2" loading="lazy"><span class="mono">ThermaLog Gun V2</span></a><a class="reel-item" href="/project/thermalog-gun-v1/" tabindex="-1"><img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-1024x576.png" alt="ThermaLog Gun v1" loading="lazy"><span class="mono">ThermaLog Gun v1</span></a><a class="reel-item" href="/project/plant-watering-and-weather-monitoring-v2/" tabindex="-1"><img src="/uploads/wp/2025/08/Untitled-design-5-3-1024x576.png" alt="Plant &amp; Weather Monitoring System V2" loading="lazy"><span class="mono">Plant &amp; Weather Monitoring System V2</span></a><a class="reel-item" href="/project/plant-watering-and-weather-monitoring/" tabindex="-1"><img src="/uploads/wp/2025/08/Untitled-design-1-1024x576.jpg" alt="My First Project (Plant &amp; Weather Monitoring System v1)" loading="lazy"><span class="mono">My First Project (Plant &amp; Weather Monitoring System v1)</span></a>  </div>
+</section>
+
+<section class="sec band">
+  <div class="wrap">
+    <div class="sh">
+  <p class="sh-label mono"><span>02</span>Capabilities</p>
+  <div class="sh-row">
+    <h2>From copper to cloud</h2>
+  </div>
+<p class="sh-text">Hardware, firmware, AI and the teaching that ties them together.</p></div>
+
+    <div class="caps">
+      <a class="cap cap-aero rv" href="/project/#aero">
+        <span class="cap-ico"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2c3 2.5 4.5 6 4.5 10.5L19 15v3l-4-1.5-1 2.5h-4l-1-2.5L5 18v-3l2.5-2.5C7.5 8 9 4.5 12 2z"/><circle cx="12" cy="9" r="1.6"/></svg></span>
+        <span class="cap-n mono">7 entries</span>
+        <h3>Aerospace &amp; Rocketry</h3>
+        <p>Flight computers, CanSats, payloads and national rocketry competitions.</p>
+      </a>
+      <a class="cap cap-robotics rv" href="/project/#robotics">
+        <span class="cap-ico"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="8" width="14" height="10" rx="2"/><path d="M12 4v4M9 13h.01M15 13h.01M3 12v3M21 12v3"/><circle cx="12" cy="3.5" r="1"/></svg></span>
+        <span class="cap-n mono">5 entries</span>
+        <h3>Robotics</h3>
+        <p>Autonomous bots, quadrupeds, ROS 2 and robot hardware.</p>
+      </a>
+      <a class="cap cap-ai rv" href="/project/#ai">
+        <span class="cap-ico"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="1.5"/><path d="M10 3v4M14 3v4M10 17v4M14 17v4M3 10h4M3 14h4M17 10h4M17 14h4"/><path d="M10 10h4v4h-4z"/></svg></span>
+        <span class="cap-n mono">8 entries</span>
+        <h3>Edge AI &amp; Vision</h3>
+        <p>YOLO, OCR, gesture recognition and AI on Jetson Nano.</p>
+      </a>
+      <a class="cap cap-iot rv" href="/project/#iot">
+        <span class="cap-ico"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5a10 10 0 0 1 14 0M8 15.5a5.5 5.5 0 0 1 8 0"/><circle cx="12" cy="18.5" r="1.3"/><path d="M2 9.5a14.5 14.5 0 0 1 20 0"/></svg></span>
+        <span class="cap-n mono">9 entries</span>
+        <h3>IoT &amp; Automation</h3>
+        <p>ESP32 systems, smart homes, security locks and cloud logging.</p>
+      </a>
+      <a class="cap cap-pcb rv" href="/project/#pcb">
+        <span class="cap-ico"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h4v4M17 7v6h-4M7 17h6M11 11l2 2"/><circle cx="7" cy="17" r="1"/><circle cx="17" cy="7" r="1"/></svg></span>
+        <span class="cap-n mono">7 entries</span>
+        <h3>PCB Design</h3>
+        <p>Custom boards from schematic to Gerber to assembled hardware.</p>
+      </a>
+      <a class="cap cap-cad rv" href="/project/#cad">
+        <span class="cap-ico"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M12 22V12M21 7l-9 5-9-5"/></svg></span>
+        <span class="cap-n mono">5 entries</span>
+        <h3>CAD &amp; 3D Design</h3>
+        <p>Autodesk Fusion, Onshape and 3D-printed products.</p>
+      </a>
+      <a class="cap cap-web rv" href="/project/#web">
+        <span class="cap-ico"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 13l-2 2 2 2M15 13l2 2-2 2"/></svg></span>
+        <span class="cap-n mono">6 entries</span>
+        <h3>Software &amp; Web</h3>
+        <p>Desktop tools, websites, CMS and community platforms.</p>
+      </a>
+      <a class="cap cap-learn rv" href="/project/#learn">
+        <span class="cap-ico"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6l9-3 9 3-9 3z"/><path d="M7 7.5V13c0 1.5 2.2 3 5 3s5-1.5 5-3V7.5M21 6v6"/></svg></span>
+        <span class="cap-n mono">8 entries</span>
+        <h3>Teaching &amp; Docs</h3>
+        <p>Programs, workshops and step-by-step learning series.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="sh">
+  <p class="sh-label mono"><span>03</span>Learning in public</p>
+  <div class="sh-row">
+    <h2>The library</h2>
+<a class="arrow-link" href="/documented-software-learnings/">Open the library</a>  </div>
+<p class="sh-text">Step-by-step notes, interactive simulations and walkthroughs for every tool I learn, free to follow.</p></div>
+
+    <div class="series-rows">
+      <a class="srow rv" href="/documented-software-learnings/ros2/">
+        <span class="srow-n mono">01</span>
+        <span class="srow-t">ROS 2</span>
+        <span class="srow-d">From Ubuntu dual-boot to ros2_control, kinematics and TF2 with the BumperBot.</span>
+        <span class="srow-f mono">57 chapters</span>
+        <span class="srow-a" aria-hidden="true">→</span>
+      </a>
+      <a class="srow rv" href="/plc/">
+        <span class="srow-n mono">02</span>
+        <span class="srow-t">PLC &amp; Industrial Automation</span>
+        <span class="srow-d">Electricity fundamentals to PLC programming, with interactive simulations.</span>
+        <span class="srow-f mono">5 chapters</span>
+        <span class="srow-a" aria-hidden="true">→</span>
+      </a>
+      <a class="srow rv" href="/project/my-autodesk-fusion-journey/">
+        <span class="srow-n mono">03</span>
+        <span class="srow-t">Autodesk Fusion Journey</span>
+        <span class="srow-d">27 hands-on CAD exercises, solids, surfaces, sheet metal, molds and assemblies.</span>
+        <span class="srow-f mono">25 chapters</span>
+        <span class="srow-a" aria-hidden="true">→</span>
+      </a>
+      <a class="srow rv" href="/documented-software-learnings/flutterflow/">
+        <span class="srow-n mono">04</span>
+        <span class="srow-t">FlutterFlow</span>
+        <span class="srow-d">Build apps from UI to logic, widgets, state, navigation and Supabase backend.</span>
+        <span class="srow-f mono">27 chapters</span>
+        <span class="srow-a" aria-hidden="true">→</span>
+      </a>
+      <a class="srow rv" href="/documented-software-learnings/onshape/">
+        <span class="srow-n mono">05</span>
+        <span class="srow-t">Onshape</span>
+        <span class="srow-d">Getting familiar with Onshape tools after working with Fusion 360.</span>
+        <span class="srow-f mono">4 chapters</span>
+        <span class="srow-a" aria-hidden="true">→</span>
+      </a>
+      <a class="srow rv" href="/documented-software-learnings/ultimaker-cura/">
+        <span class="srow-n mono">06</span>
+        <span class="srow-t">Ultimaker Cura</span>
+        <span class="srow-d">Slicing for 3D printing, printers, transforms, settings and supports.</span>
+        <span class="srow-f mono">4 chapters</span>
+        <span class="srow-a" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="sec band" id="story">
+  <div class="wrap">
+    <div class="story-head">
+      <div class="sh">
+  <p class="sh-label mono"><span>04</span>My story</p>
+  <div class="sh-row">
+    <h2>Building, breaking and rebuilding</h2>
+  </div>
+<p class="sh-text">This isn’t the usual engineering tale. It’s a mix of failures that almost broke me, choices that raised eyebrows, and breakthroughs that reshaped my purpose. Each chapter adds up to who I’m becoming.</p></div>
+
+    </div>
+    <ol class="chron">
+      <li class="chron-i rv">
+        <div class="chron-l"><span class="mono">01</span><span class="chron-tag mono">Self-Discovery</span></div>
+        <div class="chron-r">
+          <h3>The Misfit Student (School Years → Early College)</h3>
+<p>Struggled with academics, constantly shifting interests between music, sports, art, and tech tinkering. Explored coding (Python, C++, C, DSA, Data Science) but never stuck for long. Started a small photocopy/printing business in parallel.</p><p class="chron-out">Learnt best by building, not memorizing</p>        </div>
+      </li>
+      <li class="chron-i rv">
+        <div class="chron-l"><span class="mono">02</span><span class="chron-tag mono">Failure</span></div>
+        <div class="chron-r">
+          <h3>Business Experiment &amp; The Great Fall (College Years)</h3>
+<p>Scaled the photocopy/printing business and made steady profits. Shifted into stocks, F&amp;O, and crypto trading. Overconfidence led to losses. Skipped exams and the business collapsed.</p><p class="chron-out">100% financial loss, but gained humility &amp; resilience</p>        </div>
+      </li>
+      <li class="chron-i rv">
+        <div class="chron-l"><span class="mono">03</span><span class="chron-tag mono">Turning Point</span></div>
+        <div class="chron-r">
+          <h3>The IoT Spark</h3>
+<p>A simple IoT plant watering project turned into a learning spree with ESP32, sensors, and I2C communication. Professor Ankit Jain kept pushing with new challenges.</p><p class="chron-out">Discovered passion for building</p><a class="arrow-link" href="/project/plant-watering-and-weather-monitoring-v2/">See the project</a>        </div>
+      </li>
+      <li class="chron-i rv">
+        <div class="chron-l"><span class="mono">04</span><span class="chron-tag mono">Growth</span></div>
+        <div class="chron-r">
+          <h3>The Maker Obsession</h3>
+<p>Dived into home automation, PCB design, CAD &amp; 3D printing, Raspberry Pi, Jetson Nano, Linux, and AI projects like YOLO implementation.</p><p class="chron-out">IoT &amp; AI projects built</p><a class="arrow-link" href="/project/">Browse projects</a>        </div>
+      </li>
+      <li class="chron-i rv">
+        <div class="chron-l"><span class="mono">05</span><span class="chron-tag mono">Failure</span></div>
+        <div class="chron-r">
+          <h3>Home Automation Startup</h3>
+<p>Tried launching a home automation business with strong tech but lacked capital and team coordination. Business ended quickly.</p><p class="chron-out">Lesson: Skills ≠ Business Success</p>        </div>
+      </li>
+      <li class="chron-i rv">
+        <div class="chron-l"><span class="mono">06</span><span class="chron-tag mono">Growth</span></div>
+        <div class="chron-r">
+          <h3>AI on the Edge: Jetson Nano Experiments</h3>
+<p>Ventured into edge AI using the <strong>Jetson Nano</strong>, experimenting with YOLO object detection, gesture recognition, and live camera inference. Logged every error, fix, and discovery to build a personal AI reference repository.</p><p>From setting up CUDA environments to running real-time classification, these experiments made me confident integrating <strong>AI directly into hardware systems</strong>.</p><p class="chron-out">From electronics to intelligence, learned to merge hardware and AI.</p><a class="arrow-link" href="/project/jetson-nano-hacks/">Jetson Nano Hacks</a>        </div>
+      </li>
+      <li class="chron-i rv">
+        <div class="chron-l"><span class="mono">07</span><span class="chron-tag mono">Milestone</span></div>
+        <div class="chron-r">
+          <h3>Fruit Freshness Project</h3>
+<p>Built an integrated AI + IoT warehouse management system: freshness detection, OCR, brand recognition, sensors, and automated sorting.</p><p class="chron-out">First end-to-end system integration</p><a class="arrow-link" href="/project/autonomous-warehouse-project/">See the project</a>        </div>
+      </li>
+      <li class="chron-i rv">
+        <div class="chron-l"><span class="mono">08</span><span class="chron-tag mono">Milestone</span></div>
+        <div class="chron-r">
+          <h3>Reaching for the Stars</h3>
+<p>Joined the Space Club under the guidance of Sandeep Khare Sir. Built robots, avionics, payloads, fiberglass rocket tubes, and composites. Led teams and taught members. Though we didn’t reach the final stages of competitions, every failure became a lesson, and we continue building for upcoming challenges.</p><p class="chron-out">Learned rocketry hands-on through failures, teamwork, and persistence</p><a class="arrow-link" href="/project/inspace-isro-insights/">See the rocketry work</a>        </div>
+      </li>
+      <li class="chron-i rv">
+        <div class="chron-l"><span class="mono">09</span><span class="chron-tag mono">Educator</span></div>
+        <div class="chron-r">
+          <h3>Becoming an Educator</h3>
+<p>Conducted workshops on IoT, PCB design, avionics, and electronics. Taught hundreds of students, sparking curiosity and confidence.</p><p class="chron-out">Teaching became a source of pride</p>        </div>
+      </li>
+      <li class="chron-i rv">
+        <div class="chron-l"><span class="mono">10</span><span class="chron-tag mono">Learner</span></div>
+        <div class="chron-r">
+          <h3>Learner of Tools</h3>
+<p>Gained hands-on experience with PCB plotter, CNC, laser engraver, bench power supply, and test equipment. Learned mechanics, precision, and control systems.</p><p class="chron-out">Learned the tools that bring ideas to life.</p>        </div>
+      </li>
+      <li class="chron-i rv">
+        <div class="chron-l"><span class="mono">11</span><span class="chron-tag mono">Milestone</span></div>
+        <div class="chron-r">
+          <h3>Teknofest &amp; IN-SPACe / ISRO Insights</h3>
+<p>Represented our college in two national-level aerospace challenges. At <strong>Teknofest (Turkey)</strong>, we designed a complete <strong>rocket avionics and payload system</strong>, cleared every major review stage, and received official approval for final launch, but failed at the second-last stage due to <strong>coordination and submission delays</strong>.</p><p>The failure was tough but transformative, it taught me that <strong>projects don’t fail because of bad circuits; they fail because of poor coordination</strong>. I learned how leadership, accountability, and clear communication matter more than technical perfection.</p><p>In the following year, we applied those lessons at the <strong>IN-SPACe / ISRO National Challenge</strong>, competing in both <strong>Rocket</strong> and <strong>CanSat categories</strong>, securing <strong>2nd Prize (Rocket Competition)</strong> and <strong>Best CanSat Design Award, 4th Position</strong> nationally.</p><p class="chron-out">Turned failure into a framework, learned to lead, coordinate, and rebuild effectively.</p><a class="arrow-link" href="/project/teknofest-insights/">Read the insights</a>        </div>
+      </li>
+      <li class="chron-i rv">
+        <div class="chron-l"><span class="mono">12</span><span class="chron-tag mono">Transition</span></div>
+        <div class="chron-r">
+          <h3>Still Building, Even When Paused</h3>
+<p>The <strong>Narsimha Rocket Launch</strong> with <strong>Rocketeers</strong> was originally scheduled for <strong>31st January 2026</strong>, but the competition was <strong>canceled</strong> before the final launch phase.</p><p>Despite the cancellation, the system was fully prepared, including the <strong>avionics PCB</strong> that I designed with my team during the <strong>IN-SPACe / ISRO competition</strong>.</p><p>Not every project reaches the sky, sometimes they pause before liftoff. But the learning, design, and effort remain just as real.</p><p class="chron-out">Still building, even when the launch doesn’t happen.</p>        </div>
+      </li>
+      <li class="chron-i rv">
+        <div class="chron-l"><span class="mono">13</span><span class="chron-tag mono">Professional Chapter</span></div>
+        <div class="chron-r">
+          <h3>Technical Trainer @ InUnity</h3>
+<p>Joined <strong>InUnity, Mangalore</strong> on <strong>5th January</strong> as a <strong>Technical Trainer</strong>. Teaching electronics, IoT, embedded systems, and practical engineering workflows to students while continuously refining my own understanding.</p><p>This role represents a shift from building only for myself to enabling others to build with confidence.</p><p class="chron-out">Learning scaled through teaching.</p>        </div>
+      </li>
+      <li class="chron-i rv">
+        <div class="chron-l"><span class="mono">14</span><span class="chron-tag mono">Growth</span></div>
+        <div class="chron-r">
+          <h3>Promoted to Program Mentor</h3>
+<p>Promoted to <strong>Program Mentor</strong> on <strong>1st March</strong> at <strong>InUnity</strong>.</p><p>Taught <strong>first-year B.Tech students</strong> about <strong>Design Thinking</strong>, <strong>Secondary Research</strong>, and <strong>Problem Analysis</strong>, along with hands-on exposure to various prototyping tools such as <strong>IoT</strong>, <strong>CAD</strong>, <strong>Vibe Coding</strong>, and <strong>3D Printing</strong>.</p><p>Concluded my journey with InUnity on <strong>27th June</strong>, closing a chapter that taught me how to structure learning for others at scale.</p><p class="chron-out">Turning ideas into real-world prototypes.</p><a class="arrow-link" href="/project/innovation-and-design-thinking/">See the program</a>        </div>
+      </li>
+      <li class="chron-i rv">
+        <div class="chron-l"><span class="mono">15</span><span class="chron-tag mono">Professional Chapter</span></div>
+        <div class="chron-r">
+          <h3>Incubation Associate @ PSIT Kanpur</h3>
+<p>Joined <strong>PSIT Kanpur</strong> on <strong>1st July</strong> as an <strong>Incubation Associate</strong>, working with early-stage student startups, helping them move from raw ideas to working prototypes and structured ventures.</p><p>A shift from teaching individual skills to shaping entire ventures, mentoring founders on technology, product validation, and execution.</p><p class="chron-out">From building products to building builders.</p>        </div>
+      </li>
+      <li class="chron-i rv">
+        <div class="chron-l"><span class="mono">16</span><span class="chron-tag mono">Milestone</span></div>
+        <div class="chron-r">
+          <h3>First Car: Toyota Glanza</h3>
+<p>Bought my first car, a <strong>Toyota Glanza</strong>, a small milestone that marked a step forward after years of building, teaching, and juggling ventures.</p><p>A reminder that progress isn’t only measured in projects and titles, but also in the personal wins along the way.</p><p class="chron-out">A personal milestone alongside the professional journey.</p>        </div>
+      </li>
+      <li class="chron-i rv">
+        <div class="chron-l"><span class="mono">17</span><span class="chron-tag mono">Founder</span></div>
+        <div class="chron-r">
+          <h3>Founding Falcon: The Drone Club</h3>
+<p>Founded <strong>Falcon</strong>, a drone club at <strong>PSIT Kanpur</strong>, and currently serve as its <strong>Club Ambassador</strong>, building a community around UAV design, flight controllers, avionics, and autonomous systems.</p><p>What started as a personal obsession with hardware has become a shared space where students learn to design, build, and fly their own machines.</p><p class="chron-out">Building a community, not just a project.</p>        </div>
+      </li>
+      <li class="chron-i rv">
+        <div class="chron-l"><span class="mono">18</span><span class="chron-tag mono">Founder</span></div>
+        <div class="chron-r">
+          <h3>Falcon Merges with PSIT Vyomnauts</h3>
+<p>Founded <strong>Falcon</strong>, a drone club at <strong>PSIT Kanpur</strong>, initially running it solo as its <strong>Club Ambassador</strong>. Falcon has since <strong>merged with PSIT Vyomnauts</strong>, the college’s space club, bringing drones and rocketry under one shared community.</p><p>The club now runs on the combined strength of both teams, carrying forward the experience and mentorship of <strong>Vyomnauts Ambassador Sandeep Khare</strong>, alongside UAV design, flight controllers, avionics, and autonomous systems work from Falcon.</p><p class="chron-out">Two communities, one mission, building together instead of alone.</p>        </div>
+      </li>
+      <li class="chron-i rv">
+        <div class="chron-l"><span class="mono">19</span><span class="chron-tag mono">Educator</span></div>
+        <div class="chron-r">
+          <h3>Conducting the Model Rocketry Workshop by IN-SPACe</h3>
+<p>I had the opportunity to be part of a team selected by **IN-SPACe** as one of just **4 organisations** invited to conduct hands-on Model Rocketry workshops, alongside BAAS Technologies, Thrust Tech India Pvt. Ltd., and Synodic Space Labs Private Limited.</p><p>Mentored an enthusiastic batch of students together with **Sandeep Kumar Khare** and **Ritish Katiyar**, taking them from a blank sheet of paper to a rocket ready for launch. The curriculum covered OpenRocket aerostructure design, EasyEDA PCB design, electronics fundamentals (digital, analog, I2C, SPI, UART), microcontroller programming for avionics, algorithm testing in a vacuum chamber, soldering and zero-PCB board building, parachute design and packing, and complete hands-on assembly of a model rocket designed for a 100-metre launch.</p><p>Watching young minds build their first rocket, sharpen their engineering skills, design their own circuit boards, test their own code, and prepare a rocket for flight in a matter of days stands out as one of the most fulfilling experiences of my journey so far.</p><p>From being a student fascinated by aerospace to mentoring the next generation of innovators, bringing practical aerospace engineering closer to young, ambitious minds has been an incredibly rewarding experience.</p><p class="chron-out">From student to mentor, bringing real aerospace engineering to young, ambitious minds.</p><a class="arrow-link" href="https://lnkd.in/p/dmXvqAda" target="_blank" rel="noopener">See it on LinkedIn</a>        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="teaching">
+  <div class="wrap">
+    <div class="sh">
+  <p class="sh-label mono"><span>05</span>Teaching</p>
+  <div class="sh-row">
+    <h2>Workshops and mentoring</h2>
+  </div>
+<p class="sh-text">Teaching became a source of pride, from first workshops on IoT and PCB design to mentoring entire student ventures.</p></div>
+
+    <div class="grid3">
+      <div class="tcard rv">
+        <p class="log-tag mono">Educator</p>
+        <h3>Becoming an Educator</h3>
+        <p>Conducted workshops on IoT, PCB design, avionics, and electronics. Taught hundreds of students, sparking curiosity and confidence.</p>
+      </div>
+      <div class="tcard rv">
+        <p class="log-tag mono">Professional Chapter</p>
+        <h3>Technical Trainer @ InUnity</h3>
+        <p>Joined InUnity, Mangalore on 5th January as a Technical Trainer . Teaching electronics, IoT, embedded systems, and practical engineering workflows to students while continuously refining my own understanding. This role represents a shift…</p>
+      </div>
+      <div class="tcard rv">
+        <p class="log-tag mono">Growth</p>
+        <h3>Promoted to Program Mentor</h3>
+        <p>Promoted to Program Mentor on 1st March at InUnity . Taught first-year B.Tech students about Design Thinking , Secondary Research , and Problem Analysis , along with hands-on exposure to various prototyping tools such as IoT , CAD , Vibe…</p>
+<a class="arrow-link" href="/project/innovation-and-design-thinking/">See the program</a>      </div>
+      <div class="tcard rv">
+        <p class="log-tag mono">Professional Chapter</p>
+        <h3>Incubation Associate @ PSIT Kanpur</h3>
+        <p>Joined PSIT Kanpur on 1st July as an Incubation Associate , working with early-stage student startups, helping them move from raw ideas to working prototypes and structured ventures. A shift from teaching individual skills to shaping…</p>
+      </div>
+      <div class="tcard rv">
+        <p class="log-tag mono">Founder</p>
+        <h3>Founding Falcon: The Drone Club</h3>
+        <p>Founded Falcon , a drone club at PSIT Kanpur , and currently serve as its Club Ambassador , building a community around UAV design, flight controllers, avionics, and autonomous systems. What started as a personal obsession with hardware…</p>
+      </div>
+      <div class="tcard rv">
+        <p class="log-tag mono">Founder</p>
+        <h3>Falcon Merges with PSIT Vyomnauts</h3>
+        <p>Founded Falcon , a drone club at PSIT Kanpur , initially running it solo as its Club Ambassador . Falcon has since merged with PSIT Vyomnauts , the college’s space club, bringing drones and rocketry under one shared community. The club now…</p>
+      </div>
+      <div class="tcard rv">
+        <p class="log-tag mono">Educator</p>
+        <h3>Conducting the Model Rocketry Workshop by IN-SPACe</h3>
+        <p>I had the opportunity to be part of a team selected by **IN-SPACe** as one of just **4 organisations** invited to conduct hands-on Model Rocketry workshops, alongside BAAS Technologies, Thrust Tech India Pvt. Ltd., and Synodic Space Labs…</p>
+<a class="arrow-link" href="https://lnkd.in/p/dmXvqAda" target="_blank" rel="noopener">See it on LinkedIn</a>      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec band" id="stack">
+  <div class="wrap">
+    <div class="sh">
+  <p class="sh-label mono"><span>06</span>Toolbox</p>
+  <div class="sh-row">
+    <h2>Technology stack</h2>
+  </div>
+<p class="sh-text">I believe true learning happens by doing, building projects, fixing failures, learning from teammates, and sharing knowledge with others. These numbers reflect my journey of hands-on experience, not just theory.</p></div>
+
+    <div class="stack">
+      <div class="stack-g rv">
+        <p class="label">Boards &amp; Microcontrollers</p>
+        <ul><li>ESP32</li><li>ESP32-CAM</li><li>ESP8266</li><li>Raspberry Pi Pico 2</li><li>Raspberry Pi</li><li>Arduino Nano BLE 33</li><li>Jetson Nano</li></ul>
+      </div>
+      <div class="stack-g rv">
+        <p class="label">Robotics &amp; ROS 2</p>
+        <ul><li>ROS 2 Jazzy</li><li>Gazebo</li><li>RViz2</li><li>URDF / Xacro</li><li>ros2_control</li><li>TF2</li><li>Turtlesim</li></ul>
+      </div>
+      <div class="stack-g rv">
+        <p class="label">Sensors &amp; Modules</p>
+        <ul><li>BNO085 IMU</li><li>BMP390 barometer</li><li>MPU6050</li><li>INA219 power monitor</li><li>HX711 load cells</li><li>MLX90614 IR thermometer</li><li>RFID RC522</li><li>NavIC / GPS</li></ul>
+      </div>
+      <div class="stack-g rv">
+        <p class="label">Protocols &amp; Communication</p>
+        <ul><li>I²C</li><li>SPI</li><li>UART</li><li>PWM</li><li>GSM (SIM800L / EC200U)</li><li>LoRa</li><li>XBee</li></ul>
+      </div>
+      <div class="stack-g rv">
+        <p class="label">Aerospace</p>
+        <ul><li>Avionics</li><li>Flight Computer Design</li><li>Recovery Systems</li><li>Telemetry Systems</li><li>Sensor Fusion (BNO085 + BMP390)</li><li>Composite Materials</li></ul>
+      </div>
+      <div class="stack-g rv">
+        <p class="label">AI &amp; Computer Vision</p>
+        <ul><li>PyTorch</li><li>TensorFlow</li><li>YOLOv5 / YOLOv8</li><li>OpenCV</li><li>EasyOCR</li><li>Tesseract OCR</li><li>Roboflow</li><li>Vosk speech recognition</li><li>CUDA</li></ul>
+      </div>
+      <div class="stack-g rv">
+        <p class="label">Design &amp; Fabrication</p>
+        <ul><li>PCB Design</li><li>EasyEDA</li><li>Autodesk Fusion</li><li>Onshape</li><li>TinkerCAD</li><li>Ultimaker Cura</li><li>3D Printing</li><li>Laser Engraver</li><li>Copper CAM</li><li>PCB Plotter</li></ul>
+      </div>
+      <div class="stack-g rv">
+        <p class="label">Software, Apps &amp; Cloud</p>
+        <ul><li>Python</li><li>C / C++</li><li>Tkinter</li><li>FlutterFlow</li><li>Supabase</li><li>Firebase / Firestore</li><li>Blynk IoT</li><li>Google Sheets API</li><li>Telegram Bot API</li><li>WordPress</li></ul>
+      </div>
+      <div class="stack-g rv">
+        <p class="label">Tools &amp; Platforms</p>
+        <ul><li>Git</li><li>Ubuntu</li><li>WSL2</li><li>Docker</li><li>Google Colab</li><li>Jupyter Notebook</li><li>VS Code</li><li>Arduino IDE</li><li>PLC basics</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="contact">
+  <div class="wrap contact">
+    <div class="sh">
+  <p class="sh-label mono"><span>07</span>Contact</p>
+  <div class="sh-row">
+    <h2>Let us build something</h2>
+  </div>
+<p class="sh-text">Available for projects, workshops, mentoring and collaborations.</p></div>
+
+    <div class="clist">
+      <a href="mailto:lavitra@techarcanist.com"><span class="mono">Email</span>lavitra@techarcanist.com</a>
+      <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener"><span class="mono">LinkedIn</span>in/tech-arcanist</a>
+      <a href="https://github.com/TechArcanist" target="_blank" rel="noopener"><span class="mono">GitHub</span>TechArcanist</a>
+      <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener"><span class="mono">Instagram</span>@tech_arcanist</a>
+      <a href="https://maps.app.goo.gl/7yo35TM1yNbT2F9X9" target="_blank" rel="noopener"><span class="mono">Based in</span>Kanpur, India</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/plc/">PLC &amp; Industrial Automation</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=a6e775a3ba" defer></script>
+<script src="/assets/home.js?v=a6e775a3ba" defer></script>
+</body>
+</html>

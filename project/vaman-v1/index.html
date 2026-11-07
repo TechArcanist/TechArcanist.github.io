@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vaman v1 | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="The Vaman v1 prototype was built to validate whether the Jetson Nano alone could handle wireless remote control over 5G Wi-Fi , real-time motor control , and…">
+<link rel="canonical" href="https://techarcanist.com/project/vaman-v1/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="Vaman v1">
+<meta property="og:description" content="The Vaman v1 prototype was built to validate whether the Jetson Nano alone could handle wireless remote control over 5G Wi-Fi , real-time motor control , and…">
+<meta property="og:url" content="https://techarcanist.com/project/vaman-v1/">
+<meta property="og:image" content="/uploads/wp/2025/08/Copy-of-Untitled-Design-13-1024x576.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=a6e775a3ba">
+<link rel="stylesheet" href="/assets/home.css?v=a6e775a3ba">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/" aria-current="page">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<section class="cs-hero">
+  <div class="wrap">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/project/">Work</a><span>/</span><span>13 of 27</span></nav>
+    <h1>Vaman v1</h1>
+<div class="cs-lead"><p>The <span class="hl"><strong>Vaman v1</strong></span> prototype was built to validate whether the <span class="hl"><strong>Jetson Nano</strong></span> alone could handle <span class="hl"><strong>wireless remote control over 5G Wi-Fi</strong></span>, <span class="hl"><strong>real-time motor control</strong></span>, and <span class="hl"><strong>live camera streaming</strong></span>, without using any external microcontroller. It successfully moved, streamed video, and responded instantly to commands, but hardware constraints pushed us toward the next version.</p></div>  </div>
+  <div class="wrap">
+    <dl class="cs-spec mono">
+<div><dt>Discipline</dt><dd><a href="/project/#robotics">Robotics</a>, <a href="/project/#ai">Edge AI &amp; Vision</a></dd></div>      <div><dt>Contents</dt><dd>1 videos</dd></div>
+    </dl>
+  </div>
+  <div class="wrap"><figure class="cs-cover"><img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-13-1024x576.png" alt="Vaman v1"><span class="corner tl"></span><span class="corner br"></span></figure></div>
+</section>
+
+<section class="sec tight">
+  <div class="wrap doc">
+    <aside class="toc" aria-label="On this page">
+      <p class="label">On this page</p>
+      <ol><li><a href="#features"><span class="mono">01</span>Features</a></li><li><a href="#components-used"><span class="mono">02</span>Components Used</a></li><li><a href="#how-it-works"><span class="mono">03</span>How it Works</a></li><li><a href="#performance"><span class="mono">04</span>Performance</a></li><li><a href="#media-availability-important-note"><span class="mono">05</span>Media Availability (Important Note)</a></li><li><a href="#limitations-identified"><span class="mono">06</span>Limitations Identified</a></li><li><a href="#conclusion"><span class="mono">07</span>Conclusion</a></li><li><a href="#my-learnings"><span class="mono">08</span>My Learnings</a></li></ol>
+    </aside>
+    <article class="prose">
+      
+<div class="col">
+<div class="embed"><iframe src="https://www.youtube-nocookie.com/embed/3Xpzifbl-5s?rel=0&amp;modestbranding=1&amp;playsinline=1" loading="lazy" title="Video" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+</div>
+<div class="col">
+<h2 id="features">Features</h2>
+<ul>
+<li>Wireless robotic control over <strong>5G Wi-Fi</strong></li>
+<li><strong>Real-time camera feed</strong> through Jetson Nano</li>
+<li>Basic movement control (forward / reverse / turn)</li>
+<li>Vision + motion handled <strong>on-board by Jetson Nano</strong>, no microcontroller</li>
+</ul>
+</div>
+<div class="col">
+<h2 id="components-used">Components Used</h2>
+<ul>
+<li>Hardware
+<ul>
+<li><strong>Jetson Nano</strong> (main controller + processing)</li>
+<li><strong>Motor Driver L298N</strong> (controls motors from Jetson GPIO)</li>
+<li><strong>Logitech C270 Camera</strong> (vision feed)</li>
+<li><strong>Intel 5G Wi-Fi Module</strong> (high-speed wireless control)</li>
+<li><strong>JetBot Chassis</strong> (compact robot platform)</li>
+</ul>
+</li>
+<li>Software
+<ul>
+<li>Python motor control scripts (GPIO based)</li>
+<li>Wi-Fi command interface</li>
+<li>Camera streaming script using Jetson Nano</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="col">
+<h2 id="how-it-works">How it Works</h2>
+<ul>
+<li>Robot receives control commands wirelessly over <strong>5G Wi-Fi</strong></li>
+<li>Jetson Nano drives the motors via <strong>L298N motor driver</strong></li>
+<li>Live camera feed is streamed from the Logitech C270</li>
+<li>Jetson Nano handled <strong>both processing and motor control</strong> without any microcontroller.</li>
+</ul>
+</div>
+<div class="col">
+<h2 id="performance">Performance</h2>
+<ul>
+<li>Instant movement response, <strong>no input lag</strong></li>
+<li>Smooth live video feed from the camera</li>
+</ul>
+</div>
+<div class="col">
+<h2 id="media-availability-important-note">Media Availability (Important Note)</h2>
+<p class="note">⚠️ Since Vaman v1 was an early prototype, only one working video is available<br>(limited documentation because the chassis was temporary and used only for testing).</p>
+</div>
+<div class="col">
+<h2 id="limitations-identified">Limitations Identified</h2>
+<ul>
+<li><strong>PWM control limitation</strong>
+<ul>
+<li>Jetson Nano’s PWM pins could not reliably control the motor driver due to outdated PWM/GPIO library support.</li>
+</ul>
+</li>
+<li><strong>USB serial issue</strong>
+<ul>
+<li>When attempting to offload motor control to a microcontroller, the Jetson Nano failed to detect the microcontroller over USB serial.</li>
+</ul>
+</li>
+<li><strong>Space constraints</strong>
+<ul>
+<li>The JetBot chassis didn’t have enough space to mount all components (Jetson + motor driver + microcontroller).</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="col">
+<h2 id="conclusion">Conclusion</h2>
+<ul>
+<li><strong>Vaman v1 successfully proved:</strong>
+<ul>
+<li><strong><strong>Jetson Nano can independently handle motion + camera over Wi-Fi</strong></strong></li>
+</ul>
+</li>
+<li><strong>But the limitations led to the next stage:</strong>
+<ul>
+<li>Vaman v2, bigger chassis + dedicated motor controller</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="col">
+<h2 id="my-learnings">My Learnings</h2>
+<ul><li>Running <strong>vision + motion together on the Jetson Nano</strong>, wireless control over 5G Wi-Fi with a live camera feed and no external microcontroller</li><li>Driving motors from <strong>Jetson GPIO through an L298N</strong> motor driver using Python scripts</li><li>Streaming a <strong>Logitech C270</strong> camera feed with instant, lag-free movement response</li><li>Jetson Nano <strong>PWM/GPIO library limits</strong> make reliable motor control hard, a dedicated motor controller is the better design</li><li>Debugging <strong>USB serial detection</strong> issues when offloading motor control to a microcontroller</li><li>Chassis size matters: plan space for <strong>compute + motor driver + microcontroller</strong> before building, which led to Vaman v2</li></ul>
+</div>
+
+    </article>
+  </div>
+</section>
+
+<section class="wrap">
+  <nav class="pager" aria-label="More projects">
+<a href="/project/vaman-v2/"><span class="mono">Previous</span>Vaman v2</a><a class="nx" href="/project/autonomous-warehouse-project/"><span class="mono">Next</span>Autonomous Warehouse Project</a>  </nav>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <p class="label">Related work</p>
+    <div class="grid3"><a class="pcard" href="/project/vaman-v3/" data-cats="robotics ai" data-search="vaman v3-3d-printed quadruped experiment (paused version) after vaman v2 successfully implemented ai-based movement (voice + gesture + object find/stop) , the next challenge was to move beyond wheels. vaman v3 explored legged… robotics edge ai &amp; vision">
+  <div class="pcard-media">
+<img src="/uploads/wp/2025/08/Untitled-design-34-1024x576.jpg" alt="" loading="lazy">    <span class="pcard-kind mono">Project</span>
+  </div>
+  <div class="pcard-body">
+    <p class="pcard-cats mono">Robotics / Edge AI &amp; Vision</p>
+    <h3>Vaman V3-3D-Printed Quadruped Experiment (Paused Version)</h3>
+    <p class="pcard-sum">After Vaman v2 successfully implemented AI-based movement (voice + gesture + object find/stop) , the next challenge was to move beyond wheels. Vaman v3 explored legged…</p>
+  </div>
+</a>
+<a class="pcard" href="/project/vaman-v2/" data-cats="robotics ai" data-search="vaman v2 after vaman v1 validated wi-fi controlled movement using the jetson nano , the next goal was to make the robot smarter, not just remotely controllable. vaman v2 evolved… robotics edge ai &amp; vision">
+  <div class="pcard-media">
+<img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-14-1024x576.png" alt="" loading="lazy">    <span class="pcard-kind mono">Project</span>
+  </div>
+  <div class="pcard-body">
+    <p class="pcard-cats mono">Robotics / Edge AI &amp; Vision</p>
+    <h3>Vaman v2</h3>
+    <p class="pcard-sum">After Vaman v1 validated Wi-Fi controlled movement using the Jetson Nano , the next goal was to make the robot smarter, not just remotely controllable. Vaman v2 evolved…</p>
+  </div>
+</a>
+<a class="pcard" href="/documented-software-learnings/ros2/" data-cats="robotics learn" data-search="ros 2 diy this page documents the beginning of my ros 2 journey , starting with setting up ubuntu . credits: this documentation is based on my learning from the udemy course self… robotics teaching &amp; docs">
+  <div class="pcard-media">
+<img src="/uploads/wp/2025/08/image-7.png" alt="" loading="lazy">    <span class="pcard-kind mono">Series</span>
+  </div>
+  <div class="pcard-body">
+    <p class="pcard-cats mono">Robotics / Teaching &amp; Docs</p>
+    <h3>ROS 2 DIY</h3>
+    <p class="pcard-sum">This page documents the beginning of my ROS 2 journey , starting with setting up Ubuntu . Credits: This documentation is based on my learning from the Udemy course Self…</p>
+  </div>
+</a>
+</div>
+  </div>
+</section>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/plc/">PLC &amp; Industrial Automation</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=a6e775a3ba" defer></script>
+<script src="/assets/home.js?v=a6e775a3ba" defer></script>
+</body>
+</html>

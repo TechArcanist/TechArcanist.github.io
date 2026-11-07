@@ -1,0 +1,148 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="/assets/widget-base.css">
+</head><body><style>
+.highlight { color:#64FFDA; font-weight:600; }
+
+.highlight-bg {
+
+  background:#64FFDA33;
+
+  color:#0A192F;
+
+  padding:0.05em 0.25em;
+
+  border-radius:0.25em;
+
+}
+
+</style>
+
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Sans+Condensed:wght@700&amp;display=swap" rel="stylesheet"/>
+<style>
+.tv-app{--bg:#110d22;--panel:#1b1638;--deep:#0b0819;--line:rgba(233,229,250,0.10);--line-strong:rgba(233,229,250,0.20);--ink:#e9e5fa;--ink-dim:#9d97c4;--ink-faint:#67618f;--accent:#ffc857;--accent-soft:rgba(255,200,87,0.14);--accent-2:#b18cff;--accent-2-soft:rgba(177,140,255,0.12);--red:#ff6b6b;--red-soft:rgba(255,107,107,0.12);--mono:'IBM Plex Mono',ui-monospace,monospace;--sans:'IBM Plex Sans',-apple-system,'Segoe UI',sans-serif;--cond:'IBM Plex Sans Condensed','IBM Plex Sans',-apple-system,sans-serif;}
+.tv-app,.tv-app *{box-sizing:border-box;}
+.tv-app{container-type:inline-size;max-width:1100px;margin:0 auto;padding-bottom:40px;background-color:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;text-align:left;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:34px 34px;background-position:-1px -1px;}
+.tv-app h1,.tv-app h3,.tv-app p{margin:0;padding:0;color:inherit;text-transform:none;letter-spacing:0;border:0;}
+.tv-app button{box-shadow:none;text-shadow:none;text-transform:none;letter-spacing:0;-webkit-appearance:none;appearance:none;}
+.tv-err{margin:0;padding:12px 16px;background:#3a1113;color:#ffd9d9;border-bottom:2px solid #ff6b6b;font:13px/1.5 var(--sans);}
+.tv-hero{padding:30px 32px 10px;}
+.tv-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;color:var(--accent-2);margin-bottom:12px;}
+.tv-app .tv-hero h1{font-family:var(--cond);font-size:2.2rem;line-height:1.15;margin:0 0 12px;font-weight:700;}
+.tv-hero h1 span{color:var(--accent);}
+.tv-app .tv-intro{font-size:1rem;margin:0 0 6px;max-width:70ch;}
+.tv-app code{font-family:var(--mono);color:var(--accent);background:rgba(255,200,87,0.1);padding:1px 6px;border-radius:2px;font-size:0.88em;}
+.tv-section{padding:20px 32px 6px;}
+.tv-showcase{border:1px solid var(--line-strong);background:var(--panel);overflow:hidden;}
+.tv-head{display:flex;align-items:center;gap:10px;padding:12px 18px;border-bottom:1px solid var(--line);}
+.tv-app .tv-head h3{font-family:var(--mono);font-size:0.95rem;font-weight:600;flex:1;}
+.tv-flag{font-family:var(--mono);font-size:9.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:4px 8px;border-radius:2px;}
+.tv-body{padding:16px 18px;}
+.tv-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;}
+.tv-cv{background:var(--deep);border:1px solid var(--line-strong);}
+.tv-cv canvas{display:block;width:100%;touch-action:none;cursor:grab;}
+.tv-chips{font-family:var(--mono);font-size:11px;color:var(--ink-dim);margin-top:10px;}
+.tv-fl{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.tv-f{display:block;width:100%;text-align:left;cursor:pointer;font-family:var(--mono);color:var(--ink);background:var(--deep);border:1px solid var(--line-strong);border-left-width:4px;border-radius:0;padding:7px 10px;}
+.tv-f .r1{display:flex;justify-content:space-between;align-items:baseline;gap:8px;}
+.tv-f .nm{font-size:12px;font-weight:600;}
+.tv-f .v{font-size:1.25rem;font-weight:600;white-space:pre;font-variant-numeric:tabular-nums;}
+.tv-f .m{font-size:11px;color:var(--ink-dim);margin-top:1px;font-family:var(--sans);}
+.tv-f .m b{font-family:var(--mono);color:var(--ink);font-weight:500;}
+.tv-f[data-k=x]{border-left-color:#5eead4;}.tv-f[data-k=x] .nm,.tv-f[data-k=x] .v{color:#5eead4;}
+.tv-f[data-k=y]{border-left-color:#7aa7ff;}.tv-f[data-k=y] .nm,.tv-f[data-k=y] .v{color:#7aa7ff;}
+.tv-f[data-k=th]{border-left-color:#ffc857;}.tv-f[data-k=th] .nm,.tv-f[data-k=th] .v{color:#ffc857;}
+.tv-f[data-k=lv]{border-left-color:#b18cff;}.tv-f[data-k=lv] .nm,.tv-f[data-k=lv] .v{color:#b18cff;}
+.tv-f[data-k=av]{border-left-color:#ff8fc7;}.tv-f[data-k=av] .nm,.tv-f[data-k=av] .v{color:#ff8fc7;}
+.tv-f.on{background:var(--panel);outline:1px solid var(--ink-dim);}
+.tv-f.off{opacity:.35;}
+.tv-lbl{font-family:var(--mono);font-size:11px;color:var(--ink-dim);display:flex;justify-content:space-between;margin-bottom:4px;}
+.tv-lbl b{color:var(--accent);font-weight:600;}
+.tv-ctrl{margin-bottom:10px;}
+.tv-ctrl input[type=range]{width:100%;accent-color:var(--accent);margin:2px 0;}
+.tv-btn{font-family:var(--mono);font-size:12px;color:var(--bg);background:var(--accent);border:1px solid var(--accent);padding:7px 12px;border-radius:2px;cursor:pointer;font-weight:600;margin:6px 6px 0 0;line-height:1.3;}
+.tv-btn.ghost{background:transparent;color:var(--ink-dim);border-color:var(--line-strong);}
+.tv-btn:hover{border-color:var(--ink);}
+.tv-app button:focus-visible,.tv-app input:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px;}
+.tv-st{font-family:var(--mono);font-size:12.5px;line-height:1.6;padding:10px 14px;margin-top:14px;background:var(--deep);border:1px solid var(--line-strong);border-left-width:4px;color:var(--ink-dim);height:5.2em;overflow:hidden;}
+.tv-st.ok{color:var(--ink);border-color:var(--accent-2);background:var(--accent-2-soft);}
+.tv-st.bad{color:var(--red);border-color:var(--red);background:var(--red-soft);}
+.tv-app .tv-p{color:var(--ink-dim);font-size:0.95rem;max-width:76ch;margin:0 0 6px;}
+.tv-p b{color:var(--ink);font-weight:600;}
+.tv-tbl{width:100%;border-collapse:collapse;font-size:0.85rem;margin-top:12px;}
+.tv-tbl th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--accent-2);padding:8px;border-bottom:1px solid var(--line-strong);background:transparent;}
+.tv-tbl td{padding:9px 8px;border-bottom:1px solid var(--line);color:var(--ink-dim);background:transparent;}
+.tv-tbl td:first-child{font-family:var(--mono);white-space:nowrap;font-weight:600;}
+.tv-scroll{overflow-x:auto;}
+.tv-foot{padding:18px 32px 0;font-size:12px;color:var(--ink-faint);}
+@container (max-width:760px){.tv-grid{grid-template-columns:minmax(0,1fr);}.tv-hero,.tv-section,.tv-foot{padding-left:16px;padding-right:16px;}.tv-st{height:8em;}.tv-app .tv-hero h1{font-size:1.7rem;}}
+.tv-r{display:block;width:100%;text-align:left;cursor:pointer;font-family:var(--mono);color:var(--ink);background:var(--deep);border:1px solid var(--line-strong);border-left-width:4px;border-radius:0;padding:7px 10px;margin-bottom:6px;}
+.tv-r .r1{display:flex;justify-content:space-between;align-items:baseline;gap:8px;}
+.tv-r .nm{font-size:12px;font-weight:600;}
+.tv-r .v{font-size:1.25rem;font-weight:600;white-space:pre;font-variant-numeric:tabular-nums;}
+.tv-r .m{font-size:11px;color:var(--ink-dim);margin-top:2px;white-space:normal;overflow-wrap:anywhere;}
+.tv-r.t1{border-left-color:#34c77b;cursor:default;}.tv-r.t1 .nm,.tv-r.t1 .v{color:#34c77b;}
+.tv-r.t2{border-left-color:#ffb454;cursor:default;}.tv-r.t2 .nm,.tv-r.t2 .v{color:#ffb454;}
+.tv-r.tx{border-left-color:#7aa7ff;}.tv-r.tx .nm,.tv-r.tx .v{color:#7aa7ff;}
+.tv-r.ty{border-left-color:#ff8fc7;}.tv-r.ty .nm,.tv-r.ty .v{color:#ff8fc7;}
+.tv-r.vec{border-left-color:#b18cff;}.tv-r.vec .nm,.tv-r.vec .v{color:#b18cff;}
+.tv-r.on{background:var(--panel);outline:1px solid var(--ink-dim);}
+.tv-r.off{opacity:.35;}
+.tv-sl{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;margin:10px 0 4px;}
+.tv-sl .tv-lbl b{font-weight:600;}
+.tv-sl .a b{color:#34c77b;}.tv-sl .b b{color:#ffb454;}
+.tv-sl input[type=range]{width:100%;margin:2px 0;}
+.tv-sl .a input{accent-color:#34c77b;}.tv-sl .b input{accent-color:#ffb454;}
+.tv-st{height:6.4em;}
+.tv-st{color:var(--ink);border-color:var(--accent-2);background:var(--accent-2-soft);}
+.tv-code{margin:0;background:var(--deep);border:1px solid var(--line-strong);padding:12px 16px;font:13px/1.9 var(--mono);color:var(--ink-dim);overflow-x:auto;white-space:pre;}
+.tv-code b{color:var(--ink);font-weight:600;}
+.tv-note{border-left:3px solid var(--accent-2);background:var(--accent-2-soft);padding:10px 14px;font-size:0.9rem;margin-top:12px;color:var(--ink);}
+@container (max-width:760px){.tv-sl{grid-template-columns:minmax(0,1fr);}.tv-st{height:9.6em;}}
+</style>
+<div class="tv-app" data-k="" id="tv-app">
+
+<section class="tv-section"><div class="tv-showcase">
+<div class="tv-head"><h3>T(1 to 2) = (x2 − x1, y2 − y1)</h3><span class="tv-flag">Interactive</span></div>
+<div class="tv-body"><div class="tv-grid">
+<div><div class="tv-cv"><canvas aria-label="Turtlesim world with two draggable turtles and the translation vector arrow from Turtle 1 to Turtle 2" height="380" id="tv-cv" width="380"></canvas></div>
+<div class="tv-chips">Drag a turtle (the closest one moves). Origin (0, 0) is the bottom-left corner. This is the world frame.</div></div>
+<div>
+<button class="tv-r t1" tabindex="-1" type="button"><div class="r1"><span class="nm">Turtle 1 (x1, y1)</span><span class="v" id="tv-p1">(0, 0)</span></div></button>
+<button class="tv-r t2" tabindex="-1" type="button"><div class="r1"><span class="nm">Turtle 2 (x2, y2)</span><span class="v" id="tv-p2">(0, 0)</span></div></button>
+<button class="tv-r tx" data-c="tx" data-k="tx" type="button"><div class="r1"><span class="nm">Tx</span><span class="v" id="tv-tx">0.00</span></div><div class="m" id="tv-fx">Tx = x2 – x1</div></button>
+<button class="tv-r ty" data-c="ty" data-k="ty" type="button"><div class="r1"><span class="nm">Ty</span><span class="v" id="tv-ty">0.00</span></div><div class="m" id="tv-fy">Ty = y2 – y1</div></button>
+<button class="tv-r vec" data-c="vec" data-k="vec" type="button"><div class="r1"><span class="nm">vector T</span><span class="v" id="tv-vv">(0, 0)</span></div><div class="m">length <b id="tv-ln">0.00</b> (distance between the turtles)</div></button>
+<div class="tv-sl">
+<div class="a"><div class="tv-lbl">x1<b id="tv-ox1">0</b></div><input aria-label="Turtle 1 x" id="tv-sx1" max="11" min="0" step="0.01" type="range" value="5.54"/></div>
+<div class="a"><div class="tv-lbl">y1<b id="tv-oy1">0</b></div><input aria-label="Turtle 1 y" id="tv-sy1" max="11" min="0" step="0.01" type="range" value="5.54"/></div>
+<div class="b"><div class="tv-lbl">x2<b id="tv-ox2">0</b></div><input aria-label="Turtle 2 x" id="tv-sx2" max="11" min="0" step="0.01" type="range" value="1"/></div>
+<div class="b"><div class="tv-lbl">y2<b id="tv-oy2">0</b></div><input aria-label="Turtle 2 y" id="tv-sy2" max="11" min="0" step="0.01" type="range" value="4"/></div>
+</div>
+<button class="tv-btn" id="tv-ex" type="button">Load the example</button><button class="tv-btn ghost" id="tv-sw" type="button">Swap turtles</button><button class="tv-btn ghost" id="tv-rs" type="button">Reset</button>
+</div></div>
+<div aria-live="polite" class="tv-st" id="tv-st" role="status">The interactive part has not started yet. If this message stays, your site is blocking or delaying the script in this block.</div>
+</div></div></section>
+<section class="tv-section">
+<p class="tv-p"><b>The idea:</b> subtract the first turtle’s coordinates from the second turtle’s coordinates.</p>
+<pre class="tv-code">Tx = x2 - x1
+Ty = y2 - y1
+<b>T(1 to 2) = (x2 - x1, y2 - y1)</b></pre>
+<p class="tv-p" style="margin-top:12px"><b>Example:</b> Turtle 1 = (5.54, 5.54) and Turtle 2 = (1.00, 4.00). Press “Load the example” above to see it.</p>
+<pre class="tv-code">Tx = 1.00 - 5.54 = -4.54
+Ty = 4.00 - 5.54 = -1.54</pre>
+<p class="tv-p" style="margin-top:12px">A negative Tx means Turtle 2 is to the left of Turtle 1. A negative Ty means it is below Turtle 1. The exact values depend on where the turtles are.</p>
+<div class="tv-note"><b>Important distinction:</b> this is the coordinate difference in the Turtlesim world frame. We are not rotating the vector into Turtle 1’s local frame, so the turtles’ headings play no part here.</div>
+</section>
+
+</div>
+<script id="tv-js" type="text/plain">KGZ1bmN0aW9uKCl7CnZhciAkPWZ1bmN0aW9uKGkpe3JldHVybiBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgndHYtJytpKX0sQT1bXS5zbGljZSxUQVU9Ni4yODMyLFdTPTExLjA4ODkscm9vdD0kKCdhcHAnKTsKZnVuY3Rpb24gcShzKXtyZXR1cm4gQS5jYWxsKHJvb3QucXVlcnlTZWxlY3RvckFsbChzKSl9CnZhciBDMT0nIzM0Yzc3YicsQzI9JyNmZmI0NTQnLFZFQz0nI2IxOGNmZicsVFhDPScjN2FhN2ZmJyxUWUM9JyNmZjhmYzcnOwp2YXIgRElNPScjOWQ5N2M0JyxGQUlOVD0nIzY3NjE4ZicsREVFUD0nIzBiMDgxOScsR1JJRD0nIzJhMjQ0ZCcsRURHRT0nIzNhMzQ2MycsSU5LPScjZTllNWZhJyxNT05PPSdJQk0gUGxleCBNb25vLCB1aS1tb25vc3BhY2UsIG1vbm9zcGFjZSc7CnZhciBTPXt4MTo1LjU0LHkxOjUuNTQseDI6MS4wMCx5Mjo0LjAwfTsKZnVuY3Rpb24gZjIodil7cmV0dXJuIHYudG9GaXhlZCgyKX0KZnVuY3Rpb24gc2codil7cmV0dXJuKHY8MD8n4oiSJzonJykrTWF0aC5hYnModikudG9GaXhlZCgyKX0KZnVuY3Rpb24gY2xhbXAodil7cmV0dXJuIE1hdGgubWF4KDAsTWF0aC5taW4oV1MsdikpfQovKiBmb2N1cyAqLwp2YXIgaHY9Jycsc3RrPScnOwpmdW5jdGlvbiBhcHBseUsoKXt2YXIgaz1odnx8c3RrO3Jvb3Quc2V0QXR0cmlidXRlKCdkYXRhLWsnLGspO3EoJy50di1yW2RhdGEta10nKS5mb3JFYWNoKGZ1bmN0aW9uKHIpe3ZhciBvbj1yLmdldEF0dHJpYnV0ZSgnZGF0YS1rJyk9PT1rO3IuY2xhc3NOYW1lPSd0di1yICcrci5nZXRBdHRyaWJ1dGUoJ2RhdGEtYycpKyhrPT09Jyc/Jyc6KG9uPycgb24nOicgb2ZmJykpfSl9CnEoJy50di1yW2RhdGEta10nKS5mb3JFYWNoKGZ1bmN0aW9uKHIpe3ZhciBrPXIuZ2V0QXR0cmlidXRlKCdkYXRhLWsnKTsKIHIub25tb3VzZWVudGVyPXIub25mb2N1cz1mdW5jdGlvbigpe2h2PWs7YXBwbHlLKCk7ZHJhdygpfTsKIHIub25tb3VzZWxlYXZlPXIub25ibHVyPWZ1bmN0aW9uKCl7aHY9Jyc7YXBwbHlLKCk7ZHJhdygpfTsKIHIub25jbGljaz1mdW5jdGlvbigpe3N0az1zdGs9PT1rPycnOms7YXBwbHlLKCk7ZHJhdygpfX0pOwovKiBzbGlkZXJzICovClsneDEnLCd5MScsJ3gyJywneTInXS5mb3JFYWNoKGZ1bmN0aW9uKG4pe3ZhciBlbD0kKCdzJytuKTtlbC5vbmlucHV0PWZ1bmN0aW9uKCl7U1tuXT1wYXJzZUZsb2F0KGVsLnZhbHVlKTt1cGRhdGUoKX19KTsKJCgnZXgnKS5vbmNsaWNrPWZ1bmN0aW9uKCl7Uy54MT01LjU0O1MueTE9NS41NDtTLngyPTE7Uy55Mj00O3VwZGF0ZSgpfTsKJCgnc3cnKS5vbmNsaWNrPWZ1bmN0aW9uKCl7dmFyIGE9Uy54MSxiPVMueTE7Uy54MT1TLngyO1MueTE9Uy55MjtTLngyPWE7Uy55Mj1iO3VwZGF0ZSgpfTsKJCgncnMnKS5vbmNsaWNrPWZ1bmN0aW9uKCl7Uy54MT0zO1MueTE9MztTLngyPTg7Uy55Mj03O3VwZGF0ZSgpfTsKLyogY2FudmFzICovCnZhciBjdj0kKCdjdicpLExXPTM4MCxPWD0zNixPWT0zNDQsVT0zMzAvV1M7CmZ1bmN0aW9uIFdYKHgpe3JldHVybiBPWCt4KlV9ZnVuY3Rpb24gV1koeSl7cmV0dXJuIE9ZLXkqVX0KZnVuY3Rpb24gZml0KHcpe3ZhciBkPU1hdGgubWluKHdpbmRvdy5kZXZpY2VQaXhlbFJhdGlvfHwxLDIpO2lmKGN2Ll93IT09d3x8Y3YuX2QhPT1kKXtjdi5fdz13O2N2Ll9kPWQ7Y3Yud2lkdGg9TWF0aC5yb3VuZCh3KmQpO2N2LmhlaWdodD1NYXRoLnJvdW5kKHcqZCk7Y3Yuc3R5bGUuaGVpZ2h0PXcrJ3B4J31yZXR1cm4gZH0KZnVuY3Rpb24gdHh0KGcscyx4LHksY29sLGZvbnQsYWwpe2cuZmlsbFN0eWxlPWNvbDtnLmZvbnQ9Zm9udDtnLnRleHRBbGlnbj1hbHx8J2NlbnRlcic7Zy5maWxsVGV4dChzLHgseSl9CmZ1bmN0aW9uIHR1cnRsZShnLHgseSxjb2wsbGFiLGFjdCl7CiBnLnNhdmUoKTtnLnRyYW5zbGF0ZSh4LHkpOwogaWYoYWN0KXtnLnN0cm9rZVN0eWxlPUlOSztnLmxpbmVXaWR0aD0xLjU7Zy5zZXRMaW5lRGFzaChbMywzXSk7Zy5iZWdpblBhdGgoKTtnLmFyYygwLDAsMjMsMCxUQVUpO2cuc3Ryb2tlKCk7Zy5zZXRMaW5lRGFzaChbXSl9CiBnLmZpbGxTdHlsZT1jb2w7CiBbWzksLTEzXSxbOSwxM10sWy05LC0xM10sWy05LDEzXV0uZm9yRWFjaChmdW5jdGlvbihwKXtnLmJlZ2luUGF0aCgpO2cuYXJjKHBbMF0scFsxXSw1LDAsVEFVKTtnLmZpbGwoKX0pOwogZy5iZWdpblBhdGgoKTtnLmFyYygxOSwwLDcsMCxUQVUpO2cuZmlsbCgpOwogZy5iZWdpblBhdGgoKTtnLmFyYygwLDAsMTUsMCxUQVUpO2cuZmlsbCgpOwogZy5maWxsU3R5bGU9J3JnYmEoMTEsOCwyNSwwLjM1KSc7Zy5iZWdpblBhdGgoKTtnLmFyYygtMSwwLDYsMCxUQVUpO2cuZmlsbCgpOwogZy5maWxsU3R5bGU9REVFUDtnLmJlZ2luUGF0aCgpO2cuYXJjKDIxLC0zLDEuNSwwLFRBVSk7Zy5hcmMoMjEsMywxLjUsMCxUQVUpO2cuZmlsbCgpOwogZy5yZXN0b3JlKCk7CiB0eHQoZyxsYWIseCx5LTI0LGNvbCwnYm9sZCAxMnB4ICcrTU9OTyk7Cn0KZnVuY3Rpb24gaGVhZChnLHgseSxkeCxkeSxjb2wscyl7dmFyIG49TWF0aC5zcXJ0KGR4KmR4K2R5KmR5KXx8MTtkeC89bjtkeS89bjtnLmZpbGxTdHlsZT1jb2w7Zy5iZWdpblBhdGgoKTtnLm1vdmVUbyh4LHkpO2cubGluZVRvKHgtZHgqcy1keSpzKi41NSx5LWR5KnMrZHgqcyouNTUpO2cubGluZVRvKHgtZHgqcytkeSpzKi41NSx5LWR5KnMtZHgqcyouNTUpO2cuY2xvc2VQYXRoKCk7Zy5maWxsKCl9CnZhciBkcmFnPTA7CmZ1bmN0aW9uIGRyYXcoKXsKIHZhciBjdz1jdi5jbGllbnRXaWR0aHx8MzgwLGQ9Zml0KGN3KSxzPWN3L0xXLGc9Y3YuZ2V0Q29udGV4dCgnMmQnKTsKIGcuc2V0VHJhbnNmb3JtKGQqcywwLDAsZCpzLDAsMCk7Zy5maWxsU3R5bGU9REVFUDtnLmZpbGxSZWN0KDAsMCxMVyxMVyk7CiBnLmxpbmVXaWR0aD0xOwogZm9yKHZhciBpPTA7aTw9MTE7aSsrKXt2YXIgZ3g9TWF0aC5yb3VuZChXWChpKSkrLjUsZ3k9TWF0aC5yb3VuZChXWShpKSkrLjU7Zy5zdHJva2VTdHlsZT1HUklEO2cuYmVnaW5QYXRoKCk7Zy5tb3ZlVG8oZ3gsV1koMCkpO2cubGluZVRvKGd4LFdZKFdTKSk7Zy5zdHJva2UoKTtnLmJlZ2luUGF0aCgpO2cubW92ZVRvKE9YLGd5KTtnLmxpbmVUbyhXWChXUyksZ3kpO2cuc3Ryb2tlKCk7CiAgaWYoaSUyPT09MCl7dHh0KGcsU3RyaW5nKGkpLFdYKGkpLE9ZKzE2LEZBSU5ULCcxMHB4ICcrTU9OTyk7dHh0KGcsU3RyaW5nKGkpLE9YLTgsV1koaSkrMyxGQUlOVCwnMTBweCAnK01PTk8sJ3JpZ2h0Jyl9fQogZy5zdHJva2VTdHlsZT1FREdFO2cubGluZVdpZHRoPTI7Zy5zdHJva2VSZWN0KE9YLFdZKFdTKSxXWChXUyktT1gsT1ktV1koV1MpKTsKIHR4dChnLCd4JyxXWChXUyksT1krMzEsRElNLCdib2xkIDExcHggJytNT05PLCdyaWdodCcpO3R4dChnLCd5JyxPWC0yNixXWShXUykrNCxESU0sJ2JvbGQgMTFweCAnK01PTk8sJ3JpZ2h0Jyk7CiB2YXIgaz1odnx8c3RrLHAxeD1XWChTLngxKSxwMXk9V1koUy55MSkscDJ4PVdYKFMueDIpLHAyeT1XWShTLnkyKSxjeD1wMngsY3k9cDF5OwogdmFyIHR4PVMueDItUy54MSx0eT1TLnkyLVMueTE7CiAvKiBsZWdzIChyaWdodCB0cmlhbmdsZTogYWxvbmcgeCBmcm9tIFQxLCB0aGVuIGFsb25nIHkgdG8gVDIpICovCiBnLmdsb2JhbEFscGhhPShrPT09Jyd8fGs9PT0ndHgnKT8xOjAuMTU7CiBnLnN0cm9rZVN0eWxlPVRYQztnLmxpbmVXaWR0aD1rPT09J3R4Jz81OjM7Zy5zZXRMaW5lRGFzaChbXSk7Zy5iZWdpblBhdGgoKTtnLm1vdmVUbyhwMXgscDF5KTtnLmxpbmVUbyhjeCxjeSk7Zy5zdHJva2UoKTsKIGlmKE1hdGguYWJzKHAyeC1wMXgpPjM0KXtoZWFkKGcsY3gsY3kscDJ4PnAxeD8xOi0xLDAsVFhDLDkpO3R4dChnLCdUeCA9ICcrc2codHgpLChwMXgrY3gpLzIscDF5KyhwMnk8cDF5PzE4Oi05KSxUWEMsJ2JvbGQgMTFweCAnK01PTk8pfQogZy5nbG9iYWxBbHBoYT0oaz09PScnfHxrPT09J3R5Jyk/MTowLjE1OwogZy5zdHJva2VTdHlsZT1UWUM7Zy5saW5lV2lkdGg9az09PSd0eSc/NTozO2cuYmVnaW5QYXRoKCk7Zy5tb3ZlVG8oY3gsY3kpO2cubGluZVRvKHAyeCxwMnkpO2cuc3Ryb2tlKCk7CiBpZihNYXRoLmFicyhwMnktcDF5KT4zNCl7aGVhZChnLHAyeCxwMnksMCxwMnk+cDF5PzE6LTEsVFlDLDkpO3R4dChnLCdUeSA9ICcrc2codHkpLGN4KyhwMng+cDF4Py04OjgpLChjeStwMnkpLzIrNCxUWUMsJ2JvbGQgMTFweCAnK01PTk8scDJ4PnAxeD8ncmlnaHQnOidsZWZ0Jyl9CiAvKiBndWlkZSBsaW5lcyBmcm9tIFQyIHRvIGF4ZXMgKi8KIGcuZ2xvYmFsQWxwaGE9az09PScnPzAuOTowLjI7Zy5zdHJva2VTdHlsZT1GQUlOVDtnLmxpbmVXaWR0aD0xO2cuc2V0TGluZURhc2goWzMsNF0pOwogZy5iZWdpblBhdGgoKTtnLm1vdmVUbyhwMXgscDF5KTtnLmxpbmVUbyhwMXgsT1kpO2cubW92ZVRvKHAxeCxwMXkpO2cubGluZVRvKE9YLHAxeSk7Zy5tb3ZlVG8ocDJ4LHAyeSk7Zy5saW5lVG8ocDJ4LE9ZKTtnLm1vdmVUbyhwMngscDJ5KTtnLmxpbmVUbyhPWCxwMnkpO2cuc3Ryb2tlKCk7Zy5zZXRMaW5lRGFzaChbXSk7CiAvKiB2ZWN0b3IgYXJyb3cgVDEgLT4gVDIgKi8KIGcuZ2xvYmFsQWxwaGE9KGs9PT0nJ3x8az09PSd2ZWMnKT8xOjAuMTU7CiB2YXIgZHg9cDJ4LXAxeCxkeT1wMnktcDF5LEw9TWF0aC5zcXJ0KGR4KmR4K2R5KmR5KTsKIGlmKEw+NDYpe3ZhciB1eD1keC9MLHV5PWR5L0wsYXg9cDF4K3V4KjIwLGF5PXAxeSt1eSoyMCxieD1wMngtdXgqMjQsYnk9cDJ5LXV5KjI0OwogIGcuc3Ryb2tlU3R5bGU9VkVDO2cubGluZVdpZHRoPWs9PT0ndmVjJz82OjQ7Zy5saW5lQ2FwPSdyb3VuZCc7Zy5iZWdpblBhdGgoKTtnLm1vdmVUbyhheCxheSk7Zy5saW5lVG8oYngtdXgqOCxieS11eSo4KTtnLnN0cm9rZSgpO2cubGluZUNhcD0nYnV0dCc7aGVhZChnLGJ4LGJ5LHV4LHV5LFZFQywxNCl9CiBnLmdsb2JhbEFscGhhPTE7CiAvKiB0dXJ0bGVzICovCiB0dXJ0bGUoZyxwMXgscDF5LEMxLCdUdXJ0bGUgMScsZHJhZz09PTEpO3R1cnRsZShnLHAyeCxwMnksQzIsJ1R1cnRsZSAyJyxkcmFnPT09Mik7Cn0KLyogcmVhZG91dHMgKyBtZXNzYWdlICovCmZ1bmN0aW9uIHVwZGF0ZSgpewogWyd4MScsJ3kxJywneDInLCd5MiddLmZvckVhY2goZnVuY3Rpb24obil7dmFyIGVsPSQoJ3MnK24pO2lmKGRvY3VtZW50LmFjdGl2ZUVsZW1lbnQhPT1lbCllbC52YWx1ZT1TW25dOyQoJ28nK24pLnRleHRDb250ZW50PWYyKFNbbl0pfSk7CiB2YXIgdHg9Uy54Mi1TLngxLHR5PVMueTItUy55MSxMPU1hdGguc3FydCh0eCp0eCt0eSp0eSk7CiAkKCdwMScpLnRleHRDb250ZW50PScoJytmMihTLngxKSsnLCAnK2YyKFMueTEpKycpJzskKCdwMicpLnRleHRDb250ZW50PScoJytmMihTLngyKSsnLCAnK2YyKFMueTIpKycpJzsKICQoJ3R4JykudGV4dENvbnRlbnQ9c2codHgpOyQoJ3R5JykudGV4dENvbnRlbnQ9c2codHkpOwogJCgnZngnKS50ZXh0Q29udGVudD0nVHggPSB4MiDiiJIgeDEgPSAnK2YyKFMueDIpKycg4oiSICcrZjIoUy54MSkrJyA9ICcrc2codHgpOwogJCgnZnknKS50ZXh0Q29udGVudD0nVHkgPSB5MiDiiJIgeTEgPSAnK2YyKFMueTIpKycg4oiSICcrZjIoUy55MSkrJyA9ICcrc2codHkpOwogJCgndnYnKS50ZXh0Q29udGVudD0nVCA9ICgnK3NnKHR4KSsnLCAnK3NnKHR5KSsnKSc7CiAkKCdsbicpLnRleHRDb250ZW50PWYyKEwpOwogdmFyIGgsdixtOwogaD1NYXRoLmFicyh0eCk8MC4wMDU/J2F0IHRoZSBzYW1lIHggYXMnOih0eDwwPyd0byB0aGUgbGVmdCBvZic6J3RvIHRoZSByaWdodCBvZicpOwogdj1NYXRoLmFicyh0eSk8MC4wMDU/J2F0IHRoZSBzYW1lIHkgYXMnOih0eTwwPydiZWxvdyc6J2Fib3ZlJyk7CiBpZihMPDAuMDEpbT0nVGhlIHR3byB0dXJ0bGVzIGFyZSBpbiB0aGUgc2FtZSBwbGFjZSwgc28gdGhlIHRyYW5zbGF0aW9uIHZlY3RvciBpcyAoMCwgMCkuJzsKIGVsc2UgbT0nVHggaXMgJysodHg8MD8nbmVnYXRpdmUnOih0eD4wPydwb3NpdGl2ZSc6J3plcm8nKSkrJzogVHVydGxlIDIgaXMgJytoKycgVHVydGxlIDEuIFR5IGlzICcrKHR5PDA/J25lZ2F0aXZlJzoodHk+MD8ncG9zaXRpdmUnOid6ZXJvJykpKyc6IFR1cnRsZSAyIGlzICcrdisnIFR1cnRsZSAxLic7CiB2YXIgc3Q9JCgnc3QnKTtpZihzdC5fbSE9PW0pe3N0Ll9tPW07c3QudGV4dENvbnRlbnQ9bX0KIGRyYXcoKTsKfQovKiBkcmFnZ2luZzogcGljayB0aGUgbmVhcmVzdCB0dXJ0bGUgKi8KZnVuY3Rpb24gcG9zKGUpe3ZhciByPWN2LmdldEJvdW5kaW5nQ2xpZW50UmVjdCgpLGx4PShlLmNsaWVudFgtci5sZWZ0KS9yLndpZHRoKkxXLGx5PShlLmNsaWVudFktci50b3ApL3IuaGVpZ2h0KkxXO3JldHVybltseCxseV19CmZ1bmN0aW9uIG12KGUpe3ZhciBwPXBvcyhlKSx4PWNsYW1wKChwWzBdLU9YKS9VKSx5PWNsYW1wKChPWS1wWzFdKS9VKTsKIGlmKGRyYWc9PT0xKXtTLngxPU1hdGgucm91bmQoeCoxMDApLzEwMDtTLnkxPU1hdGgucm91bmQoeSoxMDApLzEwMH1lbHNle1MueDI9TWF0aC5yb3VuZCh4KjEwMCkvMTAwO1MueTI9TWF0aC5yb3VuZCh5KjEwMCkvMTAwfXVwZGF0ZSgpfQpjdi5hZGRFdmVudExpc3RlbmVyKCdwb2ludGVyZG93bicsZnVuY3Rpb24oZSl7dmFyIHA9cG9zKGUpLGQxPU1hdGguaHlwb3QocFswXS1XWChTLngxKSxwWzFdLVdZKFMueTEpKSxkMj1NYXRoLmh5cG90KHBbMF0tV1goUy54MikscFsxXS1XWShTLnkyKSk7CiBkcmFnPWQxPD1kMj8xOjI7dHJ5e2N2LnNldFBvaW50ZXJDYXB0dXJlKGUucG9pbnRlcklkKX1jYXRjaCh4KXt9bXYoZSl9KTsKY3YuYWRkRXZlbnRMaXN0ZW5lcigncG9pbnRlcm1vdmUnLGZ1bmN0aW9uKGUpe2lmKGRyYWcpbXYoZSl9KTsKY3YuYWRkRXZlbnRMaXN0ZW5lcigncG9pbnRlcnVwJyxmdW5jdGlvbigpe2RyYWc9MDtkcmF3KCl9KTsKY3YuYWRkRXZlbnRMaXN0ZW5lcigncG9pbnRlcmNhbmNlbCcsZnVuY3Rpb24oKXtkcmFnPTA7ZHJhdygpfSk7CndpbmRvdy5hZGRFdmVudExpc3RlbmVyKCdyZXNpemUnLGRyYXcpOwphcHBseUsoKTt1cGRhdGUoKTsKaWYod2luZG93LkludGVyc2VjdGlvbk9ic2VydmVyKW5ldyBJbnRlcnNlY3Rpb25PYnNlcnZlcihmdW5jdGlvbihlKXtpZihlWzBdLmlzSW50ZXJzZWN0aW5nKWRyYXcoKX0se3RocmVzaG9sZDowfSkub2JzZXJ2ZShyb290KTsKfSkoKTsK</script>
+<script>(function(){var R=document.getElementById('tv-app');function fail(m){var d=document.createElement('div');d.className='tv-err';d.innerHTML='<b>The interactive parts could not start.</b><br>'+m;if(R)R.insertBefore(d,R.firstChild);}try{var e=document.getElementById('tv-js');if(!e){fail('The script payload was removed by the page or theme.');return;}(0,eval)(decodeURIComponent(escape(atob((e.textContent||'').replace(/\s+/g,'')))));}catch(err){fail((err&&err.message?err.message:String(err)));}})();</script>
+
+<script>
+(function(){function send(){parent.postMessage({taWidget:location.pathname,h:document.documentElement.scrollHeight},'*')}
+new ResizeObserver(send).observe(document.documentElement);addEventListener('load',send);setInterval(send,1500);
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href]');if(a&&!a.target){a.target='_top'}});})();
+</script></body></html>

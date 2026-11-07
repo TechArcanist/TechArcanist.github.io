@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ROS 2 C++ Publisher | ROS 2 | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="NOTE: I will be prioritizing Python and temporarily pausing C++ implementations after Chapter 36. You can go through the C++ chapters covered up to Chapter 36.…">
+<link rel="canonical" href="https://techarcanist.com/documented-software-learnings/ros2/ros2_g/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="ROS 2 C++ Publisher | ROS 2">
+<meta property="og:description" content="NOTE: I will be prioritizing Python and temporarily pausing C++ implementations after Chapter 36. You can go through the C++ chapters covered up to Chapter 36.…">
+<meta property="og:url" content="https://techarcanist.com/documented-software-learnings/ros2/ros2_g/">
+<meta property="og:image" content="https://techarcanist.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=a6e775a3ba">
+<link rel="stylesheet" href="/assets/home.css?v=a6e775a3ba">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/" aria-current="page">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap reader wide">
+  <aside class="rd-nav" id="rd-nav">
+    <a class="rd-series" href="/documented-software-learnings/ros2/"><span class="label">Series</span>ROS 2</a>
+    <ol>
+      <li><a href="/documented-software-learnings/ros2/ros2_a/"><span class="mono">01</span>Installing Ubuntu Desktop (Dual Boot with Windows)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_b/"><span class="mono">02</span>ROS 2 Jazzy Installation on Ubuntu (Step-by-Step)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_c/"><span class="mono">03</span>Development Environment Setup for ROS 2 Jazzy on Ubuntu (With Clear Explanations)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_d/"><span class="mono">04</span>ROS 2 Fundamentals: Architecture, Communication, Packages, and Workspaces</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_e/"><span class="mono">05</span>ROS 2 Workspace &amp; Package Creation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_f/"><span class="mono">06</span>ROS 2 Python Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_g/" aria-current="page"><span class="mono">07</span>ROS 2 C++ Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_h/"><span class="mono">08</span>ROS 2 Python Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_i/"><span class="mono">09</span>ROS 2 C++ Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_j/"><span class="mono">10</span>Robot Locomotion: Introduction</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_k/"><span class="mono">11</span>Wheeled Locomotion Architectures</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_l/"><span class="mono">12</span>Rolling Friction &amp; Wheeled Locomotion Efficiency</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_m/"><span class="mono">13</span>Introduction to Robot Simulation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_n/"><span class="mono">14</span>URDF</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_o/"><span class="mono">15</span>Create a URDF Model</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_p/"><span class="mono">16</span>Rviz</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_q/"><span class="mono">17</span>Node Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_r/"><span class="mono">18</span>Python Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_s/"><span class="mono">19</span>C++ Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_t/"><span class="mono">20</span>ROS 2 Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-u/"><span class="mono">21</span>Visualize The Robot In RVIZ2</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-v/"><span class="mono">22</span>Launch Files</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-w/"><span class="mono">23</span>ROS 2 Launch Files: Visualizing the Robot with One Command</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-x/"><span class="mono">24</span>Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-y/"><span class="mono">25</span>Simulating the Robot in Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-z/"><span class="mono">26</span>ROS 2 Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-aa/"><span class="mono">27</span>Control Types</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ab/"><span class="mono">28</span>ROS 2 Control: Prepare the Robot for Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ac/"><span class="mono">29</span>Understanding ROS 2 Control | Explanation of Chapter 28</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ad/"><span class="mono">30</span>ROS 2 Control: Moving the BumperBot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ae/"><span class="mono">31</span>Robot Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-af/"><span class="mono">32</span>Pose of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_af/"><span class="mono">33</span>Translation Vector</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ag/"><span class="mono">34</span>Introduction to Turtlesim</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ah/"><span class="mono">35</span>Translation Vector Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ai/"><span class="mono">36</span>Translation Vector Between Two Turtles: CPP</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_aj/"><span class="mono">37</span>Rotation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ak/"><span class="mono">38</span>Rotation Matrix Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_al/"><span class="mono">39</span>Transformation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_am/"><span class="mono">40</span>Differential Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-41/"><span class="mono">41</span>Velocity of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-42/"><span class="mono">42</span>Simple Speed Controller: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-43/"><span class="mono">43</span>Launch the Simple Speed Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-44/"><span class="mono">44</span>Teleoperating the BumperBot with a Joystick</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-45/"><span class="mono">45</span>ROS 2 Diff Drive Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-46/"><span class="mono">46</span>TF 2 Library</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-47/"><span class="mono">47</span>Operation With Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-48/"><span class="mono">48</span>Static &amp; Dynamic Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-49/"><span class="mono">49</span>Simple TF2 Static Broadcaster</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-50/"><span class="mono">50</span>Simple TF2 Broadcaster: Static and Dynamic Transforms</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-51/"><span class="mono">51</span>ROS 2 Services</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-52/"><span class="mono">52</span>Service Server in Python: AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-53/"><span class="mono">53</span>Service Client in Python: Calling AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-54/"><span class="mono">54</span>Simple TF2 Listener in Python: a get_transform Service</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-55/"><span class="mono">55</span>Euler Angles and Quaternions</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-56/"><span class="mono">56</span>Euler to Quaternion: Turning the Robot with tf_transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-57/"><span class="mono">57</span>tf2 Tools: view_frames and tf2_echo</a></li>
+    </ol>
+  </aside>
+  <article class="rd-main">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/documented-software-learnings/">Library</a><span>/</span><a href="/documented-software-learnings/ros2/">ROS 2</a><span>/</span><span>07</span></nav>
+    <button class="btn btn-sm btn-line rd-tg" type="button" id="rd-tg">All chapters</button>
+<p class="sh-label mono"><span>07</span>Chapter 7 of 57</p>    <h1>ROS 2 C++ Publisher</h1>
+<div class="rd-prog" aria-hidden="true"><i style="width:12.3%"></i></div>    <div class="prose">
+<div class="col">
+<p><strong>NOTE:</strong> I will be prioritizing Python and temporarily pausing C++ implementations after Chapter 36. You can go through the C++ chapters covered up to Chapter 36. After that, I will complete the remaining topics in Python first, then revisit the skipped chapters to add their C++ implementations.</p>
+<h2 id="open-visual-studio-code">Open Visual Studio Code</h2>
+<figure class="img"><img alt="" decoding="async" height="369" loading="lazy" src="/uploads/wp/2026/01/1-2.png" width="1300"/></figure>
+<p>What you do</p>
+<ol>
+<li>Open <strong>Visual Studio Code</strong></li>
+<li>Click <strong>Open Folder</strong></li>
+</ol>
+<figure class="img"><img alt="" decoding="async" height="402" loading="lazy" src="/uploads/wp/2026/01/2-2.png" width="1300"/></figure>
+<p>Now</p>
+<ol>
+<li>Select: bumperbot_ws</li>
+<li>Click <strong>Yes, I trust the authors</strong></li>
+</ol>
+</div>
+<div class="col">
+<h2 id="navigate-to-the-c-package">Navigate to the C++ Package</h2>
+<figure class="img"><img alt="" decoding="async" height="599" loading="lazy" src="/uploads/wp/2026/01/1-4.png" width="1728"/></figure>
+<p>Inside VS Code, go step by step:</p>
+<p class="note">src<br/> └── bumperbot_cpp_examples<br/>     └── src</p>
+</div>
+<div class="col">
+<h2 id="create-the-c-node-file">Create the C++ Node File</h2>
+<figure class="img"><img alt="" decoding="async" height="556" loading="lazy" src="/uploads/wp/2026/01/2-4.png" width="1576"/></figure>
+<p>What you do</p>
+<ul>
+<li>Right-click on <strong>src</strong></li>
+<li>Click <strong>New File</strong></li>
+<li>Name it: </li>
+</ul>
+<div class="codeblock"><pre class="code"><code><span class="ln">simple_publisher.cpp</span></code></pre></div>
+<figure class="img"><img alt="" decoding="async" height="675" loading="lazy" src="/uploads/wp/2026/01/3-3.png" width="1598"/></figure>
+<p>This file will contain <strong>our ROS 2 node code</strong>.</p>
+</div>
+<div class="col">
+<h2 id="c-node-implementation">C++ Node Implementation</h2>
+<div class="codeblock" data-lang="C++"><pre class="code numbered"><code><span class="ln"><span class="tok-meta">#include</span> <span class="tok-string2">&lt;rclcpp/rclcpp.hpp&gt;</span></span>
+<span class="ln"><span class="tok-meta">#include</span> <span class="tok-string2">&lt;std_msgs/msg/string.hpp&gt;</span></span>
+<span class="ln"><span class="tok-meta">#include</span> <span class="tok-string2">&lt;chrono&gt;</span></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">using</span> <span class="tok-keyword">namespace</span> <span class="tok-namespace">std</span>::<span class="tok-variableName">chrono_literals</span>;</span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">class</span> <span class="tok-typeName">SimplePublisher</span> : <span class="tok-keyword">public</span> <span class="tok-namespace">rclcpp</span>::<span class="tok-typeName">Node</span></span>
+<span class="ln"><span class="tok-punctuation">{</span></span>
+<span class="ln"><span class="tok-keyword">public</span>:</span>
+<span class="ln">  <span class="tok-variableName tok-definition">SimplePublisher</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span> : <span class="tok-propertyName">Node</span><span class="tok-punctuation">(</span><span class="tok-string">"simple_publisher"</span><span class="tok-punctuation">)</span><span class="tok-punctuation">,</span> <span class="tok-propertyName">counter_</span><span class="tok-punctuation">(</span><span class="tok-number">0</span><span class="tok-punctuation">)</span></span>
+<span class="ln">  <span class="tok-punctuation">{</span></span>
+<span class="ln">    <span class="tok-variableName">pub_</span> = <span class="tok-variableName">create_publisher</span><span class="tok-punctuation">&lt;</span><span class="tok-namespace">std_msgs</span>::<span class="tok-namespace">msg</span>::<span class="tok-typeName">String</span><span class="tok-punctuation">&gt;</span><span class="tok-punctuation">(</span><span class="tok-string">"chatter"</span><span class="tok-punctuation">,</span> <span class="tok-number">10</span><span class="tok-punctuation">)</span>;</span>
+<span class="ln">    <span class="tok-variableName">timer_</span> = <span class="tok-variableName">create_wall_timer</span><span class="tok-punctuation">(</span><span class="tok-number">1</span><span class="tok-literal">s</span><span class="tok-punctuation">,</span> <span class="tok-namespace">std</span>::<span class="tok-variableName">bind</span><span class="tok-punctuation">(</span>&amp;<span class="tok-namespace">SimplePublisher</span>::<span class="tok-variableName">timerCallback</span><span class="tok-punctuation">,</span> <span class="tok-keyword">this</span><span class="tok-punctuation">)</span><span class="tok-punctuation">)</span>;</span>
+<span class="ln">    <span class="tok-variableName">RCLCPP_INFO</span><span class="tok-punctuation">(</span><span class="tok-variableName">get_logger</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-punctuation">,</span> <span class="tok-string">"Publishing at 1 Hz"</span><span class="tok-punctuation">)</span>;</span>
+<span class="ln">  <span class="tok-punctuation">}</span></span>
+<span class="ln"></span>
+<span class="ln">  <span class="tok-typeName">void</span> <span class="tok-propertyName">timerCallback</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln">  <span class="tok-punctuation">{</span></span>
+<span class="ln">    <span class="tok-keyword">auto</span> <span class="tok-variableName">message</span> = <span class="tok-namespace">std_msgs</span>::<span class="tok-namespace">msg</span>::<span class="tok-variableName">String</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span>;</span>
+<span class="ln">    <span class="tok-variableName">message</span>.<span class="tok-propertyName">data</span> = <span class="tok-string">"Hello ROS 2 - counter:"</span> <span class="tok-operator">+</span> <span class="tok-namespace">std</span>::<span class="tok-variableName">to_string</span><span class="tok-punctuation">(</span><span class="tok-variableName">counter_</span><span class="tok-operator">++</span><span class="tok-punctuation">)</span>;</span>
+<span class="ln">    <span class="tok-variableName">pub_</span>-&gt;<span class="tok-propertyName">publish</span><span class="tok-punctuation">(</span><span class="tok-variableName">message</span><span class="tok-punctuation">)</span>;</span>
+<span class="ln">  <span class="tok-punctuation">}</span></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">private</span>:</span>
+<span class="ln">  <span class="tok-namespace">rclcpp</span>::<span class="tok-typeName">Publisher</span><span class="tok-punctuation">&lt;</span><span class="tok-namespace">std_msgs</span>::<span class="tok-namespace">msg</span>::<span class="tok-typeName">String</span><span class="tok-punctuation">&gt;</span>::<span class="tok-typeName">SharedPtr</span> <span class="tok-propertyName">pub_</span>;</span>
+<span class="ln">  <span class="tok-namespace">rclcpp</span>::<span class="tok-namespace">TimerBase</span>::<span class="tok-typeName">SharedPtr</span> <span class="tok-propertyName">timer_</span>;</span>
+<span class="ln">  <span class="tok-typeName">unsigned</span> <span class="tok-typeName">int</span> <span class="tok-propertyName">counter_</span>;</span>
+<span class="ln"><span class="tok-punctuation">}</span>;</span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-typeName">int</span> <span class="tok-variableName tok-definition">main</span><span class="tok-punctuation">(</span><span class="tok-typeName">int</span> <span class="tok-variableName">argc</span><span class="tok-punctuation">,</span> <span class="tok-typeName">char</span>* <span class="tok-variableName">argv</span><span class="tok-punctuation">[</span><span class="tok-punctuation">]</span><span class="tok-punctuation">)</span></span>
+<span class="ln"><span class="tok-punctuation">{</span></span>
+<span class="ln">  <span class="tok-namespace">rclcpp</span>::<span class="tok-variableName">init</span><span class="tok-punctuation">(</span><span class="tok-variableName">argc</span><span class="tok-punctuation">,</span> <span class="tok-variableName">argv</span><span class="tok-punctuation">)</span>;</span>
+<span class="ln">  <span class="tok-keyword">auto</span> <span class="tok-variableName">node</span> = <span class="tok-namespace">std</span>::<span class="tok-variableName">make_shared</span><span class="tok-punctuation">&lt;</span><span class="tok-typeName">SimplePublisher</span><span class="tok-punctuation">&gt;</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span>;</span>
+<span class="ln">  <span class="tok-namespace">rclcpp</span>::<span class="tok-variableName">spin</span><span class="tok-punctuation">(</span><span class="tok-variableName">node</span><span class="tok-punctuation">)</span>;</span>
+<span class="ln">  <span class="tok-namespace">rclcpp</span>::<span class="tok-variableName">shutdown</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span>;</span>
+<span class="ln">  <span class="tok-keyword">return</span> <span class="tok-number">0</span>;</span>
+<span class="ln"><span class="tok-punctuation">}</span></span></code></pre></div>
+<p>simplepublisher.cpp code</p>
+
+<div class="widget"><iframe loading="lazy" scrolling="no" src="/widgets/documented-software-learnings__ros2__ros2_g-1.html" title="Interactive guide"></iframe></div></div>
+
+<div class="col">
+<h2 id="cmakelists-txt">CMakeLists.txt</h2>
+<figure class="img"><img alt="" decoding="async" height="708" loading="lazy" src="/uploads/wp/2026/01/4-3.png" width="1305"/></figure>
+<p>Open: CMakeLists.txt</p>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln">find_package(ament_cmake REQUIRED)</span>
+<span class="ln">find_package(rclcpp REQUIRED)</span>
+<span class="ln">find_package(std_msgs REQUIRED)</span>
+<span class="ln"></span>
+<span class="ln">add_executable(simple_publisher src/simple_publisher.cpp)</span>
+<span class="ln">ament_target_dependencies(simple_publisher rclcpp std_msgs)</span>
+<span class="ln"></span>
+<span class="ln">install(TARGETS</span>
+<span class="ln">  simple_publisher</span>
+<span class="ln">  DESTINATION lib/${PROJECT_NAME}</span>
+<span class="ln">)</span></code></pre></div>
+<p>Explanation</p>
+<h3>Short version</h3>
+<div class="codeblock"><pre class="code"><code><span class="ln"><span class="tok-variableName tok-definition">find_package</span><span class="tok-punctuation">(</span>ament_cmake REQUIRED<span class="tok-punctuation">)</span></span>
+<span class="ln"><span class="tok-variableName tok-definition">find_package</span><span class="tok-punctuation">(</span>rclcpp REQUIRED<span class="tok-punctuation">)</span></span>
+<span class="ln"><span class="tok-variableName tok-definition">find_package</span><span class="tok-punctuation">(</span>std_msgs REQUIRED<span class="tok-punctuation">)</span></span></code></pre></div>
+<p>These find the <strong>ROS 2 packages/dependencies</strong> your code needs.</p>
+<div class="codeblock"><pre class="code"><code><span class="ln"><span class="tok-variableName tok-definition">add_executable</span><span class="tok-punctuation">(</span>simple_publisher src/simple_publisher.cpp<span class="tok-punctuation">)</span></span></code></pre></div>
+<p>Means:</p>
+<ul>
+<li><code>simple_publisher</code> → <strong>your executable/target name</strong></li>
+<li><code>src/simple_publisher.cpp</code> → <strong>your C++ source file</strong></li>
+</ul>
+<p>You can change <code>simple_publisher</code> to anything:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln"><span class="tok-variableName tok-definition">add_executable</span><span class="tok-punctuation">(</span>my_publisher src/simple_publisher.cpp<span class="tok-punctuation">)</span></span></code></pre></div>
+<p>But then change it everywhere else too:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln"><span class="tok-variableName tok-definition">ament_target_dependencies</span><span class="tok-punctuation">(</span>my_publisher rclcpp std_msgs<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-variableName tok-definition">install</span><span class="tok-punctuation">(</span>TARGETS</span>
+<span class="ln">  my_publisher</span>
+<span class="ln">  DESTINATION lib/<span class="tok-variableName2">${PROJECT_NAME}</span></span>
+<span class="ln"><span class="tok-punctuation">)</span></span></code></pre></div>
+<p>Finally:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln"><span class="tok-variableName2">${PROJECT_NAME}</span></span></code></pre></div>
+<p>is a <strong>CMake variable</strong> containing the name from:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln"><span class="tok-variableName tok-definition">project</span><span class="tok-punctuation">(</span>bumperbot_cpp_examples<span class="tok-punctuation">)</span></span></code></pre></div>
+<p>So <code>${PROJECT_NAME}</code> = <code>bumperbot_cpp_examples</code>.</p>
+<p><strong>Remember:</strong></p>
+<div class="codeblock"><pre class="code"><code><span class="ln">rclcpp / std_msgs       → ROS 2 dependencies</span>
+<span class="ln">simple_publisher        → YOUR executable name</span>
+<span class="ln">simple_publisher.cpp    → YOUR source file</span>
+<span class="ln">${PROJECT_NAME}         → CMake variable</span></code></pre></div>
+</div>
+<div class="col">
+<h2 id="package-xml">package.xml</h2>
+<figure class="img"><img alt="" decoding="async" height="537" loading="lazy" src="/uploads/wp/2026/01/5-3.png" width="1488"/></figure>
+<p><strong>Open: bumperbot_py_examples/package.xml</strong></p>
+<div class="codeblock"><pre class="code"><code><span class="ln">  &lt;depend&gt;rclcpp&lt;/depend&gt;</span>
+<span class="ln">  &lt;depend&gt;std_msgs&lt;/depend&gt;</span></code></pre></div>
+<p>Explanation</p>
+<div class="table-wrap"><table><thead><tr><th>Word</th><th>Meaning</th></tr></thead><tbody><tr><td><code>install</code></td><td>Copies compiled file to install folder</td></tr><tr><td><code>TARGETS</code></td><td>Which executable to install</td></tr><tr><td><code>DESTINATION</code></td><td>Where to place it</td></tr><tr><td><code>lib/${PROJECT_NAME}</code></td><td>Standard ROS 2 install path</td></tr></tbody></table></div>
+</div>
+<div class="col">
+<h2 id="build-the-workspace">Build the Workspace</h2>
+<div class="codeblock"><pre class="code"><code><span class="ln">cd bumperbot_ws/</span></code></pre></div>
+<figure class="img"><img alt="" decoding="async" height="274" loading="lazy" src="/uploads/wp/2026/01/6-2.png" width="1300"/></figure>
+<div class="codeblock"><pre class="code"><code><span class="ln">colcon build</span></code></pre></div>
+<p>Converts cpp script into ROS 2 executable</p>
+<h2 id="activate-the-workspace">Activate the Workspace</h2>
+<div class="codeblock"><pre class="code"><code><span class="ln">. install/setup.bash</span></code></pre></div>
+<div class="codeblock"><pre class="code"><code><span class="ln">ros2 run bumperbot_cpp_examples simple_publisher</span></code></pre></div>
+<figure class="img"><img alt="" decoding="async" height="425" loading="lazy" src="/uploads/wp/2026/01/6-3.png" width="1281"/></figure>
+<h2 id="inspect-topics">Inspect Topics</h2>
+<div class="codeblock"><pre class="code"><code><span class="ln">ros2 topic list</span></code></pre></div>
+<ul>
+<li>Shows <strong>all active topics</strong> in the ROS 2 system</li>
+<li>Topics appear <strong>only if some node is using them</strong></li>
+</ul>
+<figure class="img"><img alt="" decoding="async" height="712" loading="lazy" src="/uploads/wp/2026/01/7-3.png" width="1284"/></figure>
+<div class="codeblock"><pre class="code"><code><span class="ln">ros2 topic echo /chatter</span></code></pre></div>
+<ul>
+<li><code>/chatter</code> → your publisher is running</li>
+<li>If <code>/chatter</code> is NOT listed → publisher is not active</li>
+</ul>
+<p><strong>Use this when</strong></p>
+<ul>
+<li>You want to check <strong>which topics exist</strong></li>
+<li>You want to verify your node is publishing</li>
+</ul>
+</div>
+</div>
+    <nav class="pager" aria-label="Chapters">
+<a href="/documented-software-learnings/ros2/ros2_f/"><span class="mono">Chapter 6</span>ROS 2 Python Publisher</a><a class="nx" href="/documented-software-learnings/ros2/ros2_h/"><span class="mono">Chapter 8</span>ROS 2 Python Subscriber</a>    </nav>
+  </article>
+</div>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/plc/">PLC &amp; Industrial Automation</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=a6e775a3ba" defer></script>
+<script src="/assets/home.js?v=a6e775a3ba" defer></script>
+</body>
+</html>

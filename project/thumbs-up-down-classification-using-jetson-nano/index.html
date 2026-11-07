@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Thumbs Up / Thumbs Down Gesture Classification | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="This project demonstrates how to build a custom deep learning classification model to detect thumbs-up and thumbs-down gestures using the Jetson Nano (or any…">
+<link rel="canonical" href="https://techarcanist.com/project/thumbs-up-down-classification-using-jetson-nano/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="Thumbs Up / Thumbs Down Gesture Classification">
+<meta property="og:description" content="This project demonstrates how to build a custom deep learning classification model to detect thumbs-up and thumbs-down gestures using the Jetson Nano (or any…">
+<meta property="og:url" content="https://techarcanist.com/project/thumbs-up-down-classification-using-jetson-nano/">
+<meta property="og:image" content="/uploads/wp/2025/08/Copy-of-Untitled-Design-6-1024x576.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=a6e775a3ba">
+<link rel="stylesheet" href="/assets/home.css?v=a6e775a3ba">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/" aria-current="page">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<section class="cs-hero">
+  <div class="wrap">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/project/">Work</a><span>/</span><span>16 of 27</span></nav>
+    <h1>Thumbs Up / Thumbs Down Gesture Classification</h1>
+<div class="cs-lead"><p>This project demonstrates how to build a <span class="hl"><strong>custom deep learning classification model</strong></span> to detect <span class="hl"><strong>thumbs-up and thumbs-down gestures</strong></span> using the <span class="hl"><strong>Jetson Nano</strong></span> (or any OS: Windows, Mac, Linux). The workflow is simple: <span class="hl"><strong>Capture dataset → Train model → Test with live camera feed</strong></span>, teaching the complete deep learning pipeline from scratch. What makes this project unique is that it focuses on creating your <span class="hl"><strong>own dataset</strong></span>, not just using a pre-trained model, making it easily extendable for <span class="hl"><strong>gesture-controlled robots, automation, and human, machine interaction</strong></span>.</p></div>  </div>
+  <div class="wrap">
+    <dl class="cs-spec mono">
+<div><dt>Discipline</dt><dd><a href="/project/#ai">Edge AI &amp; Vision</a></dd></div>      <div><dt>Contents</dt><dd>2 images · 1 videos</dd></div>
+<div><dt>Source</dt><dd><a href="https://github.com/TechArcanist/Thumbs-up-down-Classification-using-Jetson-Nano" target="_blank" rel="noopener">Thumbs-up-down-Classification-using-Jetson-Nano ↗</a></dd></div>    </dl>
+  </div>
+  <div class="wrap"><figure class="cs-cover"><img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-6-1024x576.png" alt="Thumbs Up / Thumbs Down Gesture Classification"><span class="corner tl"></span><span class="corner br"></span></figure></div>
+</section>
+
+<section class="sec tight">
+  <div class="wrap doc">
+    <aside class="toc" aria-label="On this page">
+      <p class="label">On this page</p>
+      <ol><li><a href="#features"><span class="mono">01</span>Features</a></li><li><a href="#components-used"><span class="mono">02</span>Components Used</a></li><li><a href="#learning-milestones-what-this-repo-teaches-you"><span class="mono">03</span>Learning Milestones (What this repo teaches…</a></li><li><a href="#working"><span class="mono">04</span>Working</a></li><li><a href="#code-installation"><span class="mono">05</span>Code &amp; Installation</a></li><li><a href="#my-learnings"><span class="mono">06</span>My Learnings</a></li></ol>
+    </aside>
+    <article class="prose">
+      
+<div class="cols cols-2"><div class="col">
+<figure class="img"><img src="/uploads/wp/2025/11/Untitled-design-30-1024x576.jpg" alt="" loading="lazy" decoding="async" width="1024" height="576"></figure>
+</div><div class="col">
+<figure class="img"><img src="/uploads/wp/2025/11/Untitled-design-29-1024x576.jpg" alt="" loading="lazy" decoding="async" width="1024" height="576"></figure>
+</div></div>
+<div class="col">
+<h2 id="features">Features</h2>
+<ul>
+<li>Build your own dataset from live camera input</li>
+<li>Train a deep learning model with just few gestures</li>
+<li>Real-time classification (Thumbs-Up / Thumbs-Down)</li>
+<li>Works on <strong>Jetson Nano</strong>, Windows, macOS, and Linux</li>
+<li>You can extend the model to detect <strong>other gestures</strong></li>
+</ul>
+</div>
+<div class="col">
+<h2 id="components-used">Components Used</h2>
+<ul>
+<li><strong>Jetson Nano </strong>, for edge inference</li>
+<li><strong>Python</strong></li>
+<li><strong>Jupyter Notebook / JupyterLab</strong></li>
+<li><strong>PyTorch / Torchvision</strong>, deep learning</li>
+<li><strong>OpenCV</strong>, camera integration</li>
+<li><strong>Pillow (PIL)</strong>, image handling</li>
+<li><strong>NumPy</strong>, data processing</li>
+</ul>
+</div>
+<div class="col">
+<h2 id="learning-milestones-what-this-repo-teaches-you">Learning Milestones (What this repo teaches you)</h2>
+<ul>
+<li>Creating custom datasets directly from camera feed</li>
+<li>Training a <strong>CNN / image classifier</strong> using PyTorch</li>
+<li>Working with OpenCV for <strong>real-time camera capture</strong></li>
+<li>Data preprocessing (resize, normalization, transform pipelines)</li>
+<li>Saving and loading model weights</li>
+<li>Running real-time inference with webcam on Jetson Nano</li>
+</ul>
+</div>
+<div class="col">
+<h2 id="working">Working</h2>
+<div class="embed"><iframe src="https://www.youtube-nocookie.com/embed/1daym0mgGtc?rel=0&amp;modestbranding=1&amp;playsinline=1" loading="lazy" title="Video" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+<p><span class="hl"><strong>Working</strong></span></p>
+</div>
+<div class="col">
+<h2 id="code-installation">Code &amp; Installation</h2>
+<p class="note">The complete source code is available in the GitHub repository.</p>
+<div class="btns">
+<a class="btn btn-ghost" href="https://github.com/TechArcanist/Thumbs-up-down-Classification-using-Jetson-Nano" target=_blank rel=noopener>View on Github, &gt;</a>
+</div>
+</div>
+<div class="col">
+<h2 id="my-learnings">My Learnings</h2>
+<ul>
+<li>How to capture and store <strong>dataset folders programmatically</strong></li>
+<li>How to train <strong>custom image classification models</strong> using PyTorch</li>
+<li>How to manage train/test notebooks effectively</li>
+<li>Using OpenCV to connect camera for <strong>live inference</strong></li>
+<li>Understanding transforms (resize, normalize, tensor conversion)</li>
+<li>How ML models react to <strong>small datasets + augmentation techniques</strong></li>
+<li>Running trained models on Jetson Nano’s <strong>GPU accelerated PyTorch</strong></li>
+<li>This project helped me connect the dots between <strong>data → training → model → inference</strong>.</li>
+</ul>
+</div>
+
+    </article>
+  </div>
+</section>
+
+<section class="wrap">
+  <nav class="pager" aria-label="More projects">
+<a href="/project/ocr-using-wsl/"><span class="mono">Previous</span>OCR Using WSL</a><a class="nx" href="/project/jetson-nano-yolo-v5/"><span class="mono">Next</span>Jetson Nano: YOLOv5 Setup</a>  </nav>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <p class="label">Related work</p>
+    <div class="grid3"><a class="pcard" href="/project/vaman-v3/" data-cats="robotics ai" data-search="vaman v3-3d-printed quadruped experiment (paused version) after vaman v2 successfully implemented ai-based movement (voice + gesture + object find/stop) , the next challenge was to move beyond wheels. vaman v3 explored legged… robotics edge ai &amp; vision">
+  <div class="pcard-media">
+<img src="/uploads/wp/2025/08/Untitled-design-34-1024x576.jpg" alt="" loading="lazy">    <span class="pcard-kind mono">Project</span>
+  </div>
+  <div class="pcard-body">
+    <p class="pcard-cats mono">Robotics / Edge AI &amp; Vision</p>
+    <h3>Vaman V3-3D-Printed Quadruped Experiment (Paused Version)</h3>
+    <p class="pcard-sum">After Vaman v2 successfully implemented AI-based movement (voice + gesture + object find/stop) , the next challenge was to move beyond wheels. Vaman v3 explored legged…</p>
+  </div>
+</a>
+<a class="pcard" href="/project/vaman-v2/" data-cats="robotics ai" data-search="vaman v2 after vaman v1 validated wi-fi controlled movement using the jetson nano , the next goal was to make the robot smarter, not just remotely controllable. vaman v2 evolved… robotics edge ai &amp; vision">
+  <div class="pcard-media">
+<img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-14-1024x576.png" alt="" loading="lazy">    <span class="pcard-kind mono">Project</span>
+  </div>
+  <div class="pcard-body">
+    <p class="pcard-cats mono">Robotics / Edge AI &amp; Vision</p>
+    <h3>Vaman v2</h3>
+    <p class="pcard-sum">After Vaman v1 validated Wi-Fi controlled movement using the Jetson Nano , the next goal was to make the robot smarter, not just remotely controllable. Vaman v2 evolved…</p>
+  </div>
+</a>
+<a class="pcard" href="/project/vaman-v1/" data-cats="robotics ai" data-search="vaman v1 the vaman v1 prototype was built to validate whether the jetson nano alone could handle wireless remote control over 5g wi-fi , real-time motor control , and live camera… robotics edge ai &amp; vision">
+  <div class="pcard-media">
+<img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-13-1024x576.png" alt="" loading="lazy">    <span class="pcard-kind mono">Project</span>
+  </div>
+  <div class="pcard-body">
+    <p class="pcard-cats mono">Robotics / Edge AI &amp; Vision</p>
+    <h3>Vaman v1</h3>
+    <p class="pcard-sum">The Vaman v1 prototype was built to validate whether the Jetson Nano alone could handle wireless remote control over 5G Wi-Fi , real-time motor control , and live camera…</p>
+  </div>
+</a>
+</div>
+  </div>
+</section>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/plc/">PLC &amp; Industrial Automation</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=a6e775a3ba" defer></script>
+<script src="/assets/home.js?v=a6e775a3ba" defer></script>
+</body>
+</html>

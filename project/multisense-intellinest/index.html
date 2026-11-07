@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Multisense Intellinest | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="The MultiSense IntelliNest is an advanced smart home automation system built using an ESP32 and a 16-channel relay module . It allows control of electrical…">
+<link rel="canonical" href="https://techarcanist.com/project/multisense-intellinest/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="Multisense Intellinest">
+<meta property="og:description" content="The MultiSense IntelliNest is an advanced smart home automation system built using an ESP32 and a 16-channel relay module . It allows control of electrical…">
+<meta property="og:url" content="https://techarcanist.com/project/multisense-intellinest/">
+<meta property="og:image" content="/uploads/wp/2025/08/Untitled-design-15-1024x576.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=a6e775a3ba">
+<link rel="stylesheet" href="/assets/home.css?v=a6e775a3ba">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/" aria-current="page">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<section class="cs-hero">
+  <div class="wrap">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/project/">Work</a><span>/</span><span>23 of 27</span></nav>
+    <h1>Multisense Intellinest</h1>
+<div class="cs-lead"><p>The <span class="hl"><strong>MultiSense IntelliNest</strong></span> is an advanced <span class="hl"><strong>smart home automation system</strong></span> built using an <span class="hl"><strong>ESP32</strong></span> and a <span class="hl"><strong>16-channel relay module</strong></span>. It allows control of electrical appliances in multiple ways, <span class="hl"><strong>Manual Control</strong></span>, <span class="hl"><strong>Touch Control</strong></span>, <span class="hl"><strong>Motion-Based Automation, Voice Automation</strong></span>, and <span class="hl"><strong>Internet Control (Blynk IoT)</strong></span>. The system is designed for maximum flexibility and reliability: <span class="hl"><strong>|| Manual Control || Touch Buttons || Auto Motion Control || Internet/App Control || Voice Automated  ||</strong></span></p></div>  </div>
+  <div class="wrap">
+    <dl class="cs-spec mono">
+<div><dt>Discipline</dt><dd><a href="/project/#iot">IoT &amp; Automation</a></dd></div>      <div><dt>Contents</dt><dd>5 images · 3 videos</dd></div>
+    </dl>
+  </div>
+  <div class="wrap"><figure class="cs-cover"><img src="/uploads/wp/2025/08/Untitled-design-15-1024x576.jpg" alt="Multisense Intellinest"><span class="corner tl"></span><span class="corner br"></span></figure></div>
+</section>
+
+<section class="sec tight">
+  <div class="wrap doc">
+    <aside class="toc" aria-label="On this page">
+      <p class="label">On this page</p>
+      <ol><li><a href="#features"><span class="mono">01</span>Features</a></li><li><a href="#components-used"><span class="mono">02</span>Components Used</a></li><li><a href="#how-it-works"><span class="mono">03</span>How it Works</a></li><li><a href="#media-availability-important-note"><span class="mono">04</span>Media Availability (Important Note)</a></li><li><a href="#achievement"><span class="mono">05</span>Achievement</a></li><li><a href="#working"><span class="mono">06</span>Working</a></li><li><a href="#circuit"><span class="mono">07</span>Circuit</a></li><li><a href="#my-learnings"><span class="mono">08</span>My Learnings</a></li></ol>
+    </aside>
+    <article class="prose">
+      
+<div class="cols cols-2"><div class="col">
+<figure class="img"><img src="/uploads/wp/2025/11/Untitled-design-15-1024x576.jpg" alt="" loading="lazy" decoding="async" width="1024" height="576"></figure>
+</div><div class="col">
+<figure class="img"><img src="/uploads/wp/2025/11/Untitled-design-16-1024x576.jpg" alt="" loading="lazy" decoding="async" width="1024" height="576"></figure>
+</div></div>
+<div class="col">
+<h2 id="features">Features</h2>
+<ul>
+<li><strong><strong>16-Channel Relay Control</strong></strong>
+<ul>
+<li>Each relay is connected to a 3-pin AC plug point for direct appliance control.</li>
+</ul>
+</li>
+<li><strong>Four Control Methods</strong>
+<ul>
+<li><strong>Manual Control</strong> using push buttons</li>
+<li><strong>Touch Control</strong> using capacitive touch pads</li>
+<li><strong>Auto Mode</strong> using PIR motion sensor</li>
+<li><strong>Remote IoT Control using Blynk App (Internet-based)</strong></li>
+</ul>
+</li>
+<li><strong>Voice Control Automation</strong>
+<ul>
+<li>Commands like: <em>“Turn on fan plug 3”</em> or <em>“Switch off plug 7”</em></li>
+</ul>
+</li>
+<li><strong>Blynk IoT Integration</strong>
+<ul>
+<li>Control all 16 appliances from anywhere using smartphone</li>
+<li>Real-time status monitoring in app</li>
+</ul>
+</li>
+<li><strong>GPIO Expansion with Multiplexers</strong>
+<ul>
+<li>Used <strong>PCF8575</strong> + <strong>PCF8574</strong> expanders to handle high I/O count</li>
+<li>Enables ESP32 to manage multiple inputs for touch, push buttons, and relays</li>
+</ul>
+</li>
+<li><strong><strong>Failsafe Manual Override</strong></strong>
+<ul>
+<li>Even if WiFi or the app fails, touch buttons &amp; manual switches continue working</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="col">
+<h2 id="components-used">Components Used</h2>
+<ul>
+<li><strong>ESP32</strong>, Main controller with Wi-Fi for Blynk IoT</li>
+<li><strong>16-Channel Relay Board</strong>, Controls AC appliances</li>
+<li><strong>PCF8575 + PCF8574 I/O Expanders</strong>, Increase GPIO count</li>
+<li><strong>Blynk IoT App</strong>, Smartphone control via cloud</li>
+<li><strong>Voice Assistant Integration</strong> (third-party app)</li>
+<li><strong>PIR Motion Sensor</strong>, Auto light/appliance activation</li>
+<li><strong>TTP229 16-Way Capacitive Touch Switch Digital keypad Module</strong>, Touch-based on/off control</li>
+<li><strong>Mechanical Push Buttons</strong>, Manual control / failsafe override</li>
+<li><strong>3-Pin Plug Sockets (16 pcs)</strong>, Individual relay output connections</li>
+<li><strong>Power Supply</strong>, To power ESP32 &amp; relay module</li>
+</ul>
+</div>
+<div class="col">
+<h2 id="how-it-works">How it Works</h2>
+<ul>
+<li>Inputs from <strong>touch buttons, push buttons, and PIR sensor</strong> are read via I/O expanders.</li>
+<li>ESP32 receives commands from Blynk app over Wi-Fi.</li>
+<li>ESP32 triggers the appropriate relay on the 16-channel board.</li>
+<li>Each relay switches an AC plug point → appliance ON/OFF.</li>
+<li><strong>Voice commands are sent locally to ESP32 using its IP address</strong>.</li>
+<li>All three control systems (manual + touch + Blynk IoT) work simultaneously.</li>
+</ul>
+</div>
+<div class="col">
+<h2 id="media-availability-important-note">Media Availability (Important Note)</h2>
+<p class="note">This project was built a long time ago.<br>There are very limited photos/videos of the working system</p>
+</div>
+<div class="col">
+<h2 id="achievement">Achievement</h2>
+<p class="note">This project was showcased in a college project competition, along with other projects.<br>Won 2nd place and received ₹25,000 cash prize.</p>
+<figure class="img"><img src="/uploads/wp/2025/11/1703412723403.jpeg" alt="" loading="lazy" decoding="async" width="800" height="533"></figure>
+<p><span class="hl"><strong>Showcasing Our Project</strong></span></p>
+<figure class="img"><img src="/uploads/wp/2025/11/Untitled-design-2.png" alt="" loading="lazy" decoding="async" width="6000" height="3375"></figure>
+<p><span class="hl"><strong>Certificate</strong></span></p>
+</div>
+<div class="col">
+<h2 id="working">Working</h2>
+<div class="embed"><iframe src="https://www.youtube-nocookie.com/embed/-5vPXBhIgaM?rel=0&amp;modestbranding=1&amp;playsinline=1" loading="lazy" title="Video" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+<p><span class="hl"><strong>Voice Automation (Insta Highlight)</strong></span></p>
+<div class="embed"><iframe src="https://www.youtube-nocookie.com/embed/y5S4Tdm3r_U?rel=0&amp;modestbranding=1&amp;playsinline=1" loading="lazy" title="Video" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+<p><span class="hl"><strong>Old Working Progress Snaps</strong></span></p>
+<div class="embed"><iframe src="https://www.youtube-nocookie.com/embed/v0LTpdtbBLY?rel=0&amp;modestbranding=1&amp;playsinline=1" loading="lazy" title="Video" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+<p><span class="hl"><strong>Old Working Progress Snaps</strong></span></p>
+</div>
+<div class="col">
+<h2 id="circuit">Circuit</h2>
+<figure class="img"><img src="/uploads/wp/2025/11/techarcanist.jpg" alt="" loading="lazy" decoding="async" width="6000" height="3375"></figure>
+<p><span class="hl"><strong>Circuit Diagram</strong></span></p>
+</div>
+<div class="col">
+<h2 id="my-learnings">My Learnings</h2>
+<ul>
+<li>How to expand GPIO pins using <strong>PCF8575 and PCF8574</strong> I/O expanders to control multiple relays and input modules</li>
+<li>Designing a <strong>hybrid control architecture</strong> where:</li>
+<li>Manual switches,
+<ul>
+<li>Touch buttons,</li>
+<li>PIR motion sensor,</li>
+<li>IoT app (Blynk),</li>
+<li>Voice commands (via local IP) all work together without interfering with each other</li>
+</ul>
+</li>
+<li>Implementing <strong>voice automation using local IP HTTP commands</strong>, allowing ESP32 to control devices without cloud or internet dependency</li>
+<li>Using <strong>Blynk IoT</strong> for internet-based appliance control and monitoring</li>
+<li>Working with <strong>high-voltage relay modules safely</strong>, ensuring isolation from low-voltage ESP32 logic</li>
+<li>Managing simultaneous control inputs without relay flickering or code blocking</li>
+<li>Using the <strong>Ticker library</strong> to create time-based non-blocking tasks (automation timers, auto-off timers, polling touch inputs without <code>delay()</code>)</li>
+<li>Structuring firmware to make ESP32 responsive even when multiple events occur simultaneously</li>
+</ul>
+</div>
+
+    </article>
+  </div>
+</section>
+
+<section class="wrap">
+  <nav class="pager" aria-label="More projects">
+<a href="/project/smart-cam-security-lock-system/"><span class="mono">Previous</span>Smart Cam Security Lock System</a><a class="nx" href="/project/thermalog-gun-v2/"><span class="mono">Next</span>ThermaLog Gun V2</a>  </nav>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <p class="label">Related work</p>
+    <div class="grid3"><a class="pcard" href="/project/autonomous-warehouse-project/" data-cats="ai iot" data-search="autonomous warehouse project the autonomous warehouse project is a multi-module automation system combining ai + ocr + robotics + iot + automation to bring intelligence and autonomy into warehouse… edge ai &amp; vision iot &amp; automation">
+  <div class="pcard-media">
+<img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-1-1024x576.webp" alt="" loading="lazy">    <span class="pcard-kind mono">Project</span>
+  </div>
+  <div class="pcard-body">
+    <p class="pcard-cats mono">Edge AI &amp; Vision / IoT &amp; Automation</p>
+    <h3>Autonomous Warehouse Project</h3>
+    <p class="pcard-sum">The Autonomous Warehouse Project is a multi-module automation system combining AI + OCR + Robotics + IoT + Automation to bring intelligence and autonomy into warehouse…</p>
+  </div>
+</a>
+<a class="pcard" href="/project/multi-tier-secure-lock-system-2/" data-cats="iot" data-search="multi tier secure lock system the multi-tier secure lock system is an advanced secure door locking solution built using an esp32 , integrating multiple authentication layers used in enterprise access… iot &amp; automation">
+  <div class="pcard-media">
+<img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-1-1-1024x576.png" alt="" loading="lazy">    <span class="pcard-kind mono">Project</span>
+  </div>
+  <div class="pcard-body">
+    <p class="pcard-cats mono">IoT &amp; Automation</p>
+    <h3>Multi Tier Secure Lock System</h3>
+    <p class="pcard-sum">The Multi-Tier Secure Lock System is an advanced secure door locking solution built using an ESP32 , integrating multiple authentication layers used in enterprise access…</p>
+  </div>
+</a>
+<a class="pcard" href="/project/automated-touch-socket-panel/" data-cats="iot" data-search="automated touch socket panel the automated touch socket panel is a compact touch-based smart socket control system built using an esp32 . it replaces traditional switches with touch-based activation… iot &amp; automation">
+  <div class="pcard-media">
+<img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-4-1-1024x576.png" alt="" loading="lazy">    <span class="pcard-kind mono">Project</span>
+  </div>
+  <div class="pcard-body">
+    <p class="pcard-cats mono">IoT &amp; Automation</p>
+    <h3>Automated Touch Socket Panel</h3>
+    <p class="pcard-sum">The Automated Touch Socket Panel is a compact touch-based smart socket control system built using an ESP32 . It replaces traditional switches with touch-based activation…</p>
+  </div>
+</a>
+</div>
+  </div>
+</section>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/plc/">PLC &amp; Industrial Automation</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=a6e775a3ba" defer></script>
+<script src="/assets/home.js?v=a6e775a3ba" defer></script>
+</body>
+</html>

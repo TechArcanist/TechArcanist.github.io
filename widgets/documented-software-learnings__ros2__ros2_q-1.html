@@ -1,0 +1,4036 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="/assets/widget-base.css">
+</head><body><style>
+.highlight { color:#64FFDA; font-weight:600; }
+
+.highlight-bg {
+
+  background:#64FFDA33;
+
+  color:#0A192F;
+
+  padding:0.05em 0.25em;
+
+  border-radius:0.25em;
+
+}
+
+</style>
+
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<meta content="light dark" name="color-scheme"/>
+<title>What Are Node Parameters? — Interactive Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Sans+Condensed:wght@600;700&amp;display=swap" id="np-fonts" rel="stylesheet"/>
+<div id="np-node-params-guide"></div>
+<script>
+(function () {
+
+    const mount = document.getElementById('np-node-params-guide');
+    if (!mount) return;
+
+    if (!document.getElementById('np-fonts')) {
+        const fl = document.createElement('link');
+        fl.id = 'np-fonts';
+        fl.rel = 'stylesheet';
+        fl.href = 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@600;700&display=swap';
+        document.head.appendChild(fl);
+    }
+
+    const shadow = mount.attachShadow({ mode: 'open' });
+
+    shadow.innerHTML = `
+
+<style>
+
+/* ============================================================
+   COMPONENT ROOT
+   No outer border, no max-width, no artificial page padding
+   ============================================================ */
+
+:host {
+    display: block;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    overflow: hidden;
+
+    --bg: #0d1512;
+    --bg-1: #111a16;
+    --panel: #141f1a;
+    --panel-2: #0f1713;
+
+    --line: rgba(231,237,233,0.10);
+    --line-strong: rgba(231,237,233,0.20);
+
+    --ink: #e7ede9;
+    --ink-dim: #8fa39a;
+    --ink-faint: #5c6c65;
+
+    --accent: #ff8a3d;
+    --accent-soft: rgba(255,138,61,0.14);
+
+    --accent-2: #4dd6c0;
+    --accent-2-soft: rgba(77,214,192,0.12);
+
+    --ok: #7cd992;
+    --red: #ff6b6b;
+    --purple: #c9a6ff;
+
+    --mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+    --sans: 'IBM Plex Sans', -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --cond: 'IBM Plex Sans Condensed', 'IBM Plex Sans',
+            -apple-system, 'Segoe UI', sans-serif;
+
+    --pad-page: clamp(16px, 4.2vw, 40px);
+    --pad-card: clamp(14px, 3.2vw, 26px);
+    --pad-card-sm: clamp(12px, 2.6vw, 22px);
+
+    --gap-lg: clamp(14px, 3vw, 22px);
+    --gap-md: clamp(10px, 2vw, 14px);
+    --section-gap: clamp(26px, 6vw, 40px);
+
+    font-family: var(--sans);
+    color: var(--ink);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+button {
+    font-family: inherit;
+}
+
+
+/* ============================================================
+   MAIN APP
+   ============================================================ */
+
+.np-app {
+    width: 100%;
+    min-width: 0;
+
+    background-color: var(--bg);
+    padding-bottom: clamp(36px,6vw,60px);
+
+    background-image:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+
+    background-size: 34px 34px;
+    background-position: -1px -1px;
+}
+
+
+/* ============================================================
+   TEXT
+   ============================================================ */
+
+code {
+    font-family: var(--mono);
+    color: var(--accent);
+    background: rgba(255,138,61,0.1);
+    padding: 1px 6px;
+    border-radius: 2px;
+    font-size: 0.88em;
+    word-break: break-word;
+}
+
+b.hl {
+    color: var(--ink);
+    font-weight: 600;
+}
+
+
+/* ============================================================
+   HERO
+   ============================================================ */
+
+.np-hero {
+    padding:
+        var(--pad-page)
+        var(--pad-page)
+        clamp(20px,4vw,34px);
+
+    border-bottom: 1px solid var(--line-strong);
+}
+
+.np-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--accent-2);
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: clamp(10px,2vw,14px);
+}
+
+.np-eyebrow::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+
+    background: var(--accent-2);
+
+    display: inline-block;
+    transform: rotate(45deg);
+    flex-shrink: 0;
+}
+
+.np-hero h1 {
+    font-family: var(--cond);
+    font-weight: 700;
+    font-size: clamp(1.7rem, 5vw, 2.5rem);
+    line-height: 1.14;
+
+    margin: 0 0 clamp(12px,2.5vw,18px) 0;
+
+    letter-spacing: -0.01em;
+}
+
+.np-hero h1 span {
+    color: var(--accent);
+}
+
+.np-lede {
+    max-width: 62ch;
+
+    color: var(--ink);
+
+    font-size: clamp(0.98rem, 2.2vw, 1.15rem);
+
+    margin: 0;
+    font-weight: 500;
+}
+
+.np-lede b {
+    color: var(--accent-2);
+}
+
+
+/* ============================================================
+   SECTIONS
+   ============================================================ */
+
+.np-section {
+    padding:
+        var(--section-gap)
+        var(--pad-page)
+        10px;
+}
+
+.np-section-h {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+
+    margin-bottom: clamp(12px,2.4vw,16px);
+
+    flex-wrap: wrap;
+}
+
+.np-section-h .num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-faint);
+}
+
+.np-section-h h2 {
+    font-family: var(--cond);
+    font-weight: 700;
+    font-size: clamp(1.25rem, 3.4vw, 1.55rem);
+
+    margin: 0;
+
+    line-height: 1.25;
+}
+
+.np-p {
+    color: var(--ink-dim);
+    font-size: clamp(0.92rem, 2vw, 0.98rem);
+
+    max-width: 72ch;
+
+    margin: 0 0 12px 0;
+}
+
+
+/* ============================================================
+   ANALOGY CARD
+   ============================================================ */
+
+.np-analogy {
+    border: 1px solid var(--line-strong);
+    background: var(--panel);
+
+    padding: var(--pad-card);
+
+    display: grid;
+    grid-template-columns: auto 1fr;
+
+    gap: var(--gap-lg);
+
+    align-items: center;
+}
+
+@media (max-width:600px) {
+    .np-analogy {
+        grid-template-columns: 1fr;
+    }
+
+    .np-analogy-icon {
+        margin: 0 auto;
+    }
+}
+
+.np-analogy-icon {
+    width: clamp(48px,10vw,64px);
+    height: clamp(48px,10vw,64px);
+
+    border-radius: 50%;
+
+    background: var(--accent-2-soft);
+
+    border: 1px solid rgba(77,214,192,0.4);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: clamp(20px,5vw,28px);
+
+    flex-shrink: 0;
+}
+
+.np-analogy p {
+    margin: 0;
+
+    font-size: clamp(0.9rem, 2vw, 0.98rem);
+
+    color: var(--ink);
+}
+
+.np-analogy p+p {
+    margin-top: 8px;
+    color: var(--ink-dim);
+}
+
+
+/* ============================================================
+   SHOWCASE
+   ============================================================ */
+
+.np-showcase {
+    border: 1px solid var(--line-strong);
+    background: var(--panel);
+
+    overflow: hidden;
+
+    margin-top: 10px;
+}
+
+.np-showcase-head {
+    display: flex;
+    align-items: center;
+
+    gap: var(--gap-md);
+
+    padding:
+        clamp(12px,2.6vw,18px)
+        var(--pad-card-sm);
+
+    border-bottom: 1px solid var(--line);
+
+    flex-wrap: wrap;
+}
+
+.np-showcase-head h3 {
+    font-family: var(--cond);
+    font-weight: 700;
+
+    font-size: clamp(1rem, 2.6vw, 1.2rem);
+
+    margin: 0;
+
+    flex: 1;
+
+    min-width: 140px;
+}
+
+.np-flag {
+    font-family: var(--mono);
+
+    font-size: 9.5px;
+
+    letter-spacing: 0.08em;
+
+    text-transform: uppercase;
+
+    color: var(--accent);
+
+    background: var(--accent-soft);
+
+    padding: 4px 8px;
+
+    border-radius: 2px;
+}
+
+.np-toggle {
+    display: flex;
+
+    border: 1px solid var(--line-strong);
+
+    border-radius: 3px;
+
+    overflow: hidden;
+
+    flex-wrap: wrap;
+}
+
+.np-toggle button {
+    font-family: var(--mono);
+
+    font-size: clamp(11px,2vw,12px);
+
+    padding:
+        clamp(7px,1.6vw,9px)
+        clamp(10px,2.6vw,16px);
+
+    background: transparent;
+
+    color: var(--ink-dim);
+
+    border: none;
+
+    cursor: pointer;
+
+    border-right: 1px solid var(--line-strong);
+
+    white-space: nowrap;
+}
+
+.np-toggle button:last-child {
+    border-right: none;
+}
+
+.np-toggle button.active {
+    background: var(--accent);
+
+    color: #0d1512;
+
+    font-weight: 600;
+}
+
+.np-toggle button:disabled {
+    opacity: 0.45;
+}
+
+
+/* ============================================================
+   SHOWCASE BODY
+   ============================================================ */
+
+.np-showcase-body {
+    display: grid;
+
+    grid-template-columns: 1.05fr 0.95fr;
+}
+
+@media (max-width:760px) {
+    .np-showcase-body {
+        grid-template-columns: 1fr;
+    }
+}
+
+.np-stage {
+    background: #0a0f0c;
+
+    border-right: 1px solid var(--line);
+
+    position: relative;
+
+    aspect-ratio: 300/220;
+
+    align-self: start;
+
+    width: 100%;
+}
+
+@media (max-width:760px) {
+    .np-stage {
+        border-right: none;
+
+        border-bottom: 1px solid var(--line);
+    }
+}
+
+.np-stage svg {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+}
+
+.np-stage.clickable {
+    cursor: crosshair;
+}
+
+.np-stage-caption {
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    padding:
+        clamp(8px,2vw,10px)
+        clamp(10px,2.6vw,14px);
+
+    font-family: var(--mono);
+
+    font-size: clamp(10px,2vw,11px);
+
+    color: var(--ink);
+
+    background:
+        linear-gradient(
+            0deg,
+            rgba(10,15,12,0.94),
+            transparent
+        );
+
+    pointer-events: none;
+}
+
+.np-stage-caption .live-dot {
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: var(--ok);
+
+    display: inline-block;
+
+    margin-right: 6px;
+
+    animation: npBlink 1.4s ease-in-out infinite;
+}
+
+@keyframes npBlink {
+    0%,100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.25;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .live-dot,
+    .lock-pulse {
+        animation: none !important;
+    }
+}
+
+
+/* ============================================================
+   PARAMETERS
+   ============================================================ */
+
+.np-params {
+    padding: var(--pad-card-sm);
+}
+
+.np-params .node-lbl {
+    font-family: var(--mono);
+
+    font-size: 10px;
+
+    letter-spacing: 0.08em;
+
+    text-transform: uppercase;
+
+    color: var(--ink-faint);
+
+    margin-bottom: 4px;
+
+    display: block;
+}
+
+.np-params .node-name {
+    font-family: var(--mono);
+
+    font-size: clamp(12px,2.4vw,13px);
+
+    color: var(--accent-2);
+
+    margin-bottom: 4px;
+
+    display: block;
+
+    word-break: break-word;
+}
+
+.np-params .node-sub {
+    font-size: clamp(10.5px,2vw,11.5px);
+
+    color: var(--ink-faint);
+
+    margin-bottom: 14px;
+
+    display: block;
+}
+
+.np-param-row {
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    padding: 9px 0;
+
+    border-bottom: 1px solid var(--line);
+
+    font-family: var(--mono);
+
+    font-size: clamp(11px,2.2vw,12px);
+
+    flex-wrap: wrap;
+}
+
+.np-param-row .k {
+    color: var(--ink-dim);
+}
+
+.np-param-row .v {
+    color: var(--ink);
+
+    font-weight: 600;
+
+    text-align: right;
+}
+
+.np-param-set {
+    margin-top: 16px;
+}
+
+.np-sublbl {
+    font-family: var(--mono);
+
+    font-size: 10px;
+
+    letter-spacing: 0.1em;
+
+    text-transform: uppercase;
+
+    color: var(--ink-faint);
+
+    margin: 16px 0 0 0;
+}
+
+
+/* ============================================================
+   CONTROLS
+   ============================================================ */
+
+.np-ctrl {
+    margin-bottom: clamp(14px,2.8vw,18px);
+}
+
+.np-ctrl-label {
+    font-family: var(--mono);
+
+    font-size: clamp(10.5px,2vw,11px);
+
+    color: var(--ink-dim);
+
+    display: flex;
+
+    justify-content: space-between;
+
+    flex-wrap: wrap;
+
+    gap: 4px 8px;
+
+    margin-bottom: 6px;
+}
+
+.np-ctrl-label b {
+    color: var(--accent);
+
+    font-weight: 600;
+}
+
+.np-ctrl input[type=range] {
+    width: 100%;
+
+    accent-color: var(--accent);
+
+    touch-action: pan-y;
+}
+
+.np-ctrl.disabled {
+    opacity: 0.35;
+}
+
+.np-ctrl.disabled .np-ctrl-label b {
+    color: var(--ink-faint);
+}
+
+.np-ctrl.disabled input[type=range] {
+    accent-color: var(--ink-faint);
+
+    pointer-events: none;
+}
+
+.np-lockbadge {
+    font-family: var(--mono);
+
+    font-size: 9px;
+
+    letter-spacing: 0.06em;
+
+    text-transform: uppercase;
+
+    color: var(--ink-faint);
+
+    border: 1px solid var(--line-strong);
+
+    padding: 1px 6px;
+
+    border-radius: 2px;
+}
+
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+
+.np-btnrow {
+    display: flex;
+
+    gap: clamp(6px,1.6vw,8px);
+
+    align-items: center;
+
+    flex-wrap: wrap;
+}
+
+.np-btn {
+    font-family: var(--mono);
+
+    font-size: clamp(10.5px,2.1vw,11.5px);
+
+    padding:
+        clamp(7px,1.8vw,8px)
+        clamp(10px,2.6vw,14px);
+
+    background: var(--accent);
+
+    color: #0d1512;
+
+    border: none;
+
+    border-radius: 3px;
+
+    cursor: pointer;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+.np-btn.ghost {
+    background: transparent;
+
+    color: var(--ink-dim);
+
+    border: 1px solid var(--line-strong);
+}
+
+.np-btn:disabled {
+    opacity: 0.4;
+
+    cursor: not-allowed;
+}
+
+.np-btn:focus-visible,
+.np-toggle button:focus-visible {
+    outline: 2px solid var(--accent-2);
+
+    outline-offset: 2px;
+}
+
+
+/* ============================================================
+   LOG / CARDS
+   ============================================================ */
+
+.plan-log {
+    font-family: var(--mono);
+
+    font-size: clamp(10.5px,2.1vw,11.5px);
+
+    background: var(--panel-2);
+
+    border: 1px solid var(--line);
+
+    border-radius: 2px;
+
+    padding:
+        clamp(8px,2vw,10px)
+        clamp(10px,2.4vw,12px);
+
+    min-height: 64px;
+
+    color: var(--accent-2);
+
+    margin-top: 4px;
+
+    line-height: 1.5;
+}
+
+.plan-log .dim {
+    color: var(--ink-faint);
+}
+
+.plan-log b {
+    color: var(--ink);
+}
+
+.np-card {
+    border: 1px solid var(--line-strong);
+
+    border-radius: 2px;
+
+    padding:
+        clamp(13px,2.8vw,16px)
+        clamp(14px,3vw,18px);
+
+    margin: var(--gap-md) 0;
+}
+
+.np-card.concept {
+    background: var(--accent-2-soft);
+
+    border-color: rgba(77,214,192,0.35);
+}
+
+.np-card-lbl {
+    font-family: var(--mono);
+
+    font-size: 10px;
+
+    letter-spacing: 0.1em;
+
+    text-transform: uppercase;
+
+    margin-bottom: 8px;
+
+    color: var(--accent-2);
+}
+
+.np-card p {
+    margin: 0;
+
+    font-size: clamp(0.88rem,1.9vw,0.92rem);
+
+    color: var(--ink);
+}
+
+.np-card p+p {
+    margin-top: 8px;
+}
+
+
+/* ============================================================
+   LOCK CARD
+   ============================================================ */
+
+.np-lockcard {
+    border: 1px solid var(--line-strong);
+
+    background: var(--panel);
+
+    padding: var(--pad-card);
+
+    margin-top: 12px;
+
+    display: grid;
+
+    grid-template-columns: auto 1fr;
+
+    gap: var(--gap-lg);
+
+    align-items: center;
+}
+
+@media (max-width:620px) {
+    .np-lockcard {
+        grid-template-columns: 1fr;
+    }
+
+    .np-lockcard svg {
+        margin: 0 auto;
+    }
+}
+
+.lock-pulse {
+    animation: npLockGlow 2.6s ease-in-out infinite;
+}
+
+@keyframes npLockGlow {
+    0%,100% {
+        filter: drop-shadow(0 0 0px var(--accent-2));
+    }
+
+    50% {
+        filter: drop-shadow(0 0 6px var(--accent-2));
+    }
+}
+
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.np-footer {
+    padding:
+        clamp(18px,4vw,26px)
+        var(--pad-page);
+
+    border-top: 1px solid var(--line-strong);
+
+    font-size: 12px;
+
+    color: var(--ink-faint);
+
+    margin-top: clamp(14px,3vw,20px);
+}
+
+</style>
+
+
+<div class="np-app">
+
+    <header class="np-hero">
+
+        <div class="np-eyebrow">
+            ROS 2 · Concept Guide
+        </div>
+
+        <h1>
+            What are <span>node parameters</span>?
+        </h1>
+
+        <p class="np-lede">
+            A parameter is just a <b>setting</b> — a number or word you can change —
+            that tells a piece of robot software how to behave,
+            without you touching a single line of its code.
+        </p>
+
+    </header>
+
+
+    <section class="np-section">
+
+        <div class="np-section-h">
+            <span class="num">01</span>
+            <h2>Start with something you already know</h2>
+        </div>
+
+        <div class="np-analogy">
+
+            <div class="np-analogy-icon">
+                🔊
+            </div>
+
+            <div>
+
+                <p>
+                    Turning up the volume on a speaker doesn't rewrite the speaker's
+                    software. The software already knows how to play sound at
+                    <i>any</i> volume — turning the knob just tells it
+                    <b class="hl">which</b> volume to use, right now.
+                </p>
+
+                <p>
+                    A ROS 2 parameter is that same knob, except it's attached to a
+                    piece of robot software instead of a speaker. The code never changes.
+                    Only the number you hand it does.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="np-section">
+
+        <div class="np-section-h">
+            <span class="num">02</span>
+            <h2>Meet "path planning" — the example we'll use</h2>
+        </div>
+
+        <p class="np-p">
+            Before a robot can drive anywhere, <b class="hl">something</b> has to work
+            out how to actually get there — which way to turn, how fast to go,
+            how tightly to swing around a corner. That "something" is a small program
+            called a <b class="hl">path planning node</b>. Give it a goal, and it
+            outputs a stream of drive commands to get there.
+        </p>
+
+        <p class="np-p">
+            Here's the interesting part: the exact same path-planning program can run
+            on very different robots — say, a robot that steers with
+            <b class="hl">two wheels</b>, and a robot that steers with
+            <b class="hl">four mecanum wheels</b> that can slide sideways.
+            The code doesn't need to be rewritten for each one. Only its
+            <b class="hl">parameters</b> — its settings — need to change.
+        </p>
+
+    </section>
+
+
+    <section class="np-section">
+
+        <div class="np-section-h">
+            <span class="num">03</span>
+            <h2>
+                Give it a goal — watch the planner decide <i>where</i> to go
+            </h2>
+        </div>
+
+        <p class="np-p">
+            This is where parameters actually earn their keep. Click the grid to
+            drop 1–5 waypoints. Press <b class="hl">Plan &amp; Drive</b> and watch
+            the <i>same</i> planning logic produce a velocity command suited to the
+            robot's configured movement capabilities. The planner decides the motion
+            command; a separate robot-specific kinematics step converts that command
+            into wheel speeds.
+        </p>
+
+
+        <div class="np-showcase">
+
+            <div class="np-showcase-head">
+
+                <h3>/path_planning_node</h3>
+
+                <span class="np-flag">
+                    Interactive
+                </span>
+
+                <div class="np-toggle" id="plan-toggle">
+
+                    <button class="active" data-mode="diff">
+                        2-wheel robot
+                    </button>
+
+                    <button data-mode="mec">
+                        4-wheel robot
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="np-showcase-body">
+
+                <div class="np-stage clickable" id="plan-stage">
+
+                    <svg viewBox="0 0 300 220" id="plan-svg">
+
+                        <path
+                            class="np-gridpath"
+                            fill="none"
+                            stroke="#131d18"
+                            stroke-width="1">
+                        </path>
+
+                        <rect
+                            x="4"
+                            y="4"
+                            width="292"
+                            height="212"
+                            fill="none"
+                            stroke="#1c2822"
+                            stroke-width="1">
+                        </rect>
+
+                        <g id="plan-path"></g>
+
+                        <path
+                            id="plan-trail"
+                            fill="none"
+                            stroke="#ff8a3d"
+                            stroke-opacity="0.75"
+                            stroke-width="2">
+                        </path>
+
+                        <g id="plan-points"></g>
+                        <g id="plan-robot-layer"></g>
+
+                    </svg>
+
+                    <div class="np-stage-caption">
+                        <span class="live-dot"></span>
+                        <span id="plan-caption">
+                            click the grid to add a stop
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <div class="np-params">
+
+                    <span class="node-lbl">
+                        running as
+                    </span>
+
+                    <span class="node-name">
+                        /path_planning_node
+                    </span>
+
+                    <span class="node-sub" id="plan-mode-sub">
+                        parameter in play: can_move_sideways = false
+                    </span>
+
+
+                    <div
+                        class="np-btnrow"
+                        style="margin-bottom:12px;">
+
+                        <button
+                            class="np-btn"
+                            id="plan-run"
+                            disabled>
+                            ▶ Plan &amp; Drive
+                        </button>
+
+                        <button
+                            class="np-btn ghost"
+                            id="plan-clear">
+                            ✕ Clear
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        class="plan-log"
+                        id="plan-log">
+
+                        <span class="dim">
+                            planner idle — waiting for waypoints
+                        </span>
+
+                    </div>
+
+
+                    <div class="np-param-set">
+
+                        <div class="np-param-row">
+                            <span class="k">robot_type</span>
+                            <span class="v" id="plan-rt">
+                                "two_wheel"
+                            </span>
+                        </div>
+
+                        <div class="np-param-row">
+                            <span class="k">can_move_sideways</span>
+                            <span class="v" id="plan-cms">
+                                false
+                            </span>
+                        </div>
+
+                        <div class="np-param-row">
+                            <span class="k">turning_style</span>
+                            <span class="v" id="plan-ts">
+                                rotate-then-drive
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="np-card concept">
+
+            <div class="np-card-lbl">
+                ◆ What actually changed?
+            </div>
+
+            <p>
+                The waypoints didn't change, and the planning logic didn't change.
+                The configured robot capability did:
+                <code>can_move_sideways</code>.
+                A diff-drive robot cannot command lateral velocity, so its motion
+                command uses <b>forward velocity + turn rate</b>.
+                A mecanum robot can also use <b>sideways velocity</b>, so it can move
+                toward the next waypoint without first turning.
+                In a real robot stack, the planner/controller produces the velocity
+                command and the robot-specific kinematics converts it into wheel speeds.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <section class="np-section">
+
+        <div class="np-section-h">
+            <span class="num">04</span>
+            <h2>
+                Drive it yourself — feel the parameter, don't just read it
+            </h2>
+        </div>
+
+        <p class="np-p">
+            This is the next layer: raw velocity commands, the kind a planner or
+            controller can produce. Try the <b class="hl">sideways</b> slider on both
+            robots. On the 2-wheel robot it is locked because that drive model cannot
+            produce lateral velocity. Switch to the 4-wheel robot and the same command
+            becomes available. The visualization then applies robot-specific kinematics
+            using parameters such as <code>wheel_radius</code> and
+            <code>wheel_separation</code> to calculate the wheel speeds.
+        </p>
+
+
+        <div class="np-showcase">
+
+            <div class="np-showcase-head">
+
+                <h3>/robot_controller — velocity console</h3>
+
+                <span class="np-flag">
+                    Interactive
+                </span>
+
+                <div class="np-toggle" id="drive-toggle">
+
+                    <button class="active" data-mode="diff">
+                        2-wheel robot
+                    </button>
+
+                    <button data-mode="mec">
+                        4-wheel robot
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="np-showcase-body">
+
+                <div class="np-stage" id="drive-stage">
+
+                    <svg viewBox="0 0 300 220" id="drive-svg">
+
+                        <path
+                            class="np-gridpath"
+                            fill="none"
+                            stroke="#131d18"
+                            stroke-width="1">
+                        </path>
+
+                        <rect
+                            x="4"
+                            y="4"
+                            width="292"
+                            height="212"
+                            fill="none"
+                            stroke="#1c2822"
+                            stroke-width="1">
+                        </rect>
+
+                        <path
+                            id="drive-trail"
+                            fill="none"
+                            stroke="#ff8a3d"
+                            stroke-opacity="0.55"
+                            stroke-width="1.6">
+                        </path>
+
+                        <g id="drive-robot-layer"></g>
+
+                    </svg>
+
+                    <div class="np-stage-caption">
+                        <span class="live-dot"></span>
+                        <span id="drive-caption">
+                            stopped
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <div class="np-params">
+
+                    <span class="node-lbl">
+                        you are commanding
+                    </span>
+
+                    <span class="node-name">
+                        /robot_controller
+                    </span>
+
+                    <span class="node-sub">
+                        velocity command → wheel speeds
+                    </span>
+
+
+                    <div style="margin-top:6px;">
+
+                        <div class="np-ctrl">
+
+                            <div class="np-ctrl-label">
+                                forward velocity (vx)
+                                <b id="v-vx">
+                                    0.12 m/s
+                                </b>
+                            </div>
+
+                            <input
+                                type="range"
+                                id="s-vx"
+                                min="-30"
+                                max="30"
+                                value="12">
+
+                        </div>
+
+
+                        <div class="np-ctrl" id="ctrl-vy">
+
+                            <div class="np-ctrl-label">
+
+                                sideways velocity (vy)
+
+                                <b id="v-vy">
+                                    0.00 m/s
+                                </b>
+
+                                <span
+                                    class="np-lockbadge"
+                                    id="vy-lock">
+                                    locked · needs can_move_sideways=true
+                                </span>
+
+                            </div>
+
+                            <input
+                                type="range"
+                                id="s-vy"
+                                min="-30"
+                                max="30"
+                                value="0">
+
+                        </div>
+
+
+                        <div class="np-ctrl">
+
+                            <div class="np-ctrl-label">
+
+                                turn rate (ω, + = left)
+
+                                <b id="v-w">
+                                    0 °/s
+                                </b>
+
+                            </div>
+
+                            <input
+                                type="range"
+                                id="s-w"
+                                min="-90"
+                                max="90"
+                                value="0">
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="np-btnrow"
+                        style="flex-wrap:wrap; gap:6px;">
+
+                        <button
+                            class="np-btn ghost"
+                            data-preset="fwd">
+                            Forward
+                        </button>
+
+                        <button
+                            class="np-btn ghost"
+                            data-preset="rev">
+                            Reverse
+                        </button>
+
+                        <button
+                            class="np-btn ghost"
+                            data-preset="strafe">
+                            Strafe
+                        </button>
+
+                        <button
+                            class="np-btn ghost"
+                            data-preset="spin">
+                            Spin
+                        </button>
+
+                        <button
+                            class="np-btn ghost"
+                            data-preset="stop">
+                            Stop
+                        </button>
+
+                        <button
+                            class="np-btn ghost"
+                            id="drive-reset">
+                            Reset
+                        </button>
+
+                    </div>
+
+
+                    <div class="np-sublbl">
+                        robot kinematics parameters
+                    </div>
+
+                    <div id="drive-param-rows"></div>
+
+
+                    <div class="np-sublbl">
+                        live wheel speeds (what the motors are told)
+                    </div>
+
+                    <div id="drive-wheels"></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="np-section">
+
+        <div class="np-section-h">
+            <span class="num">05</span>
+            <h2>
+                A second example, so it's clear this isn't just about path planning
+            </h2>
+        </div>
+
+        <p class="np-p">
+            Every node works this way, not just planners. Meet
+            <code>/obstacle_avoidance_node</code>: its only job is to stop the robot
+            before it hits something. It has one parameter,
+            <code>safety_margin</code> — how much empty space to leave between the
+            robot's edge and an obstacle. A small delivery robot can thread tight gaps
+            with a thin margin; a large warehouse robot needs a much wider one so it
+            doesn't clip shelving. Same node, same code — just a different number.
+        </p>
+
+
+        <div class="np-showcase">
+
+            <div class="np-showcase-head">
+
+                <h3>/obstacle_avoidance_node</h3>
+
+                <span class="np-flag">
+                    Interactive
+                </span>
+
+                <div class="np-toggle" id="oa-toggle">
+
+                    <button
+                        class="active"
+                        data-mode="small">
+                        small robot
+                    </button>
+
+                    <button data-mode="large">
+                        large robot
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="np-showcase-body">
+
+                <div class="np-stage" id="oa-stage">
+
+                    <svg viewBox="0 0 300 220" id="oa-svg">
+
+                        <path
+                            class="np-gridpath"
+                            fill="none"
+                            stroke="#131d18"
+                            stroke-width="1">
+                        </path>
+
+                        <rect
+                            x="4"
+                            y="4"
+                            width="292"
+                            height="212"
+                            fill="none"
+                            stroke="#1c2822"
+                            stroke-width="1">
+                        </rect>
+
+                        <rect
+                            x="236"
+                            y="56"
+                            width="30"
+                            height="108"
+                            fill="#ff6b6b"
+                            fill-opacity="0.85"
+                            id="oa-obstacle">
+                        </rect>
+
+                        <path
+                            d="M236 70 L266 56 M236 92 L266 78 M236 114 L266 100 M236 136 L266 122 M236 158 L266 144"
+                            stroke="#0d1512"
+                            stroke-width="2"
+                            stroke-opacity="0.5">
+                        </path>
+
+                        <text
+                            x="251"
+                            y="180"
+                            fill="#ff6b6b"
+                            font-size="9"
+                            font-family="IBM Plex Mono, monospace"
+                            text-anchor="middle">
+                            obstacle
+                        </text>
+
+                        <circle
+                            id="oa-margin"
+                            cx="100"
+                            cy="110"
+                            r="30"
+                            fill="rgba(77,214,192,0.10)"
+                            stroke="#4dd6c0"
+                            stroke-width="1.2"
+                            stroke-dasharray="4 3">
+                        </circle>
+
+                        <line
+                            id="oa-ray"
+                            x1="100"
+                            y1="110"
+                            x2="236"
+                            y2="110"
+                            stroke="#ff6b6b"
+                            stroke-width="1"
+                            stroke-dasharray="3 3"
+                            stroke-opacity="0.8">
+                        </line>
+
+                        <text
+                            id="oa-dist"
+                            x="170"
+                            y="104"
+                            fill="#ff9d9d"
+                            font-size="8.5"
+                            font-family="IBM Plex Mono, monospace"
+                            text-anchor="middle">
+                        </text>
+
+                        <g id="oa-robot-layer"></g>
+
+                    </svg>
+
+                    <div class="np-stage-caption">
+
+                        <span class="live-dot"></span>
+
+                        <span id="oa-caption">
+                            press Approach to drive toward the obstacle
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="np-params">
+
+                    <span class="node-lbl">
+                        running as
+                    </span>
+
+                    <span class="node-name">
+                        /obstacle_avoidance_node
+                    </span>
+
+                    <span
+                        class="node-sub"
+                        id="oa-sub">
+                        parameter in play: safety_margin = 0.12 m
+                    </span>
+
+
+                    <div
+                        class="np-btnrow"
+                        style="margin:6px 0 12px;">
+
+                        <button
+                            class="np-btn"
+                            id="oa-run">
+                            ▶ Approach
+                        </button>
+
+                        <button
+                            class="np-btn ghost"
+                            id="oa-reset">
+                            ↺ Reset
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        class="plan-log"
+                        id="oa-log">
+
+                        <span class="dim">
+                            idle — waiting to approach
+                        </span>
+
+                    </div>
+
+
+                    <div class="np-param-set">
+
+                        <div class="np-param-row">
+                            <span class="k">
+                                robot_footprint
+                            </span>
+
+                            <span
+                                class="v"
+                                id="oa-fp">
+                                0.20 m
+                            </span>
+                        </div>
+
+                        <div class="np-param-row">
+
+                            <span class="k">
+                                safety_margin
+                            </span>
+
+                            <span
+                                class="v"
+                                id="oa-margin-val">
+                                0.12 m
+                            </span>
+
+                        </div>
+
+                        <div class="np-param-row">
+
+                            <span class="k">
+                                stop_distance
+                            </span>
+
+                            <span
+                                class="v"
+                                id="oa-stop-val">
+                                0.22 m
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="np-card concept">
+
+            <div class="np-card-lbl">
+                ◆ Same pattern, different node
+            </div>
+
+            <p>
+                Notice the same parameter pattern appears here too: one node,
+                one parameter, two very different real-world outcomes.
+                <code>/obstacle_avoidance_node</code> doesn't know or care that
+                <code>/path_planning_node</code> exists — it just reads its own
+                <code>safety_margin</code> and acts on it. That's the whole idea
+                of a parameter: a number the code checks before it decides what to do.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <section class="np-section">
+
+        <div class="np-section-h">
+
+            <span class="num">06</span>
+
+            <h2>
+                One last rule worth knowing
+            </h2>
+
+        </div>
+
+
+        <p class="np-p">
+            A parameter isn't shared, global, or visible to every node on the robot.
+            It belongs to <b class="hl">one specific node</b> — the one that defined it.
+            Only that node ever reads it or acts on it.
+        </p>
+
+
+        <div class="np-lockcard">
+
+            <svg viewBox="0 0 120 120" width="120" height="120">
+
+                <rect
+                    x="10"
+                    y="10"
+                    width="100"
+                    height="100"
+                    rx="6"
+                    fill="rgba(255,138,61,0.1)"
+                    stroke="#ff8a3d"
+                    stroke-width="1.5">
+                </rect>
+
+                <text
+                    x="60"
+                    y="34"
+                    fill="#ff8a3d"
+                    font-size="9.5"
+                    font-family="IBM Plex Mono, monospace"
+                    text-anchor="middle">
+                    this node
+                </text>
+
+                <g
+                    class="lock-pulse"
+                    transform="translate(60,72)">
+
+                    <rect
+                        x="-14"
+                        y="-2"
+                        width="28"
+                        height="22"
+                        rx="3"
+                        fill="#0d1512"
+                        stroke="#4dd6c0"
+                        stroke-width="1.5">
+                    </rect>
+
+                    <path
+                        d="M-8,-2 v-8 a8,8 0 0 1 16,0 v8"
+                        fill="none"
+                        stroke="#4dd6c0"
+                        stroke-width="2">
+                    </path>
+
+                    <circle
+                        cx="0"
+                        cy="9"
+                        r="2.4"
+                        fill="#4dd6c0">
+                    </circle>
+
+                </g>
+
+                <text
+                    x="60"
+                    y="106"
+                    fill="#5c6c65"
+                    font-size="7.5"
+                    font-family="IBM Plex Mono, monospace"
+                    text-anchor="middle">
+                    its own parameters
+                </text>
+
+            </svg>
+
+
+            <div>
+
+                <div
+                    class="np-card-lbl"
+                    style="margin-bottom:6px;">
+                    ◆ Parameters are private to their node
+                </div>
+
+                <p
+                    style="font-size:0.92rem; color:var(--ink); margin:0;">
+                    Another node running right next to this one — even one written
+                    by the same person — has no idea
+                    <code>can_move_sideways</code> exists unless it's told separately.
+                    Each node keeps its own settings.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <footer class="np-footer">
+        Node parameters · ROS 2 · one path-planning node, two very different robots,
+        zero code changes.
+    </footer>
+
+</div>
+`;
+
+
+/* ==================================================================
+   SHARED HELPERS + REALISTIC ROBOT MODEL
+   ================================================================== */
+
+const $ = function (id) {
+    return shadow.getElementById(id);
+};
+
+const NS = 'http://www.w3.org/2000/svg';
+
+const TEAL = '#4dd6c0';
+
+const UPM = 343;
+
+const RU = 11.3;
+
+const R_W = 0.033,
+      SEP = 0.14,
+      KLXY = 0.109;
+
+
+function mk(tag, attrs, parent) {
+
+    const e = document.createElementNS(NS, tag);
+
+    for (const k in attrs) {
+        e.setAttribute(k, attrs[k]);
+    }
+
+    if (parent) {
+        parent.appendChild(e);
+    }
+
+    return e;
+}
+
+
+const clamp = function (v, a, b) {
+    return Math.max(a, Math.min(b, v));
+};
+
+
+function shortestDelta(from, to) {
+
+    let d = to - from;
+
+    while (d > Math.PI) d -= 2 * Math.PI;
+
+    while (d < -Math.PI) d += 2 * Math.PI;
+
+    return d;
+}
+
+
+function signed(n, d) {
+
+    return (n >= 0 ? '+' : '') + n.toFixed(d);
+
+}
+
+
+function diffSpeeds(v, w) {
+
+    return [
+        (v - w * SEP / 2) / R_W,
+        (v + w * SEP / 2) / R_W
+    ];
+
+}
+
+
+function mecSpeeds(vx, vy, w) {
+
+    return [
+        (vx - vy - KLXY * w) / R_W,
+        (vx + vy + KLXY * w) / R_W,
+        (vx + vy - KLXY * w) / R_W,
+        (vx - vy + KLXY * w) / R_W
+    ];
+
+}
+
+
+function gridPath(w, h, step) {
+
+    let d = '';
+
+    for (let x = step; x < w; x += step) {
+        d += 'M' + x + ' 0V' + h + ' ';
+    }
+
+    for (let y = step; y < h; y += step) {
+        d += 'M0 ' + y + 'H' + w + ' ';
+    }
+
+    return d;
+}
+
+
+shadow.querySelectorAll('.np-gridpath').forEach(function (p) {
+
+    p.setAttribute(
+        'd',
+        gridPath(300, 220, 20)
+    );
+
+});
+
+
+/* ============================================================
+   WHEEL
+   ============================================================ */
+
+function makeWheel(parent, cx, cy, len, thick, skew) {
+
+    mk(
+        'rect',
+        {
+            x: cx - len / 2,
+            y: cy - thick / 2,
+            width: len,
+            height: thick,
+            rx: 2,
+            fill: '#0a0f0c',
+            stroke: TEAL,
+            'stroke-width': 1.4,
+            'vector-effect': 'non-scaling-stroke'
+        },
+        parent
+    );
+
+    const g = mk(
+        'g',
+        {
+            transform:
+                'translate(' + cx + ' ' + cy + ') skewX(' + skew + ')'
+        },
+        parent
+    );
+
+    const line = mk(
+        'line',
+        {
+            x1: len / 2 - 1.4,
+            y1: 0,
+            x2: -len / 2 + 1.4,
+            y2: 0,
+            stroke: TEAL,
+            'stroke-opacity': 0.6,
+            'stroke-width': thick - 1.8,
+            'stroke-dasharray': '1.8 3.6'
+        },
+        g
+    );
+
+    return {
+        line: line
+    };
+
+}
+
+
+/* ============================================================
+   ROBOT
+   ============================================================ */
+
+function makeRobot(kind, parent, scale) {
+
+    const g = mk('g', {}, parent);
+
+    const wheels = [];
+
+    const SW = {
+        'stroke-width': 1.6,
+        'vector-effect': 'non-scaling-stroke'
+    };
+
+
+    if (kind === 'diff') {
+
+        mk(
+            'line',
+            {
+                x1: 0,
+                y1: -24,
+                x2: 0,
+                y2: 24,
+                stroke: '#5c6c65',
+                'stroke-width': 2
+            },
+            g
+        );
+
+
+        wheels.push(
+            makeWheel(
+                g,
+                0,
+                -24,
+                22.6,
+                6.8,
+                0
+            )
+        );
+
+
+        wheels.push(
+            makeWheel(
+                g,
+                0,
+                24,
+                22.6,
+                6.8,
+                0
+            )
+        );
+
+
+        mk(
+            'rect',
+            Object.assign(
+                {
+                    x: -22,
+                    y: -17,
+                    width: 44,
+                    height: 34,
+                    rx: 9,
+                    fill: 'rgba(255,138,61,0.20)',
+                    stroke: '#ff8a3d'
+                },
+                SW
+            ),
+            g
+        );
+
+
+        mk(
+            'circle',
+            {
+                cx: 15,
+                cy: 0,
+                r: 3.2,
+                fill: '#fb923c',
+                stroke: '#0d1512',
+                'stroke-width': 0.8
+            },
+            g
+        );
+
+
+        mk(
+            'circle',
+            {
+                cx: -15,
+                cy: 0,
+                r: 3.2,
+                fill: '#fb923c',
+                stroke: '#0d1512',
+                'stroke-width': 0.8
+            },
+            g
+        );
+
+
+        mk(
+            'circle',
+            {
+                cx: -3,
+                cy: 0,
+                r: 5.5,
+                fill: '#0d1512',
+                stroke: '#8fa39a',
+                'stroke-width': 1
+            },
+            g
+        );
+
+
+        mk(
+            'circle',
+            {
+                cx: -3,
+                cy: 0,
+                r: 1.6,
+                fill: '#7cd992'
+            },
+            g
+        );
+
+
+    } else {
+
+        wheels.push(
+            makeWheel(g, 16, -23, 18, 7, -35)
+        );
+
+        wheels.push(
+            makeWheel(g, 16, 23, 18, 7, 35)
+        );
+
+        wheels.push(
+            makeWheel(g, -16, -23, 18, 7, 35)
+        );
+
+        wheels.push(
+            makeWheel(g, -16, 23, 18, 7, -35)
+        );
+
+
+        mk(
+            'rect',
+            Object.assign(
+                {
+                    x: -27,
+                    y: -17,
+                    width: 54,
+                    height: 34,
+                    rx: 7,
+                    fill: 'rgba(201,166,255,0.20)',
+                    stroke: '#c9a6ff'
+                },
+                SW
+            ),
+            g
+        );
+
+
+        mk(
+            'rect',
+            {
+                x: -12,
+                y: -9,
+                width: 24,
+                height: 18,
+                rx: 3,
+                fill: '#0d1512',
+                stroke: '#8fa39a',
+                'stroke-width': 1
+            },
+            g
+        );
+
+
+        mk(
+            'circle',
+            {
+                cx: 0,
+                cy: 0,
+                r: 1.8,
+                fill: '#7cd992'
+            },
+            g
+        );
+
+    }
+
+
+    const fx = kind === 'diff' ? 23 : 28;
+
+
+    mk(
+        'path',
+        {
+            d:
+                'M' +
+                (fx + 7) +
+                ',0 L' +
+                fx +
+                ',-5 L' +
+                fx +
+                ',5 Z',
+            fill: '#ff6b6b'
+        },
+        g
+    );
+
+
+    return {
+
+        g: g,
+
+        wheels: wheels,
+
+        scale: scale,
+
+        setPose: function (x, y, h) {
+
+            g.setAttribute(
+                'transform',
+                'translate(' +
+                x.toFixed(2) +
+                ' ' +
+                y.toFixed(2) +
+                ') rotate(' +
+                (h * 180 / Math.PI).toFixed(2) +
+                ') scale(' +
+                scale +
+                ')'
+            );
+
+        },
+
+        setPhases: function (arr) {
+
+            for (
+                let i = 0;
+                i < wheels.length;
+                i++
+            ) {
+
+                wheels[i].line.setAttribute(
+                    'stroke-dashoffset',
+                    (arr[i] || 0).toFixed(2)
+                );
+
+            }
+
+        }
+
+    };
+
+}
+
+
+/* ==================================================================
+   SECTION 03: WAYPOINT PLANNER
+   ================================================================== */
+
+(function () {
+
+    const svg = $('plan-svg'),
+          stage = $('plan-stage'),
+          pathG = $('plan-path'),
+          trailEl = $('plan-trail'),
+          ptsG = $('plan-points'),
+          layer = $('plan-robot-layer');
+
+    const caption = $('plan-caption'),
+          runBtn = $('plan-run'),
+          clearBtn = $('plan-clear'),
+          log = $('plan-log'),
+          toggle = $('plan-toggle');
+
+    const rtEl = $('plan-rt'),
+          cmsEl = $('plan-cms'),
+          tsEl = $('plan-ts'),
+          modeSub = $('plan-mode-sub');
+
+    const START = {
+        x: 150,
+        y: 184
+    };
+
+    const PXM = UPM,
+          VMAX = 0.25;
+
+    let mode = 'diff',
+        pts = [],
+        animating = false,
+        robot = null,
+        trailD = '';
+
+    const st = {
+        x: START.x,
+        y: START.y,
+        h: -Math.PI / 2,
+        ph: [0,0,0,0]
+    };
+
+
+    function resetPose() {
+
+        st.x = START.x;
+        st.y = START.y;
+        st.h = -Math.PI / 2;
+        st.ph = [0,0,0,0];
+
+        robot.setPose(
+            st.x,
+            st.y,
+            st.h
+        );
+
+        robot.setPhases(st.ph);
+
+        trailD = '';
+
+        trailEl.setAttribute(
+            'd',
+            ''
+        );
+
+    }
+
+
+    function buildRobot() {
+
+        layer.innerHTML = '';
+
+        robot = makeRobot(
+            mode,
+            layer,
+            1
+        );
+
+        resetPose();
+
+    }
+
+
+    function svgPoint(evt) {
+
+        const pt = svg.createSVGPoint();
+
+        pt.x = evt.clientX;
+        pt.y = evt.clientY;
+
+        const p =
+            pt.matrixTransform(
+                svg.getScreenCTM().inverse()
+            );
+
+        return {
+            x: clamp(p.x,18,282),
+            y: clamp(p.y,18,202)
+        };
+
+    }
+
+
+    function render() {
+
+        ptsG.innerHTML = '';
+        pathG.innerHTML = '';
+
+        const all =
+            [START].concat(pts);
+
+
+        if (all.length > 1) {
+
+            let d =
+                'M ' +
+                all[0].x +
+                ' ' +
+                all[0].y;
+
+
+            for (
+                let i = 1;
+                i < all.length;
+                i++
+            ) {
+
+                d +=
+                    ' L ' +
+                    all[i].x +
+                    ' ' +
+                    all[i].y;
+
+            }
+
+
+            mk(
+                'path',
+                {
+                    d: d,
+                    stroke: '#5c6c65',
+                    'stroke-width': 1.5,
+                    'stroke-dasharray': '5 4',
+                    fill: 'none'
+                },
+                pathG
+            );
+
+        }
+
+
+        pts.forEach(
+            function (p,i) {
+
+                mk(
+                    'circle',
+                    {
+                        cx: p.x,
+                        cy: p.y,
+                        r: 5.5,
+                        fill:
+                            i === pts.length - 1
+                                ? '#ff6b6b'
+                                : '#e7ede9',
+                        stroke: '#0d1512',
+                        'stroke-width': 1
+                    },
+                    ptsG
+                );
+
+
+                const t =
+                    mk(
+                        'text',
+                        {
+                            x: p.x + 8,
+                            y: p.y - 7,
+                            fill: '#8fa39a',
+                            'font-size': 9,
+                            'font-family':
+                                'IBM Plex Mono, monospace'
+                        },
+                        ptsG
+                    );
+
+
+                t.textContent =
+                    String(i + 1);
+
+            }
+        );
+
+
+        mk(
+            'circle',
+            {
+                cx: START.x,
+                cy: START.y,
+                r: 3,
+                fill: '#7cd992'
+            },
+            ptsG
+        );
+
+
+        runBtn.disabled =
+            pts.length < 1 ||
+            animating;
+
+
+        if (!animating) {
+
+            caption.textContent =
+                pts.length === 0
+                    ? 'click the grid to add a stop'
+                    : pts.length +
+                      ' waypoint' +
+                      (pts.length > 1 ? 's' : '') +
+                      ' placed - press Plan & Drive';
+
+        }
+
+    }
+
+
+    stage.addEventListener(
+        'click',
+        function (e) {
+
+            if (
+                animating ||
+                pts.length >= 5
+            ) return;
+
+            pts.push(
+                svgPoint(e)
+            );
+
+            render();
+
+        }
+    );
+
+
+    clearBtn.addEventListener(
+        'click',
+        function () {
+
+            if (animating) return;
+
+            pts = [];
+
+            resetPose();
+
+            log.innerHTML =
+                '<span class="dim">' +
+                'planner idle — waiting for waypoints' +
+                '</span>';
+
+            render();
+
+        }
+    );
+
+
+    toggle.querySelectorAll('button')
+        .forEach(
+            function (btn) {
+
+                btn.addEventListener(
+                    'click',
+                    function () {
+
+                        if (animating) return;
+
+                        mode =
+                            btn.getAttribute(
+                                'data-mode'
+                            );
+
+                        toggle.querySelectorAll('button')
+                            .forEach(
+                                function (b) {
+                                    b.classList.toggle(
+                                        'active',
+                                        b === btn
+                                    );
+                                }
+                            );
+
+                        rtEl.textContent =
+                            mode === 'diff'
+                                ? '"two_wheel"'
+                                : '"four_wheel_mecanum"';
+
+                        cmsEl.textContent =
+                            mode === 'diff'
+                                ? 'false'
+                                : 'true';
+
+                        tsEl.textContent =
+                            mode === 'diff'
+                                ? 'rotate-then-drive'
+                                : 'strafe-direct';
+
+                        modeSub.textContent =
+                            'parameter in play: can_move_sideways = ' +
+                            (mode === 'diff'
+                                ? 'false'
+                                : 'true');
+
+                        buildRobot();
+
+                    }
+                );
+
+            }
+        );
+
+
+    runBtn.addEventListener(
+        'click',
+        function () {
+
+            if (
+                animating ||
+                pts.length < 1
+            ) return;
+
+            animating = true;
+
+            runBtn.disabled = true;
+            clearBtn.disabled = true;
+
+            toggle.querySelectorAll('button')
+                .forEach(
+                    function (b) {
+                        b.disabled = true;
+                    }
+                );
+
+
+            resetPose();
+
+            trailD =
+                'M' +
+                st.x.toFixed(1) +
+                ' ' +
+                st.y.toFixed(1);
+
+
+            let wp = 0,
+                phase = 'rotate',
+                last = null,
+                lastLog = 0;
+
+
+            function finish() {
+
+                animating = false;
+
+                clearBtn.disabled = false;
+
+                toggle.querySelectorAll('button')
+                    .forEach(
+                        function (b) {
+                            b.disabled = false;
+                        }
+                    );
+
+                caption.textContent =
+                    'goal reached — planner idle';
+
+                log.innerHTML =
+                    '<span class="dim">' +
+                    'planner idle — path complete. wheels stopped.' +
+                    '</span>';
+
+                render();
+
+            }
+
+
+            function frame(now) {
+
+                if (last === null) {
+                    last = now;
+                }
+
+                const dt =
+                    Math.min(
+                        (now - last) / 1000,
+                        0.05
+                    );
+
+                last = now;
+
+
+                const tgt = pts[wp];
+
+                const dx =
+                    tgt.x - st.x;
+
+                const dy =
+                    tgt.y - st.y;
+
+                const dpx =
+                    Math.hypot(dx,dy);
+
+                const dm =
+                    dpx / PXM;
+
+
+                if (dpx < 2.5) {
+
+                    wp++;
+
+                    phase = 'rotate';
+
+                    if (wp >= pts.length) {
+                        finish();
+                        return;
+                    }
+
+                    requestAnimationFrame(frame);
+                    return;
+
+                }
+
+
+                let v = 0,
+                    vy = 0,
+                    wRos = 0,
+                    wheels,
+                    html = '';
+
+
+                if (mode === 'diff') {
+
+                    const a =
+                        Math.atan2(dy,dx);
+
+                    const err =
+                        shortestDelta(
+                            st.h,
+                            a
+                        );
+
+
+                    if (
+                        phase === 'rotate' &&
+                        Math.abs(err) < 0.04
+                    ) {
+                        phase = 'drive';
+                    }
+
+
+                    if (phase === 'rotate') {
+
+                        let ws =
+                            clamp(
+                                3.2 * err,
+                                -2.4,
+                                2.4
+                            );
+
+                        if (
+                            Math.abs(ws) < 0.35
+                        ) {
+                            ws =
+                                0.35 *
+                                (err >= 0 ? 1 : -1);
+                        }
+
+                        st.h +=
+                            ws * dt;
+
+                        wRos = -ws;
+
+                        caption.textContent =
+                            'waypoint ' +
+                            (wp + 1) +
+                            ': rotating to face it';
+
+                    } else {
+
+                        v =
+                            clamp(
+                                dm * 2.2,
+                                0.04,
+                                VMAX
+                            );
+
+                        const ws =
+                            clamp(
+                                2.5 * err,
+                                -1,
+                                1
+                            );
+
+                        st.h +=
+                            ws * dt;
+
+                        wRos = -ws;
+
+                        st.x +=
+                            Math.cos(st.h) *
+                            v *
+                            PXM *
+                            dt;
+
+                        st.y +=
+                            Math.sin(st.h) *
+                            v *
+                            PXM *
+                            dt;
+
+                        caption.textContent =
+                            'waypoint ' +
+                            (wp + 1) +
+                            ': driving straight to it';
+
+                    }
+
+
+                    wheels =
+                        diffSpeeds(
+                            v,
+                            wRos
+                        );
+
+
+                    html =
+                        'velocity command: <b>vx=' +
+                        v.toFixed(2) +
+                        '</b> ω=' +
+                        signed(
+                            wRos * 180 / Math.PI,
+                            0
+                        ) +
+                        '°/s<br>kinematics → wheels: L=' +
+                        signed(wheels[0],1) +
+                        ' R=' +
+                        signed(wheels[1],1) +
+                        ' rad/s<br><span class="dim">' +
+                        (
+                            phase === 'rotate'
+                                ? 'diff-drive: no lateral velocity available'
+                                : 'heading controlled toward target'
+                        ) +
+                        '</span>';
+
+
+                } else {
+
+                    const ux =
+                        dx / dpx;
+
+                    const uy =
+                        dy / dpx;
+
+                    const sp =
+                        clamp(
+                            dm * 2.2,
+                            0.04,
+                            VMAX
+                        );
+
+                    const wvx =
+                        ux * sp;
+
+                    const wvy =
+                        uy * sp;
+
+
+                    st.x +=
+                        wvx *
+                        PXM *
+                        dt;
+
+                    st.y +=
+                        wvy *
+                        PXM *
+                        dt;
+
+
+                    v =
+                        wvx *
+                        Math.cos(st.h) +
+                        wvy *
+                        Math.sin(st.h);
+
+                    vy =
+                        wvx *
+                        Math.sin(st.h) -
+                        wvy *
+                        Math.cos(st.h);
+
+
+                    wheels =
+                        mecSpeeds(
+                            v,
+                            vy,
+                            0
+                        );
+
+
+                    caption.textContent =
+                        'waypoint ' +
+                        (wp + 1) +
+                        ': strafing straight at it, no turning';
+
+
+                    html =
+                        'velocity command: <b>vx=' +
+                        signed(v,2) +
+                        ' vy=' +
+                        signed(vy,2) +
+                        '</b> ω=0°/s<br>kinematics → wheels: FL=' +
+                        signed(wheels[0],1) +
+                        ' FR=' +
+                        signed(wheels[1],1) +
+                        '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RL=' +
+                        signed(wheels[2],1) +
+                        ' RR=' +
+                        signed(wheels[3],1) +
+                        ' rad/s<br><span class="dim">' +
+                        'mecanum drive: lateral velocity is available' +
+                        '</span>';
+
+                }
+
+
+                for (
+                    let i = 0;
+                    i < wheels.length;
+                    i++
+                ) {
+
+                    st.ph[i] +=
+                        wheels[i] *
+                        dt *
+                        RU;
+
+                }
+
+
+                robot.setPose(
+                    st.x,
+                    st.y,
+                    st.h
+                );
+
+                robot.setPhases(
+                    st.ph
+                );
+
+
+                trailD +=
+                    ' L' +
+                    st.x.toFixed(1) +
+                    ' ' +
+                    st.y.toFixed(1);
+
+                trailEl.setAttribute(
+                    'd',
+                    trailD
+                );
+
+
+                if (
+                    now - lastLog > 90
+                ) {
+
+                    log.innerHTML = html;
+
+                    lastLog = now;
+
+                }
+
+
+                requestAnimationFrame(frame);
+
+            }
+
+
+            requestAnimationFrame(frame);
+
+        }
+    );
+
+
+    buildRobot();
+    render();
+
+})();
+
+
+/* ==================================================================
+   SECTION 04: VELOCITY CONSOLE
+   ================================================================== */
+
+(function () {
+
+    const toggle = $('drive-toggle'),
+          layer = $('drive-robot-layer'),
+          trailEl = $('drive-trail'),
+          caption = $('drive-caption');
+
+    const sVx = $('s-vx'),
+          sVy = $('s-vy'),
+          sW = $('s-w'),
+          vVx = $('v-vx'),
+          vVy = $('v-vy'),
+          vW = $('v-w');
+
+    const ctrlVy = $('ctrl-vy'),
+          vyLock = $('vy-lock'),
+          paramRows = $('drive-param-rows'),
+          wheelRows = $('drive-wheels'),
+          stage = $('drive-stage');
+
+    const S = 1.3,
+          PXM = UPM * S;
+
+    let mode = 'diff',
+        robot = null,
+        trail = [],
+        visible = true,
+        wheelEls = [],
+        lastUi = 0;
+
+
+    const st = {
+        x: 150,
+        y: 110,
+        h: 0,
+        ph: [0,0,0,0]
+    };
+
+
+    function names() {
+
+        return mode === 'diff'
+            ? [
+                'wheel_left',
+                'wheel_right'
+            ]
+            : [
+                'wheel_front_left',
+                'wheel_front_right',
+                'wheel_rear_left',
+                'wheel_rear_right'
+            ];
+
+    }
+
+
+    function buildRobot() {
+
+        layer.innerHTML = '';
+
+        robot =
+            makeRobot(
+                mode,
+                layer,
+                S
+            );
+
+        st.ph =
+            [0,0,0,0];
+
+        robot.setPose(
+            st.x,
+            st.y,
+            st.h
+        );
+
+
+        paramRows.innerHTML =
+            '<div class="np-param-row">' +
+            '<span class="k">wheel_radius</span>' +
+            '<span class="v">0.033 m</span>' +
+            '</div>' +
+
+            (
+                mode === 'diff'
+                    ?
+                    '<div class="np-param-row">' +
+                    '<span class="k">wheel_separation</span>' +
+                    '<span class="v">0.14 m</span>' +
+                    '</div>'
+
+                    :
+
+                    '<div class="np-param-row">' +
+                    '<span class="k">wheel_lx_plus_ly</span>' +
+                    '<span class="v">0.109 m</span>' +
+                    '</div>'
+            );
+
+
+        wheelRows.innerHTML =
+            names()
+                .map(
+                    function (n) {
+
+                        return (
+                            '<div class="np-param-row">' +
+                            '<span class="k">' +
+                            n +
+                            '</span>' +
+                            '<span class="v">0.0 rad/s</span>' +
+                            '</div>'
+                        );
+
+                    }
+                )
+                .join('');
+
+
+        wheelEls =
+            Array.prototype.slice.call(
+                wheelRows.querySelectorAll('.v')
+            );
+
+    }
+
+
+    function readVals() {
+
+        const canSide =
+            mode === 'mec';
+
+        const vx =
+            (+sVx.value) / 100;
+
+        const vy =
+            canSide
+                ? (+sVy.value) / 100
+                : 0;
+
+        const w =
+            (+sW.value) *
+            Math.PI /
+            180;
+
+
+        vVx.textContent =
+            vx.toFixed(2) +
+            ' m/s';
+
+        vVy.textContent =
+            vy.toFixed(2) +
+            ' m/s';
+
+        vW.textContent =
+            Math.round(+sW.value) +
+            ' °/s';
+
+
+        ctrlVy.classList.toggle(
+            'disabled',
+            !canSide
+        );
+
+        vyLock.style.display =
+            canSide
+                ? 'none'
+                : 'inline-block';
+
+
+        const moving =
+            Math.abs(vx) > 0.01 ||
+            Math.abs(vy) > 0.01 ||
+            Math.abs(w) > 0.02;
+
+
+        caption.textContent =
+            !moving
+                ? 'stopped'
+
+                :
+
+                (
+                    Math.abs(vy) > 0.02 &&
+                    canSide
+                )
+
+                    ?
+                    'strafing sideways'
+
+                    :
+
+                    (
+                        Math.abs(vx) > 0.02
+                            ?
+                            (
+                                vx > 0
+                                    ? 'driving forward'
+                                    : 'reversing'
+                            )
+
+                            :
+
+                            'spinning in place'
+                    );
+
+
+        return {
+            vx: vx,
+            vy: vy,
+            w: w
+        };
+
+    }
+
+
+    [sVx,sVy,sW].forEach(
+        function (el) {
+
+            el.addEventListener(
+                'input',
+                readVals
+            );
+
+        }
+    );
+
+
+    toggle.querySelectorAll('button')
+        .forEach(
+            function (btn) {
+
+                btn.addEventListener(
+                    'click',
+                    function () {
+
+                        mode =
+                            btn.getAttribute(
+                                'data-mode'
+                            );
+
+
+                        toggle.querySelectorAll('button')
+                            .forEach(
+                                function (b) {
+
+                                    b.classList.toggle(
+                                        'active',
+                                        b === btn
+                                    );
+
+                                }
+                            );
+
+
+                        if (mode === 'diff') {
+                            sVy.value = 0;
+                        }
+
+
+                        buildRobot();
+                        readVals();
+
+                    }
+                );
+
+            }
+        );
+
+
+    shadow.querySelectorAll(
+        '[data-preset]'
+    ).forEach(
+        function (btn) {
+
+            btn.addEventListener(
+                'click',
+                function () {
+
+                    const p =
+                        btn.getAttribute(
+                            'data-preset'
+                        );
+
+
+                    if (p === 'fwd') {
+
+                        sVx.value = 20;
+                        sVy.value = 0;
+                        sW.value = 0;
+
+                    }
+
+
+                    if (p === 'rev') {
+
+                        sVx.value = -18;
+                        sVy.value = 0;
+                        sW.value = 0;
+
+                    }
+
+
+                    if (p === 'strafe') {
+
+                        sVx.value = 0;
+
+                        sVy.value =
+                            mode === 'mec'
+                                ? 20
+                                : 0;
+
+                        sW.value = 0;
+
+                    }
+
+
+                    if (p === 'spin') {
+
+                        sVx.value = 0;
+                        sVy.value = 0;
+                        sW.value = 70;
+
+                    }
+
+
+                    if (p === 'stop') {
+
+                        sVx.value = 0;
+                        sVy.value = 0;
+                        sW.value = 0;
+
+                    }
+
+
+                    readVals();
+
+                }
+            );
+
+        }
+    );
+
+
+    $('drive-reset')
+        .addEventListener(
+            'click',
+            function () {
+
+                st.x = 150;
+                st.y = 110;
+                st.h = 0;
+
+                trail = [];
+
+                trailEl.setAttribute(
+                    'd',
+                    ''
+                );
+
+                robot.setPose(
+                    st.x,
+                    st.y,
+                    st.h
+                );
+
+            }
+        );
+
+
+    if (
+        typeof IntersectionObserver !==
+        'undefined'
+    ) {
+
+        new IntersectionObserver(
+            function (es) {
+
+                visible =
+                    es[0].isIntersecting;
+
+            }
+        ).observe(stage);
+
+    }
+
+
+    let last = null;
+
+
+    function loop(now) {
+
+        if (last === null) {
+            last = now;
+        }
+
+
+        const dt =
+            Math.min(
+                (now - last) / 1000,
+                0.05
+            );
+
+
+        last = now;
+
+
+        if (visible) {
+
+            const c =
+                readVals();
+
+
+            st.h -=
+                c.w * dt;
+
+
+            const dx =
+                (
+                    c.vx * Math.cos(st.h) +
+                    c.vy * Math.sin(st.h)
+                ) *
+                PXM *
+                dt;
+
+
+            const dy =
+                (
+                    c.vx * Math.sin(st.h) -
+                    c.vy * Math.cos(st.h)
+                ) *
+                PXM *
+                dt;
+
+
+            st.x += dx;
+            st.y += dy;
+
+
+            let brk = false;
+
+
+            if (st.x < -14) {
+
+                st.x += 328;
+                brk = true;
+
+            } else if (st.x > 314) {
+
+                st.x -= 328;
+                brk = true;
+
+            }
+
+
+            if (st.y < -14) {
+
+                st.y += 248;
+                brk = true;
+
+            } else if (st.y > 234) {
+
+                st.y -= 248;
+                brk = true;
+
+            }
+
+
+            const ws =
+                mode === 'diff'
+                    ? diffSpeeds(
+                        c.vx,
+                        c.w
+                    )
+                    : mecSpeeds(
+                        c.vx,
+                        c.vy,
+                        c.w
+                    );
+
+
+            for (
+                let i = 0;
+                i < ws.length;
+                i++
+            ) {
+
+                st.ph[i] +=
+                    ws[i] *
+                    dt *
+                    RU;
+
+            }
+
+
+            robot.setPose(
+                st.x,
+                st.y,
+                st.h
+            );
+
+            robot.setPhases(
+                st.ph
+            );
+
+
+            if (
+                Math.abs(dx) +
+                Math.abs(dy) >
+                0.05 ||
+                brk
+            ) {
+
+                trail.push([
+                    st.x,
+                    st.y,
+                    brk
+                ]);
+
+
+                if (
+                    trail.length >
+                    600
+                ) {
+                    trail.shift();
+                }
+
+
+                trailEl.setAttribute(
+                    'd',
+                    trail
+                        .map(
+                            function (p,i) {
+
+                                return (
+                                    (
+                                        i === 0 ||
+                                        p[2]
+                                    )
+                                        ? 'M'
+                                        : 'L'
+                                ) +
+
+                                p[0].toFixed(1) +
+                                ' ' +
+                                p[1].toFixed(1);
+
+                            }
+                        )
+                        .join(' ')
+                );
+
+            }
+
+
+            if (
+                now - lastUi >
+                100
+            ) {
+
+                lastUi = now;
+
+
+                for (
+                    let i = 0;
+                    i < ws.length;
+                    i++
+                ) {
+
+                    if (wheelEls[i]) {
+
+                        wheelEls[i].textContent =
+                            signed(
+                                ws[i],
+                                1
+                            ) +
+                            ' rad/s';
+
+                    }
+
+                }
+
+            }
+
+        }
+
+
+        requestAnimationFrame(
+            loop
+        );
+
+    }
+
+
+    buildRobot();
+
+    readVals();
+
+    requestAnimationFrame(loop);
+
+})();
+
+
+/* ==================================================================
+   SECTION 05: OBSTACLE AVOIDANCE
+   ================================================================== */
+
+(function () {
+
+    const toggle = $('oa-toggle'),
+          layer = $('oa-robot-layer'),
+          bubble = $('oa-margin'),
+          caption = $('oa-caption');
+
+    const runBtn = $('oa-run'),
+          resetBtn = $('oa-reset'),
+          log = $('oa-log'),
+          sub = $('oa-sub');
+
+    const fpEl = $('oa-fp'),
+          marginEl = $('oa-margin-val'),
+          stopEl = $('oa-stop-val'),
+          ray = $('oa-ray'),
+          distTxt = $('oa-dist');
+
+    const PXM = 140,
+          OBS_X = 236,
+          START_X = 100,
+          Y = 110;
+
+
+    const presets = {
+
+        small: {
+            footprint: 0.20,
+            margin: 0.12
+        },
+
+        large: {
+            footprint: 0.55,
+            margin: 0.35
+        }
+
+    };
+
+
+    let mode = 'small',
+        animating = false,
+        robot = null,
+        s = 1;
+
+
+    const ph = [0,0];
+
+
+    function stopM(p) {
+
+        return p.footprint / 2 +
+               p.margin;
+
+    }
+
+
+    function build() {
+
+        const p =
+            presets[mode];
+
+
+        s =
+            p.footprint *
+            PXM /
+            44;
+
+
+        layer.innerHTML = '';
+
+
+        robot =
+            makeRobot(
+                'diff',
+                layer,
+                s
+            );
+
+
+        fpEl.textContent =
+            p.footprint.toFixed(2) +
+            ' m';
+
+
+        marginEl.textContent =
+            p.margin.toFixed(2) +
+            ' m';
+
+
+        stopEl.textContent =
+            stopM(p).toFixed(2) +
+            ' m';
+
+
+        sub.textContent =
+            'parameter in play: safety_margin = ' +
+            p.margin.toFixed(2) +
+            ' m';
+
+
+        bubble.setAttribute(
+            'r',
+            (
+                stopM(p) *
+                PXM
+            ).toFixed(1)
+        );
+
+
+        place(
+            START_X,
+            0
+        );
+
+
+        caption.textContent =
+            'press Approach to drive toward the obstacle';
+
+
+        log.innerHTML =
+            '<span class="dim">' +
+            'idle — waiting to approach' +
+            '</span>';
+
+    }
+
+
+    function place(x,v) {
+
+        robot.setPose(
+            x,
+            Y,
+            0
+        );
+
+
+        robot.setPhases([
+            ph[0],
+            ph[0]
+        ]);
+
+
+        bubble.setAttribute(
+            'cx',
+            x.toFixed(1)
+        );
+
+
+        bubble.setAttribute(
+            'cy',
+            Y
+        );
+
+
+        const front =
+            x +
+            22 *
+            s;
+
+
+        ray.setAttribute(
+            'x1',
+            front.toFixed(1)
+        );
+
+
+        ray.setAttribute(
+            'y1',
+            Y
+        );
+
+
+        distTxt.setAttribute(
+            'x',
+            (
+                (
+                    front +
+                    OBS_X
+                ) / 2
+            ).toFixed(1)
+        );
+
+
+        distTxt.textContent =
+            (
+                (
+                    OBS_X -
+                    front
+                ) / PXM
+            ).toFixed(2) +
+            ' m';
+
+    }
+
+
+    toggle.querySelectorAll('button')
+        .forEach(
+            function (btn) {
+
+                btn.addEventListener(
+                    'click',
+                    function () {
+
+                        if (animating) return;
+
+                        mode =
+                            btn.getAttribute(
+                                'data-mode'
+                            );
+
+
+                        toggle.querySelectorAll('button')
+                            .forEach(
+                                function (b) {
+
+                                    b.classList.toggle(
+                                        'active',
+                                        b === btn
+                                    );
+
+                                }
+                            );
+
+
+                        ph[0] = 0;
+
+                        build();
+
+                    }
+                );
+
+            }
+        );
+
+
+    resetBtn.addEventListener(
+        'click',
+        function () {
+
+            if (!animating) {
+
+                ph[0] = 0;
+
+                build();
+
+            }
+
+        }
+    );
+
+
+    runBtn.addEventListener(
+        'click',
+        function () {
+
+            if (animating) return;
+
+            animating = true;
+
+            runBtn.disabled = true;
+
+
+            toggle.querySelectorAll('button')
+                .forEach(
+                    function (b) {
+                        b.disabled = true;
+                    }
+                );
+
+
+            ph[0] = 0;
+
+            build();
+
+
+            const p =
+                presets[mode];
+
+
+            const stopPx =
+                stopM(p) *
+                PXM;
+
+
+            const targetX =
+                OBS_X -
+                stopPx;
+
+
+            const VMAX =
+                0.45 *
+                PXM;
+
+
+            const A =
+                0.9 *
+                PXM;
+
+
+            let x = START_X,
+                v = 0,
+                last = null,
+                lastLog = 0;
+
+
+            caption.textContent =
+                'driving forward — watching stop_distance';
+
+
+            function frame(now) {
+
+                if (last === null) {
+                    last = now;
+                }
+
+
+                const dt =
+                    Math.min(
+                        (now - last) /
+                        1000,
+                        0.05
+                    );
+
+
+                last = now;
+
+
+                const rem =
+                    targetX -
+                    x;
+
+
+                if (rem <= 0.4) {
+
+                    x =
+                        targetX;
+
+
+                    place(
+                        x,
+                        0
+                    );
+
+
+                    animating = false;
+
+                    runBtn.disabled = false;
+
+
+                    toggle.querySelectorAll('button')
+                        .forEach(
+                            function (b) {
+                                b.disabled = false;
+                            }
+                        );
+
+
+                    caption.textContent =
+                        'stopped — safety_margin reached (' +
+                        p.margin.toFixed(2) +
+                        ' m clear)';
+
+
+                    log.innerHTML =
+                        'cmd: <b>vx=0.00</b><br>' +
+                        '<span class="dim">' +
+                        'obstacle within safety_margin — halted' +
+                        '</span>';
+
+
+                    return;
+
+                }
+
+
+                v =
+                    Math.min(
+                        v + A * dt,
+                        VMAX,
+                        Math.sqrt(
+                            2 *
+                            A *
+                            rem
+                        )
+                    );
+
+
+                x +=
+                    v *
+                    dt;
+
+
+                ph[0] +=
+                    v *
+                    dt /
+                    s;
+
+
+                place(
+                    x,
+                    v
+                );
+
+
+                if (
+                    now - lastLog >
+                    90
+                ) {
+
+                    lastLog = now;
+
+
+                    log.innerHTML =
+                        'cmd: <b>vx=' +
+                        (
+                            v / PXM
+                        ).toFixed(2) +
+                        ' m/s</b><br>' +
+
+                        'gap to obstacle: ' +
+                        (
+                            (
+                                OBS_X -
+                                (
+                                    x +
+                                    22 *
+                                    s
+                                )
+                            ) /
+                            PXM
+                        ).toFixed(2) +
+                        ' m<br>' +
+
+                        '<span class="dim">' +
+                        'braking so it stops at stop_distance = ' +
+                        stopM(p).toFixed(2) +
+                        ' m' +
+                        '</span>';
+
+                }
+
+
+                requestAnimationFrame(
+                    frame
+                );
+
+            }
+
+
+            requestAnimationFrame(
+                frame
+            );
+
+        }
+    );
+
+
+    build();
+
+})();
+
+})();
+</script>
+
+<script>
+(function(){function send(){parent.postMessage({taWidget:location.pathname,h:document.documentElement.scrollHeight},'*')}
+new ResizeObserver(send).observe(document.documentElement);addEventListener('load',send);setInterval(send,1500);
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href]');if(a&&!a.target){a.target='_top'}});})();
+</script></body></html>

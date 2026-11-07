@@ -1,0 +1,39 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="/assets/widget-base.css">
+</head><body><style>#plcmap{--bg:#0a121e;--pn:#122032;--pn2:#0d1826;--ink:#eef3fa;--dim:#a7b8cd;--fnt:#6b7f96;--ln:rgba(224,234,245,.12);--st:rgba(224,234,245,.22);--or:#ff8a3d;--bl:#5ab4ff;--ok:#66e3b0;font:17px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);max-width:1240px;width:100%;margin:0 auto;border-radius:14px;overflow:hidden;-webkit-text-size-adjust:100%}
+#plcmap,#plcmap *{box-sizing:border-box}
+#plcmap h1,#plcmap h2,#plcmap p,#plcmap ul{margin:0;padding:0}
+#plcmap .hero{padding:40px 26px 28px;border-bottom:1px solid var(--st)}
+#plcmap .kick{font:700 11px ui-monospace,Menlo,Consolas,monospace;letter-spacing:.16em;color:var(--bl);text-transform:uppercase}
+#plcmap .hero h1{font-size:clamp(28px,4.6vw,46px);line-height:1.08;letter-spacing:-.02em;margin:12px 0 14px;color:#fff}
+#plcmap .hero h1 span{color:var(--or)}
+#plcmap .hero>p{max-width:860px;color:var(--dim);font-size:17px;margin-bottom:10px}
+#plcmap .jr{display:flex;align-items:stretch;gap:10px;margin:20px 0;flex-wrap:wrap}
+#plcmap .jn{flex:1 1 200px;background:var(--pn);border:1px solid var(--st);border-radius:12px;padding:12px 14px}
+#plcmap .jn b{display:block;font:700 11px ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--or)}
+#plcmap .jn span{display:block;font-size:18px;font-weight:700;color:#fff;margin:2px 0}
+
+#plcmap .ja{align-self:center;color:var(--or);font:700 22px ui-monospace,monospace}
+#plcmap .cur{padding:8px 26px 30px}
+#plcmap .stg{margin-top:26px;padding-top:18px;border-top:1px solid var(--st)}
+#plcmap .sk{font:700 11px ui-monospace,monospace;letter-spacing:.16em;color:var(--or);text-transform:uppercase}
+#plcmap .stg h2{font-size:28px;color:#fff;line-height:1.15;margin:4px 0}
+#plcmap .stg>p{color:var(--dim);max-width:860px;margin-bottom:6px}
+
+#plcmap .stg>p.sd{margin-bottom:14px}
+#plcmap .tp{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+#plcmap .tc{background:var(--pn);border:1px solid var(--st);border-radius:12px;padding:14px 16px;border-top:3px solid var(--or)}
+#plcmap .tc b{display:block;font-size:18px;color:#fff;margin-bottom:4px}
+#plcmap .tc span{display:block;font-size:14px;color:var(--dim);line-height:1.5}
+@media(max-width:700px){#plcmap .hero,#plcmap .cur{padding-left:14px;padding-right:14px}#plcmap .ja{display:none}}</style>
+<div id="plcmap">
+<div class="hero"><div class="kick">Industrial automation series</div><h1>Learn PLC step by step, <span>starting from the basics</span></h1><p>In this series we are going to learn the PLC. But a PLC does not work alone. It switches motors, reads sensors and drives relays through wires and panels, so before we write a single program we cover the basics we need.</p><p>First we learn the electricity and the industrial parts around a PLC. Then we learn the PLC itself, one idea at a time. We finish by building one complete small project.</p><div class="jr"><div class="jn"><b>Stage 1</b><span>Basics before PLC</span></div><div class="ja">→</div><div class="jn"><b>Stage 2</b><span>Learning PLC</span></div><div class="ja">→</div><div class="jn"><b>Stage 3</b><span>Finish</span></div></div></div>
+<div class="cur"><div class="stg"><div class="sk">Stage 1</div><h2>Basics before PLC</h2><p class="sd">A PLC is only the brain. It switches motors, reads sensors and talks to relays through wires, so we first learn what it is controlling.</p><div class="tp"><div class="tc"><b>Electricity basics</b><span>Voltage, current, resistance, AC and DC, power supplies</span></div><div class="tc"><b>Protecting the circuit</b><span>Fuses, breakers and overloads</span></div><div class="tc"><b>Switching and motors</b><span>Relays, contactors, buttons and motors</span></div><div class="tc"><b>Sensors and signals</b><span>Digital and analog signals, common sensors, reading drawings</span></div></div></div><div class="stg"><div class="sk">Stage 2</div><h2>Learning PLC</h2><p class="sd">Now we meet the PLC itself, then program it step by step.</p><div class="tp"><div class="tc"><b>Meet the PLC</b><span>What it is, its inputs and outputs, how it scans</span></div><div class="tc"><b>Ladder logic</b><span>The main PLC language, with timers and counters</span></div><div class="tc"><b>Blocks and data</b><span>Logic, compare, math and data types</span></div><div class="tc"><b>Other PLC languages</b><span>Function blocks, structured text and state machines</span></div><div class="tc"><b>Operator screens</b><span>Building a simple HMI</span></div></div></div><div class="stg"><div class="sk">Stage 3</div><h2>Finish</h2><p class="sd">We put everything together in one complete small project.</p><div class="tp"><div class="tc"><b>Final project</b><span>Plan it, wire it, program it and test it</span></div></div></div></div>
+</div>
+
+<script>
+(function(){function send(){parent.postMessage({taWidget:location.pathname,h:document.documentElement.scrollHeight},'*')}
+new ResizeObserver(send).observe(document.documentElement);addEventListener('load',send);setInterval(send,1500);
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href]');if(a&&!a.target){a.target='_top'}});})();
+</script></body></html>

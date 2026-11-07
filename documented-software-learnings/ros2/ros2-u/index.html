@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Visualize The Robot In RVIZ2 | ROS 2 | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="In this chapter, we will use ROS 2 parameters, robot_state_publisher , joint_state_publisher_gui , and RViz2 together to visualize our robot. The goal is to…">
+<link rel="canonical" href="https://techarcanist.com/documented-software-learnings/ros2/ros2-u/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="Visualize The Robot In RVIZ2 | ROS 2">
+<meta property="og:description" content="In this chapter, we will use ROS 2 parameters, robot_state_publisher , joint_state_publisher_gui , and RViz2 together to visualize our robot. The goal is to…">
+<meta property="og:url" content="https://techarcanist.com/documented-software-learnings/ros2/ros2-u/">
+<meta property="og:image" content="https://techarcanist.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=a6e775a3ba">
+<link rel="stylesheet" href="/assets/home.css?v=a6e775a3ba">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/" aria-current="page">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap reader">
+  <aside class="rd-nav" id="rd-nav">
+    <a class="rd-series" href="/documented-software-learnings/ros2/"><span class="label">Series</span>ROS 2</a>
+    <ol>
+      <li><a href="/documented-software-learnings/ros2/ros2_a/"><span class="mono">01</span>Installing Ubuntu Desktop (Dual Boot with Windows)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_b/"><span class="mono">02</span>ROS 2 Jazzy Installation on Ubuntu (Step-by-Step)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_c/"><span class="mono">03</span>Development Environment Setup for ROS 2 Jazzy on Ubuntu (With Clear Explanations)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_d/"><span class="mono">04</span>ROS 2 Fundamentals: Architecture, Communication, Packages, and Workspaces</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_e/"><span class="mono">05</span>ROS 2 Workspace &amp; Package Creation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_f/"><span class="mono">06</span>ROS 2 Python Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_g/"><span class="mono">07</span>ROS 2 C++ Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_h/"><span class="mono">08</span>ROS 2 Python Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_i/"><span class="mono">09</span>ROS 2 C++ Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_j/"><span class="mono">10</span>Robot Locomotion: Introduction</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_k/"><span class="mono">11</span>Wheeled Locomotion Architectures</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_l/"><span class="mono">12</span>Rolling Friction &amp; Wheeled Locomotion Efficiency</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_m/"><span class="mono">13</span>Introduction to Robot Simulation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_n/"><span class="mono">14</span>URDF</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_o/"><span class="mono">15</span>Create a URDF Model</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_p/"><span class="mono">16</span>Rviz</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_q/"><span class="mono">17</span>Node Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_r/"><span class="mono">18</span>Python Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_s/"><span class="mono">19</span>C++ Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_t/"><span class="mono">20</span>ROS 2 Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-u/" aria-current="page"><span class="mono">21</span>Visualize The Robot In RVIZ2</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-v/"><span class="mono">22</span>Launch Files</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-w/"><span class="mono">23</span>ROS 2 Launch Files: Visualizing the Robot with One Command</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-x/"><span class="mono">24</span>Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-y/"><span class="mono">25</span>Simulating the Robot in Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-z/"><span class="mono">26</span>ROS 2 Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-aa/"><span class="mono">27</span>Control Types</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ab/"><span class="mono">28</span>ROS 2 Control: Prepare the Robot for Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ac/"><span class="mono">29</span>Understanding ROS 2 Control | Explanation of Chapter 28</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ad/"><span class="mono">30</span>ROS 2 Control: Moving the BumperBot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ae/"><span class="mono">31</span>Robot Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-af/"><span class="mono">32</span>Pose of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_af/"><span class="mono">33</span>Translation Vector</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ag/"><span class="mono">34</span>Introduction to Turtlesim</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ah/"><span class="mono">35</span>Translation Vector Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ai/"><span class="mono">36</span>Translation Vector Between Two Turtles: CPP</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_aj/"><span class="mono">37</span>Rotation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ak/"><span class="mono">38</span>Rotation Matrix Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_al/"><span class="mono">39</span>Transformation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_am/"><span class="mono">40</span>Differential Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-41/"><span class="mono">41</span>Velocity of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-42/"><span class="mono">42</span>Simple Speed Controller: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-43/"><span class="mono">43</span>Launch the Simple Speed Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-44/"><span class="mono">44</span>Teleoperating the BumperBot with a Joystick</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-45/"><span class="mono">45</span>ROS 2 Diff Drive Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-46/"><span class="mono">46</span>TF 2 Library</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-47/"><span class="mono">47</span>Operation With Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-48/"><span class="mono">48</span>Static &amp; Dynamic Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-49/"><span class="mono">49</span>Simple TF2 Static Broadcaster</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-50/"><span class="mono">50</span>Simple TF2 Broadcaster: Static and Dynamic Transforms</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-51/"><span class="mono">51</span>ROS 2 Services</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-52/"><span class="mono">52</span>Service Server in Python: AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-53/"><span class="mono">53</span>Service Client in Python: Calling AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-54/"><span class="mono">54</span>Simple TF2 Listener in Python: a get_transform Service</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-55/"><span class="mono">55</span>Euler Angles and Quaternions</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-56/"><span class="mono">56</span>Euler to Quaternion: Turning the Robot with tf_transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-57/"><span class="mono">57</span>tf2 Tools: view_frames and tf2_echo</a></li>
+    </ol>
+  </aside>
+  <article class="rd-main">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/documented-software-learnings/">Library</a><span>/</span><a href="/documented-software-learnings/ros2/">ROS 2</a><span>/</span><span>21</span></nav>
+    <button class="btn btn-sm btn-line rd-tg" type="button" id="rd-tg">All chapters</button>
+<p class="sh-label mono"><span>21</span>Chapter 21 of 57 · 4 min read</p>    <h1>Visualize The Robot In RVIZ2</h1>
+<div class="rd-prog" aria-hidden="true"><i style="width:36.8%"></i></div>    <div class="prose">
+<div class="col">
+<p>In this chapter, we will use <strong>ROS 2 parameters, <code>robot_state_publisher</code>, <code>joint_state_publisher_gui</code>, and RViz2</strong> together to visualize our robot.</p>
+<p>The goal is to:</p>
+<ul>
+<li>Publish the robot’s URDF model</li>
+<li>Publish the robot’s joint states</li>
+<li>Visualize the robot’s TF frames</li>
+<li>Display the robot meshes</li>
+<li>Move the wheels using the joint-state sliders</li>
+<li>Save the RViz2 configuration for use later</li>
+</ul>
+<blockquote>
+<p><strong>Note:</strong> This practical uses multiple terminals because each ROS 2 node needs to keep running while we work with RViz2.</p>
+</blockquote>
+<h2 id="source-the-workspace">Source the workspace</h2>
+<p>Before running our ROS 2 node, we need to source the workspace.</p>
+<figure class="img"><img src="/uploads/wp/2026/09/image-56.png" alt="" loading="lazy" decoding="async" width="876" height="182"></figure>
+<p>Open a terminal and go to your workspace:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">cd bumperbot_ws</span></code></pre></div>
+<p>Then source the workspace:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">. install/setup.bash </span></code></pre></div>
+<h2 id="start-robot-state-publisher">Start <code>robot_state_publisher</code></h2>
+<p><code>robot_state_publisher</code> is a general-purpose ROS 2 node that publishes the robot’s state based on its URDF description.</p>
+<p>In our case, we need to provide it with the URDF model of our BumperBot.</p>
+<p>Our robot model is written using <strong>Xacro</strong>, so we use the <code>xacro</code> command to convert it into the URDF representation required by <code>robot_state_publisher</code>.</p>
+<p>Run:</p>
+<figure class="img"><img src="/uploads/wp/2026/09/image-67.png" alt="" loading="lazy" decoding="async" width="1357" height="94"></figure>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln">ros2 run robot_state_publisher robot_state_publisher --ros-args -p robot_description:="$(xacro /home/techarcanist/bumperbot_ws/src/bumperbot_description/urdf/bumperbot.urdf.xacro)"</span></code></pre></div>
+<h2 id="understanding-the-command">Understanding the command</h2>
+<p>The important part is:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">--ros-args -p robot_description:=...</span></code></pre></div>
+<p>Here we are using a <strong>ROS 2 parameter</strong> to provide the robot description to the node.</p>
+<p>The value is generated by:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">$(xacro /home/techarcanist/bumperbot_ws/src/bumperbot_description/urdf/bumperbot.urdf.xacro)</span></code></pre></div>
+<p>So the process is:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">bumperbot.urdf.xacro</span>
+<span class="ln">        │</span>
+<span class="ln">        │ xacro</span>
+<span class="ln">        ▼</span>
+<span class="ln">     URDF model</span>
+<span class="ln">        │</span>
+<span class="ln">        │ robot_description parameter</span>
+<span class="ln">        ▼</span>
+<span class="ln">robot_state_publisher</span>
+<span class="ln">        │</span>
+<span class="ln">        ▼</span>
+<span class="ln">ROS 2 topics</span></code></pre></div>
+<p>The <code>robot_state_publisher</code> node can then use this robot description to publish the information required to visualize the robot.</p>
+<blockquote>
+<p><strong>Keep this terminal running.</strong></p>
+</blockquote>
+<h2 id="start-joint-state-publisher-gui">Start <code>joint_state_publisher_gui</code></h2>
+<p>Open a <strong>new terminal</strong>. ctrl+shift+O</p>
+<figure class="img"><img src="/uploads/wp/2026/09/image-69.png" alt="" loading="lazy" decoding="async" width="1343" height="113"></figure>
+<p>Source the workspace again:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">. install/setup.bash</span></code></pre></div>
+<p>Now run:</p>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln">ros2 run joint_state_publisher_gui joint_state_publisher_gui</span></code></pre></div>
+<figure class="img"><img src="/uploads/wp/2026/09/image-70.png" alt="" loading="lazy" decoding="async" width="413" height="274"></figure>
+<p>The <code>joint_state_publisher_gui</code> node provides a graphical interface containing sliders for the movable joints of the robot.</p>
+<p>For our robot, the GUI contains sliders for:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">wheel_left_joint</span>
+<span class="ln">wheel_right_joint</span></code></pre></div>
+<p>These sliders allow us to change the joint positions manually.</p>
+<blockquote>
+<p><strong>Keep this terminal and the GUI running.</strong></p>
+</blockquote>
+<h2 id="open-another-terminal-for-rviz2">Open Another Terminal for RViz2</h2>
+<p>Now open <strong>one more terminal</strong>.</p>
+<figure class="img"><img src="/uploads/wp/2026/09/image-71.png" alt="" loading="lazy" decoding="async" width="1279" height="402"></figure>
+<p>Source the workspace again:</p>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln">. install/setup.bash </span></code></pre></div>
+<h3>Why do we need another terminal?</h3>
+<p>At this point we have:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">Terminal 1</span>
+<span class="ln">└── robot_state_publisher</span>
+<span class="ln"></span>
+<span class="ln">Terminal 2</span>
+<span class="ln">└── joint_state_publisher_gui</span>
+<span class="ln"></span>
+<span class="ln">Terminal 3</span>
+<span class="ln">└── RViz2</span></code></pre></div>
+<p>Each node needs to remain running, so we use separate terminals.</p>
+<h2 id="start-rviz2">Start RViz2</h2>
+<p>Now start RViz2:</p>
+<figure class="img"><img src="/uploads/wp/2026/09/image-72.png" alt="" loading="lazy" decoding="async" width="1217" height="458"></figure>
+<div class="codeblock"><pre class="code"><code><span class="ln">ros2 run rviz2 rviz2</span></code></pre></div>
+<p>RViz2 will open with its graphical interface.</p>
+<figure class="img"><img src="/uploads/wp/2026/09/image-74.png" alt="" loading="lazy" decoding="async" width="1359" height="653"></figure>
+<p>At first, the robot may not be visible and you may see an error related to the <code>map</code> frame.</p>
+<h2 id="fix-the-fixed-frame-error">Fix the Fixed Frame Error</h2>
+<figure class="img"><img src="/uploads/wp/2026/09/image-75.png" alt="" loading="lazy" decoding="async" width="1235" height="463"></figure>
+<p>The default <strong>Fixed Frame</strong> in RViz2 is usually:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">map</span></code></pre></div>
+<p>However, our robot does not currently have a <code>map</code> frame.</p>
+<p>For this visualization, we should use the robot’s:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">base_footprint</span></code></pre></div>
+<h3>Change the Fixed Frame</h3>
+<p>In the <strong>Global Options</strong> section:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">Fixed Frame: map</span></code></pre></div>
+<p>change it to:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">Fixed Frame: base_footprint</span></code></pre></div>
+<p>Once this is changed, the frame error should disappear.</p>
+<h3>Why <code>base_footprint</code>?</h3>
+<p><code>base_footprint</code> represents the robot’s base reference frame at ground level.</p>
+<p>Since we are visualizing the robot relative to its own base, it is an appropriate fixed frame for this setup.</p>
+<h2 id="add-the-tf-plugin">Add the TF Plugin</h2>
+<figure class="img"><img src="/uploads/wp/2026/09/image-76.png" alt="" loading="lazy" decoding="async" width="1066" height="552"></figure>
+<p>Now we will visualize the robot’s TF frames.</p>
+<p>Click:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">Add</span></code></pre></div>
+<figure class="img"><img src="/uploads/wp/2026/09/image-77.png" alt="" loading="lazy" decoding="async" width="771" height="645"></figure>
+<p>In the plugin selection window, select:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">TF</span></code></pre></div>
+<p>and click:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">OK</span></code></pre></div>
+<p>select TF and click on OK</p>
+<h2 id="visualize-the-robot-frames">Visualize the Robot Frames</h2>
+<figure class="img"><img src="/uploads/wp/2026/09/image-78.png" alt="" loading="lazy" decoding="async" width="1184" height="586"></figure>
+<p>You should now be able to see frames corresponding to different parts of the robot, such as:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">base_footprint</span>
+<span class="ln">      │</span>
+<span class="ln">      ▼</span>
+<span class="ln">  base_link</span>
+<span class="ln">   /     \</span>
+<span class="ln">  ▼       ▼</span>
+<span class="ln">wheels   caster wheels</span></code></pre></div>
+<p>The TF information represents the <strong>position and orientation of the robot’s different links/frames</strong>.</p>
+<p>The TF plugin also provides an option to display the names of the frames.</p>
+<p>Enable:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">Show Names</span></code></pre></div>
+<h2 id="select-individual-frames">Select Individual Frames</h2>
+<figure class="img"><img src="/uploads/wp/2026/09/image-79.png" alt="" loading="lazy" decoding="async" width="990" height="392"></figure>
+<p>The TF plugin also allows you to control which frames are displayed.</p>
+<p>Go to the <strong>Frames</strong> section of the TF plugin.</p>
+<p>You can hide or show individual frames depending on what you want to inspect.</p>
+<p>This can be useful when the robot has many frames and the visualization becomes difficult to read.</p>
+<h2 id="add-the-robot-model-plugin">Add the Robot Model Plugin</h2>
+<figure class="img"><img src="/uploads/wp/2026/09/image-80.png" alt="" loading="lazy" decoding="async" width="710" height="681"></figure>
+<p>The TF plugin shows the robot’s <strong>frames</strong>, but we also want to see the actual robot meshes.</p>
+<p>For this, we need the:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">RobotModel</span></code></pre></div>
+<p>plugin.</p>
+<p>Click:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">Add</span></code></pre></div>
+<p>Select:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">RobotModel</span></code></pre></div>
+<p>and click:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">OK</span></code></pre></div>
+<h2 id="configure-the-robot-model">Configure the Robot Model</h2>
+<figure class="img"><img src="/uploads/wp/2026/09/image-81.png" alt="" loading="lazy" decoding="async" width="1088" height="536"></figure>
+<p>After adding the RobotModel plugin, we need to tell it where the robot description is coming from.</p>
+<p>In the RobotModel settings, find:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">Description Source</span></code></pre></div>
+<p>Set it to:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">Topic</span></code></pre></div>
+<p>Then select the robot description topic:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">/robot_description</span></code></pre></div>
+<figure class="img"><img src="/uploads/wp/2026/09/image-82.png" alt="" loading="lazy" decoding="async" width="1053" height="523"></figure>
+<p>Once <code>/robot_description</code> is selected, RViz2 can use the robot description to display the robot model.</p>
+<h2 id="move-the-robot-using-joint-state-publisher-gui">Move the Robot Using Joint State Publisher GUI</h2>
+<figure class="img"><img src="/uploads/wp/2026/09/image-83.png" alt="" loading="lazy" decoding="async" width="983" height="621"></figure>
+<p>We can now use the <code>joint_state_publisher_gui</code> that we started earlier.</p>
+<p>For example, moving the:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">wheel_right_joint</span></code></pre></div>
+<p>slider changes the rotation of the right wheel.</p>
+<p>Similarly, moving:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">wheel_left_joint</span></code></pre></div>
+<p>changes the rotation of the left wheel.</p>
+<h2 id="save-the-rviz2-configuration">Save the RViz2 Configuration</h2>
+<figure class="img"><img src="/uploads/wp/2026/09/image-84.png" alt="" loading="lazy" decoding="async" width="1194" height="936"></figure>
+<p>At this point, we have configured RViz2 with:</p>
+<ul>
+<li><code>base_footprint</code> as the Fixed Frame</li>
+<li>TF plugin</li>
+<li>RobotModel plugin</li>
+<li><code>/robot_description</code> as the RobotModel source</li>
+<li>Our desired frame visibility settings</li>
+</ul>
+<p>It would be inconvenient to configure all of this again every time we start RViz2.</p>
+<p>So we can save the configuration.</p>
+<p>Go to:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">File → Save Config As</span></code></pre></div>
+<p>Navigate to:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">bumperbot_ws/src/bumperbot_description/rviz</span></code></pre></div>
+<p>Save the configuration as:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">display.rviz</span></code></pre></div>
+<p>Your file will be located at:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">/home/techarcanist/bumperbot_ws/src/bumperbot_description/rviz/display.rviz</span></code></pre></div>
+<h3>Recommended folder structure</h3>
+<div class="codeblock"><pre class="code"><code><span class="ln">bumperbot_description/</span>
+<span class="ln">├── urdf/</span>
+<span class="ln">│   └── bumperbot.urdf.xacro</span>
+<span class="ln">│</span>
+<span class="ln">└── rviz/</span>
+<span class="ln">    └── display.rviz</span></code></pre></div>
+<p>The <code>display.rviz</code> file stores the RViz2 visualization configuration we just created.</p>
+</div>
+</div>
+    <nav class="pager" aria-label="Chapters">
+<a href="/documented-software-learnings/ros2/ros2_t/"><span class="mono">Chapter 20</span>ROS 2 Parameters</a><a class="nx" href="/documented-software-learnings/ros2/ros2-v/"><span class="mono">Chapter 22</span>Launch Files</a>    </nav>
+  </article>
+</div>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/plc/">PLC &amp; Industrial Automation</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=a6e775a3ba" defer></script>
+<script src="/assets/home.js?v=a6e775a3ba" defer></script>
+</body>
+</html>

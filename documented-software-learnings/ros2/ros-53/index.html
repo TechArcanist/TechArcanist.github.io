@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Service Client in Python: Calling AddTwoInts | ROS 2 | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="Introduction In the previous chapter we wrote a service server that adds two numbers, and called it from the terminal with ros2 service call . Now we write the…">
+<link rel="canonical" href="https://techarcanist.com/documented-software-learnings/ros2/ros-53/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="Service Client in Python: Calling AddTwoInts | ROS 2">
+<meta property="og:description" content="Introduction In the previous chapter we wrote a service server that adds two numbers, and called it from the terminal with ros2 service call . Now we write the…">
+<meta property="og:url" content="https://techarcanist.com/documented-software-learnings/ros2/ros-53/">
+<meta property="og:image" content="https://techarcanist.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=a6e775a3ba">
+<link rel="stylesheet" href="/assets/home.css?v=a6e775a3ba">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/" aria-current="page">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap reader wide">
+  <aside class="rd-nav" id="rd-nav">
+    <a class="rd-series" href="/documented-software-learnings/ros2/"><span class="label">Series</span>ROS 2</a>
+    <ol>
+      <li><a href="/documented-software-learnings/ros2/ros2_a/"><span class="mono">01</span>Installing Ubuntu Desktop (Dual Boot with Windows)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_b/"><span class="mono">02</span>ROS 2 Jazzy Installation on Ubuntu (Step-by-Step)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_c/"><span class="mono">03</span>Development Environment Setup for ROS 2 Jazzy on Ubuntu (With Clear Explanations)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_d/"><span class="mono">04</span>ROS 2 Fundamentals: Architecture, Communication, Packages, and Workspaces</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_e/"><span class="mono">05</span>ROS 2 Workspace &amp; Package Creation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_f/"><span class="mono">06</span>ROS 2 Python Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_g/"><span class="mono">07</span>ROS 2 C++ Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_h/"><span class="mono">08</span>ROS 2 Python Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_i/"><span class="mono">09</span>ROS 2 C++ Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_j/"><span class="mono">10</span>Robot Locomotion: Introduction</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_k/"><span class="mono">11</span>Wheeled Locomotion Architectures</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_l/"><span class="mono">12</span>Rolling Friction &amp; Wheeled Locomotion Efficiency</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_m/"><span class="mono">13</span>Introduction to Robot Simulation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_n/"><span class="mono">14</span>URDF</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_o/"><span class="mono">15</span>Create a URDF Model</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_p/"><span class="mono">16</span>Rviz</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_q/"><span class="mono">17</span>Node Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_r/"><span class="mono">18</span>Python Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_s/"><span class="mono">19</span>C++ Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_t/"><span class="mono">20</span>ROS 2 Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-u/"><span class="mono">21</span>Visualize The Robot In RVIZ2</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-v/"><span class="mono">22</span>Launch Files</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-w/"><span class="mono">23</span>ROS 2 Launch Files: Visualizing the Robot with One Command</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-x/"><span class="mono">24</span>Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-y/"><span class="mono">25</span>Simulating the Robot in Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-z/"><span class="mono">26</span>ROS 2 Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-aa/"><span class="mono">27</span>Control Types</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ab/"><span class="mono">28</span>ROS 2 Control: Prepare the Robot for Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ac/"><span class="mono">29</span>Understanding ROS 2 Control | Explanation of Chapter 28</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ad/"><span class="mono">30</span>ROS 2 Control: Moving the BumperBot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ae/"><span class="mono">31</span>Robot Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-af/"><span class="mono">32</span>Pose of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_af/"><span class="mono">33</span>Translation Vector</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ag/"><span class="mono">34</span>Introduction to Turtlesim</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ah/"><span class="mono">35</span>Translation Vector Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ai/"><span class="mono">36</span>Translation Vector Between Two Turtles: CPP</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_aj/"><span class="mono">37</span>Rotation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ak/"><span class="mono">38</span>Rotation Matrix Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_al/"><span class="mono">39</span>Transformation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_am/"><span class="mono">40</span>Differential Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-41/"><span class="mono">41</span>Velocity of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-42/"><span class="mono">42</span>Simple Speed Controller: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-43/"><span class="mono">43</span>Launch the Simple Speed Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-44/"><span class="mono">44</span>Teleoperating the BumperBot with a Joystick</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-45/"><span class="mono">45</span>ROS 2 Diff Drive Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-46/"><span class="mono">46</span>TF 2 Library</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-47/"><span class="mono">47</span>Operation With Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-48/"><span class="mono">48</span>Static &amp; Dynamic Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-49/"><span class="mono">49</span>Simple TF2 Static Broadcaster</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-50/"><span class="mono">50</span>Simple TF2 Broadcaster: Static and Dynamic Transforms</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-51/"><span class="mono">51</span>ROS 2 Services</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-52/"><span class="mono">52</span>Service Server in Python: AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-53/" aria-current="page"><span class="mono">53</span>Service Client in Python: Calling AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-54/"><span class="mono">54</span>Simple TF2 Listener in Python: a get_transform Service</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-55/"><span class="mono">55</span>Euler Angles and Quaternions</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-56/"><span class="mono">56</span>Euler to Quaternion: Turning the Robot with tf_transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-57/"><span class="mono">57</span>tf2 Tools: view_frames and tf2_echo</a></li>
+    </ol>
+  </aside>
+  <article class="rd-main">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/documented-software-learnings/">Library</a><span>/</span><a href="/documented-software-learnings/ros2/">ROS 2</a><span>/</span><span>53</span></nav>
+    <button class="btn btn-sm btn-line rd-tg" type="button" id="rd-tg">All chapters</button>
+<p class="sh-label mono"><span>53</span>Chapter 53 of 57</p>    <h1>Service Client in Python: Calling AddTwoInts</h1>
+<div class="rd-prog" aria-hidden="true"><i style="width:93.0%"></i></div>    <div class="prose"><div class="col"><h2 id="introduction">Introduction</h2><p>In the previous chapter we wrote a service server that adds two numbers, and called it from the terminal with <code>ros2 service call</code>. Now we write the other side in Python: a <b>service client</b> node that sends the request itself and prints the answer.</p><p>The client takes the two numbers from the command line, for example <code>ros2 run bumperbot_py_examples simple_service_client 5 3</code>, waits until the server is there, sends the request and prints <b>Service Response 8</b>.</p><p>Two new ideas appear in this chapter:</p><ul><li><b>Command-line arguments</b> with <code>sys.argv</code>: the words typed after the program name.</li><li><b>A future</b> from <code>call_async</code>: a placeholder for an answer that has not arrived yet, with a function that runs once it does.</li></ul><p class="note">The server and the <code>AddTwoInts</code> service from the previous chapter must already be built. This chapter only adds the client.</p></div>
+<div class="col"><h2 id="create-the-file">Create the file</h2><p>Create <code>simple_service_client.py</code> inside <code>bumperbot_py_examples/bumperbot_py_examples</code>, next to the other example nodes.</p><figure class="img sz-s al-l"><img src="/uploads/2026/11/image-23.png" alt="simple_service_client.py next to simple_service_server.py in bumperbot_py_examples" loading="lazy"><figcaption>simple_service_client.py next to simple_service_server.py in bumperbot_py_examples</figcaption></figure></div>
+<div class="col"><h2 id="write-the-client">Write the client</h2><div class="codeblock" data-lang="Python"><pre class="code numbered"><code><span class="ln"><span class="tok-keyword">import</span> <span class="tok-namespace">sys</span></span>
+<span class="ln"><span class="tok-keyword">import</span> <span class="tok-namespace">rclpy</span></span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">rclpy</span><span class="tok-namespace">.</span><span class="tok-namespace">node</span> <span class="tok-keyword">import</span> Node</span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">bumperbot_msgs</span><span class="tok-namespace">.</span><span class="tok-namespace">srv</span> <span class="tok-keyword">import</span> AddTwoInts</span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">class</span> <span class="tok-className">SimpleServiceClient</span><span class="tok-punctuation">(</span>Node<span class="tok-punctuation">)</span><span class="tok-punctuation">:</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-keyword">def</span> <span class="tok-definition">__init__</span><span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-punctuation">,</span> a<span class="tok-punctuation">,</span> b<span class="tok-punctuation">)</span><span class="tok-punctuation">:</span></span>
+<span class="ln">        <span class="tok-typeName">super</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span><span class="tok-definition">__init__</span><span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">simple_service_client</span><span class="tok-string">"</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>client_ <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>create_client<span class="tok-punctuation">(</span>AddTwoInts<span class="tok-punctuation">,</span> <span class="tok-string">"</span><span class="tok-string">add_two_ints</span><span class="tok-string">"</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-keyword">while</span> <span class="tok-operator">not</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>client_<span class="tok-operator">.</span>wait_for_service<span class="tok-punctuation">(</span>timeout_sec<span class="tok-operator">=</span><span class="tok-number">1.0</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span></span>
+<span class="ln">            <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_logger<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>info<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">service not available, waiting again...</span><span class="tok-string">"</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>req_ <span class="tok-operator">=</span> AddTwoInts<span class="tok-operator">.</span>Request<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>req_<span class="tok-operator">.</span>a <span class="tok-operator">=</span> a</span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>req_<span class="tok-operator">.</span>b <span class="tok-operator">=</span> b</span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>future_ <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>client_<span class="tok-operator">.</span>call_async<span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>req_<span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>future_<span class="tok-operator">.</span>add_done_callback<span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>responseCallback<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-keyword">def</span> <span class="tok-definition">responseCallback</span><span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-punctuation">,</span> future<span class="tok-punctuation">)</span><span class="tok-punctuation">:</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_logger<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>info<span class="tok-punctuation">(</span><span class="tok-string">'</span><span class="tok-string">Service Response </span><span class="tok-string">%d</span><span class="tok-string">'</span> <span class="tok-operator">%</span> future<span class="tok-operator">.</span>result<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>sum<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">def</span> <span class="tok-definition">main</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span></span>
+<span class="ln">    rclpy<span class="tok-operator">.</span>init<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-keyword">if</span> <span class="tok-typeName">len</span><span class="tok-punctuation">(</span>sys<span class="tok-operator">.</span>argv<span class="tok-punctuation">)</span> <span class="tok-operator">!=</span> <span class="tok-number">3</span><span class="tok-punctuation">:</span></span>
+<span class="ln">        <span class="tok-typeName">print</span><span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">Wrong number of arguments! Usage: simple_service_client A B</span><span class="tok-string">"</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-keyword">return</span> <span class="tok-operator">-</span><span class="tok-number">1</span></span>
+<span class="ln"></span>
+<span class="ln">    simple_service_client <span class="tok-operator">=</span> SimpleServiceClient<span class="tok-punctuation">(</span><span class="tok-typeName">int</span><span class="tok-punctuation">(</span>sys<span class="tok-operator">.</span>argv<span class="tok-punctuation">[</span><span class="tok-number">1</span><span class="tok-punctuation">]</span><span class="tok-punctuation">)</span><span class="tok-punctuation">,</span> <span class="tok-typeName">int</span><span class="tok-punctuation">(</span>sys<span class="tok-operator">.</span>argv<span class="tok-punctuation">[</span><span class="tok-number">2</span><span class="tok-punctuation">]</span><span class="tok-punctuation">)</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    rclpy<span class="tok-operator">.</span>spin<span class="tok-punctuation">(</span>simple_service_client<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    simple_service_client<span class="tok-operator">.</span>destroy_node<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln">    rclpy<span class="tok-operator">.</span>shutdown<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">if</span> <span class="tok-variableName">__name__</span> <span class="tok-operator">==</span> <span class="tok-string">'</span><span class="tok-string">__main__</span><span class="tok-string">'</span><span class="tok-punctuation">:</span></span>
+<span class="ln">    main<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span></code></pre></div><h3>What it does, in short</h3><ul><li>Line 1 imports <code>sys</code>, which gives the program the words typed on the command line.</li><li>Line 11 creates the client: type <code>AddTwoInts</code> and the service name <code>add_two_ints</code>, the same name the server uses.</li><li>Lines 13 and 14 wait, checking once per second, until a server with that name exists. Until then it prints "service not available, waiting again...".</li><li>Lines 16 to 18 build the request and put <code>a</code> and <code>b</code> into it.</li><li>Line 19 sends it with <code>call_async</code>. It does not wait for the answer: it gets back a <b>future</b>, a placeholder for the answer. Line 20 says which function to run when the answer arrives.</li><li>Lines 22 and 23: <code>responseCallback</code> runs once, when the answer is there, and prints the sum.</li><li><code>main()</code> checks that exactly two numbers were given, turns them from text into whole numbers with <code>int()</code>, creates the node and spins, which is what lets the answer arrive and the callback run.</li></ul><h3>A future, step by step</h3><p>The picture below shows what happens between sending the request and getting the answer, and why <code>spin</code> is needed for the callback to run.</p><div class="widget"><iframe src="/widgets/claude-ros-53-20261109-181944-future-timeline.html" title="call_async, the future and the done callback, step by step"></iframe></div><h3>How the code works, line by line</h3><p>The visualizer covers this file and the line added to setup.py. Pick a level, click any line, follow a run, or break something on purpose.</p><div class="widget"><iframe src="/widgets/claude-ros-53-20261109-181944-service-client-visualizer.html" title="Service client: line-by-line code visualizer"></iframe></div></div>
+<div class="col"><h2 id="register-the-node">Register the node</h2><p>In <code>setup.py</code> of <code>bumperbot_py_examples</code>, add the new executable to <code>console_scripts</code>, below the server you added last time:</p><figure class="img"><img src="/uploads/2026/11/image-24.png" alt="The simple_service_client entry point added to setup.py" loading="lazy"><figcaption>The simple_service_client entry point added to setup.py</figcaption></figure><div class="codeblock" data-lang="Python"><pre class="code numbered"><code><span class="ln">entry_points<span class="tok-operator">=</span><span class="tok-punctuation">{</span></span>
+<span class="ln">    <span class="tok-string">'</span><span class="tok-string">console_scripts</span><span class="tok-string">'</span><span class="tok-punctuation">:</span> <span class="tok-punctuation">[</span></span>
+<span class="ln">        <span class="tok-comment"># ... the executables you added earlier stay here ...</span></span>
+<span class="ln">        <span class="tok-string">'</span><span class="tok-string">simple_service_server = bumperbot_py_examples.simple_service_server:main</span><span class="tok-string">'</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        <span class="tok-string">'</span><span class="tok-string">simple_service_client = bumperbot_py_examples.simple_service_client:main</span><span class="tok-string">'</span><span class="tok-punctuation">,</span></span>
+<span class="ln">    <span class="tok-punctuation">]</span><span class="tok-punctuation">,</span></span>
+<span class="ln"><span class="tok-punctuation">}</span><span class="tok-punctuation">,</span></span></code></pre></div><p>The <code>bumperbot_msgs</code> dependency in <code>package.xml</code> is already there from the previous chapter, so nothing else changes.</p></div>
+<div class="col"><h2 id="build-run-and-test">Build, run and test</h2><h3>Build</h3><p>Build again, because setup.py changed:</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln"><span class="tok-typeName">cd</span> ~/bumperbot_ws</span></code></pre></div><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">colcon build</span></code></pre></div><figure class="img sz-m al-l"><img src="/uploads/2026/11/image-25.png" alt="colcon build finishing for all packages" loading="lazy"><figcaption>colcon build finishing for all packages</figcaption></figure><h3>Start the server</h3><p>Open a new terminal (terminal 1). Source the workspace and start the server from the previous chapter:</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln"><span class="tok-typeName">cd</span> ~/bumperbot_ws</span></code></pre></div><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">. install/setup.bash</span></code></pre></div><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">ros2 run bumperbot_py_examples simple_service_server</span></code></pre></div><p class="caption">What you should see (the number in the first brackets is the time, so yours differs)</p><div class="codeblock" data-lang="Plain text"><pre class="code"><code><span class="ln">[INFO] [1794227307.977538642] [simple_service_server]: Service add_two_ints Ready</span></code></pre></div><figure class="img"><img src="/uploads/2026/11/image-26.png" alt="Terminal 1: the server is ready" loading="lazy"><figcaption>Terminal 1: the server is ready</figcaption></figure><h3>Check the service</h3><p>Open another terminal (terminal 2). Source the workspace and list the services:</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln"><span class="tok-typeName">cd</span> ~/bumperbot_ws</span></code></pre></div><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">. install/setup.bash</span></code></pre></div><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">ros2 service list</span></code></pre></div><p class="caption">What you should see</p><div class="codeblock" data-lang="Plain text"><pre class="code"><code><span class="ln">/add_two_ints</span>
+<span class="ln">/simple_service_server/describe_parameters</span>
+<span class="ln">/simple_service_server/get_parameter_types</span>
+<span class="ln">/simple_service_server/get_parameters</span>
+<span class="ln">/simple_service_server/get_type_description</span>
+<span class="ln">/simple_service_server/list_parameters</span>
+<span class="ln">/simple_service_server/set_parameters</span>
+<span class="ln">/simple_service_server/set_parameters_atomically</span></code></pre></div><figure class="img sz-l al-l"><img src="/uploads/2026/11/image-27.png" alt="Terminal 2: ros2 service list shows /add_two_ints" loading="lazy"><figcaption>Terminal 2: ros2 service list shows /add_two_ints</figcaption></figure><h3>Run the client</h3><p>In terminal 2, run the client with two numbers after its name:</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">ros2 run bumperbot_py_examples simple_service_client <span class="tok-number">5</span> <span class="tok-number">3</span></span></code></pre></div><p class="caption">What you should see</p><div class="codeblock" data-lang="Plain text"><pre class="code"><code><span class="ln">[INFO] [1794227843.335588217] [simple_service_client]: Service Response 8</span></code></pre></div><figure class="img sz-m al-l"><img src="/uploads/2026/11/image-28.png" alt="Terminal 2: the client prints Service Response 8" loading="lazy"><figcaption>Terminal 2: the client prints Service Response 8</figcaption></figure><p>The client keeps running after it prints the answer, because <code>rclpy.spin</code> on line 35 only returns when the program is stopped. Press <b>Ctrl+C</b> to end it. In terminal 1 the server logs the request it answered.</p><h3>Try it with wrong input</h3><ul><li>No numbers, or only one: the client prints <code>Wrong number of arguments! Usage: simple_service_client A B</code> and stops.</li><li>Text instead of a number, for example <code>five 3</code>: <code>int("five")</code> fails with a <code>ValueError</code>.</li><li>Server not started: the client prints "service not available, waiting again..." once per second until you start it.</li></ul><p>The second small visual shows how the words you type become <code>a</code> and <code>b</code>:</p><div class="widget"><iframe src="/widgets/claude-ros-53-20261109-181944-argv-to-request.html" title="From the command line to the request: sys.argv and int()"></iframe></div></div>
+<div class="col"><h2 id="remember">Remember</h2><ul><li>A client uses <code>create_client(type, name)</code> with the same type and name as the server.</li><li><code>wait_for_service(timeout_sec=1.0)</code> waits up to one second and returns True once the server exists; the loop keeps trying.</li><li>A request object comes from <code>AddTwoInts.Request()</code>; fill its fields before sending.</li><li><code>call_async</code> sends without waiting and returns a future. <code>add_done_callback</code> names the function that runs when the answer arrives, and <code>future.result()</code> is the response.</li><li>The callback only runs while the node spins.</li><li><code>sys.argv</code> holds the program name and the words after it, as text; <code>int()</code> turns them into numbers.</li></ul></div></div>
+    <nav class="pager" aria-label="Chapters">
+<a href="/documented-software-learnings/ros2/ros-52/"><span class="mono">Chapter 52</span>Service Server in Python: AddTwoInts</a><a class="nx" href="/documented-software-learnings/ros2/ros-54/"><span class="mono">Chapter 54</span>Simple TF2 Listener in Python: a get_transform Service</a>    </nav>
+  </article>
+</div>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/plc/">PLC &amp; Industrial Automation</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=a6e775a3ba" defer></script>
+<script src="/assets/home.js?v=a6e775a3ba" defer></script>
+</body>
+</html>

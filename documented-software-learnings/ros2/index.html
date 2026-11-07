@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ROS 2 | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="This series documents my ROS 2 journey, starting with setting up Ubuntu and building up to simulation, ros2_control, robot kinematics and transformations with…">
+<link rel="canonical" href="https://techarcanist.com/documented-software-learnings/ros2/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="ROS 2">
+<meta property="og:description" content="This series documents my ROS 2 journey, starting with setting up Ubuntu and building up to simulation, ros2_control, robot kinematics and transformations with…">
+<meta property="og:url" content="https://techarcanist.com/documented-software-learnings/ros2/">
+<meta property="og:image" content="/uploads/wp/2026/01/Development-Environment-Setup-for-ROS-2-Jazzy-on-Ubuntu-1-1-1024x576.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=a6e775a3ba">
+<link rel="stylesheet" href="/assets/home.css?v=a6e775a3ba">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/" aria-current="page">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<section class="phero">
+  <div class="wrap series-hero">
+    <div>
+      <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/documented-software-learnings/">Library</a><span>/</span><span>ROS 2</span></nav>
+      <h1>ROS 2</h1>
+      <p class="phero-lead">This series documents my ROS 2 journey, starting with setting up Ubuntu and building up to simulation, ros2_control, robot kinematics and transformations with the BumperBot.</p>
+<p class="credit">Credits: based on my learning from the Udemy course <em>Self Driving and ROS 2, Learn by Doing! Odometry &amp; Control</em> by Antonio Brandi. The BumperBot files and initial implementations were developed with the guidance of this course.</p>      <dl class="cs-spec mono inline">
+        <div><dt>Chapters</dt><dd>57</dd></div>
+      </dl>
+<div class="btns"><a class="btn" href="/documented-software-learnings/ros2/ros2_a/">Start with chapter 1</a></div>    </div>
+<figure class="series-cover"><img src="/uploads/wp/2026/01/Development-Environment-Setup-for-ROS-2-Jazzy-on-Ubuntu-1-1-1024x576.jpg" alt=""><span class="corner tl"></span><span class="corner br"></span></figure>  </div>
+</section>
+<section class="sec tight">
+  <div class="wrap">
+    <ol class="chgrid">
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2_a/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/Installing-Ubuntu-Desktop-Dual-Boot-with-Windows-1024x576.jpg" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 01</span><span class="chcard-t">Installing Ubuntu Desktop (Dual Boot with Windows)</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2_b/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-9-1024x576.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 02</span><span class="chcard-t">ROS 2 Jazzy Installation on Ubuntu (Step-by-Step)</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2_c/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/Development-Environment-Setup-for-ROS-2-Jazzy-on-Ubuntu-1024x576.jpg" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 03</span><span class="chcard-t">Development Environment Setup for ROS 2 Jazzy on Ubuntu (With Clear Explanations)</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2_d/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/Development-Environment-Setup-for-ROS-2-Jazzy-on-Ubuntu-2-1024x576.jpg" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 04</span><span class="chcard-t">ROS 2 Fundamentals: Architecture, Communication, Packages, and Workspaces</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2_e/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/Development-Environment-Setup-for-ROS-2-Jazzy-on-Ubuntu-4-1024x576.jpg" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 05</span><span class="chcard-t">ROS 2 Workspace &amp; Package Creation</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2_f/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/Development-Environment-Setup-for-ROS-2-Jazzy-on-Ubuntu-5-1024x576.jpg" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 06</span><span class="chcard-t">ROS 2 Python Publisher</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2_g/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/Development-Environment-Setup-for-ROS-2-Jazzy-on-Ubuntu-6-1024x576.jpg" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 07</span><span class="chcard-t">ROS 2 C++ Publisher</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2_h/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/Jazzy-Jalisco-1024x576.jpg" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 08</span><span class="chcard-t">ROS 2 Python Subscriber</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2_i/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/a6a6292b-82c2-4777-a13c-33c0d4ad24c4-1024x576.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 09</span><span class="chcard-t">ROS 2 C++ Subscriber</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2_j/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/ChatGPT-Image-Sep-8-2026-10_39_29-AM-1024x576.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 10</span><span class="chcard-t">Robot Locomotion: Introduction</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2_k/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/ChatGPT-Image-Sep-8-2026-11_38_23-AM-1024x576.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 11</span><span class="chcard-t">Wheeled Locomotion Architectures</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2_l/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/ChatGPT-Image-Sep-9-2026-10_56_09-AM-1024x576.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 12</span><span class="chcard-t">Rolling Friction &amp; Wheeled Locomotion Efficiency</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2_m/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/ChatGPT-Image-Sep-9-2026-03_45_07-PM-1024x576.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 13</span><span class="chcard-t">Introduction to Robot Simulation</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2_n/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/ChatGPT-Image-Sep-15-2026-11_54_08-AM-1-1024x576.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 14</span><span class="chcard-t">URDF</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2_o/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-8.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 15</span><span class="chcard-t">Create a URDF Model</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2_p/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/ChatGPT-Image-Sep-20-2026-08_51_09-PM.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 16</span><span class="chcard-t">Rviz</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2_q/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/ChatGPT-Image-Sep-21-2026-11_36_24-PM.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 17</span><span class="chcard-t">Node Parameters</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2_r/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-11.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 18</span><span class="chcard-t">Python Parameters</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2_s/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-12.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 19</span><span class="chcard-t">C++ Parameters</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2_t/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-13.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 20</span><span class="chcard-t">ROS 2 Parameters</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2-u/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-14.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 21</span><span class="chcard-t">Visualize The Robot In RVIZ2</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2-v/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-15.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 22</span><span class="chcard-t">Launch Files</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2-w/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-16-1024x576.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 23</span><span class="chcard-t">ROS 2 Launch Files: Visualizing the Robot with One Command</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2-x/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-17.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 24</span><span class="chcard-t">Gazebo</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2-y/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-20.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 25</span><span class="chcard-t">Simulating the Robot in Gazebo</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2-z/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-21.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 26</span><span class="chcard-t">ROS 2 Control</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2-aa/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-23.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 27</span><span class="chcard-t">Control Types</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2-ab/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-26.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 28</span><span class="chcard-t">ROS 2 Control: Prepare the Robot for Control</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2-ac/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-25.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 29</span><span class="chcard-t">Understanding ROS 2 Control | Explanation of Chapter 28</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2-ad/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-27.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 30</span><span class="chcard-t">ROS 2 Control: Moving the BumperBot</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2-ae/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-32.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 31</span><span class="chcard-t">Robot Kinematics</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2-af/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-31.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 32</span><span class="chcard-t">Pose of a Mobile Robot</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros_af/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-34.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 33</span><span class="chcard-t">Translation Vector</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros_ag/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-33.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 34</span><span class="chcard-t">Introduction to Turtlesim</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros_ah/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-35.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 35</span><span class="chcard-t">Translation Vector Between Two Turtles: Python</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros_ai/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-36.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 36</span><span class="chcard-t">Translation Vector Between Two Turtles: CPP</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros_aj/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-38.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 37</span><span class="chcard-t">Rotation Matrix</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros_ak/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-39.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 38</span><span class="chcard-t">Rotation Matrix Between Two Turtles: Python</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros_al/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-42.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 39</span><span class="chcard-t">Transformation Matrix</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros_am/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-44.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 40</span><span class="chcard-t">Differential Kinematics</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2-41/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-46.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 41</span><span class="chcard-t">Velocity of a Mobile Robot</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2-42/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-47.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 42</span><span class="chcard-t">Simple Speed Controller: Python</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2-43/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-48.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 43</span><span class="chcard-t">Launch the Simple Speed Controller</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2-44/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-49.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 44</span><span class="chcard-t">Teleoperating the BumperBot with a Joystick</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2-45/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-50.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 45</span><span class="chcard-t">ROS 2 Diff Drive Controller</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2-46/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-51.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 46</span><span class="chcard-t">TF 2 Library</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2-47/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-52.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 47</span><span class="chcard-t">Operation With Transformations</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2-48/">
+        <span class="chcard-media"><img src="/uploads/wp/2026/01/image-53.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 48</span><span class="chcard-t">Static &amp; Dynamic Transformations</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2-49/">
+        <span class="chcard-media"><img src="/uploads/2026/11/pasted-cover-1794123064665.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 49</span><span class="chcard-t">Simple TF2 Static Broadcaster</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2-50/">
+        <span class="chcard-media"><img src="/uploads/2026/11/pasted-cover-1794123123830.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 50</span><span class="chcard-t">Simple TF2 Broadcaster: Static and Dynamic Transforms</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2-51/">
+        <span class="chcard-media"><img src="/uploads/2026/11/pasted-cover-1794142485712.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 51</span><span class="chcard-t">ROS 2 Services</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros-52/">
+        <span class="chcard-media"><img src="/uploads/2026/11/pasted-cover-1794217843680.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 52</span><span class="chcard-t">Service Server in Python: AddTwoInts</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros-53/">
+        <span class="chcard-media"><img src="/uploads/2026/11/pasted-cover-1794580948305.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 53</span><span class="chcard-t">Service Client in Python: Calling AddTwoInts</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros-54/">
+        <span class="chcard-media"><img src="/uploads/2026/11/pasted-cover-1794584215618.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 54</span><span class="chcard-t">Simple TF2 Listener in Python: a get_transform Service</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros-55/">
+        <span class="chcard-media"><img src="/uploads/2026/11/pasted-cover-1794641644068.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 55</span><span class="chcard-t">Euler Angles and Quaternions</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2-56/">
+        <span class="chcard-media"><img src="/uploads/2026/11/pasted-cover-1794650437111.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 56</span><span class="chcard-t">Euler to Quaternion: Turning the Robot with tf_transformations</span></span>
+      </a></li>
+      <li class="rv"><a class="chcard" href="/documented-software-learnings/ros2/ros2-57/">
+        <span class="chcard-media"><img src="/uploads/2026/11/pasted-cover-1794651103996.png" alt="" loading="lazy"></span>
+        <span class="chcard-b"><span class="chcard-n mono">Chapter 57</span><span class="chcard-t">tf2 Tools: view_frames and tf2_echo</span></span>
+      </a></li>
+    </ol>
+  </div>
+</section>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/plc/">PLC &amp; Industrial Automation</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=a6e775a3ba" defer></script>
+<script src="/assets/home.js?v=a6e775a3ba" defer></script>
+</body>
+</html>

@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ROS 2 Control: Prepare the Robot for Control | ROS 2 | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="From Simulation to Controlling the Robot We already have our robot running inside Gazebo. Now we want to control the wheels of the robot from ROS 2. Detailed…">
+<link rel="canonical" href="https://techarcanist.com/documented-software-learnings/ros2/ros2-ab/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="ROS 2 Control: Prepare the Robot for Control | ROS 2">
+<meta property="og:description" content="From Simulation to Controlling the Robot We already have our robot running inside Gazebo. Now we want to control the wheels of the robot from ROS 2. Detailed…">
+<meta property="og:url" content="https://techarcanist.com/documented-software-learnings/ros2/ros2-ab/">
+<meta property="og:image" content="https://techarcanist.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=a6e775a3ba">
+<link rel="stylesheet" href="/assets/home.css?v=a6e775a3ba">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/" aria-current="page">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap reader wide">
+  <aside class="rd-nav" id="rd-nav">
+    <a class="rd-series" href="/documented-software-learnings/ros2/"><span class="label">Series</span>ROS 2</a>
+    <ol>
+      <li><a href="/documented-software-learnings/ros2/ros2_a/"><span class="mono">01</span>Installing Ubuntu Desktop (Dual Boot with Windows)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_b/"><span class="mono">02</span>ROS 2 Jazzy Installation on Ubuntu (Step-by-Step)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_c/"><span class="mono">03</span>Development Environment Setup for ROS 2 Jazzy on Ubuntu (With Clear Explanations)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_d/"><span class="mono">04</span>ROS 2 Fundamentals: Architecture, Communication, Packages, and Workspaces</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_e/"><span class="mono">05</span>ROS 2 Workspace &amp; Package Creation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_f/"><span class="mono">06</span>ROS 2 Python Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_g/"><span class="mono">07</span>ROS 2 C++ Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_h/"><span class="mono">08</span>ROS 2 Python Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_i/"><span class="mono">09</span>ROS 2 C++ Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_j/"><span class="mono">10</span>Robot Locomotion: Introduction</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_k/"><span class="mono">11</span>Wheeled Locomotion Architectures</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_l/"><span class="mono">12</span>Rolling Friction &amp; Wheeled Locomotion Efficiency</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_m/"><span class="mono">13</span>Introduction to Robot Simulation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_n/"><span class="mono">14</span>URDF</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_o/"><span class="mono">15</span>Create a URDF Model</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_p/"><span class="mono">16</span>Rviz</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_q/"><span class="mono">17</span>Node Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_r/"><span class="mono">18</span>Python Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_s/"><span class="mono">19</span>C++ Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_t/"><span class="mono">20</span>ROS 2 Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-u/"><span class="mono">21</span>Visualize The Robot In RVIZ2</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-v/"><span class="mono">22</span>Launch Files</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-w/"><span class="mono">23</span>ROS 2 Launch Files: Visualizing the Robot with One Command</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-x/"><span class="mono">24</span>Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-y/"><span class="mono">25</span>Simulating the Robot in Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-z/"><span class="mono">26</span>ROS 2 Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-aa/"><span class="mono">27</span>Control Types</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ab/" aria-current="page"><span class="mono">28</span>ROS 2 Control: Prepare the Robot for Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ac/"><span class="mono">29</span>Understanding ROS 2 Control | Explanation of Chapter 28</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ad/"><span class="mono">30</span>ROS 2 Control: Moving the BumperBot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ae/"><span class="mono">31</span>Robot Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-af/"><span class="mono">32</span>Pose of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_af/"><span class="mono">33</span>Translation Vector</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ag/"><span class="mono">34</span>Introduction to Turtlesim</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ah/"><span class="mono">35</span>Translation Vector Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ai/"><span class="mono">36</span>Translation Vector Between Two Turtles: CPP</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_aj/"><span class="mono">37</span>Rotation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ak/"><span class="mono">38</span>Rotation Matrix Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_al/"><span class="mono">39</span>Transformation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_am/"><span class="mono">40</span>Differential Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-41/"><span class="mono">41</span>Velocity of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-42/"><span class="mono">42</span>Simple Speed Controller: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-43/"><span class="mono">43</span>Launch the Simple Speed Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-44/"><span class="mono">44</span>Teleoperating the BumperBot with a Joystick</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-45/"><span class="mono">45</span>ROS 2 Diff Drive Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-46/"><span class="mono">46</span>TF 2 Library</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-47/"><span class="mono">47</span>Operation With Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-48/"><span class="mono">48</span>Static &amp; Dynamic Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-49/"><span class="mono">49</span>Simple TF2 Static Broadcaster</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-50/"><span class="mono">50</span>Simple TF2 Broadcaster: Static and Dynamic Transforms</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-51/"><span class="mono">51</span>ROS 2 Services</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-52/"><span class="mono">52</span>Service Server in Python: AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-53/"><span class="mono">53</span>Service Client in Python: Calling AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-54/"><span class="mono">54</span>Simple TF2 Listener in Python: a get_transform Service</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-55/"><span class="mono">55</span>Euler Angles and Quaternions</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-56/"><span class="mono">56</span>Euler to Quaternion: Turning the Robot with tf_transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-57/"><span class="mono">57</span>tf2 Tools: view_frames and tf2_echo</a></li>
+    </ol>
+  </aside>
+  <article class="rd-main">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/documented-software-learnings/">Library</a><span>/</span><a href="/documented-software-learnings/ros2/">ROS 2</a><span>/</span><span>28</span></nav>
+    <button class="btn btn-sm btn-line rd-tg" type="button" id="rd-tg">All chapters</button>
+<p class="sh-label mono"><span>28</span>Chapter 28 of 57</p>    <h1>ROS 2 Control: Prepare the Robot for Control</h1>
+<div class="rd-prog" aria-hidden="true"><i style="width:49.1%"></i></div>    <div class="prose"><div class="col">
+<h2 id="from-simulation-to-controlling-the-robot">From Simulation to Controlling the Robot</h2>
+<p>We already have our robot running inside Gazebo. Now we<strong> want to control the wheels of the robot from ROS 2.</strong></p>
+<blockquote>
+<h2 id="detailed-explanation">Detailed Explanation</h2>
+<p>This chapter focuses on the <strong>practical implementation</strong> of ROS 2 Control for our BumperBot.</p>
+<p>The detailed explanation of the concepts, code, parameters, interfaces, and how all the components work together is covered in <strong>Chapter 29</strong>.</p>
+<div class="btns">
+<a class="btn" href="/documented-software-learnings/ros2/ros2-ac/">Chapter 29</a>
+</div>
+</blockquote>
+<h2 id="create-the-controller-package">Create the Controller Package</h2>
+<p>We will keep the controller configuration in a separate package called:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">bumperbot_controller</span></code></pre></div>
+<p>This package will contain the configuration files required for our robot controllers.</p>
+<h3>Go to the <code>src</code> Folder</h3>
+<figure class="img"><img alt="" decoding="async" height="46" loading="lazy" src="/uploads/wp/2026/09/image-101.png" width="552"></figure>
+<p>Open a terminal and run:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">cd bumperbot_ws</span>
+<span class="ln">cd src</span></code></pre></div>
+<h3>Create the Controller Package</h3>
+<figure class="img"><img alt="" decoding="async" height="171" loading="lazy" src="/uploads/wp/2026/09/image-102.png" width="1038"></figure>
+<p>Run:</p>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln">ros2 pkg create --build-type ament_cmake bumperbot_controller</span></code></pre></div>
+<h2 id="build-the-package">Build the Package</h2>
+<figure class="img"><img alt="" decoding="async" height="344" loading="lazy" src="/uploads/wp/2026/09/image-103.png" width="956"></figure>
+<p>Go back to the workspace and build</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">cd ..</span>
+<span class="ln">colcon build</span></code></pre></div>
+<h2 id="create-the-config-folder">Create the <code>config</code> Folder</h2>
+<figure class="img"><img alt="" decoding="async" height="507" loading="lazy" src="/uploads/wp/2026/09/image-104.png" width="809"></figure>
+<p>Open the workspace in VS Code.</p>
+<p>Inside:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">bumperbot_controller</span></code></pre></div>
+<p>create a folder called:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">config</span></code></pre></div>
+<h2 id="create-the-controller-yaml-file">Create the Controller YAML File</h2>
+<figure class="img al-l sz-s"><img alt="" decoding="async" height="487" loading="lazy" src="/uploads/wp/2026/09/image-105.png" width="338"></figure>
+<p>Inside the <code>config</code> folder, create:</p>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln">bumperbot_controllers.yaml</span></code></pre></div>
+<h2 id="configure-the-controllers">Configure the Controllers</h2>
+<figure class="img"><img alt="" decoding="async" height="502" loading="lazy" src="/uploads/wp/2026/09/image-106.png" width="799"></figure>
+<p>Put this in <code>bumperbot_controllers.yaml</code>:</p>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln"><span class="tok-propertyName tok-definition">controller_manager</span><span class="tok-punctuation">:</span></span>
+<span class="ln">  <span class="tok-propertyName tok-definition">ros__parameters</span><span class="tok-punctuation">:</span></span>
+<span class="ln">    <span class="tok-propertyName tok-definition">update_rate</span><span class="tok-punctuation">:</span> 100 <span class="tok-comment"># Hz</span></span>
+<span class="ln">    <span class="tok-propertyName tok-definition">use_sim_time</span><span class="tok-punctuation">:</span> true</span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-propertyName tok-definition">joint_state_broadcaster</span><span class="tok-punctuation">:</span></span>
+<span class="ln">      <span class="tok-propertyName tok-definition">type</span><span class="tok-punctuation">:</span> joint_state_broadcaster/JointStateBroadcaster</span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-propertyName tok-definition">simple_velocity_controller</span><span class="tok-punctuation">:</span></span>
+<span class="ln">      <span class="tok-propertyName tok-definition">type</span><span class="tok-punctuation">:</span> velocity_controllers/JointGroupVelocityController</span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-propertyName tok-definition">simple_velocity_controller</span><span class="tok-punctuation">:</span></span>
+<span class="ln">  <span class="tok-propertyName tok-definition">ros__parameters</span><span class="tok-punctuation">:</span></span>
+<span class="ln">    <span class="tok-propertyName tok-definition">joints</span><span class="tok-punctuation">:</span></span>
+<span class="ln">      <span class="tok-punctuation">-</span> wheel_left_joint</span>
+<span class="ln">      <span class="tok-punctuation">-</span> wheel_right_joint</span></code></pre></div>
+</div>
+<div class="col">
+<h2 id="understanding-yaml">Understanding YAML</h2>
+
+<div class="widget"><iframe loading="lazy" scrolling="no" src="/widgets/documented-software-learnings__ros2__ros2-ab-1.html" title="Interactive guide"></iframe></div></div>
+
+<div class="col">
+<h2 id="install-the-config-folder">Install the <code>config</code> Folder</h2>
+<figure class="img"><img alt="" decoding="async" height="319" loading="lazy" src="/uploads/wp/2026/09/image-111.png" width="997"></figure>
+<p>Now we need to make sure ROS 2 installs our YAML configuration file when the package is built.</p>
+<p>Open:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">CMakeLists.txt</span></code></pre></div>
+<p>and add:</p>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln">install(</span>
+<span class="ln">  DIRECTORY config</span>
+<span class="ln">  DESTINATION share/${PROJECT_NAME}</span>
+<span class="ln">)</span></code></pre></div>
+<h2 id="add-ros-2-control-to-the-gazebo-configuration">Add ROS 2 Control to the Gazebo Configuration</h2>
+<p>Now we go back to the package:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">bumperbot_description</span></code></pre></div>
+<p>and its:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">urdf/</span></code></pre></div>
+<p>folder.</p>
+<p>We already have:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">bumperbot_gazebo.xacro</span></code></pre></div>
+<h3>Update <code>bumperbot_gazebo.xacro</code></h3>
+<p>Open:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">bumperbot_gazebo.xacro</span></code></pre></div>
+<p>Add the ROS 2 Control section below the existing Gazebo wheel/caster settings:</p>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln">&lt;?xml version="1.0"?&gt;</span>
+<span class="ln"></span>
+<span class="ln">&lt;robot name="bumperbot" xmlns:xacro="http://ros.org/wiki/xacro"&gt;</span>
+<span class="ln"></span>
+<span class="ln">  &lt;!-- Wheels --&gt;</span>
+<span class="ln">  &lt;gazebo reference="wheel_left_link"&gt;</span>
+<span class="ln">    &lt;mu1&gt;1000000000000000.0&lt;/mu1&gt;</span>
+<span class="ln">    &lt;mu2&gt;1000000000000000.0&lt;/mu2&gt;</span>
+<span class="ln">    &lt;kp&gt;1000000000000.0&lt;/kp&gt;</span>
+<span class="ln">    &lt;kd&gt;10.0&lt;/kd&gt;</span>
+<span class="ln">    &lt;minDepth&gt;0.001&lt;/minDepth&gt;</span>
+<span class="ln">    &lt;maxVel&gt;0.1&lt;/maxVel&gt;</span>
+<span class="ln">    &lt;fdir1&gt;1 0 0&lt;/fdir1&gt;</span>
+<span class="ln">  &lt;/gazebo&gt;</span>
+<span class="ln"></span>
+<span class="ln">  &lt;gazebo reference="wheel_right_link"&gt;</span>
+<span class="ln">    &lt;mu1&gt;1000000000000000.0&lt;/mu1&gt;</span>
+<span class="ln">    &lt;mu2&gt;1000000000000000.0&lt;/mu2&gt;</span>
+<span class="ln">    &lt;kp&gt;1000000000000.0&lt;/kp&gt;</span>
+<span class="ln">    &lt;kd&gt;10.0&lt;/kd&gt;</span>
+<span class="ln">    &lt;minDepth&gt;0.001&lt;/minDepth&gt;</span>
+<span class="ln">    &lt;maxVel&gt;0.1&lt;/maxVel&gt;</span>
+<span class="ln">    &lt;fdir1&gt;1 0 0&lt;/fdir1&gt;</span>
+<span class="ln">  &lt;/gazebo&gt;</span>
+<span class="ln">    </span>
+<span class="ln">  &lt;!-- Caster Wheels --&gt;</span>
+<span class="ln">  &lt;gazebo reference="caster_rear_link"&gt;</span>
+<span class="ln">    &lt;mu1&gt;0.1&lt;/mu1&gt;</span>
+<span class="ln">    &lt;mu2&gt;0.1&lt;/mu2&gt;</span>
+<span class="ln">    &lt;kp&gt;1000000.0&lt;/kp&gt;</span>
+<span class="ln">    &lt;kd&gt;100.0&lt;/kd&gt;</span>
+<span class="ln">    &lt;minDepth&gt;0.001&lt;/minDepth&gt;</span>
+<span class="ln">    &lt;maxVel&gt;1.0&lt;/maxVel&gt;</span>
+<span class="ln">  &lt;/gazebo&gt;</span>
+<span class="ln">    </span>
+<span class="ln">  &lt;gazebo reference="caster_front_link"&gt;</span>
+<span class="ln">    &lt;mu1&gt;0.1&lt;/mu1&gt;</span>
+<span class="ln">    &lt;mu2&gt;0.1&lt;/mu2&gt;</span>
+<span class="ln">    &lt;kp&gt;1000000.0&lt;/kp&gt;</span>
+<span class="ln">    &lt;kd&gt;100.0&lt;/kd&gt;</span>
+<span class="ln">    &lt;minDepth&gt;0.001&lt;/minDepth&gt;</span>
+<span class="ln">    &lt;maxVel&gt;1.0&lt;/maxVel&gt;</span>
+<span class="ln">  &lt;/gazebo&gt;</span>
+<span class="ln"></span>
+<span class="ln">  &lt;!-- ROS 2 Control --&gt;</span>
+<span class="ln">  &lt;gazebo&gt;</span>
+<span class="ln">    &lt;!-- ROS 2 Humble --&gt;</span>
+<span class="ln">    &lt;xacro:if value="$(arg is_ignition)"&gt;</span>
+<span class="ln">      &lt;plugin filename="ign_ros2_control-system" name="ign_ros2_control::IgnitionROS2ControlPlugin"&gt;</span>
+<span class="ln">        &lt;parameters&gt;$(find bumperbot_controller)/config/bumperbot_controllers.yaml&lt;/parameters&gt;</span>
+<span class="ln">      &lt;/plugin&gt;</span>
+<span class="ln">    &lt;/xacro:if&gt;</span>
+<span class="ln"></span>
+<span class="ln">    &lt;!-- ROS 2 Iron or above --&gt;</span>
+<span class="ln">    &lt;xacro:unless value="$(arg is_ignition)"&gt;</span>
+<span class="ln">      &lt;plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin"&gt;</span>
+<span class="ln">        &lt;parameters&gt;$(find bumperbot_controller)/config/bumperbot_controllers.yaml&lt;/parameters&gt;</span>
+<span class="ln">      &lt;/plugin&gt;</span>
+<span class="ln">    &lt;/xacro:unless&gt;</span>
+<span class="ln">  &lt;/gazebo&gt;</span>
+<span class="ln"></span>
+<span class="ln">&lt;/robot&gt;</span></code></pre></div>
+<h2 id="write-bumperbot-urdf-xacro">Write bumperbot.urdf.xacro</h2>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln">&lt;?xml version="1.0"?&gt;</span>
+<span class="ln"></span>
+<span class="ln">&lt;robot name="bumperbot" xmlns:xacro="http://ros.org/wiki/xacro"&gt;</span>
+<span class="ln"></span>
+<span class="ln">  &lt;!-- Start GZ or Ignition depending on ROS 2 Version --&gt;</span>
+<span class="ln">  &lt;xacro:arg name="is_ignition" default="true"/&gt;</span>
+<span class="ln"></span>
+<span class="ln">  &lt;!-- Include Gazebo Parameters --&gt;</span>
+<span class="ln">  &lt;xacro:include filename="$(find bumperbot_description)/urdf/bumperbot_gazebo.xacro" /&gt;</span>
+<span class="ln"></span>
+<span class="ln">  &lt;!-- Include ros2_control Plugins --&gt;</span>
+<span class="ln">  &lt;xacro:include filename="$(find bumperbot_description)/urdf/bumperbot_ros2_control.xacro" /&gt;</span>
+<span class="ln"></span>
+<span class="ln">  &lt;link name="base_footprint"/&gt;</span>
+<span class="ln">  </span>
+<span class="ln">  &lt;link name="base_link"&gt;</span>
+<span class="ln">    &lt;inertial&gt;</span>
+<span class="ln">      &lt;origin xyz="0 0 0.04" rpy="0.0 0.25 0.3" /&gt;</span>
+<span class="ln">      &lt;mass value="8.2573504e-01"/&gt;</span>
+<span class="ln">      &lt;inertia ixx="2.2124416e-02" ixy="-1.2294101e-04" ixz="3.4938785e-04"</span>
+<span class="ln">               iyy="2.1193702e-02" iyz="-5.0120904e-05"</span>
+<span class="ln">               izz="2.0064271e-02" /&gt;</span>
+<span class="ln">    &lt;/inertial&gt;</span>
+<span class="ln">    &lt;visual&gt;</span>
+<span class="ln">      &lt;origin xyz="0 0 0" rpy="0 0 0" /&gt;</span>
+<span class="ln">      &lt;geometry&gt;</span>
+<span class="ln">        &lt;mesh filename="package://bumperbot_description/meshes/base_link.STL" /&gt;</span>
+<span class="ln">      &lt;/geometry&gt;</span>
+<span class="ln">    &lt;/visual&gt;</span>
+<span class="ln">    &lt;collision&gt;</span>
+<span class="ln">      &lt;origin xyz="0 0 0" rpy="0 0 0" /&gt;</span>
+<span class="ln">      &lt;geometry&gt;</span>
+<span class="ln">        &lt;mesh filename="package://bumperbot_description/meshes/base_link.STL" /&gt;</span>
+<span class="ln">      &lt;/geometry&gt;</span>
+<span class="ln">    &lt;/collision&gt;</span>
+<span class="ln">  &lt;/link&gt;</span>
+<span class="ln"></span>
+<span class="ln">  &lt;joint name="base_joint" type="fixed"&gt;</span>
+<span class="ln">    &lt;parent link="base_footprint"/&gt;</span>
+<span class="ln">    &lt;child link="base_link" /&gt;</span>
+<span class="ln">    &lt;origin xyz="0 0 0.033" rpy="0 0 0"/&gt;</span>
+<span class="ln">  &lt;/joint&gt;</span>
+<span class="ln"></span>
+<span class="ln">  &lt;link name="wheel_right_link"&gt;</span>
+<span class="ln">    &lt;inertial&gt;</span>
+<span class="ln">      &lt;origin xyz="0 -0.014 0" rpy="0 0 0" /&gt;</span>
+<span class="ln">      &lt;mass value="0.0530086090966721" /&gt;</span>
+<span class="ln">      &lt;inertia ixx="1.88176298336665E-05" ixy="-4.8444933029987E-10" ixz="1.88163708851143E-08"</span>
+<span class="ln">               iyy="3.11510738647764E-05" iyz="-6.93560663069607E-11"</span>
+<span class="ln">               izz="1.8801969558182E-05" /&gt;</span>
+<span class="ln">    &lt;/inertial&gt;</span>
+<span class="ln">    &lt;visual&gt;</span>
+<span class="ln">      &lt;origin xyz="0 0 0" rpy="1.57 0 0" /&gt;</span>
+<span class="ln">      &lt;geometry&gt;</span>
+<span class="ln">        &lt;mesh filename="package://bumperbot_description/meshes/wheel_right_link.STL" /&gt;</span>
+<span class="ln">      &lt;/geometry&gt;</span>
+<span class="ln">    &lt;/visual&gt;</span>
+<span class="ln">    &lt;collision&gt;</span>
+<span class="ln">      &lt;origin xyz="0 -0.015 0" rpy="1.57 0 0" /&gt;</span>
+<span class="ln">      &lt;geometry&gt;</span>
+<span class="ln">        &lt;sphere radius="0.033"/&gt;</span>
+<span class="ln">      &lt;/geometry&gt;</span>
+<span class="ln">    &lt;/collision&gt;</span>
+<span class="ln">  &lt;/link&gt;</span>
+<span class="ln"></span>
+<span class="ln">  &lt;joint name="wheel_right_joint" type="continuous"&gt;</span>
+<span class="ln">    &lt;origin xyz="0 -0.0701101849418637 0" rpy="0 0 0" /&gt;</span>
+<span class="ln">    &lt;parent link="base_link" /&gt;</span>
+<span class="ln">    &lt;child link="wheel_right_link" /&gt;</span>
+<span class="ln">    &lt;axis xyz="0 1 0" /&gt;</span>
+<span class="ln">  &lt;/joint&gt;</span>
+<span class="ln">  </span>
+<span class="ln">  &lt;link</span>
+<span class="ln">    name="wheel_left_link"&gt;</span>
+<span class="ln">    &lt;inertial&gt;</span>
+<span class="ln">      &lt;origin xyz="0 0.014 0" rpy="0 0 0" /&gt;</span>
+<span class="ln">      &lt;mass value="0.0530086043217644" /&gt;</span>
+<span class="ln">      &lt;inertia ixx="1.8792911368909E-05"  ixy="3.31256392204584E-10" ixz="-1.14082001662767E-08"</span>
+<span class="ln">               iyy="3.11510738759073E-05" iyz="-3.60499245082192E-10"</span>
+<span class="ln">               izz="1.88266886146847E-05" /&gt;</span>
+<span class="ln">    &lt;/inertial&gt;</span>
+<span class="ln">    &lt;visual&gt;</span>
+<span class="ln">      &lt;origin xyz="0 0 0" rpy="-1.57 0 0" /&gt;</span>
+<span class="ln">      &lt;geometry&gt;</span>
+<span class="ln">        &lt;mesh filename="package://bumperbot_description/meshes/wheel_left_link.STL" /&gt;</span>
+<span class="ln">      &lt;/geometry&gt;</span>
+<span class="ln">    &lt;/visual&gt;</span>
+<span class="ln">    &lt;collision&gt;</span>
+<span class="ln">      &lt;origin xyz="0 0.015 0" rpy="-1.57 0 0" /&gt;</span>
+<span class="ln">      &lt;geometry&gt;</span>
+<span class="ln">        &lt;sphere radius="0.033"/&gt;</span>
+<span class="ln">      &lt;/geometry&gt;</span>
+<span class="ln">    &lt;/collision&gt;</span>
+<span class="ln">  &lt;/link&gt;</span>
+<span class="ln"></span>
+<span class="ln">  &lt;joint name="wheel_left_joint" type="continuous"&gt;</span>
+<span class="ln">    &lt;origin xyz="0 0.0701101849418642 0" rpy="0 0 0" /&gt;</span>
+<span class="ln">    &lt;parent link="base_link" /&gt;</span>
+<span class="ln">    &lt;child link="wheel_left_link" /&gt;</span>
+<span class="ln">    &lt;axis xyz="0 1 0" /&gt;</span>
+<span class="ln">  &lt;/joint&gt;</span>
+<span class="ln"></span>
+<span class="ln">  &lt;link name="caster_front_link"&gt;</span>
+<span class="ln">    &lt;inertial&gt;</span>
+<span class="ln">      &lt;origin xyz="3.89968128948481E-07 2.40073004698083E-07 0.00219173397061506" rpy="0 0 0" /&gt;</span>
+<span class="ln">      &lt;mass value="1.44379265037903E-06" /&gt;</span>
+<span class="ln">      &lt;inertia ixx="7.23075276010246E-11" ixy="-6.10956883467859E-16" ixz="2.22849693525031E-15"</span>
+<span class="ln">               iyy="3.8713793085917E-11"  iyz="2.93909858781952E-15"</span>
+<span class="ln">               izz="1.00967486676306E-10" /&gt;</span>
+<span class="ln">    &lt;/inertial&gt;</span>
+<span class="ln">    &lt;visual&gt;</span>
+<span class="ln">      &lt;origin xyz="0 0 0" rpy="0 0 0" /&gt;</span>
+<span class="ln">      &lt;geometry&gt;</span>
+<span class="ln">        &lt;mesh filename="package://bumperbot_description/meshes/caster_front_link.STL" /&gt;</span>
+<span class="ln">      &lt;/geometry&gt;</span>
+<span class="ln">    &lt;/visual&gt;</span>
+<span class="ln">    &lt;collision&gt;</span>
+<span class="ln">      &lt;origin xyz="0 0 0" rpy="0 0 0" /&gt;</span>
+<span class="ln">      &lt;geometry&gt;</span>
+<span class="ln">        &lt;sphere radius="0.005"/&gt;</span>
+<span class="ln">      &lt;/geometry&gt;</span>
+<span class="ln">    &lt;/collision&gt;</span>
+<span class="ln">  &lt;/link&gt;</span>
+<span class="ln"></span>
+<span class="ln">  &lt;joint name="caster_front_joint" type="fixed"&gt;</span>
+<span class="ln">    &lt;origin xyz="0.04755 0 -0.0275" rpy="0 0 0" /&gt;</span>
+<span class="ln">    &lt;parent link="base_link" /&gt;</span>
+<span class="ln">    &lt;child link="caster_front_link" /&gt;</span>
+<span class="ln">    &lt;axis xyz="0 0 0" /&gt;</span>
+<span class="ln">  &lt;/joint&gt;</span>
+<span class="ln">  </span>
+<span class="ln">  &lt;link name="caster_rear_link"&gt;</span>
+<span class="ln">    &lt;inertial&gt;</span>
+<span class="ln">      &lt;origin xyz="3.8996812895542E-07 2.40073004698083E-07 0.00219173397061509" rpy="0 0 0" /&gt;</span>
+<span class="ln">      &lt;mass value="1.44379265037902E-06" /&gt;</span>
+<span class="ln">      &lt;inertia ixx="7.23075276010246E-11" ixy="-6.10956872363424E-16" ixz="2.22849693527207E-15"</span>
+<span class="ln">               iyy="3.87137930859167E-11" iyz="2.939098587861E-15"</span>
+<span class="ln">               izz="1.00967486676306E-10" /&gt;</span>
+<span class="ln">    &lt;/inertial&gt;</span>
+<span class="ln">    &lt;visual&gt;</span>
+<span class="ln">      &lt;origin xyz="0 0 0" rpy="0 0 0" /&gt;</span>
+<span class="ln">      &lt;geometry&gt;</span>
+<span class="ln">        &lt;mesh filename="package://bumperbot_description/meshes/caster_rear_link.STL" /&gt;</span>
+<span class="ln">      &lt;/geometry&gt;</span>
+<span class="ln">    &lt;/visual&gt;</span>
+<span class="ln">    &lt;collision&gt;</span>
+<span class="ln">      &lt;origin xyz="0 0 0" rpy="0 0 0" /&gt;</span>
+<span class="ln">      &lt;geometry&gt;</span>
+<span class="ln">        &lt;sphere radius="0.005"/&gt;</span>
+<span class="ln">      &lt;/geometry&gt;</span>
+<span class="ln">    &lt;/collision&gt;</span>
+<span class="ln">  &lt;/link&gt;</span>
+<span class="ln"></span>
+<span class="ln">  &lt;joint name="caster_rear_joint" type="fixed"&gt;</span>
+<span class="ln">    &lt;origin xyz="-0.04755 0 -0.0275" rpy="0 0 0" /&gt;</span>
+<span class="ln">    &lt;parent link="base_link" /&gt;</span>
+<span class="ln">    &lt;child link="caster_rear_link" /&gt;</span>
+<span class="ln">    &lt;axis xyz="0 0 0" /&gt;</span>
+<span class="ln">  &lt;/joint&gt;</span>
+<span class="ln"></span>
+<span class="ln">&lt;/robot&gt;</span></code></pre></div>
+<h2 id="create-bumperbot-ros2-control-xacro">Create <code>bumperbot_ros2_control.xacro</code></h2>
+<figure class="img"><img alt="" decoding="async" height="132" loading="lazy" src="/uploads/wp/2026/09/image-108.png" width="654"></figure>
+<p>Now create another file inside:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">bumperbot_description/urdf/</span></code></pre></div>
+<p>called:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">bumperbot_ros2_control.xacro</span></code></pre></div>
+<h2 id="write-bumperbot-ros2-control-xacro">Write <code>bumperbot_ros2_control.xacro</code></h2>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln">&lt;?xml version="1.0"?&gt;</span>
+<span class="ln">&lt;robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="bumperbot"&gt;</span>
+<span class="ln"></span>
+<span class="ln">    &lt;ros2_control name="RobotSystem" type="system"&gt;</span>
+<span class="ln"></span>
+<span class="ln">        &lt;!-- ros2_control Gazebo --&gt;</span>
+<span class="ln">        &lt;!-- ROS 2 Humble --&gt;</span>
+<span class="ln">        &lt;xacro:if value="$(arg is_ignition)"&gt;</span>
+<span class="ln">            &lt;hardware&gt;</span>
+<span class="ln">                &lt;plugin&gt;ign_ros2_control/IgnitionSystem&lt;/plugin&gt;</span>
+<span class="ln">            &lt;/hardware&gt;</span>
+<span class="ln">        &lt;/xacro:if&gt;</span>
+<span class="ln"></span>
+<span class="ln">        &lt;!-- ROS 2 Iron or above --&gt;</span>
+<span class="ln">        &lt;xacro:unless value="$(arg is_ignition)"&gt;</span>
+<span class="ln">            &lt;hardware&gt;</span>
+<span class="ln">                &lt;plugin&gt;gz_ros2_control/GazeboSimSystem&lt;/plugin&gt;</span>
+<span class="ln">            &lt;/hardware&gt;</span>
+<span class="ln">        &lt;/xacro:unless&gt;</span>
+<span class="ln">        </span>
+<span class="ln">        &lt;!-- ros2_control Common Interfaces --&gt;</span>
+<span class="ln">        &lt;joint name="wheel_right_joint"&gt;</span>
+<span class="ln">            &lt;command_interface name="velocity"&gt;</span>
+<span class="ln">              &lt;param name="min"&gt;-1&lt;/param&gt;</span>
+<span class="ln">              &lt;param name="max"&gt;1&lt;/param&gt;</span>
+<span class="ln">            &lt;/command_interface&gt;</span>
+<span class="ln">            &lt;state_interface name="position" /&gt;</span>
+<span class="ln">            &lt;state_interface name="velocity" /&gt;</span>
+<span class="ln">        &lt;/joint&gt;</span>
+<span class="ln"></span>
+<span class="ln">        &lt;joint name="wheel_left_joint"&gt;</span>
+<span class="ln">            &lt;command_interface name="velocity"&gt;</span>
+<span class="ln">              &lt;param name="min"&gt;-1&lt;/param&gt;</span>
+<span class="ln">              &lt;param name="max"&gt;1&lt;/param&gt;</span>
+<span class="ln">            &lt;/command_interface&gt;</span>
+<span class="ln">            &lt;state_interface name="position" /&gt;</span>
+<span class="ln">            &lt;state_interface name="velocity" /&gt;</span>
+<span class="ln">        &lt;/joint&gt;</span>
+<span class="ln">        </span>
+<span class="ln">    &lt;/ros2_control&gt;</span>
+<span class="ln"></span>
+<span class="ln">&lt;/robot&gt;</span></code></pre></div>
+<h2 id="add-the-dependency-to-package-xml">Add the Dependency to <code>package.xml</code></h2>
+<figure class="img"><img alt="" decoding="async" height="409" loading="lazy" src="/uploads/wp/2026/09/image-109.png" width="1200"></figure>
+<p>Open:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">bumperbot_description/package.xml</span></code></pre></div>
+<p>Add:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">  &lt;exec_depend condition="$ROS_DISTRO &gt;= iron"&gt;gz_ros2_control&lt;/exec_depend&gt;</span>
+<span class="ln">  &lt;exec_depend condition="$ROS_DISTRO == humble"&gt;ign_ros2_control&lt;/exec_depend&gt;</span></code></pre></div>
+<h3>Why Are There Two Dependencies?</h3>
+<p>Because our Xacro file can use two different plugins:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">Humble</span>
+<span class="ln">  ↓</span>
+<span class="ln">ign_ros2_control</span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln">Iron and above</span>
+<span class="ln">  ↓</span>
+<span class="ln">gz_ros2_control</span></code></pre></div>
+<p>So <code>package.xml</code> tells ROS 2:</p>
+<blockquote>
+<p>“Depending on the ROS 2 distribution, this package needs the corresponding control package.”</p>
+</blockquote>
+<p>This is the same idea as our earlier dependency additions.</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">package.xml</span>
+<span class="ln">    ↓</span>
+<span class="ln">"What ROS 2 packages does this package need?"</span></code></pre></div>
+<h2 id="update-the-gazebo-launch-file">Update the Gazebo Launch File</h2>
+<figure class="img"><img alt="" decoding="async" height="333" loading="lazy" src="/uploads/wp/2026/09/image-110.png" width="964"></figure>
+<p>Now we need to update:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">bumperbot_description/launch/gazebo.launch.py</span></code></pre></div>
+<p>The important new part is that the launch file reads the current ROS 2 distribution.</p>
+<p>Use:</p>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln">import os</span>
+<span class="ln">from pathlib import Path</span>
+<span class="ln">from ament_index_python.packages import get_package_share_directory</span>
+<span class="ln"></span>
+<span class="ln">from launch import LaunchDescription</span>
+<span class="ln">from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, SetEnvironmentVariable</span>
+<span class="ln">from launch.substitutions import Command, LaunchConfiguration</span>
+<span class="ln">from launch.launch_description_sources import PythonLaunchDescriptionSource</span>
+<span class="ln"></span>
+<span class="ln">from launch_ros.actions import Node</span>
+<span class="ln">from launch_ros.parameter_descriptions import ParameterValue</span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln">def generate_launch_description():</span>
+<span class="ln">    bumperbot_description = get_package_share_directory("bumperbot_description")</span>
+<span class="ln"></span>
+<span class="ln">    model_arg = DeclareLaunchArgument(name="model", default_value=os.path.join(</span>
+<span class="ln">                                        bumperbot_description, "urdf", "bumperbot.urdf.xacro"</span>
+<span class="ln">                                        ),</span>
+<span class="ln">                                      description="Absolute path to robot urdf file"</span>
+<span class="ln">    )</span>
+<span class="ln"></span>
+<span class="ln">    gazebo_resource_path = SetEnvironmentVariable(</span>
+<span class="ln">        name="GZ_SIM_RESOURCE_PATH",</span>
+<span class="ln">        value=[</span>
+<span class="ln">            str(Path(bumperbot_description).parent.resolve())</span>
+<span class="ln">            ]</span>
+<span class="ln">        )</span>
+<span class="ln">    </span>
+<span class="ln">    ros_distro = os.environ["ROS_DISTRO"]</span>
+<span class="ln">    is_ignition = "True" if ros_distro == "humble" else "False"</span>
+<span class="ln">    </span>
+<span class="ln">    robot_description = ParameterValue(Command([</span>
+<span class="ln">            "xacro ",</span>
+<span class="ln">            LaunchConfiguration("model"),</span>
+<span class="ln">            " is_ignition:=",</span>
+<span class="ln">            is_ignition</span>
+<span class="ln">        ]),</span>
+<span class="ln">        value_type=str</span>
+<span class="ln">    )</span>
+<span class="ln"></span>
+<span class="ln">    robot_state_publisher_node = Node(</span>
+<span class="ln">        package="robot_state_publisher",</span>
+<span class="ln">        executable="robot_state_publisher",</span>
+<span class="ln">        parameters=[{"robot_description": robot_description,</span>
+<span class="ln">                     "use_sim_time": True}]</span>
+<span class="ln">    )</span>
+<span class="ln"></span>
+<span class="ln">    gazebo = IncludeLaunchDescription(</span>
+<span class="ln">                PythonLaunchDescriptionSource([os.path.join(</span>
+<span class="ln">                    get_package_share_directory("ros_gz_sim"), "launch"), "/gz_sim.launch.py"]),</span>
+<span class="ln">                launch_arguments=[</span>
+<span class="ln">                    ("gz_args", [" -v 4", " -r", " empty.sdf"]</span>
+<span class="ln">                    )</span>
+<span class="ln">                ]</span>
+<span class="ln">             )</span>
+<span class="ln"></span>
+<span class="ln">    gz_spawn_entity = Node(</span>
+<span class="ln">        package="ros_gz_sim",</span>
+<span class="ln">        executable="create",</span>
+<span class="ln">        output="screen",</span>
+<span class="ln">        arguments=["-topic", "robot_description",</span>
+<span class="ln">                   "-name", "bumperbot"],</span>
+<span class="ln">    )</span>
+<span class="ln"></span>
+<span class="ln">    gz_ros2_bridge = Node(</span>
+<span class="ln">        package="ros_gz_bridge",</span>
+<span class="ln">        executable="parameter_bridge",</span>
+<span class="ln">        arguments=[</span>
+<span class="ln">            "/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock",</span>
+<span class="ln">        ]</span>
+<span class="ln">    )</span>
+<span class="ln"></span>
+<span class="ln">    return LaunchDescription([</span>
+<span class="ln">        model_arg,</span>
+<span class="ln">        gazebo_resource_path,</span>
+<span class="ln">        robot_state_publisher_node,</span>
+<span class="ln">        gazebo,</span>
+<span class="ln">        gz_spawn_entity,</span>
+<span class="ln">        gz_ros2_bridge,</span>
+<span class="ln">    ])</span></code></pre></div>
+<h2 id="build-the-workspace">Build the Workspace</h2>
+<figure class="img"><img alt="" decoding="async" height="246" loading="lazy" src="/uploads/wp/2026/09/image-112.png" width="619"></figure>
+<p>We have changed multiple package files, so now rebuild the workspace.</p>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln">cd bumperbot_ws</span>
+<span class="ln">colcon build</span></code></pre></div>
+<h2 id="source-the-workspace-and-launch">Source the Workspace and Launch</h2>
+<figure class="img"><img alt="" decoding="async" height="178" loading="lazy" src="/uploads/wp/2026/09/image-113.png" width="939"></figure>
+<p>Open another terminal and source the workspace:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">. install/setup.bash</span></code></pre></div>
+<p>Then launch the simulation:</p>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln">ros2 launch bumperbot_description gazebo.launch.py</span></code></pre></div>
+<h2 id="gazebo-starts">Gazebo Starts</h2>
+<figure class="img"><img alt="" decoding="async" height="614" loading="lazy" src="/uploads/wp/2026/09/image-114.png" width="986"></figure>
+<p>Gazebo should now start with the BumperBot.</p>
+<p>But this time something important has changed.</p>
+<p>We are no longer launching <strong>only the simulated robot</strong>.</p>
+<p>We have also connected its wheel joints to <strong><code>ros2_control</code></strong>.</p>
+<h2 id="check-the-terminal-output">Check the Terminal Output</h2>
+<figure class="img"><img alt="" decoding="async" height="289" loading="lazy" src="/uploads/wp/2026/09/image-115.png" width="1151"></figure>
+<p>This output is actually a useful verification that our configuration has been loaded.</p>
+</div></div>
+    <nav class="pager" aria-label="Chapters">
+<a href="/documented-software-learnings/ros2/ros2-aa/"><span class="mono">Chapter 27</span>Control Types</a><a class="nx" href="/documented-software-learnings/ros2/ros2-ac/"><span class="mono">Chapter 29</span>Understanding ROS 2 Control | Explanation of Chapter 28</a>    </nav>
+  </article>
+</div>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/plc/">PLC &amp; Industrial Automation</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=a6e775a3ba" defer></script>
+<script src="/assets/home.js?v=a6e775a3ba" defer></script>
+</body>
+</html>

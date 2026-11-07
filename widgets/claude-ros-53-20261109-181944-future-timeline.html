@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>call_async and the future</title>
+<style>
+html,body{margin:0;background:#0e182c;color:#e8eef7;font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+.w{padding:16px;max-width:1000px;margin:0 auto}
+h1{font-size:18px;margin:0 0 4px}.sub{color:#a9b8cc;font-size:14px;margin:0 0 12px}
+.card{background:#13213a;border:1px solid #23395c;border-radius:12px;padding:12px}
+svg{display:block;width:100%;height:auto}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+button{background:#ff8a3d;color:#1a0d02;border:0;border-radius:8px;padding:8px 14px;font:600 14px system-ui,sans-serif;cursor:pointer}
+button.g{background:transparent;color:#e8eef7;border:1px solid #2b4366}button[disabled]{opacity:.4;cursor:not-allowed}
+.cnt{font:12px ui-monospace,Consolas,monospace;color:#8aa0bd}
+.cks{display:flex;flex-wrap:wrap;gap:14px;margin:4px 0 8px}label{font-size:14px;display:inline-flex;gap:6px;align-items:center}
+.why{background:#0f1b31;border:1px solid #23395c;border-radius:10px;padding:10px 12px;margin:8px 0;font-size:14.5px;min-height:70px}
+.why b.t{display:block;color:#ff8a3d;margin-bottom:2px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media (max-width:720px){.row2{grid-template-columns:1fr}}
+.term{background:#060c18;border:1px solid #1f3352;border-radius:8px;padding:8px 10px;font:12.5px/1.6 ui-monospace,Consolas,monospace;white-space:pre-wrap;word-break:break-word;min-height:104px}
+.term .h{color:#7f93ad;font-family:system-ui,sans-serif;font-size:11px;letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:4px}
+.ok{color:#66e3b0}.warn{color:#ffd24a}.bad{color:#ff6b6b}code{font-family:ui-monospace,Consolas,monospace;color:#ffd9bf}
+</style></head><body><div class="w">
+<h1>call_async: send now, get the answer later</h1>
+<p class="sub">Left: your client node, line by line. Middle: the future, a box that will hold the answer. Right: the server. Go Next and Back, or press Play. Then break something with the checkboxes.</p>
+<div class="card">
+ <svg id="sv" viewBox="0 0 760 270" role="img" aria-label="Client code, the future box and the server"></svg>
+ <div class="bar"><button class="g" id="bk">Back</button><button id="nx">Next</button><button class="g" id="pl">Play</button><span class="cnt" id="cnt"></span></div>
+ <div class="cks"><label><input type="checkbox" id="late"> server starts 3 s late</label><label><input type="checkbox" id="nospin"> rclpy.spin missing (line 35)</label><label><input type="checkbox" id="slow"> slow server (2 s to answer)</label></div>
+ <div class="why" id="why"></div>
+ <div class="row2"><div class="term" id="tc"></div><div class="term" id="ts"></div></div>
+</div></div>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)},st=0,timer=null;
+var LINES={11:'self.client_ = self.create_client(AddTwoInts, "add_two_ints")',13:'while not self.client_.wait_for_service(timeout_sec=1.0):',14:'    self.get_logger().info("service not available, waiting again...")',16:'self.req_ = AddTwoInts.Request()',17:'self.req_.a = a   (5)',18:'self.req_.b = b   (3)',19:'self.future_ = self.client_.call_async(self.req_)',20:'self.future_.add_done_callback(self.responseCallback)',33:'simple_service_client = SimpleServiceClient(5, 3)',35:'rclpy.spin(simple_service_client)',37:'simple_service_client.destroy_node()',23:"self.get_logger().info('Service Response %d' % future.result().sum)"};
+function steps(){
+  var late=$('late').checked,nospin=$('nospin').checked,slow=$('slow').checked,S=[],tc='ros2 run bumperbot_py_examples simple_service_client 5 3',ts=late?'(server not started yet)':'[INFO] [simple_service_server]: Service add_two_ints Ready';
+  function add(o){o.tc=o.tc||tc;o.ts=o.ts||ts;S.push(o)}
+  add({ln:33,t:'main creates the node',x:'Line 33 calls SimpleServiceClient(5, 3). Its __init__ runs from top to bottom.',fut:'',srv:late?'off':'on'});
+  add({ln:11,t:'The client is created',x:'create_client makes a client for the service <code>add_two_ints</code> of type AddTwoInts. Nothing is sent yet.',fut:'',srv:late?'off':'on'});
+  if(late){for(var k=1;k<=3;k++){tc+='\n<span class="warn">[INFO] [simple_service_client]: service not available, waiting again...</span>';
+    add({ln:14,t:'Waiting for the server ('+k+' s)',x:'wait_for_service waits up to 1 second, finds no server and returns False, so the loop prints the line and tries again.',fut:'',srv:'off',tc:tc})}
+    ts='ros2 run bumperbot_py_examples simple_service_server\n[INFO] [simple_service_server]: Service add_two_ints Ready'}
+  add({ln:13,t:'The server is there',x:'wait_for_service returns True, so <code>not True</code> is False and the loop ends.',fut:'',srv:'on',ts:ts});
+  add({ln:16,t:'An empty request',x:'AddTwoInts.Request() is a new request with a = 0 and b = 0. Lines 17 and 18 put 5 and 3 into it.',fut:'',srv:'on',req:'a=5, b=3'});
+  add({ln:19,t:'call_async sends it and returns at once',x:'The request leaves. call_async does <b>not</b> wait for the answer: it hands back a <b>future</b>, an empty box that will hold the answer later.',fut:'pending',srv:'on',env:'req'});
+  add({ln:20,t:'Say what to do when the answer comes',x:'add_done_callback stores responseCallback in the future. It will run once, when the box is filled. __init__ is now finished.',fut:'pending',srv:'on',env:'req2'});
+  ts+='\n[INFO] [simple_service_server]: New Request Received a: 5, b: 3\n[INFO] [simple_service_server]: Returning sum: 8';
+  if(nospin){
+    add({ln:37,t:'No spin: the program ends',x:'Without rclpy.spin, main goes straight on to destroy_node and shutdown. The answer may still be computed by the server, but nothing in the client is listening, so responseCallback never runs and nothing is printed.',fut:'pending',srv:'on',ts:ts,end:1});
+    return S}
+  add({ln:35,t:'spin: wait for events',x:'main reaches rclpy.spin. Now the node can receive the answer. '+(slow?'The server takes 2 seconds, so the box stays empty for a while: the client is not stuck, it simply waits.':'The server answers within milliseconds.'),fut:'pending',srv:'busy',ts:ts});
+  add({ln:35,t:'The answer arrives: the future is done',x:'The response (sum = 8) is put into the box. future.result() now returns it.',fut:'done',srv:'on',env:'res',ts:ts});
+  tc+='\n<span class="ok">[INFO] [simple_service_client]: Service Response 8</span>';
+  add({ln:23,t:'spin runs responseCallback',x:'spin calls responseCallback(future). future.result().sum is 8, so the line is printed. This is why spin is needed: it is what runs the callback.',fut:'done',srv:'on',tc:tc,ts:ts});
+  add({ln:35,t:'It keeps spinning',x:'The work is done, but spin only returns when the program is stopped. Press Ctrl+C to end the client.',fut:'done',srv:'on',tc:tc+'\n(still running: press Ctrl+C)',ts:ts});
+  return S}
+function box(x,y,w,h,col,t,s,dim){return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="12" fill="#0f1d30" stroke="'+col+'" stroke-width="2.5" opacity="'+(dim?.4:1)+'"/>'+
+  '<text x="'+(x+w/2)+'" y="'+(y+22)+'" text-anchor="middle" fill="#eef3fa" font-size="15" font-weight="700" font-family="system-ui,sans-serif">'+t+'</text>'+
+  (s?'<text x="'+(x+w/2)+'" y="'+(y+40)+'" text-anchor="middle" fill="#a7b8cd" font-size="12" font-family="ui-monospace,Consolas,monospace">'+s+'</text>':'')}
+function env(x,y,col){return '<g transform="translate('+x+' '+y+')"><rect x="-16" y="-10" width="32" height="20" rx="3" fill="#0b1522" stroke="'+col+'" stroke-width="2"/><path d="M-16 -10 L0 2 L16 -10" fill="none" stroke="'+col+'" stroke-width="2"/></g>'}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function draw(){
+  var S=steps();st=Math.max(0,Math.min(st,S.length-1));var s=S[st],g='';
+  g+=box(14,20,300,230,'#ff8a3d','your client node','simple_service_client');
+  var shown=[33,11,13,16,19,20,35,23];shown.forEach(function(n,i){var y=86+i*20,on=n===s.ln||(s.ln===14&&n===13)||(s.ln===37&&n===35);
+    g+='<text x="26" y="'+y+'" fill="'+(on?'#ffd24a':'#8aa0bd')+'" font-size="11.5" font-family="ui-monospace,Consolas,monospace" font-weight="'+(on?700:400)+'">'+String(n).padStart(2,' ')+'  '+esc(LINES[n].length>36?LINES[n].slice(0,35)+'…':LINES[n])+'</text>'});
+  var fcol=s.fut==='done'?'#66e3b0':s.fut==='pending'?'#ffd24a':'#4a5a70';
+  g+=box(330,70,150,110,fcol,'the future',s.fut==='done'?'done':s.fut==='pending'?'pending':'not made yet',!s.fut);
+  if(s.fut==='done')g+='<text x="405" y="150" text-anchor="middle" fill="#66e3b0" font-size="17" font-weight="800" font-family="ui-monospace,Consolas,monospace">sum = 8</text>';
+  if(s.fut==='pending')g+='<text x="405" y="150" text-anchor="middle" fill="#ffd24a" font-size="22" font-family="system-ui">⌛</text>';
+  if(s.fut)g+='<text x="405" y="200" text-anchor="middle" fill="#a7b8cd" font-size="11.5" font-family="system-ui,sans-serif">then: responseCallback</text>';
+  var scol=s.srv==='off'?'#4a5a70':s.srv==='busy'?'#ffd24a':'#66e3b0';
+  g+=box(560,70,186,110,scol,'server',s.srv==='off'?'not running':'add_two_ints',s.srv==='off');
+  if(s.srv==='busy')g+='<text x="653" y="150" text-anchor="middle" fill="#ffd24a" font-size="12.5" font-family="ui-monospace,Consolas,monospace">computing 5 + 3</text>';
+  g+='<line x1="480" y1="125" x2="560" y2="125" stroke="#4f9c80" stroke-width="2" stroke-dasharray="6 5"/>';
+  if(s.env==='req'||s.env==='req2')g+=env(s.env==='req'?505:540,125,'#ffd24a');
+  if(s.env==='res')g+=env(505,125,'#5ab4ff');
+  if(s.end)g+='<text x="164" y="240" text-anchor="middle" fill="#ff6b6b" font-size="13" font-weight="700" font-family="system-ui,sans-serif">program ended: no callback</text>';
+  $('sv').innerHTML=g;
+  $('why').innerHTML='<b class="t">Step '+(st+1)+' of '+S.length+': '+s.t+'</b>'+s.x;
+  $('tc').innerHTML='<span class="h">Terminal 2: the client</span>'+s.tc;$('ts').innerHTML='<span class="h">Terminal 1: the server</span>'+s.ts;
+  $('cnt').textContent='step '+(st+1)+' / '+S.length;$('bk').disabled=st===0;$('nx').textContent=st===S.length-1?'Start again':'Next';
+}
+$('nx').onclick=function(){var n=steps().length;st=st>=n-1?0:st+1;draw()};
+$('bk').onclick=function(){st--;draw()};
+$('pl').onclick=function(){if(timer){clearInterval(timer);timer=null;$('pl').textContent='Play';return}st=0;draw();$('pl').textContent='Pause';
+  timer=setInterval(function(){var n=steps().length;if(st>=n-1){clearInterval(timer);timer=null;$('pl').textContent='Play';return}st++;draw()},1400)};
+['late','nospin','slow'].forEach(function(i){$(i).onchange=function(){st=0;draw()}});
+draw();
+})();
+</script>
+<script>
+(function(){function s(){parent.postMessage({taWidget:location.pathname,h:document.documentElement.scrollHeight},'*')}
+new ResizeObserver(s).observe(document.documentElement);addEventListener('load',s);setInterval(s,1500);})();
+</script></body></html>

@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Euler to Quaternion: Turning the Robot with tf_transformations | ROS 2 | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="Introduction In the previous chapters the node simple_tf_kinematics published a moving transform, odom → bumperbot_base , that only drove forward. Its rotation…">
+<link rel="canonical" href="https://techarcanist.com/documented-software-learnings/ros2/ros2-56/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="Euler to Quaternion: Turning the Robot with tf_transformations | ROS 2">
+<meta property="og:description" content="Introduction In the previous chapters the node simple_tf_kinematics published a moving transform, odom → bumperbot_base , that only drove forward. Its rotation…">
+<meta property="og:url" content="https://techarcanist.com/documented-software-learnings/ros2/ros2-56/">
+<meta property="og:image" content="https://techarcanist.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=a6e775a3ba">
+<link rel="stylesheet" href="/assets/home.css?v=a6e775a3ba">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/" aria-current="page">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap reader wide">
+  <aside class="rd-nav" id="rd-nav">
+    <a class="rd-series" href="/documented-software-learnings/ros2/"><span class="label">Series</span>ROS 2</a>
+    <ol>
+      <li><a href="/documented-software-learnings/ros2/ros2_a/"><span class="mono">01</span>Installing Ubuntu Desktop (Dual Boot with Windows)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_b/"><span class="mono">02</span>ROS 2 Jazzy Installation on Ubuntu (Step-by-Step)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_c/"><span class="mono">03</span>Development Environment Setup for ROS 2 Jazzy on Ubuntu (With Clear Explanations)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_d/"><span class="mono">04</span>ROS 2 Fundamentals: Architecture, Communication, Packages, and Workspaces</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_e/"><span class="mono">05</span>ROS 2 Workspace &amp; Package Creation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_f/"><span class="mono">06</span>ROS 2 Python Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_g/"><span class="mono">07</span>ROS 2 C++ Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_h/"><span class="mono">08</span>ROS 2 Python Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_i/"><span class="mono">09</span>ROS 2 C++ Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_j/"><span class="mono">10</span>Robot Locomotion: Introduction</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_k/"><span class="mono">11</span>Wheeled Locomotion Architectures</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_l/"><span class="mono">12</span>Rolling Friction &amp; Wheeled Locomotion Efficiency</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_m/"><span class="mono">13</span>Introduction to Robot Simulation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_n/"><span class="mono">14</span>URDF</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_o/"><span class="mono">15</span>Create a URDF Model</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_p/"><span class="mono">16</span>Rviz</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_q/"><span class="mono">17</span>Node Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_r/"><span class="mono">18</span>Python Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_s/"><span class="mono">19</span>C++ Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_t/"><span class="mono">20</span>ROS 2 Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-u/"><span class="mono">21</span>Visualize The Robot In RVIZ2</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-v/"><span class="mono">22</span>Launch Files</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-w/"><span class="mono">23</span>ROS 2 Launch Files: Visualizing the Robot with One Command</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-x/"><span class="mono">24</span>Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-y/"><span class="mono">25</span>Simulating the Robot in Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-z/"><span class="mono">26</span>ROS 2 Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-aa/"><span class="mono">27</span>Control Types</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ab/"><span class="mono">28</span>ROS 2 Control: Prepare the Robot for Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ac/"><span class="mono">29</span>Understanding ROS 2 Control | Explanation of Chapter 28</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ad/"><span class="mono">30</span>ROS 2 Control: Moving the BumperBot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ae/"><span class="mono">31</span>Robot Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-af/"><span class="mono">32</span>Pose of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_af/"><span class="mono">33</span>Translation Vector</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ag/"><span class="mono">34</span>Introduction to Turtlesim</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ah/"><span class="mono">35</span>Translation Vector Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ai/"><span class="mono">36</span>Translation Vector Between Two Turtles: CPP</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_aj/"><span class="mono">37</span>Rotation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ak/"><span class="mono">38</span>Rotation Matrix Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_al/"><span class="mono">39</span>Transformation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_am/"><span class="mono">40</span>Differential Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-41/"><span class="mono">41</span>Velocity of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-42/"><span class="mono">42</span>Simple Speed Controller: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-43/"><span class="mono">43</span>Launch the Simple Speed Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-44/"><span class="mono">44</span>Teleoperating the BumperBot with a Joystick</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-45/"><span class="mono">45</span>ROS 2 Diff Drive Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-46/"><span class="mono">46</span>TF 2 Library</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-47/"><span class="mono">47</span>Operation With Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-48/"><span class="mono">48</span>Static &amp; Dynamic Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-49/"><span class="mono">49</span>Simple TF2 Static Broadcaster</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-50/"><span class="mono">50</span>Simple TF2 Broadcaster: Static and Dynamic Transforms</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-51/"><span class="mono">51</span>ROS 2 Services</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-52/"><span class="mono">52</span>Service Server in Python: AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-53/"><span class="mono">53</span>Service Client in Python: Calling AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-54/"><span class="mono">54</span>Simple TF2 Listener in Python: a get_transform Service</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-55/"><span class="mono">55</span>Euler Angles and Quaternions</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-56/" aria-current="page"><span class="mono">56</span>Euler to Quaternion: Turning the Robot with tf_transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-57/"><span class="mono">57</span>tf2 Tools: view_frames and tf2_echo</a></li>
+    </ol>
+  </aside>
+  <article class="rd-main">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/documented-software-learnings/">Library</a><span>/</span><a href="/documented-software-learnings/ros2/">ROS 2</a><span>/</span><span>56</span></nav>
+    <button class="btn btn-sm btn-line rd-tg" type="button" id="rd-tg">All chapters</button>
+<p class="sh-label mono"><span>56</span>Chapter 56 of 57</p>    <h1>Euler to Quaternion: Turning the Robot with tf_transformations</h1>
+<div class="cs-lead"><br></div><div class="rd-prog" aria-hidden="true"><i style="width:98.2%"></i></div>    <div class="prose"><div class="col"><h2 id="introduction">Introduction</h2><p>In the previous chapters the node <code>simple_tf_kinematics</code> published a moving transform, <code>odom</code> → <code>bumperbot_base</code>, that only drove forward. Its rotation was always x 0, y 0, z 0, w 1: no turn.</p><p>This chapter makes the base <b>turn</b> as well. People think about turns in angles (roll, pitch, yaw), but ROS 2 stores every rotation as a <b>quaternion</b>, four numbers x, y, z, w. The library <code>tf_transformations</code> converts between the two and does the quaternion maths:</p><ul><li><code>quaternion_from_euler(roll, pitch, yaw)</code> turns three angles (in radians) into a quaternion.</li><li><code>quaternion_multiply(a, b)</code> combines two turns into one.</li><li><code>quaternion_inverse(q)</code> gives the opposite turn.</li></ul><p>The node starts with no turn, multiplies in a small yaw of 0.05 radians on every tick, and after 100 ticks switches to the inverse so the base turns back. In RViz the base frame drives along X while turning back and forth.</p><p class="note">The node from the TF2 listener chapter must already build and run. This chapter changes that file and adds one dependency.</p></div>
+<div class="col"><h2 id="write-the-code">Write the code</h2><p>Open <code>simple_tf_kinematics.py</code> in <code>bumperbot_py_examples/bumperbot_py_examples</code>.</p><figure class="img sz-s al-l"><img src="/uploads/2026/11/image-42.png" alt="simple_tf_kinematics.py in bumperbot_py_examples" loading="lazy"><figcaption>simple_tf_kinematics.py in bumperbot_py_examples</figcaption></figure><p>Make it look like this. Everything from the listener chapter stays; the new parts are marked below.</p><div class="codeblock" data-lang="Python"><pre class="code numbered"><code><span class="ln"><span class="tok-keyword">import</span> <span class="tok-namespace">rclpy</span></span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">rclpy</span><span class="tok-namespace">.</span><span class="tok-namespace">node</span> <span class="tok-keyword">import</span> Node</span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">bumperbot_msgs</span><span class="tok-namespace">.</span><span class="tok-namespace">srv</span> <span class="tok-keyword">import</span> GetTransform</span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">tf2_ros</span><span class="tok-namespace">.</span><span class="tok-namespace">static_transform_broadcaster</span> <span class="tok-keyword">import</span> StaticTransformBroadcaster</span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">tf2_ros</span> <span class="tok-keyword">import</span> TransformBroadcaster<span class="tok-punctuation">,</span> TransformException</span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">tf2_ros</span><span class="tok-namespace">.</span><span class="tok-namespace">buffer</span> <span class="tok-keyword">import</span> Buffer</span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">tf2_ros</span><span class="tok-namespace">.</span><span class="tok-namespace">transform_listener</span> <span class="tok-keyword">import</span> TransformListener</span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">geometry_msgs</span><span class="tok-namespace">.</span><span class="tok-namespace">msg</span> <span class="tok-keyword">import</span> TransformStamped</span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">tf_transformations</span> <span class="tok-keyword">import</span> quaternion_from_euler<span class="tok-punctuation">,</span> quaternion_multiply<span class="tok-punctuation">,</span> quaternion_inverse</span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">class</span> <span class="tok-className">SimpleTfKinematics</span><span class="tok-punctuation">(</span>Node<span class="tok-punctuation">)</span><span class="tok-punctuation">:</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-keyword">def</span> <span class="tok-definition">__init__</span><span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span></span>
+<span class="ln">        <span class="tok-typeName">super</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span><span class="tok-definition">__init__</span><span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">simple_tf_kinematics</span><span class="tok-string">"</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>x_increment_ <span class="tok-operator">=</span> <span class="tok-number">0.05</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>last_x_ <span class="tok-operator">=</span> <span class="tok-number">0.0</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>rotations_counter_ <span class="tok-operator">=</span> <span class="tok-number">0</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-comment"># TF Broadcaster</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>static_tf_broadcaster_ <span class="tok-operator">=</span> StaticTransformBroadcaster<span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>dynamic_tf_broadcaster_ <span class="tok-operator">=</span> TransformBroadcaster<span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>static_transform_stamped_ <span class="tok-operator">=</span> TransformStamped<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>dynamic_transform_stamped_ <span class="tok-operator">=</span> TransformStamped<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-comment"># TF Listener</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>tf_buffer_ <span class="tok-operator">=</span> Buffer<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>tf_listener_ <span class="tok-operator">=</span> TransformListener<span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>tf_buffer_<span class="tok-punctuation">,</span> <span class="tok-typeName">self</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>static_transform_stamped_<span class="tok-operator">.</span>header<span class="tok-operator">.</span>stamp <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_clock<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>now<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>to_msg<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>static_transform_stamped_<span class="tok-operator">.</span>header<span class="tok-operator">.</span>frame_id <span class="tok-operator">=</span> <span class="tok-string">"</span><span class="tok-string">bumperbot_base</span><span class="tok-string">"</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>static_transform_stamped_<span class="tok-operator">.</span>child_frame_id <span class="tok-operator">=</span> <span class="tok-string">"</span><span class="tok-string">bumperbot_top</span><span class="tok-string">"</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>static_transform_stamped_<span class="tok-operator">.</span>transform<span class="tok-operator">.</span>translation<span class="tok-operator">.</span>x <span class="tok-operator">=</span> <span class="tok-number">0.0</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>static_transform_stamped_<span class="tok-operator">.</span>transform<span class="tok-operator">.</span>translation<span class="tok-operator">.</span>y <span class="tok-operator">=</span> <span class="tok-number">0.0</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>static_transform_stamped_<span class="tok-operator">.</span>transform<span class="tok-operator">.</span>translation<span class="tok-operator">.</span>z <span class="tok-operator">=</span> <span class="tok-number">0.3</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>static_transform_stamped_<span class="tok-operator">.</span>transform<span class="tok-operator">.</span>rotation<span class="tok-operator">.</span>x <span class="tok-operator">=</span> <span class="tok-number">0.0</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>static_transform_stamped_<span class="tok-operator">.</span>transform<span class="tok-operator">.</span>rotation<span class="tok-operator">.</span>y <span class="tok-operator">=</span> <span class="tok-number">0.0</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>static_transform_stamped_<span class="tok-operator">.</span>transform<span class="tok-operator">.</span>rotation<span class="tok-operator">.</span>z <span class="tok-operator">=</span> <span class="tok-number">0.0</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>static_transform_stamped_<span class="tok-operator">.</span>transform<span class="tok-operator">.</span>rotation<span class="tok-operator">.</span>w <span class="tok-operator">=</span> <span class="tok-number">1.0</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>static_tf_broadcaster_<span class="tok-operator">.</span>sendTransform<span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>static_transform_stamped_<span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_logger<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>info<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">Publishing static transform between </span><span class="tok-string">%s</span><span class="tok-string"> and </span><span class="tok-string">%s</span><span class="tok-string">"</span> <span class="tok-operator">%</span></span>
+<span class="ln">                      <span class="tok-punctuation">(</span></span>
+<span class="ln">                        <span class="tok-typeName">self</span><span class="tok-operator">.</span>static_transform_stamped_<span class="tok-operator">.</span>header<span class="tok-operator">.</span>frame_id<span class="tok-punctuation">,</span></span>
+<span class="ln">                        <span class="tok-typeName">self</span><span class="tok-operator">.</span>static_transform_stamped_<span class="tok-operator">.</span>child_frame_id</span>
+<span class="ln">                      <span class="tok-punctuation">)</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-comment"># Timer</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>timer_ <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>create_timer<span class="tok-punctuation">(</span><span class="tok-number">0.1</span><span class="tok-punctuation">,</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>timerCallback<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-comment"># Service Server</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_transform_srv_ <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>create_service<span class="tok-punctuation">(</span>GetTransform<span class="tok-punctuation">,</span> <span class="tok-string">"</span><span class="tok-string">get_transform</span><span class="tok-string">"</span><span class="tok-punctuation">,</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>getTransformCallback<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-comment"># Quaternion</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>last_orientation_ <span class="tok-operator">=</span> quaternion_from_euler<span class="tok-punctuation">(</span><span class="tok-number">0</span><span class="tok-punctuation">,</span> <span class="tok-number">0</span><span class="tok-punctuation">,</span> <span class="tok-number">0</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>orientation_increment_ <span class="tok-operator">=</span> quaternion_from_euler<span class="tok-punctuation">(</span><span class="tok-number">0</span><span class="tok-punctuation">,</span> <span class="tok-number">0</span><span class="tok-punctuation">,</span> <span class="tok-number">0.05</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-keyword">def</span> <span class="tok-definition">timerCallback</span><span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>dynamic_transform_stamped_<span class="tok-operator">.</span>header<span class="tok-operator">.</span>stamp <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_clock<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>now<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>to_msg<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>dynamic_transform_stamped_<span class="tok-operator">.</span>header<span class="tok-operator">.</span>frame_id <span class="tok-operator">=</span> <span class="tok-string">"</span><span class="tok-string">odom</span><span class="tok-string">"</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>dynamic_transform_stamped_<span class="tok-operator">.</span>child_frame_id <span class="tok-operator">=</span> <span class="tok-string">"</span><span class="tok-string">bumperbot_base</span><span class="tok-string">"</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>dynamic_transform_stamped_<span class="tok-operator">.</span>transform<span class="tok-operator">.</span>translation<span class="tok-operator">.</span>x <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>last_x_ <span class="tok-operator">+</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>x_increment_</span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>dynamic_transform_stamped_<span class="tok-operator">.</span>transform<span class="tok-operator">.</span>translation<span class="tok-operator">.</span>y <span class="tok-operator">=</span> <span class="tok-number">0.0</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>dynamic_transform_stamped_<span class="tok-operator">.</span>transform<span class="tok-operator">.</span>translation<span class="tok-operator">.</span>z <span class="tok-operator">=</span> <span class="tok-number">0.0</span></span>
+<span class="ln">        <span class="tok-comment"># self.dynamic_transform_stamped_.transform.rotation.x = 0.0</span></span>
+<span class="ln">        <span class="tok-comment"># self.dynamic_transform_stamped_.transform.rotation.y = 0.0</span></span>
+<span class="ln">        <span class="tok-comment"># self.dynamic_transform_stamped_.transform.rotation.z = 0.0</span></span>
+<span class="ln">        <span class="tok-comment"># self.dynamic_transform_stamped_.transform.rotation.w = 1.0</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-comment"># Euler to Quaternion</span></span>
+<span class="ln">        q <span class="tok-operator">=</span> quaternion_multiply<span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>last_orientation_<span class="tok-punctuation">,</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>orientation_increment_<span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>dynamic_transform_stamped_<span class="tok-operator">.</span>transform<span class="tok-operator">.</span>rotation<span class="tok-operator">.</span>x <span class="tok-operator">=</span> q<span class="tok-punctuation">[</span><span class="tok-number">0</span><span class="tok-punctuation">]</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>dynamic_transform_stamped_<span class="tok-operator">.</span>transform<span class="tok-operator">.</span>rotation<span class="tok-operator">.</span>y <span class="tok-operator">=</span> q<span class="tok-punctuation">[</span><span class="tok-number">1</span><span class="tok-punctuation">]</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>dynamic_transform_stamped_<span class="tok-operator">.</span>transform<span class="tok-operator">.</span>rotation<span class="tok-operator">.</span>z <span class="tok-operator">=</span> q<span class="tok-punctuation">[</span><span class="tok-number">2</span><span class="tok-punctuation">]</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>dynamic_transform_stamped_<span class="tok-operator">.</span>transform<span class="tok-operator">.</span>rotation<span class="tok-operator">.</span>w <span class="tok-operator">=</span> q<span class="tok-punctuation">[</span><span class="tok-number">3</span><span class="tok-punctuation">]</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>dynamic_tf_broadcaster_<span class="tok-operator">.</span>sendTransform<span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>dynamic_transform_stamped_<span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>last_x_ <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>dynamic_transform_stamped_<span class="tok-operator">.</span>transform<span class="tok-operator">.</span>translation<span class="tok-operator">.</span>x</span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>last_orientation_ <span class="tok-operator">=</span> q</span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>rotations_counter_ <span class="tok-operator">+</span><span class="tok-operator">=</span> <span class="tok-number">1</span></span>
+<span class="ln">        <span class="tok-keyword">if</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>rotations_counter_ <span class="tok-operator">&gt;</span><span class="tok-operator">=</span> <span class="tok-number">100</span><span class="tok-punctuation">:</span></span>
+<span class="ln">            <span class="tok-typeName">self</span><span class="tok-operator">.</span>orientation_increment_ <span class="tok-operator">=</span> quaternion_inverse<span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-operator">.</span>orientation_increment_<span class="tok-punctuation">)</span></span>
+<span class="ln">            <span class="tok-typeName">self</span><span class="tok-operator">.</span>rotations_counter_ <span class="tok-operator">=</span> <span class="tok-number">0</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-keyword">def</span> <span class="tok-definition">getTransformCallback</span><span class="tok-punctuation">(</span><span class="tok-typeName">self</span><span class="tok-punctuation">,</span> req<span class="tok-punctuation">,</span> res<span class="tok-punctuation">)</span><span class="tok-punctuation">:</span></span>
+<span class="ln">        <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_logger<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>info<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">Requested Transform between </span><span class="tok-string">%s</span><span class="tok-string"> and </span><span class="tok-string">%s</span><span class="tok-string">"</span> <span class="tok-operator">%</span> <span class="tok-punctuation">(</span>req<span class="tok-operator">.</span>frame_id<span class="tok-punctuation">,</span> req<span class="tok-operator">.</span>child_frame_id<span class="tok-punctuation">)</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        requested_transform <span class="tok-operator">=</span> TransformStamped<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-keyword">try</span><span class="tok-punctuation">:</span></span>
+<span class="ln">            requested_transform <span class="tok-operator">=</span> <span class="tok-typeName">self</span><span class="tok-operator">.</span>tf_buffer_<span class="tok-operator">.</span>lookup_transform<span class="tok-punctuation">(</span>req<span class="tok-operator">.</span>frame_id<span class="tok-punctuation">,</span> req<span class="tok-operator">.</span>child_frame_id<span class="tok-punctuation">,</span> rclpy<span class="tok-operator">.</span>time<span class="tok-operator">.</span>Time<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-keyword">except</span> TransformException <span class="tok-keyword">as</span> e<span class="tok-punctuation">:</span></span>
+<span class="ln">            <span class="tok-typeName">self</span><span class="tok-operator">.</span>get_logger<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span>error<span class="tok-punctuation">(</span><span class="tok-string">"</span><span class="tok-string">An error occurred while transforming </span><span class="tok-string">%s</span><span class="tok-string"> and </span><span class="tok-string">%s</span><span class="tok-string">: </span><span class="tok-string">%s</span><span class="tok-string">"</span> <span class="tok-operator">%</span></span>
+<span class="ln">                         <span class="tok-punctuation">(</span>req<span class="tok-operator">.</span>frame_id<span class="tok-punctuation">,</span> req<span class="tok-operator">.</span>child_frame_id<span class="tok-punctuation">,</span> e<span class="tok-punctuation">)</span><span class="tok-punctuation">)</span></span>
+<span class="ln">            res<span class="tok-operator">.</span>success <span class="tok-operator">=</span> <span class="tok-bool">False</span></span>
+<span class="ln">            <span class="tok-keyword">return</span> res</span>
+<span class="ln"></span>
+<span class="ln">        res<span class="tok-operator">.</span>transform <span class="tok-operator">=</span> requested_transform</span>
+<span class="ln">        res<span class="tok-operator">.</span>success <span class="tok-operator">=</span> <span class="tok-bool">True</span></span>
+<span class="ln">        <span class="tok-keyword">return</span> res</span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">def</span> <span class="tok-definition">main</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span></span>
+<span class="ln">    rclpy<span class="tok-operator">.</span>init<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    simple_tf_kinematics <span class="tok-operator">=</span> SimpleTfKinematics<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln">    rclpy<span class="tok-operator">.</span>spin<span class="tok-punctuation">(</span>simple_tf_kinematics<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    simple_tf_kinematics<span class="tok-operator">.</span>destroy_node<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln">    rclpy<span class="tok-operator">.</span>shutdown<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">if</span> <span class="tok-variableName">__name__</span> <span class="tok-operator">==</span> <span class="tok-string">'</span><span class="tok-string">__main__</span><span class="tok-string">'</span><span class="tok-punctuation">:</span></span>
+<span class="ln">    main<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span></code></pre></div><h3>What is new</h3><ul><li><b>Line 9</b> imports the three quaternion tools from <code>tf_transformations</code>. In this library a quaternion is a list in the order <b>x, y, z, w</b>, the same order as the rotation fields of a ROS 2 message.</li><li><b>Line 17</b> adds <code>rotations_counter_</code>, which counts the ticks since the turning direction last changed.</li><li><b>Lines 54 and 55</b> make two quaternions in <code>__init__</code>: <code>last_orientation_</code> starts as no turn, <code>[0, 0, 0, 1]</code>, and <code>orientation_increment_</code> is a yaw of 0.05 radians (about 2.9°), which is <code>[0, 0, 0.024997, 0.999688]</code>.</li><li><b>Lines 64 to 67</b>, the old fixed rotation, are now comments.</li><li><b>Line 70</b>: on every tick, <code>q = quaternion_multiply(last_orientation_, orientation_increment_)</code> adds one more small turn. Turns are combined by multiplying quaternions, never by adding the numbers.</li><li><b>Lines 71 to 74</b> copy q[0], q[1], q[2], q[3] into x, y, z, w. Python counts from 0, so q[3] is w.</li><li><b>Line 78</b> keeps q for the next tick. <b>Lines 79 to 82</b> count the ticks; at 100 (10 seconds, 5 radians of turning) the increment is replaced by its inverse and the counter starts again, so the base turns back.</li></ul><h3>One yaw, four numbers</h3><p>A turn around Z only changes z and w: z = sin(yaw ÷ 2) and w = cos(yaw ÷ 2). Turn the robot and multiply in single ticks:</p><div class="widget"><iframe src="/widgets/claude-ros2-56-20261114-130608-yaw-quaternion-dial.html" title="One yaw, four numbers"></iframe></div><h3>Every line, step by step</h3><p>The visualizer explains every line at three levels. It shows the order you would write it in, traces a run up to the moment the turn reverses, lets you break 27 things on purpose, and has a live view of the base turning.</p><div class="widget"><iframe src="/widgets/claude-ros2-56-20261114-130608-euler-to-quaternion-visualizer.html" title="Euler to Quaternion: code visualizer"></iframe></div></div>
+<div class="col"><h2 id="add-the-dependency">Add the dependency</h2><p>Open <code>package.xml</code> of <code>bumperbot_py_examples</code> (in the same package as the node) and add this line next to the other dependencies:</p><div class="codeblock" data-lang="XML"><pre class="code"><code><span class="ln"><span class="tok-typeName">&lt;exec_depend</span><span class="tok-typeName">&gt;</span>tf_transformations<span class="tok-typeName">&lt;/exec_depend&gt;</span></span></code></pre></div><p>The line tells ROS 2 that the package needs <code>tf_transformations</code> when it runs. It does not install the library. If the node later stops with <code>ModuleNotFoundError: No module named 'tf_transformations'</code>, install it. As far as I know, on ROS 2 Jazzy this is:</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">sudo apt install ros-jazzy-tf-transformations</span></code></pre></div><p class="note">Use the name of your ROS 2 distribution instead of jazzy if it is different. As far as I know the library also needs the Python package transforms3d; if an error names it, install that too.</p></div>
+<div class="col"><h2 id="build-run-and-test">Build, run and test</h2><h3>Build</h3><p>Go to the workspace and build:</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln"><span class="tok-typeName">cd</span> ~/bumperbot_ws</span></code></pre></div><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">colcon build</span></code></pre></div><p class="caption">What you should see</p><div class="codeblock" data-lang="Plain text"><pre class="code"><code><span class="ln">Starting &gt;&gt;&gt; bumperbot_msgs</span>
+<span class="ln">...</span>
+<span class="ln">Finished &lt;&lt;&lt; bumperbot_py_examples [3.84s]</span>
+<span class="ln"></span>
+<span class="ln">Summary: 5 packages finished [5.76s]</span></code></pre></div><figure class="img sz-m al-l"><img src="/uploads/2026/11/image-43.png" alt="colcon build: all five packages finish" loading="lazy"><figcaption>colcon build: all five packages finish</figcaption></figure><h3>Terminal 2: RViz</h3><p>Open another terminal, go to the workspace, source it and start RViz:</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln"><span class="tok-typeName">cd</span> ~/bumperbot_ws</span></code></pre></div><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">. install/setup.bash</span></code></pre></div><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">rviz2</span></code></pre></div><figure class="img"><img src="/uploads/2026/11/image-44.png" alt="The build in the first terminal, RViz started in the second" loading="lazy"><figcaption>The build in the first terminal, RViz started in the second</figcaption></figure><p>In RViz set <b>Fixed Frame</b> to <code>odom</code>, then click <b>Add</b> and choose <b>TF</b>.</p><figure class="img sz-m al-l"><img src="/uploads/2026/11/image-46.png" alt="Fixed Frame set to odom and the TF display added" loading="lazy"><figcaption>Fixed Frame set to odom and the TF display added</figcaption></figure><h3>Terminal 3: run the node</h3><p>Open a third terminal, source the workspace and run the node:</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln"><span class="tok-typeName">cd</span> ~/bumperbot_ws</span></code></pre></div><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">. install/setup.bash</span></code></pre></div><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">ros2 run bumperbot_py_examples simple_tf_kinematics</span></code></pre></div><p class="caption">What you should see</p><div class="codeblock" data-lang="Plain text"><pre class="code"><code><span class="ln">[INFO] [simple_tf_kinematics]: Publishing static transform between bumperbot_base and bumperbot_top</span></code></pre></div><figure class="img"><img src="/uploads/2026/11/image-45.png" alt="Sourcing and running simple_tf_kinematics in the third terminal" loading="lazy"><figcaption>Sourcing and running simple_tf_kinematics in the third terminal</figcaption></figure><p>In RViz the frame <code>bumperbot_base</code> (with <code>bumperbot_top</code> above it) drives along odom X at 0.5 m per second and turns 0.05 radians every tick. After 10 seconds it turns back, and after 20 seconds it faces forward again.</p><p>Look closely: the base keeps moving along odom X even while it faces another way, so it slides sideways. That is how this example is written, because the step <code>x + 0.05</code> on line 61 is always along odom X.</p><div class="widget"><iframe src="/widgets/claude-ros2-56-20261114-130608-turn-back-and-forth.html" title="Turning back and forth"></iframe></div><p>To see the four numbers change, open one more sourced terminal:</p><div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">ros2 topic <span class="tok-typeName">echo</span> /tf</span></code></pre></div><p class="caption">What you should see (roughly, about 10 times a second)</p><div class="codeblock" data-lang="Plain text"><pre class="code"><code><span class="ln">transforms:</span>
+<span class="ln">- header: ... frame_id: odom</span>
+<span class="ln">  child_frame_id: bumperbot_base</span>
+<span class="ln">  transform:</span>
+<span class="ln">    translation: {x: ..., y: 0.0, z: 0.0}</span>
+<span class="ln">    rotation: {x: 0.0, y: 0.0, z: ..., w: ...}</span></code></pre></div></div>
+<div class="col"><h2 id="remember">Remember</h2><ul><li>ROS 2 stores every rotation as a quaternion x, y, z, w. No turn is <code>[0, 0, 0, 1]</code>.</li><li><code>quaternion_from_euler(roll, pitch, yaw)</code> takes <b>radians</b>: 0.05 rad is about 2.9°, and 5 would be about 286°.</li><li>Turns are combined by <b>multiplying</b> quaternions (<code>quaternion_multiply</code>), never by adding the numbers.</li><li>The inverse flips the signs of x, y and z. Flipping all four signs gives the <b>same</b> turn, not the opposite.</li><li>Keep the new orientation for the next tick, or the turn never builds up.</li><li>Declare the library with <code>&lt;exec_depend&gt;tf_transformations&lt;/exec_depend&gt;</code>, and install it if Python cannot find it.</li></ul></div></div>
+    <nav class="pager" aria-label="Chapters">
+<a href="/documented-software-learnings/ros2/ros-55/"><span class="mono">Chapter 55</span>Euler Angles and Quaternions</a><a class="nx" href="/documented-software-learnings/ros2/ros2-57/"><span class="mono">Chapter 57</span>tf2 Tools: view_frames and tf2_echo</a>    </nav>
+  </article>
+</div>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/plc/">PLC &amp; Industrial Automation</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=a6e775a3ba" defer></script>
+<script src="/assets/home.js?v=a6e775a3ba" defer></script>
+</body>
+</html>

@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ROS 2 Diff Drive Controller | ROS 2 | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="Introduction Now, we will explore an alternative approach using the Diff Drive Controller provided by the ROS 2 Controllers package. A differential-drive robot…">
+<link rel="canonical" href="https://techarcanist.com/documented-software-learnings/ros2/ros2-45/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="ROS 2 Diff Drive Controller | ROS 2">
+<meta property="og:description" content="Introduction Now, we will explore an alternative approach using the Diff Drive Controller provided by the ROS 2 Controllers package. A differential-drive robot…">
+<meta property="og:url" content="https://techarcanist.com/documented-software-learnings/ros2/ros2-45/">
+<meta property="og:image" content="https://techarcanist.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=a6e775a3ba">
+<link rel="stylesheet" href="/assets/home.css?v=a6e775a3ba">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/" aria-current="page">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap reader wide">
+  <aside class="rd-nav" id="rd-nav">
+    <a class="rd-series" href="/documented-software-learnings/ros2/"><span class="label">Series</span>ROS 2</a>
+    <ol>
+      <li><a href="/documented-software-learnings/ros2/ros2_a/"><span class="mono">01</span>Installing Ubuntu Desktop (Dual Boot with Windows)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_b/"><span class="mono">02</span>ROS 2 Jazzy Installation on Ubuntu (Step-by-Step)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_c/"><span class="mono">03</span>Development Environment Setup for ROS 2 Jazzy on Ubuntu (With Clear Explanations)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_d/"><span class="mono">04</span>ROS 2 Fundamentals: Architecture, Communication, Packages, and Workspaces</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_e/"><span class="mono">05</span>ROS 2 Workspace &amp; Package Creation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_f/"><span class="mono">06</span>ROS 2 Python Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_g/"><span class="mono">07</span>ROS 2 C++ Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_h/"><span class="mono">08</span>ROS 2 Python Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_i/"><span class="mono">09</span>ROS 2 C++ Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_j/"><span class="mono">10</span>Robot Locomotion: Introduction</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_k/"><span class="mono">11</span>Wheeled Locomotion Architectures</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_l/"><span class="mono">12</span>Rolling Friction &amp; Wheeled Locomotion Efficiency</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_m/"><span class="mono">13</span>Introduction to Robot Simulation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_n/"><span class="mono">14</span>URDF</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_o/"><span class="mono">15</span>Create a URDF Model</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_p/"><span class="mono">16</span>Rviz</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_q/"><span class="mono">17</span>Node Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_r/"><span class="mono">18</span>Python Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_s/"><span class="mono">19</span>C++ Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_t/"><span class="mono">20</span>ROS 2 Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-u/"><span class="mono">21</span>Visualize The Robot In RVIZ2</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-v/"><span class="mono">22</span>Launch Files</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-w/"><span class="mono">23</span>ROS 2 Launch Files: Visualizing the Robot with One Command</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-x/"><span class="mono">24</span>Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-y/"><span class="mono">25</span>Simulating the Robot in Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-z/"><span class="mono">26</span>ROS 2 Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-aa/"><span class="mono">27</span>Control Types</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ab/"><span class="mono">28</span>ROS 2 Control: Prepare the Robot for Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ac/"><span class="mono">29</span>Understanding ROS 2 Control | Explanation of Chapter 28</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ad/"><span class="mono">30</span>ROS 2 Control: Moving the BumperBot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ae/"><span class="mono">31</span>Robot Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-af/"><span class="mono">32</span>Pose of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_af/"><span class="mono">33</span>Translation Vector</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ag/"><span class="mono">34</span>Introduction to Turtlesim</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ah/"><span class="mono">35</span>Translation Vector Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ai/"><span class="mono">36</span>Translation Vector Between Two Turtles: CPP</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_aj/"><span class="mono">37</span>Rotation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ak/"><span class="mono">38</span>Rotation Matrix Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_al/"><span class="mono">39</span>Transformation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_am/"><span class="mono">40</span>Differential Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-41/"><span class="mono">41</span>Velocity of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-42/"><span class="mono">42</span>Simple Speed Controller: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-43/"><span class="mono">43</span>Launch the Simple Speed Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-44/"><span class="mono">44</span>Teleoperating the BumperBot with a Joystick</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-45/" aria-current="page"><span class="mono">45</span>ROS 2 Diff Drive Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-46/"><span class="mono">46</span>TF 2 Library</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-47/"><span class="mono">47</span>Operation With Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-48/"><span class="mono">48</span>Static &amp; Dynamic Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-49/"><span class="mono">49</span>Simple TF2 Static Broadcaster</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-50/"><span class="mono">50</span>Simple TF2 Broadcaster: Static and Dynamic Transforms</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-51/"><span class="mono">51</span>ROS 2 Services</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-52/"><span class="mono">52</span>Service Server in Python: AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-53/"><span class="mono">53</span>Service Client in Python: Calling AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-54/"><span class="mono">54</span>Simple TF2 Listener in Python: a get_transform Service</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-55/"><span class="mono">55</span>Euler Angles and Quaternions</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-56/"><span class="mono">56</span>Euler to Quaternion: Turning the Robot with tf_transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-57/"><span class="mono">57</span>tf2 Tools: view_frames and tf2_echo</a></li>
+    </ol>
+  </aside>
+  <article class="rd-main">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/documented-software-learnings/">Library</a><span>/</span><a href="/documented-software-learnings/ros2/">ROS 2</a><span>/</span><span>45</span></nav>
+    <button class="btn btn-sm btn-line rd-tg" type="button" id="rd-tg">All chapters</button>
+<p class="sh-label mono"><span>45</span>Chapter 45 of 57</p>    <h1>ROS 2 Diff Drive Controller</h1>
+<div class="rd-prog" aria-hidden="true"><i style="width:78.9%"></i></div>    <div class="prose"><div class="col">
+<h2 id="introduction">Introduction</h2>
+<p>Now, we will explore an alternative approach using the <strong>Diff Drive Controller</strong> provided by the ROS 2 Controllers package.</p>
+<p>A differential-drive robot uses two independently controlled wheels to move forward, backward, and rotate.</p>
+<p>To control this type of robot, we need to convert its linear and angular velocity commands into individual wheel velocities.</p>
+<p>We already implemented this in the Simple Controller. However, ROS 2 provides a built-in controller that performs this conversion and provides additional functionality for differential-drive robots.</p>
+<h2 id="configure-the-diff-drive-controller">Configure the Diff Drive Controller</h2>
+<p>Open the <code>bumperbot_controller</code> package in Visual Studio Code.</p>
+<p>Navigate to the <code>config</code> folder and open:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">bumperbot_controllers.yaml</span></code></pre></div>
+<p>We will modify this file to configure the Diff Drive Controller.</p>
+<figure class="img sz-s al-l"><img alt="" decoding="async" height="664" loading="lazy" src="/uploads/wp/2026/10/image-73.png" width="345"></figure>
+<h2 id="write-the-code">Write the Code</h2>
+<p>Inside bumperbot_controllers.yaml:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln"><span class="tok-propertyName tok-definition">controller_manager</span><span class="tok-punctuation">:</span></span>
+<span class="ln">  <span class="tok-propertyName tok-definition">ros__parameters</span><span class="tok-punctuation">:</span></span>
+<span class="ln">    <span class="tok-propertyName tok-definition">update_rate</span><span class="tok-punctuation">:</span> 100 <span class="tok-comment"># Hz</span></span>
+<span class="ln">    <span class="tok-propertyName tok-definition">use_sim_time</span><span class="tok-punctuation">:</span> true</span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-propertyName tok-definition">bumperbot_controller</span><span class="tok-punctuation">:</span></span>
+<span class="ln">      <span class="tok-propertyName tok-definition">type</span><span class="tok-punctuation">:</span> diff_drive_controller/DiffDriveController</span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-propertyName tok-definition">joint_state_broadcaster</span><span class="tok-punctuation">:</span></span>
+<span class="ln">      <span class="tok-propertyName tok-definition">type</span><span class="tok-punctuation">:</span> joint_state_broadcaster/JointStateBroadcaster</span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-propertyName tok-definition">simple_velocity_controller</span><span class="tok-punctuation">:</span></span>
+<span class="ln">      <span class="tok-propertyName tok-definition">type</span><span class="tok-punctuation">:</span> velocity_controllers/JointGroupVelocityController</span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-propertyName tok-definition">bumperbot_controller</span><span class="tok-punctuation">:</span></span>
+<span class="ln">  <span class="tok-propertyName tok-definition">ros__parameters</span><span class="tok-punctuation">:</span></span>
+<span class="ln">    <span class="tok-propertyName tok-definition">type</span>        <span class="tok-punctuation">:</span> diff_drive_controller/DiffDriveController</span>
+<span class="ln">    <span class="tok-propertyName tok-definition">use_stamped_vel</span><span class="tok-punctuation">:</span> true</span>
+<span class="ln">    <span class="tok-propertyName tok-definition">left_wheel_names</span>  <span class="tok-punctuation">:</span> <span class="tok-punctuation">[</span><span class="tok-string">'wheel_left_joint'</span><span class="tok-punctuation">]</span></span>
+<span class="ln">    <span class="tok-propertyName tok-definition">right_wheel_names</span> <span class="tok-punctuation">:</span> <span class="tok-punctuation">[</span><span class="tok-string">'wheel_right_joint'</span><span class="tok-punctuation">]</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-propertyName tok-definition">publish_rate</span><span class="tok-punctuation">:</span> 50.0               <span class="tok-comment"># default: 50</span></span>
+<span class="ln">    <span class="tok-propertyName tok-definition">pose_covariance_diagonal</span> <span class="tok-punctuation">:</span> <span class="tok-punctuation">[</span>0.001<span class="tok-punctuation">,</span> 0.001<span class="tok-punctuation">,</span> 1.0e-3<span class="tok-punctuation">,</span> 1.0e-3<span class="tok-punctuation">,</span> 1.0e-3<span class="tok-punctuation">,</span> 0.01<span class="tok-punctuation">]</span></span>
+<span class="ln">    <span class="tok-propertyName tok-definition">twist_covariance_diagonal</span><span class="tok-punctuation">:</span> <span class="tok-punctuation">[</span>0.001<span class="tok-punctuation">,</span> 0.001<span class="tok-punctuation">,</span> 1.0e-3<span class="tok-punctuation">,</span> 1.0e-3<span class="tok-punctuation">,</span> 1.0e-3<span class="tok-punctuation">,</span> 0.01<span class="tok-punctuation">]</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-propertyName tok-definition">wheel_separation</span> <span class="tok-punctuation">:</span> 0.17</span>
+<span class="ln">    <span class="tok-propertyName tok-definition">wheel_radius</span> <span class="tok-punctuation">:</span> 0.033</span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-propertyName tok-definition">wheel_separation_multiplier</span><span class="tok-punctuation">:</span> 1.0</span>
+<span class="ln">    <span class="tok-propertyName tok-definition">left_wheel_radius_multiplier</span><span class="tok-punctuation">:</span> 1.0</span>
+<span class="ln">    <span class="tok-propertyName tok-definition">right_wheel_radius_multiplier</span><span class="tok-punctuation">:</span> 1.0</span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-comment"># Velocity commands timeout [s], default 0.5</span></span>
+<span class="ln">    <span class="tok-propertyName tok-definition">cmd_vel_timeout</span><span class="tok-punctuation">:</span> 0.5</span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-comment"># Base frame_id</span></span>
+<span class="ln">    <span class="tok-propertyName tok-definition">base_frame_id</span><span class="tok-punctuation">:</span> base_footprint <span class="tok-comment">#default: base_link</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-comment"># Publish limited velocity</span></span>
+<span class="ln">    <span class="tok-propertyName tok-definition">publish_limited_velocity</span><span class="tok-punctuation">:</span> true</span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-comment"># Publish wheel data</span></span>
+<span class="ln">    <span class="tok-propertyName tok-definition">publish_wheel_data</span><span class="tok-punctuation">:</span> true</span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-comment"># Publish to TF directly or not</span></span>
+<span class="ln">    <span class="tok-propertyName tok-definition">enable_odom_tf</span><span class="tok-punctuation">:</span> true</span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-comment"># Velocity and acceleration limits</span></span>
+<span class="ln">    <span class="tok-comment"># Whenever a min_* is unspecified, default to -max_*</span></span>
+<span class="ln">    <span class="tok-propertyName tok-definition">linear</span><span class="tok-punctuation">:</span></span>
+<span class="ln">      <span class="tok-propertyName tok-definition">x</span><span class="tok-punctuation">:</span></span>
+<span class="ln">        <span class="tok-propertyName tok-definition">has_velocity_limits</span>    <span class="tok-punctuation">:</span> true</span>
+<span class="ln">        <span class="tok-propertyName tok-definition">max_velocity</span>           <span class="tok-punctuation">:</span> 1.0  <span class="tok-comment"># m/s</span></span>
+<span class="ln">        <span class="tok-propertyName tok-definition">min_velocity</span>           <span class="tok-punctuation">:</span> -0.5 <span class="tok-comment"># m/s</span></span>
+<span class="ln">        <span class="tok-propertyName tok-definition">has_acceleration_limits</span><span class="tok-punctuation">:</span> true</span>
+<span class="ln">        <span class="tok-propertyName tok-definition">max_acceleration</span>       <span class="tok-punctuation">:</span> 0.8  <span class="tok-comment"># m/s^2</span></span>
+<span class="ln">        <span class="tok-propertyName tok-definition">min_acceleration</span>       <span class="tok-punctuation">:</span> -0.4 <span class="tok-comment"># m/s^2</span></span>
+<span class="ln">        <span class="tok-propertyName tok-definition">has_jerk_limits</span>        <span class="tok-punctuation">:</span> false</span>
+<span class="ln">        <span class="tok-propertyName tok-definition">max_jerk</span>               <span class="tok-punctuation">:</span> 5.0  <span class="tok-comment"># m/s^3</span></span>
+<span class="ln">    <span class="tok-propertyName tok-definition">angular</span><span class="tok-punctuation">:</span></span>
+<span class="ln">      <span class="tok-propertyName tok-definition">z</span><span class="tok-punctuation">:</span></span>
+<span class="ln">        <span class="tok-propertyName tok-definition">has_velocity_limits</span>    <span class="tok-punctuation">:</span> true</span>
+<span class="ln">        <span class="tok-propertyName tok-definition">max_velocity</span>           <span class="tok-punctuation">:</span> 1.7  <span class="tok-comment"># rad/s</span></span>
+<span class="ln">        <span class="tok-propertyName tok-definition">has_acceleration_limits</span><span class="tok-punctuation">:</span> true</span>
+<span class="ln">        <span class="tok-propertyName tok-definition">max_acceleration</span>       <span class="tok-punctuation">:</span> 1.5  <span class="tok-comment"># rad/s^2</span></span>
+<span class="ln">        <span class="tok-propertyName tok-definition">has_jerk_limits</span>        <span class="tok-punctuation">:</span> false</span>
+<span class="ln">        <span class="tok-propertyName tok-definition">max_jerk</span>               <span class="tok-punctuation">:</span> 2.5  <span class="tok-comment"># rad/s^3</span></span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-propertyName tok-definition">simple_velocity_controller</span><span class="tok-punctuation">:</span></span>
+<span class="ln">  <span class="tok-propertyName tok-definition">ros__parameters</span><span class="tok-punctuation">:</span></span>
+<span class="ln">    <span class="tok-propertyName tok-definition">joints</span><span class="tok-punctuation">:</span></span>
+<span class="ln">      <span class="tok-punctuation">-</span> wheel_left_joint</span>
+<span class="ln">      <span class="tok-punctuation">-</span> wheel_right_joint</span></code></pre></div>
+<h2 id="update-the-controller-launch-file">Update the Controller Launch File</h2>
+<p>Now, we need to modify our existing launch file so that we can choose which controller to use when launching the robot.</p>
+<p>Open:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">launch/controller.launch.py</span></code></pre></div>
+<figure class="img sz-s al-l"><img alt="" decoding="async" height="754" loading="lazy" src="/uploads/wp/2026/10/image-74.png" width="346"></figure>
+<h2 id="write-the-code-x">Write the Code</h2>
+<p>Inside launch/controller.launch.py:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln"></span>
+<span class="ln">from launch import LaunchDescription</span>
+<span class="ln">from launch.actions import DeclareLaunchArgument, GroupAction</span>
+<span class="ln">from launch_ros.actions import Node</span>
+<span class="ln">from launch.substitutions import LaunchConfiguration</span>
+<span class="ln">from launch.conditions import UnlessCondition, IfCondition</span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln">def generate_launch_description():</span>
+<span class="ln"></span>
+<span class="ln">    use_sim_time_arg = DeclareLaunchArgument(</span>
+<span class="ln">        "use_sim_time",</span>
+<span class="ln">        default_value="True",</span>
+<span class="ln">    )</span>
+<span class="ln">    use_simple_controller_arg = DeclareLaunchArgument(</span>
+<span class="ln">        "use_simple_controller",</span>
+<span class="ln">        default_value="True",</span>
+<span class="ln">    )</span>
+<span class="ln">    wheel_radius_arg = DeclareLaunchArgument(</span>
+<span class="ln">        "wheel_radius",</span>
+<span class="ln">        default_value="0.033",</span>
+<span class="ln">    )</span>
+<span class="ln">    wheel_separation_arg = DeclareLaunchArgument(</span>
+<span class="ln">        "wheel_separation",</span>
+<span class="ln">        default_value="0.17",</span>
+<span class="ln">    )</span>
+<span class="ln"></span>
+<span class="ln">    use_sim_time = LaunchConfiguration("use_sim_time")</span>
+<span class="ln">    use_simple_controller = LaunchConfiguration("use_simple_controller")</span>
+<span class="ln">    wheel_radius = LaunchConfiguration("wheel_radius")</span>
+<span class="ln">    wheel_separation = LaunchConfiguration("wheel_separation")</span>
+<span class="ln"></span>
+<span class="ln">    joint_state_broadcaster_spawner = Node(</span>
+<span class="ln">        package="controller_manager",</span>
+<span class="ln">        executable="spawner",</span>
+<span class="ln">        arguments=[</span>
+<span class="ln">            "joint_state_broadcaster",</span>
+<span class="ln">            "--controller-manager",</span>
+<span class="ln">            "/controller_manager",</span>
+<span class="ln">        ],</span>
+<span class="ln">    )</span>
+<span class="ln"></span>
+<span class="ln">    wheel_controller_spawner = Node(</span>
+<span class="ln">        package="controller_manager",</span>
+<span class="ln">        executable="spawner",</span>
+<span class="ln">        arguments=[</span>
+<span class="ln">            "bumperbot_controller",</span>
+<span class="ln">            "--controller-manager",</span>
+<span class="ln">            "/controller_manager",</span>
+<span class="ln">        ],</span>
+<span class="ln">        condition=UnlessCondition(use_simple_controller),</span>
+<span class="ln">    )</span>
+<span class="ln"></span>
+<span class="ln">    simple_controller = GroupAction(</span>
+<span class="ln">        condition=IfCondition(use_simple_controller),</span>
+<span class="ln">        actions=[</span>
+<span class="ln">            Node(</span>
+<span class="ln">                package="controller_manager",</span>
+<span class="ln">                executable="spawner",</span>
+<span class="ln">                arguments=[</span>
+<span class="ln">                    "simple_velocity_controller",</span>
+<span class="ln">                    "--controller-manager",</span>
+<span class="ln">                    "/controller_manager",</span>
+<span class="ln">                ],</span>
+<span class="ln">            ),</span>
+<span class="ln">            Node(</span>
+<span class="ln">                package="bumperbot_controller",</span>
+<span class="ln">                executable="simple_controller.py",</span>
+<span class="ln">                parameters=[</span>
+<span class="ln">                    {</span>
+<span class="ln">                        "wheel_radius": wheel_radius,</span>
+<span class="ln">                        "wheel_separation": wheel_separation,</span>
+<span class="ln">                        "use_sim_time": use_sim_time,</span>
+<span class="ln">                    }</span>
+<span class="ln">                ],</span>
+<span class="ln">            ),</span>
+<span class="ln">        ],</span>
+<span class="ln">    )</span>
+<span class="ln"></span>
+<span class="ln">    return LaunchDescription(</span>
+<span class="ln">        [</span>
+<span class="ln">            use_sim_time_arg,</span>
+<span class="ln">            use_simple_controller_arg,</span>
+<span class="ln">            wheel_radius_arg,</span>
+<span class="ln">            wheel_separation_arg,</span>
+<span class="ln">            joint_state_broadcaster_spawner,</span>
+<span class="ln">            wheel_controller_spawner,</span>
+<span class="ln">            simple_controller,</span>
+<span class="ln">        ]</span>
+<span class="ln">    )</span></code></pre></div>
+
+<div class="widget"><iframe loading="lazy" scrolling="no" src="/widgets/documented-software-learnings__ros2__ros2-45-1.html" title="Interactive guide"></iframe></div></div>
+
+<div class="col">
+<h2 id="build-the-workspace">Build the Workspace</h2>
+<p>After updating the YAML configuration and launch file, open a terminal and navigate to your workspace:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln"><span class="tok-variableName">cd</span> bumperbot_ws</span></code></pre></div>
+<p>Run the following command:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">colcon build</span></code></pre></div>
+<p>Wait for the build to complete successfully.</p>
+<figure class="img"><img alt="" decoding="async" height="346" loading="lazy" src="/uploads/wp/2026/10/image-75.png" width="660"></figure>
+</div>
+<div class="col">
+<h2 id="start-the-gazebo-simulation">Start the Gazebo Simulation</h2>
+<p>Open another terminal and source the workspace:</p>
+<figure class="img"><img alt="" decoding="async" height="906" loading="lazy" src="/uploads/wp/2026/10/image-76.png" width="1618"></figure>
+<div class="codeblock"><pre class="code"><code><span class="ln">. install/setup.bash</span></code></pre></div>
+<p>Now start the Gazebo simulation:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">ros2 launch bumperbot_description gazebo.launch.py</span></code></pre></div>
+<p>Wait for the BumperBot to appear in Gazebo.</p>
+<h2 id="inspect-the-available-launch-arguments">Inspect the Available Launch Arguments</h2>
+<figure class="img"><img alt="" decoding="async" height="926" loading="lazy" src="/uploads/wp/2026/10/image-78.png" width="815"></figure>
+<p>Open another terminal and source the workspace:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln"><span class="tok-variableName">cd</span> bumperbot_ws</span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-variableName">source</span> install/setup.bash</span></code></pre></div>
+<p>Run:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">ros2 launch bumperbot_controller controller.launch.py --show-args</span></code></pre></div>
+<p>OUTPUT</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">'use_sim_time':</span>
+<span class="ln">    no description given</span>
+<span class="ln">    (default: 'True')</span>
+<span class="ln"></span>
+<span class="ln">'use_simple_controller':</span>
+<span class="ln">    no description given</span>
+<span class="ln">    (default: 'True')</span>
+<span class="ln"></span>
+<span class="ln">'wheel_radius':</span>
+<span class="ln">    no description given</span>
+<span class="ln">    (default: '0.033')</span>
+<span class="ln"></span>
+<span class="ln">'wheel_separation':</span>
+<span class="ln">    no description given</span>
+<span class="ln">    (default: '0.17')</span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"></span></code></pre></div>
+<p>These arguments allow us to select the controller and configure the robot's wheel dimensions.</p>
+<h2 id="launch-the-diff-drive-controller">Launch the Diff Drive Controller</h2>
+<figure class="img"><img alt="" decoding="async" height="927" loading="lazy" src="/uploads/wp/2026/10/image-79.png" width="803"></figure>
+<p>By default, our launch file uses the custom Python Simple Controller.</p>
+<p>Now, we want to use the built-in Diff Drive Controller.</p>
+<p>To do this, set:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">use_simple_controller = false</span></code></pre></div>
+<p>Open a new terminal, source the workspace, and run:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">. install/setup.bash</span>
+<span class="ln">ros2 launch bumperbot_controller controller.launch.py use_simple_controller:=false</span></code></pre></div>
+<p>his time, the launch file will:</p>
+<ul>
+<li>Start the Joint State Broadcaster.</li>
+<li>Start the built-in <code>bumperbot_controller</code>.</li>
+<li>Skip the custom Python Simple Controller.</li>
+<li>Skip the Simple Velocity Controller spawner.</li>
+</ul>
+<p>The controller manager will load the Diff Drive Controller using the configuration we added to <code>bumperbot_controllers.yaml</code>.</p>
+<h2 id="connect-and-launch-the-joystick">Connect and Launch the Joystick</h2>
+<p>We can now use the same physical joystick that we configured in the previous chapter.</p>
+<p>Connect your joystick to the computer using USB or a supported wireless connection.</p>
+<p>In this demonstration, we are using the HyperX Clutch Gladiate controller.</p>
+<p>Open another terminal:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">. install/setup.bash</span></code></pre></div>
+<p>Launch the joystick teleoperation system:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">ros2 launch bumperbot_controller joystick_teleop.launch.py</span></code></pre></div>
+<figure class="img"><img alt="" decoding="async" height="904" loading="lazy" src="/uploads/wp/2026/10/image-80.png" width="904"></figure>
+<p>This starts:</p>
+<ul>
+<li>The <code>joy_node</code>, which reads the physical joystick inputs.</li>
+<li>The <code>joy_teleop</code> node, which converts joystick inputs into velocity commands.</li>
+</ul>
+<p>The joystick publishes <code>TwistStamped</code> commands to the same robot velocity topic used in the previous chapter.</p>
+<h2 id="teleoperate-the-bumperbot">Teleoperate the BumperBot</h2>
+<p>Once the joystick has been detected, we can start controlling the robot.</p>
+<p>Just like in the previous chapter, keep the deadman button pressed while using the joystick's analog controls.</p>
+<p>Use the configured controls to:</p>
+<ul>
+<li>Move the robot forward and backward.</li>
+<li>Turn the robot left and right.</li>
+<li>Combine forward movement and turning.</li>
+</ul>
+<h2 id="what-happens-internally">What Happens Internally?</h2>
+<p>This time, the joystick commands are processed directly by the built-in Diff Drive Controller.</p>
+<p>The data flow is:</p>
+<p class="note"><code>      Physical Joystick<br>               |<br>               v<br>            Joy Node<br>               |<br>               v<br>        Joy Teleop Node<br>               |<br>               v<br> /bumperbot_controller/cmd_vel<br>               |<br>               v<br>       Diff Drive Controller<br>               |<br>               v<br>        Differential Kinematics<br>               |<br>               v<br>        Individual Wheel Speeds<br>               |<br>               v<br>        BumperBot Wheel Motion<br>               |<br>               v<br>         Gazebo Simulation</code></p>
+<p>The movement should be very similar to what we observed with our custom Python Simple Controller.</p>
+<p>The main difference is that the velocity conversion is now handled by the built-in Diff Drive Controller instead of our own Python implementation.</p>
+</div></div>
+    <nav class="pager" aria-label="Chapters">
+<a href="/documented-software-learnings/ros2/ros2-44/"><span class="mono">Chapter 44</span>Teleoperating the BumperBot with a Joystick</a><a class="nx" href="/documented-software-learnings/ros2/ros2-46/"><span class="mono">Chapter 46</span>TF 2 Library</a>    </nav>
+  </article>
+</div>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/plc/">PLC &amp; Industrial Automation</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=a6e775a3ba" defer></script>
+<script src="/assets/home.js?v=a6e775a3ba" defer></script>
+</body>
+</html>

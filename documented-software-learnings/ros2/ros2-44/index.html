@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Teleoperating the BumperBot with a Joystick | ROS 2 | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="Introduction In the previous chapters, we developed a Python Simple Controller and used it to move the BumperBot in the Gazebo simulation by publishing…">
+<link rel="canonical" href="https://techarcanist.com/documented-software-learnings/ros2/ros2-44/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="Teleoperating the BumperBot with a Joystick | ROS 2">
+<meta property="og:description" content="Introduction In the previous chapters, we developed a Python Simple Controller and used it to move the BumperBot in the Gazebo simulation by publishing…">
+<meta property="og:url" content="https://techarcanist.com/documented-software-learnings/ros2/ros2-44/">
+<meta property="og:image" content="https://techarcanist.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=a6e775a3ba">
+<link rel="stylesheet" href="/assets/home.css?v=a6e775a3ba">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/" aria-current="page">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap reader wide">
+  <aside class="rd-nav" id="rd-nav">
+    <a class="rd-series" href="/documented-software-learnings/ros2/"><span class="label">Series</span>ROS 2</a>
+    <ol>
+      <li><a href="/documented-software-learnings/ros2/ros2_a/"><span class="mono">01</span>Installing Ubuntu Desktop (Dual Boot with Windows)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_b/"><span class="mono">02</span>ROS 2 Jazzy Installation on Ubuntu (Step-by-Step)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_c/"><span class="mono">03</span>Development Environment Setup for ROS 2 Jazzy on Ubuntu (With Clear Explanations)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_d/"><span class="mono">04</span>ROS 2 Fundamentals: Architecture, Communication, Packages, and Workspaces</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_e/"><span class="mono">05</span>ROS 2 Workspace &amp; Package Creation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_f/"><span class="mono">06</span>ROS 2 Python Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_g/"><span class="mono">07</span>ROS 2 C++ Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_h/"><span class="mono">08</span>ROS 2 Python Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_i/"><span class="mono">09</span>ROS 2 C++ Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_j/"><span class="mono">10</span>Robot Locomotion: Introduction</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_k/"><span class="mono">11</span>Wheeled Locomotion Architectures</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_l/"><span class="mono">12</span>Rolling Friction &amp; Wheeled Locomotion Efficiency</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_m/"><span class="mono">13</span>Introduction to Robot Simulation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_n/"><span class="mono">14</span>URDF</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_o/"><span class="mono">15</span>Create a URDF Model</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_p/"><span class="mono">16</span>Rviz</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_q/"><span class="mono">17</span>Node Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_r/"><span class="mono">18</span>Python Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_s/"><span class="mono">19</span>C++ Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_t/"><span class="mono">20</span>ROS 2 Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-u/"><span class="mono">21</span>Visualize The Robot In RVIZ2</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-v/"><span class="mono">22</span>Launch Files</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-w/"><span class="mono">23</span>ROS 2 Launch Files: Visualizing the Robot with One Command</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-x/"><span class="mono">24</span>Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-y/"><span class="mono">25</span>Simulating the Robot in Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-z/"><span class="mono">26</span>ROS 2 Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-aa/"><span class="mono">27</span>Control Types</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ab/"><span class="mono">28</span>ROS 2 Control: Prepare the Robot for Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ac/"><span class="mono">29</span>Understanding ROS 2 Control | Explanation of Chapter 28</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ad/"><span class="mono">30</span>ROS 2 Control: Moving the BumperBot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ae/"><span class="mono">31</span>Robot Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-af/"><span class="mono">32</span>Pose of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_af/"><span class="mono">33</span>Translation Vector</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ag/"><span class="mono">34</span>Introduction to Turtlesim</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ah/"><span class="mono">35</span>Translation Vector Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ai/"><span class="mono">36</span>Translation Vector Between Two Turtles: CPP</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_aj/"><span class="mono">37</span>Rotation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ak/"><span class="mono">38</span>Rotation Matrix Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_al/"><span class="mono">39</span>Transformation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_am/"><span class="mono">40</span>Differential Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-41/"><span class="mono">41</span>Velocity of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-42/"><span class="mono">42</span>Simple Speed Controller: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-43/"><span class="mono">43</span>Launch the Simple Speed Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-44/" aria-current="page"><span class="mono">44</span>Teleoperating the BumperBot with a Joystick</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-45/"><span class="mono">45</span>ROS 2 Diff Drive Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-46/"><span class="mono">46</span>TF 2 Library</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-47/"><span class="mono">47</span>Operation With Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-48/"><span class="mono">48</span>Static &amp; Dynamic Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-49/"><span class="mono">49</span>Simple TF2 Static Broadcaster</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-50/"><span class="mono">50</span>Simple TF2 Broadcaster: Static and Dynamic Transforms</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-51/"><span class="mono">51</span>ROS 2 Services</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-52/"><span class="mono">52</span>Service Server in Python: AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-53/"><span class="mono">53</span>Service Client in Python: Calling AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-54/"><span class="mono">54</span>Simple TF2 Listener in Python: a get_transform Service</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-55/"><span class="mono">55</span>Euler Angles and Quaternions</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-56/"><span class="mono">56</span>Euler to Quaternion: Turning the Robot with tf_transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-57/"><span class="mono">57</span>tf2 Tools: view_frames and tf2_echo</a></li>
+    </ol>
+  </aside>
+  <article class="rd-main">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/documented-software-learnings/">Library</a><span>/</span><a href="/documented-software-learnings/ros2/">ROS 2</a><span>/</span><span>44</span></nav>
+    <button class="btn btn-sm btn-line rd-tg" type="button" id="rd-tg">All chapters</button>
+<p class="sh-label mono"><span>44</span>Chapter 44 of 57</p>    <h1>Teleoperating the BumperBot with a Joystick</h1>
+<div class="rd-prog" aria-hidden="true"><i style="width:77.2%"></i></div>    <div class="prose"><div class="col">
+<h2 id="introduction">Introduction</h2>
+<p>In the previous chapters, we developed a Python Simple Controller and used it to move the BumperBot in the Gazebo simulation by publishing velocity commands manually.</p>
+<p>Now, we will make robot control easier by connecting a physical joystick to our system.</p>
+<p>We will use two ROS 2 packages:</p>
+<ul>
+<li><strong>joy:</strong> Reads input from the physical joystick and publishes joystick data.</li>
+<li><strong>joy_teleop:</strong> Converts joystick inputs into robot velocity commands.</li>
+</ul>
+<p>The joystick will control the BumperBot through our existing Python Simple Controller.</p>
+<h2 id="create-the-joystick-teleoperation-launch-file">Create the Joystick Teleoperation Launch File</h2>
+<p>Open the <code>bumperbot_controller</code> package in Visual Studio Code.</p>
+<p>Navigate to the <code>launch</code> folder and create a new Python file named:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">joystick_teleop.launch.py</span></code></pre></div>
+<div class="codeblock"><pre class="code"><code><span class="ln">bumperbot_controller/</span>
+<span class="ln">│</span>
+<span class="ln">├── launch/</span>
+<span class="ln">│   ├── controller.launch.py</span>
+<span class="ln">│   └── joystick_teleop.launch.py</span></code></pre></div>
+<figure class="img sz-s al-l"><img alt="" decoding="async" height="598" loading="lazy" src="/uploads/wp/2026/10/image-63.png" width="392"></figure>
+<p><strong>Note:</strong> Keep the launch file inside the <code>launch</code> folder and the YAML configuration files inside <code>config</code>. This matches the package installation structure used in our earlier chapter.</p>
+<h2 id="write-the-code">Write the Code</h2>
+<div class="codeblock" data-lang="Python"><pre class="code"><code><span class="ln"><span class="tok-keyword">import</span> <span class="tok-variableName">os</span></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-variableName">ament_index_python</span><span class="tok-operator">.</span><span class="tok-variableName">packages</span> <span class="tok-keyword">import</span> <span class="tok-variableName">get_package_share_directory</span></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-variableName">launch</span> <span class="tok-keyword">import</span> <span class="tok-variableName">LaunchDescription</span></span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-variableName">launch</span><span class="tok-operator">.</span><span class="tok-variableName">actions</span> <span class="tok-keyword">import</span> <span class="tok-variableName">DeclareLaunchArgument</span></span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-variableName">launch</span><span class="tok-operator">.</span><span class="tok-variableName">substitutions</span> <span class="tok-keyword">import</span> <span class="tok-variableName">LaunchConfiguration</span></span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-variableName">launch_ros</span><span class="tok-operator">.</span><span class="tok-variableName">actions</span> <span class="tok-keyword">import</span> <span class="tok-variableName">Node</span></span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">def</span> <span class="tok-variableName tok-definition">generate_launch_description</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span>:</span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-variableName">joy_teleop</span> <span class="tok-operator">=</span> <span class="tok-variableName">Node</span><span class="tok-punctuation">(</span></span>
+<span class="ln">        <span class="tok-variableName">package</span><span class="tok-operator">=</span><span class="tok-string">"joy_teleop"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        <span class="tok-variableName">executable</span><span class="tok-operator">=</span><span class="tok-string">"joy_teleop"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        <span class="tok-variableName">parameters</span><span class="tok-operator">=</span><span class="tok-punctuation">[</span><span class="tok-variableName">os</span><span class="tok-operator">.</span><span class="tok-propertyName">path</span><span class="tok-operator">.</span><span class="tok-propertyName">join</span><span class="tok-punctuation">(</span><span class="tok-variableName">get_package_share_directory</span><span class="tok-punctuation">(</span><span class="tok-string">"bumperbot_controller"</span><span class="tok-punctuation">)</span><span class="tok-punctuation">,</span> <span class="tok-string">"config"</span><span class="tok-punctuation">,</span> <span class="tok-string">"joy_teleop.yaml"</span><span class="tok-punctuation">)</span><span class="tok-punctuation">]</span></span>
+<span class="ln">    <span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-variableName">joy_node</span> <span class="tok-operator">=</span> <span class="tok-variableName">Node</span><span class="tok-punctuation">(</span></span>
+<span class="ln">        <span class="tok-variableName">package</span><span class="tok-operator">=</span><span class="tok-string">"joy"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        <span class="tok-variableName">executable</span><span class="tok-operator">=</span><span class="tok-string">"joy_node"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        <span class="tok-variableName">name</span><span class="tok-operator">=</span><span class="tok-string">"joystick"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        <span class="tok-variableName">parameters</span><span class="tok-operator">=</span><span class="tok-punctuation">[</span><span class="tok-variableName">os</span><span class="tok-operator">.</span><span class="tok-propertyName">path</span><span class="tok-operator">.</span><span class="tok-propertyName">join</span><span class="tok-punctuation">(</span><span class="tok-variableName">get_package_share_directory</span><span class="tok-punctuation">(</span><span class="tok-string">"bumperbot_controller"</span><span class="tok-punctuation">)</span><span class="tok-punctuation">,</span> <span class="tok-string">"config"</span><span class="tok-punctuation">,</span> <span class="tok-string">"joy_config.yaml"</span><span class="tok-punctuation">)</span><span class="tok-punctuation">]</span></span>
+<span class="ln">    <span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-keyword">return</span> <span class="tok-variableName">LaunchDescription</span><span class="tok-punctuation">(</span></span>
+<span class="ln">        <span class="tok-punctuation">[</span></span>
+<span class="ln">            <span class="tok-variableName">joy_teleop</span><span class="tok-punctuation">,</span></span>
+<span class="ln">            <span class="tok-variableName">joy_node</span></span>
+<span class="ln">        <span class="tok-punctuation">]</span></span>
+<span class="ln">    <span class="tok-punctuation">)</span></span></code></pre></div>
+<h2 id="configure-the-joystick-driver">Configure the Joystick Driver</h2>
+<p>Now, we need to configure the physical joystick.</p>
+<p>Inside the <code>config</code> folder, create a YAML file named:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">joy_config.yaml</span></code></pre></div>
+<p>The recommended package structure is:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">bumperbot_controller/</span>
+<span class="ln">│</span>
+<span class="ln">├── config/</span>
+<span class="ln">│   ├── joy_config.yaml</span></code></pre></div>
+<figure class="img sz-s al-l"><img alt="" decoding="async" height="600" loading="lazy" src="/uploads/wp/2026/10/image-64.png" width="336"></figure>
+<h2 id="write-the-code-x">Write the Code</h2>
+<div class="codeblock"><pre class="code"><code><span class="ln">joystick:</span>
+<span class="ln">  ros__parameters:</span>
+<span class="ln">    device_id: 0</span>
+<span class="ln">    device_name: ""</span>
+<span class="ln">    deadzone: 0.5</span>
+<span class="ln">    autorepeat_rate: 20.0</span>
+<span class="ln">    sticky_buttons: false</span>
+<span class="ln">    coalesce_interval_ms: 1</span></code></pre></div>
+<h2 id="configure-the-joystick-teleoperation">Configure the Joystick Teleoperation</h2>
+<p>Name it:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">joy_teleop.yaml</span></code></pre></div>
+<p>This file defines how the joystick input is converted into robot velocity commands.</p>
+<p>The recommended package structure is:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">bumperbot_controller/</span>
+<span class="ln">│</span>
+<span class="ln">├── config/</span>
+<span class="ln">│   ├── joy_config.yaml</span>
+<span class="ln">│   └── joy_teleop.yaml</span></code></pre></div>
+<figure class="img sz-s al-l"><img alt="" decoding="async" height="711" loading="lazy" src="/uploads/wp/2026/10/image-65.png" width="345"></figure>
+<h2 id="write-the-code-x-x">Write the code</h2>
+<div class="codeblock"><pre class="code"><code><span class="ln">joy_teleop:</span>
+<span class="ln">  ros__parameters:</span>
+<span class="ln">    move:</span>
+<span class="ln">      type: topic</span>
+<span class="ln">      interface_type: geometry_msgs/msg/TwistStamped</span>
+<span class="ln">      topic_name: bumperbot_controller/cmd_vel</span>
+<span class="ln">      deadman_buttons: [5]</span>
+<span class="ln">      axis_mappings:</span>
+<span class="ln">        twist-linear-x:</span>
+<span class="ln">          axis: 1</span>
+<span class="ln">          scale: 1.0</span>
+<span class="ln">          offset: 0.0</span>
+<span class="ln">        twist-angular-z:</span>
+<span class="ln">          axis: 3</span>
+<span class="ln">          scale: 8.0</span>
+<span class="ln">          offset: 0.0</span></code></pre></div>
+
+<div class="widget"><iframe loading="lazy" scrolling="no" src="/widgets/documented-software-learnings__ros2__ros2-44-1.html" title="Interactive guide"></iframe></div></div>
+
+<div class="col">
+<h2 id="build-the-workspace">Build the Workspace</h2>
+<div class="codeblock"><pre class="code"><code><span class="ln"><span class="tok-variableName">cd</span> bumperbot_ws</span></code></pre></div>
+<p>Run the following command:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">colcon build</span></code></pre></div>
+<p>Wait for the build to complete successfully.</p>
+<figure class="img"><img alt="" decoding="async" height="335" loading="lazy" src="/uploads/wp/2026/10/image-55.png" width="817"></figure>
+</div>
+<div class="col">
+<h2 id="start-the-gazebo-simulation">Start the Gazebo Simulation</h2>
+<p>Open another terminal and source the workspace:</p>
+<figure class="img"><img alt="" decoding="async" height="346" loading="lazy" src="/uploads/wp/2026/10/image-56.png" width="811"></figure>
+<div class="codeblock"><pre class="code"><code><span class="ln">. install/setup.bash</span></code></pre></div>
+<p>Now start the Gazebo simulation:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">ros2 launch bumperbot_description gazebo.launch.py</span></code></pre></div>
+<p>Wait for the BumperBot to appear in Gazebo.</p>
+<figure class="img"><img alt="" decoding="async" height="747" loading="lazy" src="/uploads/wp/2026/10/image-66-1024x747.png" width="1024"></figure>
+<h2 id="launch-the-python-controller">Launch the Python Controller</h2>
+<figure class="img"><img alt="" decoding="async" height="1089" loading="lazy" src="/uploads/wp/2026/10/image-67.png" width="1595"></figure>
+<p>open a new terminal and Now, start the controller system.</p>
+<p>Run:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">. install/setup.bash</span>
+<span class="ln">ros2 launch bumperbot_controller controller.launch.py</span></code></pre></div>
+<p>This will start:</p>
+<ul>
+<li>The Joint State Broadcaster.</li>
+<li>The Simple Velocity Controller.</li>
+<li>The Python Simple Controller node.</li>
+</ul>
+<p>The Python node will receive robot velocity commands, convert them into individual wheel velocities, and publish the results to the wheel controller.</p>
+<h2 id="connect-and-launch-the-joystick">Connect and Launch the Joystick</h2>
+<p>Now, connect your physical joystick to the computer.</p>
+<p>You can use a USB connection or a supported wireless connection.</p>
+<p>In this demonstration, we are using the <strong>HyperX Clutch Gladiate</strong> controller.</p>
+<p>Open another terminal and source the workspace:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">. install/setup.bash</span></code></pre></div>
+<p>Launch the joystick teleoperation system:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">ros2 launch bumperbot_controller joystick_teleop.launch.py</span></code></pre></div>
+<figure class="img"><img alt="" decoding="async" height="977" loading="lazy" src="/uploads/wp/2026/10/image-68.png" width="1617"></figure>
+<p>This starts two nodes:</p>
+<ol start="1">
+<li><code>joy_node</code>: Reads the physical joystick input.</li>
+<li><code>joy_teleop</code>: Converts joystick inputs into velocity commands.</li>
+</ol>
+<p>You should see output indicating that the joystick has been detected.</p>
+<figure class="img"><img alt="" decoding="async" height="110" loading="lazy" src="/uploads/wp/2026/10/image-69.png" width="1204"></figure>
+<h2 id="teleoperate-the-bumperbot">Teleoperate the BumperBot</h2>
+<p>Once the joystick has been detected, you can start controlling the robot.</p>
+<p>Using the HyperX Clutch Gladiate controller:</p>
+<p><strong>1 - Enable movement</strong></p>
+<p>Keep the configured deadman button pressed.</p>
+<figure class="img sz-s al-l"><img alt="" decoding="async" height="689" loading="lazy" src="/uploads/wp/2026/10/image-70.png" width="574"></figure>
+<p><strong>2 - Move forward and backward</strong></p>
+<p>Use the designated movement axis to move the robot forward or backward.</p>
+<p><strong>3 - Turn the robot</strong></p>
+<p>Use the designated turning axis to turn the robot left or right.</p>
+<figure class="img sz-m al-l"><img alt="" decoding="async" height="1042" loading="lazy" src="/uploads/wp/2026/10/image-72.png" width="1861"></figure>
+<figure>
+<div class="embed"><iframe src="https://www.youtube-nocookie.com/embed/tTJCfpJmfSY?rel=0&amp;modestbranding=1&amp;playsinline=1&amp;loop=1&amp;playlist=tTJCfpJmfSY" loading="lazy" title="Video" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+</figure>
+<h2 id="understand-the-joystick-control-architecture">Understand the Joystick Control Architecture</h2>
+<p>The complete control process involves three main components:</p>
+<p><strong>1. Joy Node</strong></p>
+<p>The <code>joy</code> package reads input from the physical joystick and publishes the joystick data.</p>
+<p><strong>2. Joy Teleop Node</strong></p>
+<p>The <code>joy_teleop</code> package reads the joystick data and converts the configured button and axis inputs into velocity commands.</p>
+<p><strong>3. Python Simple Controller</strong></p>
+<p>Our existing Python controller receives the velocity commands, calculates the individual wheel velocities, and publishes them to the wheel controller.</p>
+<h3>Data Flow</h3><div><div class="codeblock"><pre class="code"><code><span class="ln">Physical Joystick</span>
+<span class="ln">  |</span>
+<span class="ln">  v</span>
+<span class="ln">Joy Node</span>
+<span class="ln">  |</span>
+<span class="ln">  v  </span>
+<span class="ln">/joy</span>
+<span class="ln">  |</span>
+<span class="ln">  v    </span>
+<span class="ln">Joy Teleop Node</span>
+<span class="ln">  |</span>
+<span class="ln">  v  </span>
+<span class="ln">/bumperbot_controller/cmd_vel</span>
+<span class="ln">  |</span>
+<span class="ln">  v  </span>
+<span class="ln">Python Simple Controller</span>
+<span class="ln">  |</span>
+<span class="ln">  v  </span>
+<span class="ln">Differential Drive Kinematics</span>
+<span class="ln">  |</span>
+<span class="ln">  v  </span>
+<span class="ln">/simple_velocity_controller/commands</span>
+<span class="ln">  |</span>
+<span class="ln">  v  </span>
+<span class="ln">Simple Velocity Controller</span>
+<span class="ln">  |</span>
+<span class="ln">  v  </span>
+<span class="ln">BumperBot Movement</span>
+<span class="ln">  |</span>
+<span class="ln">  v  </span>
+<span class="ln">Gazebo Simulation</span></code></pre></div><p>This allows us to control the robot directly using the joystick instead of manually publishing velocity commands.</p></div>
+</div></div>
+    <nav class="pager" aria-label="Chapters">
+<a href="/documented-software-learnings/ros2/ros2-43/"><span class="mono">Chapter 43</span>Launch the Simple Speed Controller</a><a class="nx" href="/documented-software-learnings/ros2/ros2-45/"><span class="mono">Chapter 45</span>ROS 2 Diff Drive Controller</a>    </nav>
+  </article>
+</div>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/plc/">PLC &amp; Industrial Automation</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=a6e775a3ba" defer></script>
+<script src="/assets/home.js?v=a6e775a3ba" defer></script>
+</body>
+</html>

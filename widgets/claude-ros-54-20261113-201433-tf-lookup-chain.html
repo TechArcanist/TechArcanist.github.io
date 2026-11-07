@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ask the buffer: lookup_transform</title>
+<style>
+html,body{margin:0;background:#0e182c;color:#e8eef7;font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+.w{padding:16px;max-width:980px;margin:0 auto}
+h1{font-size:18px;margin:0 0 4px}.sub{color:#a9b8cc;font-size:14px;margin:0 0 12px}
+.card{background:#13213a;border:1px solid #23395c;border-radius:12px;padding:14px}
+.grid{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:14px}
+@media (max-width:700px){.grid{grid-template-columns:1fr}}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:6px 0}
+.lbl{color:#a9b8cc;font-size:13px;min-width:120px}
+.fb{background:transparent;color:#e8eef7;border:1px solid #2b4366;border-radius:7px;padding:5px 9px;font:13px ui-monospace,Consolas,monospace;cursor:pointer}
+.fb.on{border-color:#ff8a3d;background:#2a1a10;color:#ffd9bf}
+.fb:hover{border-color:#ff8a3d}
+input[type=range]{width:100%;accent-color:#ff8a3d}
+svg{width:100%;height:auto;display:block}
+.res{font:13.5px/1.7 ui-monospace,Consolas,monospace;word-break:break-word}
+.term{background:#060c18;border:1px solid #1f3352;border-radius:8px;padding:10px;font:12.5px/1.6 ui-monospace,Consolas,monospace;white-space:pre-wrap;word-break:break-all;color:#cfe0f5;margin-top:10px}
+.ok{color:#66e3b0}.bad{color:#ff6b6b}.warn{color:#ffd24a}.dim{color:#6b7f96}
+.note{color:#a9b8cc;font-size:13.5px;margin-top:8px}
+</style></head><body><div class="w">
+<h1>Ask the buffer: where is one frame, seen from another?</h1>
+<p class="sub">Pick the two frames of the request and drag the time. The buffer adds the transforms along the tree, exactly like line 70 does with <code>lookup_transform(frame_id, child_frame_id, Time())</code>.</p>
+<div class="card grid">
+<div>
+<div class="row"><span class="lbl">frame_id (stand here)</span></div><div class="row" id="fA"></div>
+<div class="row"><span class="lbl">child_frame_id (look at)</span></div><div class="row" id="fB"></div>
+<div class="row"><button class="fb" id="sw">Swap the two</button></div>
+<div class="row"><span class="lbl">seconds since the node started: <b id="tv"></b></span></div>
+<input type="range" id="t" min="0" max="800" step="0.1" value="713.1" aria-label="time">
+<div class="row"><button class="fb" data-t="0.05">0.05 s</button><button class="fb" data-t="2">2 s</button><button class="fb" data-t="60">1 min</button><button class="fb" data-t="713.1">713.1 s</button></div>
+</div>
+<div><svg id="sv" viewBox="0 0 560 300" role="img" aria-label="The TF tree with the path used for the lookup"></svg>
+<div class="res" id="res"></div></div>
+</div>
+<div class="term" id="term"></div>
+<p class="note">The timer adds 0.05 m every 0.1 s, so the base drives 0.5 m per second. The computer adds 0.05 one step at a time, so after 7131 ticks (713.1 s) it shows 356.5500000000468, just like the real answer. No frame is turned here, so the numbers simply add up (or flip sign when you swap).</p>
+</div>
+<script>
+(function(){
+var F=['odom','bumperbot_base','bumperbot_top','world'],S={a:0,b:2,t:713.1};
+function $(i){return document.getElementById(i)}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function fmt(v){var s=String(Math.round(v*1e9)/1e9);if(s==='-0')s='0';return s.indexOf('.')<0?s+'.0':s}
+function pos(f,x){return f==='odom'?[0,0]:f==='bumperbot_base'?[x,0]:f==='bumperbot_top'?[x,0.3]:null}
+function btns(id,key){$(id).innerHTML=F.map(function(f,i){return '<button class="fb" data-k="'+key+'" data-i="'+i+'">'+f+'</button>'}).join('')}
+btns('fA','a');btns('fB','b');
+function draw(){
+  var k=Math.floor(S.t*10+1e-9),x=0;for(var i=0;i<k;i++)x=x+0.05;
+  var A=F[S.a],B=F[S.b];$('tv').textContent=S.t.toFixed(1)+' s';
+  [].slice.call(document.querySelectorAll('[data-k]')).forEach(function(b){b.classList.toggle('on',+b.getAttribute('data-i')===S[b.getAttribute('data-k')])});
+  var known={odom:k>0,bumperbot_base:true,bumperbot_top:true,world:false},ok=true,err='';
+  if(!known[A]){ok=false;err='"'+A+'" passed to lookupTransform argument target_frame does not exist.'}
+  else if(!known[B]){ok=false;err='"'+B+'" passed to lookupTransform argument source_frame does not exist.'}
+  var path={};if(ok){path[A]=1;path[B]=1;if((A==='odom'&&B==='bumperbot_top')||(B==='odom'&&A==='bumperbot_top'))path.bumperbot_base=1}
+  var g='',N={odom:[110,50],bumperbot_base:[110,150],bumperbot_top:[110,250]};
+  function on(p,q){return path[p]&&path[q]&&A!==B}
+  g+='<line x1="110" y1="68" x2="110" y2="132" stroke="'+(k>0?'#ff8a3d':'#3a4a60')+'" stroke-width="'+(on('odom','bumperbot_base')?5:2)+'"'+(k>0?'':' stroke-dasharray="5 4"')+'/>';
+  g+='<text x="124" y="104" fill="#ff8a3d" font-size="12" font-family="ui-monospace,Consolas,monospace">'+(k>0?'x '+fmt(x)+' (moving, /tf)':'odom not heard yet')+'</text>';
+  g+='<line x1="110" y1="168" x2="110" y2="232" stroke="#66e3b0" stroke-width="'+(on('bumperbot_base','bumperbot_top')?5:2)+'"/>';
+  g+='<text x="124" y="204" fill="#66e3b0" font-size="12" font-family="ui-monospace,Consolas,monospace">z 0.3 (static, /tf_static)</text>';
+  Object.keys(N).forEach(function(f){var p=N[f],h=path[f];g+='<rect x="'+(p[0]-95)+'" y="'+(p[1]-18)+'" width="190" height="36" rx="9" fill="'+(h?'#2a1f0c':'#0f1d30')+'" stroke="'+(h?'#ffd24a':'#2b4366')+'" stroke-width="2"/><text x="'+p[0]+'" y="'+(p[1]+5)+'" fill="#eef3fa" font-size="13" font-weight="700" text-anchor="middle">'+f+'</text>'});
+  g+='<rect x="330" y="32" width="200" height="236" rx="10" fill="#0f1b31" stroke="#23395c"/><text x="430" y="56" fill="#a9b8cc" font-size="12" text-anchor="middle">world</text><text x="430" y="76" fill="#6b7f96" font-size="11" text-anchor="middle">nobody broadcasts it</text>';
+  g+='<text x="430" y="150" fill="#a9b8cc" font-size="12" text-anchor="middle">robot after '+S.t.toFixed(1)+' s</text><text x="430" y="172" fill="#ff8a3d" font-size="15" font-weight="700" text-anchor="middle">'+fmt(x)+' m</text><text x="430" y="194" fill="#6b7f96" font-size="11" text-anchor="middle">'+k+' ticks of 0.05 m</text>';
+  $('sv').innerHTML=g;
+  var cmd="ros2 service call /get_transform bumperbot_msgs/srv/GetTransform \"{frame_id: '"+A+"', child_frame_id: '"+B+"'}\"",out;
+  if(!ok){$('res').innerHTML='<span class="bad">TransformException</span><br>'+esc(err)+'<br>success = <span class="bad">False</span>'+(A==='odom'||B==='odom'?'<br><span class="dim">Before the first tick (0.1 s) odom does not exist yet.</span>':'');
+    out='response:\nbumperbot_msgs.srv.GetTransform_Response(transform=...(all zeros, empty names), success=False)'}
+  else{var a=pos(A,x),b=pos(B,x),tx=b[0]-a[0],tz=b[1]-a[1],dyn=(A==='odom'||B==='odom')&&A!==B;
+    $('res').innerHTML='where is <b>'+B+'</b>, seen from <b>'+A+'</b>:<br>translation x <span class="ok">'+fmt(tx)+'</span>, y 0.0, z <span class="ok">'+fmt(tz)+'</span><br>rotation (0, 0, 0, 1)<br>stamp: '+(dyn?'the time of the latest tick':'<span class="warn">0</span> (only the static transform is used)')+'<br>success = <span class="ok">True</span>'+(A===B?'<br><span class="dim">Same frame: a zero transform.</span>':'');
+    out="response:\nbumperbot_msgs.srv.GetTransform_Response(transform=geometry_msgs.msg.TransformStamped(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time("+(dyn?'sec=..., nanosec=...':'sec=0, nanosec=0')+"), frame_id='"+A+"'), child_frame_id='"+B+"', transform=geometry_msgs.msg.Transform(translation=geometry_msgs.msg.Vector3(x="+fmt(tx)+", y=0.0, z="+fmt(tz)+"), rotation=geometry_msgs.msg.Quaternion(x=0.0, y=0.0, z=0.0, w=1.0))), success=True)"}
+  $('term').textContent=cmd+'\n\nwaiting for service to become available...\nrequester: making request: bumperbot_msgs.srv.GetTransform_Request(frame_id=\''+A+'\', child_frame_id=\''+B+'\')\n\n'+out+'\n\n(simulated output; the real wording may differ slightly)'}
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('button');if(!b)return;
+  if(b.hasAttribute('data-k')){S[b.getAttribute('data-k')]=+b.getAttribute('data-i');draw()}
+  else if(b.id==='sw'){var t=S.a;S.a=S.b;S.b=t;draw()}
+  else if(b.hasAttribute('data-t')){S.t=+b.getAttribute('data-t');$('t').value=S.t;draw()}});
+$('t').oninput=function(){S.t=+this.value;draw()};
+draw();
+})();
+</script>
+<script>
+(function(){function s(){parent.postMessage({taWidget:location.pathname,h:document.documentElement.scrollHeight},'*')}
+new ResizeObserver(s).observe(document.documentElement);addEventListener('load',s);setInterval(s,1500);})();
+</script></body></html>

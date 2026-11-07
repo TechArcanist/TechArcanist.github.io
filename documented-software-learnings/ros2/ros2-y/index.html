@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simulating the Robot in Gazebo | ROS 2 | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="In the Chapter 23, we used RViz2 to visualize our BumperBot. But RViz2 mainly answers: “What does my robot look like, and where are its frames?” Gazebo answers…">
+<link rel="canonical" href="https://techarcanist.com/documented-software-learnings/ros2/ros2-y/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="Simulating the Robot in Gazebo | ROS 2">
+<meta property="og:description" content="In the Chapter 23, we used RViz2 to visualize our BumperBot. But RViz2 mainly answers: “What does my robot look like, and where are its frames?” Gazebo answers…">
+<meta property="og:url" content="https://techarcanist.com/documented-software-learnings/ros2/ros2-y/">
+<meta property="og:image" content="https://techarcanist.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=a6e775a3ba">
+<link rel="stylesheet" href="/assets/home.css?v=a6e775a3ba">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/" aria-current="page">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap reader wide">
+  <aside class="rd-nav" id="rd-nav">
+    <a class="rd-series" href="/documented-software-learnings/ros2/"><span class="label">Series</span>ROS 2</a>
+    <ol>
+      <li><a href="/documented-software-learnings/ros2/ros2_a/"><span class="mono">01</span>Installing Ubuntu Desktop (Dual Boot with Windows)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_b/"><span class="mono">02</span>ROS 2 Jazzy Installation on Ubuntu (Step-by-Step)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_c/"><span class="mono">03</span>Development Environment Setup for ROS 2 Jazzy on Ubuntu (With Clear Explanations)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_d/"><span class="mono">04</span>ROS 2 Fundamentals: Architecture, Communication, Packages, and Workspaces</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_e/"><span class="mono">05</span>ROS 2 Workspace &amp; Package Creation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_f/"><span class="mono">06</span>ROS 2 Python Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_g/"><span class="mono">07</span>ROS 2 C++ Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_h/"><span class="mono">08</span>ROS 2 Python Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_i/"><span class="mono">09</span>ROS 2 C++ Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_j/"><span class="mono">10</span>Robot Locomotion: Introduction</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_k/"><span class="mono">11</span>Wheeled Locomotion Architectures</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_l/"><span class="mono">12</span>Rolling Friction &amp; Wheeled Locomotion Efficiency</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_m/"><span class="mono">13</span>Introduction to Robot Simulation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_n/"><span class="mono">14</span>URDF</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_o/"><span class="mono">15</span>Create a URDF Model</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_p/"><span class="mono">16</span>Rviz</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_q/"><span class="mono">17</span>Node Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_r/"><span class="mono">18</span>Python Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_s/"><span class="mono">19</span>C++ Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_t/"><span class="mono">20</span>ROS 2 Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-u/"><span class="mono">21</span>Visualize The Robot In RVIZ2</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-v/"><span class="mono">22</span>Launch Files</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-w/"><span class="mono">23</span>ROS 2 Launch Files: Visualizing the Robot with One Command</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-x/"><span class="mono">24</span>Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-y/" aria-current="page"><span class="mono">25</span>Simulating the Robot in Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-z/"><span class="mono">26</span>ROS 2 Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-aa/"><span class="mono">27</span>Control Types</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ab/"><span class="mono">28</span>ROS 2 Control: Prepare the Robot for Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ac/"><span class="mono">29</span>Understanding ROS 2 Control | Explanation of Chapter 28</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ad/"><span class="mono">30</span>ROS 2 Control: Moving the BumperBot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ae/"><span class="mono">31</span>Robot Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-af/"><span class="mono">32</span>Pose of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_af/"><span class="mono">33</span>Translation Vector</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ag/"><span class="mono">34</span>Introduction to Turtlesim</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ah/"><span class="mono">35</span>Translation Vector Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ai/"><span class="mono">36</span>Translation Vector Between Two Turtles: CPP</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_aj/"><span class="mono">37</span>Rotation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ak/"><span class="mono">38</span>Rotation Matrix Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_al/"><span class="mono">39</span>Transformation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_am/"><span class="mono">40</span>Differential Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-41/"><span class="mono">41</span>Velocity of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-42/"><span class="mono">42</span>Simple Speed Controller: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-43/"><span class="mono">43</span>Launch the Simple Speed Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-44/"><span class="mono">44</span>Teleoperating the BumperBot with a Joystick</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-45/"><span class="mono">45</span>ROS 2 Diff Drive Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-46/"><span class="mono">46</span>TF 2 Library</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-47/"><span class="mono">47</span>Operation With Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-48/"><span class="mono">48</span>Static &amp; Dynamic Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-49/"><span class="mono">49</span>Simple TF2 Static Broadcaster</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-50/"><span class="mono">50</span>Simple TF2 Broadcaster: Static and Dynamic Transforms</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-51/"><span class="mono">51</span>ROS 2 Services</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-52/"><span class="mono">52</span>Service Server in Python: AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-53/"><span class="mono">53</span>Service Client in Python: Calling AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-54/"><span class="mono">54</span>Simple TF2 Listener in Python: a get_transform Service</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-55/"><span class="mono">55</span>Euler Angles and Quaternions</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-56/"><span class="mono">56</span>Euler to Quaternion: Turning the Robot with tf_transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-57/"><span class="mono">57</span>tf2 Tools: view_frames and tf2_echo</a></li>
+    </ol>
+  </aside>
+  <article class="rd-main">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/documented-software-learnings/">Library</a><span>/</span><a href="/documented-software-learnings/ros2/">ROS 2</a><span>/</span><span>25</span></nav>
+    <button class="btn btn-sm btn-line rd-tg" type="button" id="rd-tg">All chapters</button>
+<p class="sh-label mono"><span>25</span>Chapter 25 of 57</p>    <h1>Simulating the Robot in Gazebo</h1>
+<div class="rd-prog" aria-hidden="true"><i style="width:43.9%"></i></div>    <div class="prose">
+<div class="col">
+<p>In the Chapter 23, we used RViz2 to visualize our BumperBot.</p>
+<p>But RViz2 mainly answers:</p>
+<blockquote>
+<p><strong>“What does my robot look like, and where are its frames?”</strong></p>
+</blockquote>
+<p>Gazebo answers a different question:</p>
+<blockquote>
+<p><strong>“How does my robot behave in a physical world?”</strong></p>
+</blockquote>
+<p>For example, Gazebo can simulate things such as:</p>
+<ul>
+<li>Gravity</li>
+<li>Friction</li>
+<li>Collision</li>
+<li>Movement</li>
+<li>Contact with the ground</li>
+<li>Robot dynamics</li>
+<li>Sensors</li>
+<li>Virtual environments</li>
+</ul>
+<h2 id="create-the-gazebo-xacro-file">Create the Gazebo Xacro File</h2>
+<figure class="img"><img alt="" decoding="async" height="518" loading="lazy" src="/uploads/wp/2026/09/image-95.png" width="1037"/></figure>
+<p>Inside:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">bumperbot_description</span>
+<span class="ln">└── urdf</span></code></pre></div>
+<p>create:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">bumperbot_gazebo.xacro</span></code></pre></div>
+<h2 id="write-the-bumperbot-urdf-xacro-file">Write the bumperbot.urdf.xacro File</h2>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln"><span class="tok-meta">&lt;?xml version="1.0"?&gt;</span></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-punctuation">&lt;</span><span class="tok-typeName">robot</span> <span class="tok-propertyName">name</span><span class="tok-operator">=</span><span class="tok-string">"bumperbot"</span> <span class="tok-propertyName">xmlns:xacro</span><span class="tok-operator">=</span><span class="tok-string">"http://ros.org/wiki/xacro"</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln"></span>
+<span class="ln">  <span class="tok-comment">&lt;!-- Include Gazebo Parameters --&gt;</span></span>
+<span class="ln">  <span class="tok-punctuation">&lt;</span><span class="tok-typeName">xacro:include</span> <span class="tok-propertyName">filename</span><span class="tok-operator">=</span><span class="tok-string">"$(find bumperbot_description)/urdf/bumperbot_gazebo.xacro"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln"></span>
+<span class="ln">  <span class="tok-punctuation">&lt;</span><span class="tok-typeName">link</span> <span class="tok-propertyName">name</span><span class="tok-operator">=</span><span class="tok-string">"base_footprint"</span><span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">  </span>
+<span class="ln">  <span class="tok-punctuation">&lt;</span><span class="tok-typeName">link</span> <span class="tok-propertyName">name</span><span class="tok-operator">=</span><span class="tok-string">"base_link"</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">inertial</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">origin</span> <span class="tok-propertyName">xyz</span><span class="tok-operator">=</span><span class="tok-string">"0 0 0.04"</span> <span class="tok-propertyName">rpy</span><span class="tok-operator">=</span><span class="tok-string">"0.0 0.25 0.3"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">mass</span> <span class="tok-propertyName">value</span><span class="tok-operator">=</span><span class="tok-string">"8.2573504e-01"</span><span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">inertia</span> <span class="tok-propertyName">ixx</span><span class="tok-operator">=</span><span class="tok-string">"2.2124416e-02"</span> <span class="tok-propertyName">ixy</span><span class="tok-operator">=</span><span class="tok-string">"-1.2294101e-04"</span> <span class="tok-propertyName">ixz</span><span class="tok-operator">=</span><span class="tok-string">"3.4938785e-04"</span></span>
+<span class="ln">               <span class="tok-propertyName">iyy</span><span class="tok-operator">=</span><span class="tok-string">"2.1193702e-02"</span> <span class="tok-propertyName">iyz</span><span class="tok-operator">=</span><span class="tok-string">"-5.0120904e-05"</span></span>
+<span class="ln">               <span class="tok-propertyName">izz</span><span class="tok-operator">=</span><span class="tok-string">"2.0064271e-02"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">inertial</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">visual</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">origin</span> <span class="tok-propertyName">xyz</span><span class="tok-operator">=</span><span class="tok-string">"0 0 0"</span> <span class="tok-propertyName">rpy</span><span class="tok-operator">=</span><span class="tok-string">"0 0 0"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">geometry</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">        <span class="tok-punctuation">&lt;</span><span class="tok-typeName">mesh</span> <span class="tok-propertyName">filename</span><span class="tok-operator">=</span><span class="tok-string">"package://bumperbot_description/meshes/base_link.STL"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">geometry</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">visual</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">collision</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">origin</span> <span class="tok-propertyName">xyz</span><span class="tok-operator">=</span><span class="tok-string">"0 0 0"</span> <span class="tok-propertyName">rpy</span><span class="tok-operator">=</span><span class="tok-string">"0 0 0"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">geometry</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">        <span class="tok-punctuation">&lt;</span><span class="tok-typeName">mesh</span> <span class="tok-propertyName">filename</span><span class="tok-operator">=</span><span class="tok-string">"package://bumperbot_description/meshes/base_link.STL"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">geometry</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">collision</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">  <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">link</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln"></span>
+<span class="ln">  <span class="tok-punctuation">&lt;</span><span class="tok-typeName">joint</span> <span class="tok-propertyName">name</span><span class="tok-operator">=</span><span class="tok-string">"base_joint"</span> <span class="tok-propertyName">type</span><span class="tok-operator">=</span><span class="tok-string">"fixed"</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">parent</span> <span class="tok-propertyName">link</span><span class="tok-operator">=</span><span class="tok-string">"base_footprint"</span><span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">child</span> <span class="tok-propertyName">link</span><span class="tok-operator">=</span><span class="tok-string">"base_link"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">origin</span> <span class="tok-propertyName">xyz</span><span class="tok-operator">=</span><span class="tok-string">"0 0 0.033"</span> <span class="tok-propertyName">rpy</span><span class="tok-operator">=</span><span class="tok-string">"0 0 0"</span><span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">  <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">joint</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln"></span>
+<span class="ln">  <span class="tok-punctuation">&lt;</span><span class="tok-typeName">link</span> <span class="tok-propertyName">name</span><span class="tok-operator">=</span><span class="tok-string">"wheel_right_link"</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">inertial</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">origin</span> <span class="tok-propertyName">xyz</span><span class="tok-operator">=</span><span class="tok-string">"0 -0.014 0"</span> <span class="tok-propertyName">rpy</span><span class="tok-operator">=</span><span class="tok-string">"0 0 0"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">mass</span> <span class="tok-propertyName">value</span><span class="tok-operator">=</span><span class="tok-string">"0.0530086090966721"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">inertia</span> <span class="tok-propertyName">ixx</span><span class="tok-operator">=</span><span class="tok-string">"1.88176298336665E-05"</span> <span class="tok-propertyName">ixy</span><span class="tok-operator">=</span><span class="tok-string">"-4.8444933029987E-10"</span> <span class="tok-propertyName">ixz</span><span class="tok-operator">=</span><span class="tok-string">"1.88163708851143E-08"</span></span>
+<span class="ln">               <span class="tok-propertyName">iyy</span><span class="tok-operator">=</span><span class="tok-string">"3.11510738647764E-05"</span> <span class="tok-propertyName">iyz</span><span class="tok-operator">=</span><span class="tok-string">"-6.93560663069607E-11"</span></span>
+<span class="ln">               <span class="tok-propertyName">izz</span><span class="tok-operator">=</span><span class="tok-string">"1.8801969558182E-05"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">inertial</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">visual</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">origin</span> <span class="tok-propertyName">xyz</span><span class="tok-operator">=</span><span class="tok-string">"0 0 0"</span> <span class="tok-propertyName">rpy</span><span class="tok-operator">=</span><span class="tok-string">"1.57 0 0"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">geometry</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">        <span class="tok-punctuation">&lt;</span><span class="tok-typeName">mesh</span> <span class="tok-propertyName">filename</span><span class="tok-operator">=</span><span class="tok-string">"package://bumperbot_description/meshes/wheel_right_link.STL"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">geometry</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">visual</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">collision</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">origin</span> <span class="tok-propertyName">xyz</span><span class="tok-operator">=</span><span class="tok-string">"0 -0.015 0"</span> <span class="tok-propertyName">rpy</span><span class="tok-operator">=</span><span class="tok-string">"1.57 0 0"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">geometry</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">        <span class="tok-punctuation">&lt;</span><span class="tok-typeName">sphere</span> <span class="tok-propertyName">radius</span><span class="tok-operator">=</span><span class="tok-string">"0.033"</span><span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">geometry</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">collision</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">  <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">link</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln"></span>
+<span class="ln">  <span class="tok-punctuation">&lt;</span><span class="tok-typeName">joint</span> <span class="tok-propertyName">name</span><span class="tok-operator">=</span><span class="tok-string">"wheel_right_joint"</span> <span class="tok-propertyName">type</span><span class="tok-operator">=</span><span class="tok-string">"continuous"</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">origin</span> <span class="tok-propertyName">xyz</span><span class="tok-operator">=</span><span class="tok-string">"0 -0.0701101849418637 0"</span> <span class="tok-propertyName">rpy</span><span class="tok-operator">=</span><span class="tok-string">"0 0 0"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">parent</span> <span class="tok-propertyName">link</span><span class="tok-operator">=</span><span class="tok-string">"base_link"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">child</span> <span class="tok-propertyName">link</span><span class="tok-operator">=</span><span class="tok-string">"wheel_right_link"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">axis</span> <span class="tok-propertyName">xyz</span><span class="tok-operator">=</span><span class="tok-string">"0 1 0"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">  <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">joint</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">  </span>
+<span class="ln">  <span class="tok-punctuation">&lt;</span><span class="tok-typeName">link</span></span>
+<span class="ln">    <span class="tok-propertyName">name</span><span class="tok-operator">=</span><span class="tok-string">"wheel_left_link"</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">inertial</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">origin</span> <span class="tok-propertyName">xyz</span><span class="tok-operator">=</span><span class="tok-string">"0 0.014 0"</span> <span class="tok-propertyName">rpy</span><span class="tok-operator">=</span><span class="tok-string">"0 0 0"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">mass</span> <span class="tok-propertyName">value</span><span class="tok-operator">=</span><span class="tok-string">"0.0530086043217644"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">inertia</span> <span class="tok-propertyName">ixx</span><span class="tok-operator">=</span><span class="tok-string">"1.8792911368909E-05"</span>  <span class="tok-propertyName">ixy</span><span class="tok-operator">=</span><span class="tok-string">"3.31256392204584E-10"</span> <span class="tok-propertyName">ixz</span><span class="tok-operator">=</span><span class="tok-string">"-1.14082001662767E-08"</span></span>
+<span class="ln">               <span class="tok-propertyName">iyy</span><span class="tok-operator">=</span><span class="tok-string">"3.11510738759073E-05"</span> <span class="tok-propertyName">iyz</span><span class="tok-operator">=</span><span class="tok-string">"-3.60499245082192E-10"</span></span>
+<span class="ln">               <span class="tok-propertyName">izz</span><span class="tok-operator">=</span><span class="tok-string">"1.88266886146847E-05"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">inertial</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">visual</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">origin</span> <span class="tok-propertyName">xyz</span><span class="tok-operator">=</span><span class="tok-string">"0 0 0"</span> <span class="tok-propertyName">rpy</span><span class="tok-operator">=</span><span class="tok-string">"-1.57 0 0"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">geometry</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">        <span class="tok-punctuation">&lt;</span><span class="tok-typeName">mesh</span> <span class="tok-propertyName">filename</span><span class="tok-operator">=</span><span class="tok-string">"package://bumperbot_description/meshes/wheel_left_link.STL"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">geometry</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">visual</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">collision</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">origin</span> <span class="tok-propertyName">xyz</span><span class="tok-operator">=</span><span class="tok-string">"0 0.015 0"</span> <span class="tok-propertyName">rpy</span><span class="tok-operator">=</span><span class="tok-string">"-1.57 0 0"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">geometry</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">        <span class="tok-punctuation">&lt;</span><span class="tok-typeName">sphere</span> <span class="tok-propertyName">radius</span><span class="tok-operator">=</span><span class="tok-string">"0.033"</span><span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">geometry</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">collision</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">  <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">link</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln"></span>
+<span class="ln">  <span class="tok-punctuation">&lt;</span><span class="tok-typeName">joint</span> <span class="tok-propertyName">name</span><span class="tok-operator">=</span><span class="tok-string">"wheel_left_joint"</span> <span class="tok-propertyName">type</span><span class="tok-operator">=</span><span class="tok-string">"continuous"</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">origin</span> <span class="tok-propertyName">xyz</span><span class="tok-operator">=</span><span class="tok-string">"0 0.0701101849418642 0"</span> <span class="tok-propertyName">rpy</span><span class="tok-operator">=</span><span class="tok-string">"0 0 0"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">parent</span> <span class="tok-propertyName">link</span><span class="tok-operator">=</span><span class="tok-string">"base_link"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">child</span> <span class="tok-propertyName">link</span><span class="tok-operator">=</span><span class="tok-string">"wheel_left_link"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">axis</span> <span class="tok-propertyName">xyz</span><span class="tok-operator">=</span><span class="tok-string">"0 1 0"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">  <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">joint</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln"></span>
+<span class="ln">  <span class="tok-punctuation">&lt;</span><span class="tok-typeName">link</span> <span class="tok-propertyName">name</span><span class="tok-operator">=</span><span class="tok-string">"caster_front_link"</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">inertial</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">origin</span> <span class="tok-propertyName">xyz</span><span class="tok-operator">=</span><span class="tok-string">"3.89968128948481E-07 2.40073004698083E-07 0.00219173397061506"</span> <span class="tok-propertyName">rpy</span><span class="tok-operator">=</span><span class="tok-string">"0 0 0"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">mass</span> <span class="tok-propertyName">value</span><span class="tok-operator">=</span><span class="tok-string">"1.44379265037903E-06"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">inertia</span> <span class="tok-propertyName">ixx</span><span class="tok-operator">=</span><span class="tok-string">"7.23075276010246E-11"</span> <span class="tok-propertyName">ixy</span><span class="tok-operator">=</span><span class="tok-string">"-6.10956883467859E-16"</span> <span class="tok-propertyName">ixz</span><span class="tok-operator">=</span><span class="tok-string">"2.22849693525031E-15"</span></span>
+<span class="ln">               <span class="tok-propertyName">iyy</span><span class="tok-operator">=</span><span class="tok-string">"3.8713793085917E-11"</span>  <span class="tok-propertyName">iyz</span><span class="tok-operator">=</span><span class="tok-string">"2.93909858781952E-15"</span></span>
+<span class="ln">               <span class="tok-propertyName">izz</span><span class="tok-operator">=</span><span class="tok-string">"1.00967486676306E-10"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">inertial</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">visual</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">origin</span> <span class="tok-propertyName">xyz</span><span class="tok-operator">=</span><span class="tok-string">"0 0 0"</span> <span class="tok-propertyName">rpy</span><span class="tok-operator">=</span><span class="tok-string">"0 0 0"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">geometry</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">        <span class="tok-punctuation">&lt;</span><span class="tok-typeName">mesh</span> <span class="tok-propertyName">filename</span><span class="tok-operator">=</span><span class="tok-string">"package://bumperbot_description/meshes/caster_front_link.STL"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">geometry</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">visual</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">collision</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">origin</span> <span class="tok-propertyName">xyz</span><span class="tok-operator">=</span><span class="tok-string">"0 0 0"</span> <span class="tok-propertyName">rpy</span><span class="tok-operator">=</span><span class="tok-string">"0 0 0"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">geometry</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">        <span class="tok-punctuation">&lt;</span><span class="tok-typeName">sphere</span> <span class="tok-propertyName">radius</span><span class="tok-operator">=</span><span class="tok-string">"0.005"</span><span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">geometry</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">collision</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">  <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">link</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln"></span>
+<span class="ln">  <span class="tok-punctuation">&lt;</span><span class="tok-typeName">joint</span> <span class="tok-propertyName">name</span><span class="tok-operator">=</span><span class="tok-string">"caster_front_joint"</span> <span class="tok-propertyName">type</span><span class="tok-operator">=</span><span class="tok-string">"fixed"</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">origin</span> <span class="tok-propertyName">xyz</span><span class="tok-operator">=</span><span class="tok-string">"0.04755 0 -0.0275"</span> <span class="tok-propertyName">rpy</span><span class="tok-operator">=</span><span class="tok-string">"0 0 0"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">parent</span> <span class="tok-propertyName">link</span><span class="tok-operator">=</span><span class="tok-string">"base_link"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">child</span> <span class="tok-propertyName">link</span><span class="tok-operator">=</span><span class="tok-string">"caster_front_link"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">axis</span> <span class="tok-propertyName">xyz</span><span class="tok-operator">=</span><span class="tok-string">"0 0 0"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">  <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">joint</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">  </span>
+<span class="ln">  <span class="tok-punctuation">&lt;</span><span class="tok-typeName">link</span> <span class="tok-propertyName">name</span><span class="tok-operator">=</span><span class="tok-string">"caster_rear_link"</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">inertial</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">origin</span> <span class="tok-propertyName">xyz</span><span class="tok-operator">=</span><span class="tok-string">"3.8996812895542E-07 2.40073004698083E-07 0.00219173397061509"</span> <span class="tok-propertyName">rpy</span><span class="tok-operator">=</span><span class="tok-string">"0 0 0"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">mass</span> <span class="tok-propertyName">value</span><span class="tok-operator">=</span><span class="tok-string">"1.44379265037902E-06"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">inertia</span> <span class="tok-propertyName">ixx</span><span class="tok-operator">=</span><span class="tok-string">"7.23075276010246E-11"</span> <span class="tok-propertyName">ixy</span><span class="tok-operator">=</span><span class="tok-string">"-6.10956872363424E-16"</span> <span class="tok-propertyName">ixz</span><span class="tok-operator">=</span><span class="tok-string">"2.22849693527207E-15"</span></span>
+<span class="ln">               <span class="tok-propertyName">iyy</span><span class="tok-operator">=</span><span class="tok-string">"3.87137930859167E-11"</span> <span class="tok-propertyName">iyz</span><span class="tok-operator">=</span><span class="tok-string">"2.939098587861E-15"</span></span>
+<span class="ln">               <span class="tok-propertyName">izz</span><span class="tok-operator">=</span><span class="tok-string">"1.00967486676306E-10"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">inertial</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">visual</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">origin</span> <span class="tok-propertyName">xyz</span><span class="tok-operator">=</span><span class="tok-string">"0 0 0"</span> <span class="tok-propertyName">rpy</span><span class="tok-operator">=</span><span class="tok-string">"0 0 0"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">geometry</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">        <span class="tok-punctuation">&lt;</span><span class="tok-typeName">mesh</span> <span class="tok-propertyName">filename</span><span class="tok-operator">=</span><span class="tok-string">"package://bumperbot_description/meshes/caster_rear_link.STL"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">geometry</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">visual</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">collision</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">origin</span> <span class="tok-propertyName">xyz</span><span class="tok-operator">=</span><span class="tok-string">"0 0 0"</span> <span class="tok-propertyName">rpy</span><span class="tok-operator">=</span><span class="tok-string">"0 0 0"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;</span><span class="tok-typeName">geometry</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">        <span class="tok-punctuation">&lt;</span><span class="tok-typeName">sphere</span> <span class="tok-propertyName">radius</span><span class="tok-operator">=</span><span class="tok-string">"0.005"</span><span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">      <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">geometry</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">collision</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">  <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">link</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln"></span>
+<span class="ln">  <span class="tok-punctuation">&lt;</span><span class="tok-typeName">joint</span> <span class="tok-propertyName">name</span><span class="tok-operator">=</span><span class="tok-string">"caster_rear_joint"</span> <span class="tok-propertyName">type</span><span class="tok-operator">=</span><span class="tok-string">"fixed"</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">origin</span> <span class="tok-propertyName">xyz</span><span class="tok-operator">=</span><span class="tok-string">"-0.04755 0 -0.0275"</span> <span class="tok-propertyName">rpy</span><span class="tok-operator">=</span><span class="tok-string">"0 0 0"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">parent</span> <span class="tok-propertyName">link</span><span class="tok-operator">=</span><span class="tok-string">"base_link"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">child</span> <span class="tok-propertyName">link</span><span class="tok-operator">=</span><span class="tok-string">"caster_rear_link"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">axis</span> <span class="tok-propertyName">xyz</span><span class="tok-operator">=</span><span class="tok-string">"0 0 0"</span> <span class="tok-punctuation">/&gt;</span></span>
+<span class="ln">  <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">joint</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-punctuation">&lt;/</span><span class="tok-typeName">robot</span><span class="tok-punctuation">&gt;</span></span></code></pre></div>
+<h2 id="write-the-bumperbot-gazebo-xacro-file">Write the bumperbot_gazebo.xacro File</h2>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln"><span class="tok-meta">&lt;?xml version="1.0"?&gt;</span></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-punctuation">&lt;</span><span class="tok-typeName">robot</span> <span class="tok-propertyName">name</span><span class="tok-operator">=</span><span class="tok-string">"bumperbot"</span> <span class="tok-propertyName">xmlns:xacro</span><span class="tok-operator">=</span><span class="tok-string">"http://ros.org/wiki/xacro"</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln"></span>
+<span class="ln">  <span class="tok-comment">&lt;!-- Wheels --&gt;</span></span>
+<span class="ln">  <span class="tok-punctuation">&lt;</span><span class="tok-typeName">gazebo</span> <span class="tok-propertyName">reference</span><span class="tok-operator">=</span><span class="tok-string">"wheel_left_link"</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">mu1</span><span class="tok-punctuation">&gt;</span>1000000000000000.0<span class="tok-punctuation">&lt;/</span><span class="tok-typeName">mu1</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">mu2</span><span class="tok-punctuation">&gt;</span>1000000000000000.0<span class="tok-punctuation">&lt;/</span><span class="tok-typeName">mu2</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">kp</span><span class="tok-punctuation">&gt;</span>1000000000000.0<span class="tok-punctuation">&lt;/</span><span class="tok-typeName">kp</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">kd</span><span class="tok-punctuation">&gt;</span>10.0<span class="tok-punctuation">&lt;/</span><span class="tok-typeName">kd</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">minDepth</span><span class="tok-punctuation">&gt;</span>0.001<span class="tok-punctuation">&lt;/</span><span class="tok-typeName">minDepth</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">maxVel</span><span class="tok-punctuation">&gt;</span>0.1<span class="tok-punctuation">&lt;/</span><span class="tok-typeName">maxVel</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">fdir1</span><span class="tok-punctuation">&gt;</span>1 0 0<span class="tok-punctuation">&lt;/</span><span class="tok-typeName">fdir1</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">  <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">gazebo</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">  </span>
+<span class="ln">  <span class="tok-punctuation">&lt;</span><span class="tok-typeName">gazebo</span> <span class="tok-propertyName">reference</span><span class="tok-operator">=</span><span class="tok-string">"wheel_right_link"</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">mu1</span><span class="tok-punctuation">&gt;</span>1000000000000000.0<span class="tok-punctuation">&lt;/</span><span class="tok-typeName">mu1</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">mu2</span><span class="tok-punctuation">&gt;</span>1000000000000000.0<span class="tok-punctuation">&lt;/</span><span class="tok-typeName">mu2</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">kp</span><span class="tok-punctuation">&gt;</span>1000000000000.0<span class="tok-punctuation">&lt;/</span><span class="tok-typeName">kp</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">kd</span><span class="tok-punctuation">&gt;</span>10.0<span class="tok-punctuation">&lt;/</span><span class="tok-typeName">kd</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">minDepth</span><span class="tok-punctuation">&gt;</span>0.001<span class="tok-punctuation">&lt;/</span><span class="tok-typeName">minDepth</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">maxVel</span><span class="tok-punctuation">&gt;</span>0.1<span class="tok-punctuation">&lt;/</span><span class="tok-typeName">maxVel</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">fdir1</span><span class="tok-punctuation">&gt;</span>1 0 0<span class="tok-punctuation">&lt;/</span><span class="tok-typeName">fdir1</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">  <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">gazebo</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">  </span>
+<span class="ln">  <span class="tok-comment">&lt;!-- Caster Wheels --&gt;</span></span>
+<span class="ln">  <span class="tok-punctuation">&lt;</span><span class="tok-typeName">gazebo</span> <span class="tok-propertyName">reference</span><span class="tok-operator">=</span><span class="tok-string">"caster_rear_link"</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">mu1</span><span class="tok-punctuation">&gt;</span>0.1<span class="tok-punctuation">&lt;/</span><span class="tok-typeName">mu1</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">mu2</span><span class="tok-punctuation">&gt;</span>0.1<span class="tok-punctuation">&lt;/</span><span class="tok-typeName">mu2</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">kp</span><span class="tok-punctuation">&gt;</span>1000000.0<span class="tok-punctuation">&lt;/</span><span class="tok-typeName">kp</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">kd</span><span class="tok-punctuation">&gt;</span>100.0<span class="tok-punctuation">&lt;/</span><span class="tok-typeName">kd</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">minDepth</span><span class="tok-punctuation">&gt;</span>0.001<span class="tok-punctuation">&lt;/</span><span class="tok-typeName">minDepth</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">maxVel</span><span class="tok-punctuation">&gt;</span>1.0<span class="tok-punctuation">&lt;/</span><span class="tok-typeName">maxVel</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">  <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">gazebo</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">  </span>
+<span class="ln">  <span class="tok-punctuation">&lt;</span><span class="tok-typeName">gazebo</span> <span class="tok-propertyName">reference</span><span class="tok-operator">=</span><span class="tok-string">"caster_front_link"</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">mu1</span><span class="tok-punctuation">&gt;</span>0.1<span class="tok-punctuation">&lt;/</span><span class="tok-typeName">mu1</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">mu2</span><span class="tok-punctuation">&gt;</span>0.1<span class="tok-punctuation">&lt;/</span><span class="tok-typeName">mu2</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">kp</span><span class="tok-punctuation">&gt;</span>1000000.0<span class="tok-punctuation">&lt;/</span><span class="tok-typeName">kp</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">kd</span><span class="tok-punctuation">&gt;</span>100.0<span class="tok-punctuation">&lt;/</span><span class="tok-typeName">kd</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">minDepth</span><span class="tok-punctuation">&gt;</span>0.001<span class="tok-punctuation">&lt;/</span><span class="tok-typeName">minDepth</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">    <span class="tok-punctuation">&lt;</span><span class="tok-typeName">maxVel</span><span class="tok-punctuation">&gt;</span>1.0<span class="tok-punctuation">&lt;/</span><span class="tok-typeName">maxVel</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln">  <span class="tok-punctuation">&lt;/</span><span class="tok-typeName">gazebo</span><span class="tok-punctuation">&gt;</span></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-punctuation">&lt;/</span><span class="tok-typeName">robot</span><span class="tok-punctuation">&gt;</span></span></code></pre></div>
+
+</div>
+<div class="col"><h2 id="explanation">Explanation</h2>
+
+<div class="widget"><iframe loading="lazy" scrolling="no" src="/widgets/documented-software-learnings__ros2__ros2-y-1.html" title="Interactive guide"></iframe></div>
+</div>
+<div class="col">
+<h2 id="create-launch-file">Create Launch File</h2>
+<figure class="img"><img alt="" decoding="async" height="566" loading="lazy" src="/uploads/wp/2026/09/image-96.png" width="860"/></figure>
+<p>Inside:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">bumperbot_description</span>
+<span class="ln">└── launch</span></code></pre></div>
+<p>create:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">gazebo.launch.py</span></code></pre></div>
+<h2 id="write-the-launch-file">Write the Launch File</h2>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln"><span class="tok-keyword">import</span> <span class="tok-variableName">os</span></span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-variableName">pathlib</span> <span class="tok-keyword">import</span> <span class="tok-variableName">Path</span></span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-variableName">ament_index_python</span><span class="tok-operator">.</span><span class="tok-variableName">packages</span> <span class="tok-keyword">import</span> <span class="tok-variableName">get_package_share_directory</span></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-variableName">launch</span> <span class="tok-keyword">import</span> <span class="tok-variableName">LaunchDescription</span></span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-variableName">launch</span><span class="tok-operator">.</span><span class="tok-variableName">actions</span> <span class="tok-keyword">import</span> <span class="tok-variableName">DeclareLaunchArgument</span><span class="tok-punctuation">,</span> <span class="tok-variableName">IncludeLaunchDescription</span><span class="tok-punctuation">,</span> <span class="tok-variableName">SetEnvironmentVariable</span></span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-variableName">launch</span><span class="tok-operator">.</span><span class="tok-variableName">substitutions</span> <span class="tok-keyword">import</span> <span class="tok-variableName">Command</span><span class="tok-punctuation">,</span> <span class="tok-variableName">LaunchConfiguration</span></span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-variableName">launch</span><span class="tok-operator">.</span><span class="tok-variableName">launch_description_sources</span> <span class="tok-keyword">import</span> <span class="tok-variableName">PythonLaunchDescriptionSource</span></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-variableName">launch_ros</span><span class="tok-operator">.</span><span class="tok-variableName">actions</span> <span class="tok-keyword">import</span> <span class="tok-variableName">Node</span></span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-variableName">launch_ros</span><span class="tok-operator">.</span><span class="tok-variableName">parameter_descriptions</span> <span class="tok-keyword">import</span> <span class="tok-variableName">ParameterValue</span></span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">def</span> <span class="tok-variableName tok-definition">generate_launch_description</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span>:</span>
+<span class="ln">    <span class="tok-variableName">bumperbot_description</span> <span class="tok-operator">=</span> <span class="tok-variableName">get_package_share_directory</span><span class="tok-punctuation">(</span><span class="tok-string">"bumperbot_description"</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-variableName">model_arg</span> <span class="tok-operator">=</span> <span class="tok-variableName">DeclareLaunchArgument</span><span class="tok-punctuation">(</span><span class="tok-variableName">name</span><span class="tok-operator">=</span><span class="tok-string">"model"</span><span class="tok-punctuation">,</span> <span class="tok-variableName">default_value</span><span class="tok-operator">=</span><span class="tok-variableName">os</span><span class="tok-operator">.</span><span class="tok-propertyName">path</span><span class="tok-operator">.</span><span class="tok-propertyName">join</span><span class="tok-punctuation">(</span></span>
+<span class="ln">                                        <span class="tok-variableName">bumperbot_description</span><span class="tok-punctuation">,</span> <span class="tok-string">"urdf"</span><span class="tok-punctuation">,</span> <span class="tok-string">"bumperbot.urdf.xacro"</span></span>
+<span class="ln">                                        <span class="tok-punctuation">)</span><span class="tok-punctuation">,</span></span>
+<span class="ln">                                      <span class="tok-variableName">description</span><span class="tok-operator">=</span><span class="tok-string">"Absolute path to robot urdf file"</span></span>
+<span class="ln">    <span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-variableName">gazebo_resource_path</span> <span class="tok-operator">=</span> <span class="tok-variableName">SetEnvironmentVariable</span><span class="tok-punctuation">(</span></span>
+<span class="ln">        <span class="tok-variableName">name</span><span class="tok-operator">=</span><span class="tok-string">"GZ_SIM_RESOURCE_PATH"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        <span class="tok-variableName">value</span><span class="tok-operator">=</span><span class="tok-punctuation">[</span></span>
+<span class="ln">            <span class="tok-variableName">str</span><span class="tok-punctuation">(</span><span class="tok-variableName">Path</span><span class="tok-punctuation">(</span><span class="tok-variableName">bumperbot_description</span><span class="tok-punctuation">)</span><span class="tok-operator">.</span><span class="tok-propertyName">parent</span><span class="tok-operator">.</span><span class="tok-propertyName">resolve</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-punctuation">)</span></span>
+<span class="ln">            <span class="tok-punctuation">]</span></span>
+<span class="ln">        <span class="tok-punctuation">)</span></span>
+<span class="ln">    </span>
+<span class="ln">    <span class="tok-variableName">robot_description</span> <span class="tok-operator">=</span> <span class="tok-variableName">ParameterValue</span><span class="tok-punctuation">(</span><span class="tok-variableName">Command</span><span class="tok-punctuation">(</span><span class="tok-punctuation">[</span></span>
+<span class="ln">            <span class="tok-string">"xacro "</span><span class="tok-punctuation">,</span></span>
+<span class="ln">            <span class="tok-variableName">LaunchConfiguration</span><span class="tok-punctuation">(</span><span class="tok-string">"model"</span><span class="tok-punctuation">)</span></span>
+<span class="ln">        <span class="tok-punctuation">]</span><span class="tok-punctuation">)</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        <span class="tok-variableName">value_type</span><span class="tok-operator">=</span><span class="tok-variableName">str</span></span>
+<span class="ln">    <span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-variableName">robot_state_publisher_node</span> <span class="tok-operator">=</span> <span class="tok-variableName">Node</span><span class="tok-punctuation">(</span></span>
+<span class="ln">        <span class="tok-variableName">package</span><span class="tok-operator">=</span><span class="tok-string">"robot_state_publisher"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        <span class="tok-variableName">executable</span><span class="tok-operator">=</span><span class="tok-string">"robot_state_publisher"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        <span class="tok-variableName">parameters</span><span class="tok-operator">=</span><span class="tok-punctuation">[</span><span class="tok-punctuation">{</span><span class="tok-string">"robot_description"</span>: <span class="tok-variableName">robot_description</span><span class="tok-punctuation">,</span></span>
+<span class="ln">                     <span class="tok-string">"use_sim_time"</span>: <span class="tok-bool">True</span><span class="tok-punctuation">}</span><span class="tok-punctuation">]</span></span>
+<span class="ln">    <span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-variableName">gazebo</span> <span class="tok-operator">=</span> <span class="tok-variableName">IncludeLaunchDescription</span><span class="tok-punctuation">(</span></span>
+<span class="ln">                <span class="tok-variableName">PythonLaunchDescriptionSource</span><span class="tok-punctuation">(</span><span class="tok-punctuation">[</span><span class="tok-variableName">os</span><span class="tok-operator">.</span><span class="tok-propertyName">path</span><span class="tok-operator">.</span><span class="tok-propertyName">join</span><span class="tok-punctuation">(</span></span>
+<span class="ln">                    <span class="tok-variableName">get_package_share_directory</span><span class="tok-punctuation">(</span><span class="tok-string">"ros_gz_sim"</span><span class="tok-punctuation">)</span><span class="tok-punctuation">,</span> <span class="tok-string">"launch"</span><span class="tok-punctuation">)</span><span class="tok-punctuation">,</span> <span class="tok-string">"/gz_sim.launch.py"</span><span class="tok-punctuation">]</span><span class="tok-punctuation">)</span><span class="tok-punctuation">,</span></span>
+<span class="ln">                <span class="tok-variableName">launch_arguments</span><span class="tok-operator">=</span><span class="tok-punctuation">[</span></span>
+<span class="ln">                    <span class="tok-punctuation">(</span><span class="tok-string">"gz_args"</span><span class="tok-punctuation">,</span> <span class="tok-punctuation">[</span><span class="tok-string">" -v 4"</span><span class="tok-punctuation">,</span> <span class="tok-string">" -r"</span><span class="tok-punctuation">,</span> <span class="tok-string">" empty.sdf"</span><span class="tok-punctuation">]</span></span>
+<span class="ln">                    <span class="tok-punctuation">)</span></span>
+<span class="ln">                <span class="tok-punctuation">]</span></span>
+<span class="ln">             <span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-variableName">gz_spawn_entity</span> <span class="tok-operator">=</span> <span class="tok-variableName">Node</span><span class="tok-punctuation">(</span></span>
+<span class="ln">        <span class="tok-variableName">package</span><span class="tok-operator">=</span><span class="tok-string">"ros_gz_sim"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        <span class="tok-variableName">executable</span><span class="tok-operator">=</span><span class="tok-string">"create"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        <span class="tok-variableName">output</span><span class="tok-operator">=</span><span class="tok-string">"screen"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        <span class="tok-variableName">arguments</span><span class="tok-operator">=</span><span class="tok-punctuation">[</span><span class="tok-string">"-topic"</span><span class="tok-punctuation">,</span> <span class="tok-string">"robot_description"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">                   <span class="tok-string">"-name"</span><span class="tok-punctuation">,</span> <span class="tok-string">"bumperbot"</span><span class="tok-punctuation">]</span><span class="tok-punctuation">,</span></span>
+<span class="ln">    <span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-variableName">gz_ros2_bridge</span> <span class="tok-operator">=</span> <span class="tok-variableName">Node</span><span class="tok-punctuation">(</span></span>
+<span class="ln">        <span class="tok-variableName">package</span><span class="tok-operator">=</span><span class="tok-string">"ros_gz_bridge"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        <span class="tok-variableName">executable</span><span class="tok-operator">=</span><span class="tok-string">"parameter_bridge"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        <span class="tok-variableName">arguments</span><span class="tok-operator">=</span><span class="tok-punctuation">[</span></span>
+<span class="ln">            <span class="tok-string">"/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock"</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        <span class="tok-punctuation">]</span></span>
+<span class="ln">    <span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="tok-keyword">return</span> <span class="tok-variableName">LaunchDescription</span><span class="tok-punctuation">(</span><span class="tok-punctuation">[</span></span>
+<span class="ln">        <span class="tok-variableName">model_arg</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        <span class="tok-variableName">gazebo_resource_path</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        <span class="tok-variableName">robot_state_publisher_node</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        <span class="tok-variableName">gazebo</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        <span class="tok-variableName">gz_spawn_entity</span><span class="tok-punctuation">,</span></span>
+<span class="ln">        <span class="tok-variableName">gz_ros2_bridge</span><span class="tok-punctuation">,</span></span>
+<span class="ln">    <span class="tok-punctuation">]</span><span class="tok-punctuation">)</span></span></code></pre></div>
+<h2 id="explanation-x">Explanation</h2>
+
+<div class="widget"><iframe loading="lazy" scrolling="no" src="/widgets/documented-software-learnings__ros2__ros2-y-2.html" title="Interactive guide"></iframe></div></div>
+
+<div class="col">
+<h2 id="package-xml">Package.XML</h2>
+<figure class="img"><img alt="" decoding="async" height="431" loading="lazy" src="/uploads/wp/2026/09/image-97.png" width="1131"/></figure>
+<p>Because our launch file now uses Gazebo-related ROS 2 packages, our package needs to declare the dependency.</p>
+<p>Add:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">&lt;exec_depend&gt;ros_gz_sim&lt;/exec_depend&gt;</span></code></pre></div>
+<h3>Why Do We Add This to <code>package.xml</code>?</h3>
+<p>Think about <code>package.xml</code> as the package's <strong>dependency list</strong>.</p>
+<p>Our launch file says:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">package="ros_gz_sim"</span></code></pre></div>
+<p>So our package needs to say:</p>
+<blockquote>
+<p>"When someone uses this package, it needs <code>ros_gz_sim</code>."</p>
+</blockquote>
+<p>Therefore:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">gazebo.launch.py</span>
+<span class="ln">       │</span>
+<span class="ln">       │ uses</span>
+<span class="ln">       ▼</span>
+<span class="ln">ros_gz_sim</span>
+<span class="ln">       ▲</span>
+<span class="ln">       │</span>
+<span class="ln">       │ dependency declared</span>
+<span class="ln">       │</span>
+<span class="ln">package.xml</span></code></pre></div>
+<p>This is the same idea we used earlier when adding dependencies for <code>rcl_interfaces</code>.</p>
+<p>A newly used Gazebo dependency also needs to be declared in <code>package.xml</code>.</p>
+<h2 id="build-the-workspace">Build the Workspace</h2>
+<figure class="img"><img alt="" decoding="async" height="231" loading="lazy" src="/uploads/wp/2026/09/image-98.png" width="944"/></figure>
+<p>After modifying the package:</p>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln">cd bumperbot_ws</span>
+<span class="ln">colcon build</span></code></pre></div>
+<h2 id="source-the-workspace-launch-the-simulation">Source the Workspace &amp;<br/>Launch the Simulation</h2>
+<p>Open a new terminal:</p>
+<figure class="img"><img alt="" decoding="async" height="267" loading="lazy" src="/uploads/wp/2026/09/image-99.png" width="1163"/></figure>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln">. install/setup.bash</span>
+<span class="ln">ros2 launch bumperbot_description gazebo.launch.py</span></code></pre></div>
+<h2 id="the-result">The Result</h2>
+<p>Gazebo should open with our BumperBot inside the simulation.</p>
+<figure class="img"><img alt="" decoding="async" height="645" loading="lazy" src="/uploads/wp/2026/09/image-100.png" width="1335"/></figure>
+</div>
+</div>
+    <nav class="pager" aria-label="Chapters">
+<a href="/documented-software-learnings/ros2/ros2-x/"><span class="mono">Chapter 24</span>Gazebo</a><a class="nx" href="/documented-software-learnings/ros2/ros2-z/"><span class="mono">Chapter 26</span>ROS 2 Control</a>    </nav>
+  </article>
+</div>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/plc/">PLC &amp; Industrial Automation</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=a6e775a3ba" defer></script>
+<script src="/assets/home.js?v=a6e775a3ba" defer></script>
+</body>
+</html>

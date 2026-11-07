@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simple TF2 Static Broadcaster | ROS 2 | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="Introduction In ROS 2, a transform describes where one coordinate frame sits relative to another. A static transform is one that never changes, such as a…">
+<link rel="canonical" href="https://techarcanist.com/documented-software-learnings/ros2/ros2-49/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="Simple TF2 Static Broadcaster | ROS 2">
+<meta property="og:description" content="Introduction In ROS 2, a transform describes where one coordinate frame sits relative to another. A static transform is one that never changes, such as a…">
+<meta property="og:url" content="https://techarcanist.com/documented-software-learnings/ros2/ros2-49/">
+<meta property="og:image" content="https://techarcanist.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=a6e775a3ba">
+<link rel="stylesheet" href="/assets/home.css?v=a6e775a3ba">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/" aria-current="page">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap reader wide">
+  <aside class="rd-nav" id="rd-nav">
+    <a class="rd-series" href="/documented-software-learnings/ros2/"><span class="label">Series</span>ROS 2</a>
+    <ol>
+      <li><a href="/documented-software-learnings/ros2/ros2_a/"><span class="mono">01</span>Installing Ubuntu Desktop (Dual Boot with Windows)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_b/"><span class="mono">02</span>ROS 2 Jazzy Installation on Ubuntu (Step-by-Step)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_c/"><span class="mono">03</span>Development Environment Setup for ROS 2 Jazzy on Ubuntu (With Clear Explanations)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_d/"><span class="mono">04</span>ROS 2 Fundamentals: Architecture, Communication, Packages, and Workspaces</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_e/"><span class="mono">05</span>ROS 2 Workspace &amp; Package Creation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_f/"><span class="mono">06</span>ROS 2 Python Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_g/"><span class="mono">07</span>ROS 2 C++ Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_h/"><span class="mono">08</span>ROS 2 Python Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_i/"><span class="mono">09</span>ROS 2 C++ Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_j/"><span class="mono">10</span>Robot Locomotion: Introduction</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_k/"><span class="mono">11</span>Wheeled Locomotion Architectures</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_l/"><span class="mono">12</span>Rolling Friction &amp; Wheeled Locomotion Efficiency</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_m/"><span class="mono">13</span>Introduction to Robot Simulation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_n/"><span class="mono">14</span>URDF</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_o/"><span class="mono">15</span>Create a URDF Model</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_p/"><span class="mono">16</span>Rviz</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_q/"><span class="mono">17</span>Node Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_r/"><span class="mono">18</span>Python Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_s/"><span class="mono">19</span>C++ Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_t/"><span class="mono">20</span>ROS 2 Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-u/"><span class="mono">21</span>Visualize The Robot In RVIZ2</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-v/"><span class="mono">22</span>Launch Files</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-w/"><span class="mono">23</span>ROS 2 Launch Files: Visualizing the Robot with One Command</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-x/"><span class="mono">24</span>Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-y/"><span class="mono">25</span>Simulating the Robot in Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-z/"><span class="mono">26</span>ROS 2 Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-aa/"><span class="mono">27</span>Control Types</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ab/"><span class="mono">28</span>ROS 2 Control: Prepare the Robot for Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ac/"><span class="mono">29</span>Understanding ROS 2 Control | Explanation of Chapter 28</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ad/"><span class="mono">30</span>ROS 2 Control: Moving the BumperBot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ae/"><span class="mono">31</span>Robot Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-af/"><span class="mono">32</span>Pose of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_af/"><span class="mono">33</span>Translation Vector</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ag/"><span class="mono">34</span>Introduction to Turtlesim</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ah/"><span class="mono">35</span>Translation Vector Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ai/"><span class="mono">36</span>Translation Vector Between Two Turtles: CPP</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_aj/"><span class="mono">37</span>Rotation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ak/"><span class="mono">38</span>Rotation Matrix Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_al/"><span class="mono">39</span>Transformation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_am/"><span class="mono">40</span>Differential Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-41/"><span class="mono">41</span>Velocity of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-42/"><span class="mono">42</span>Simple Speed Controller: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-43/"><span class="mono">43</span>Launch the Simple Speed Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-44/"><span class="mono">44</span>Teleoperating the BumperBot with a Joystick</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-45/"><span class="mono">45</span>ROS 2 Diff Drive Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-46/"><span class="mono">46</span>TF 2 Library</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-47/"><span class="mono">47</span>Operation With Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-48/"><span class="mono">48</span>Static &amp; Dynamic Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-49/" aria-current="page"><span class="mono">49</span>Simple TF2 Static Broadcaster</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-50/"><span class="mono">50</span>Simple TF2 Broadcaster: Static and Dynamic Transforms</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-51/"><span class="mono">51</span>ROS 2 Services</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-52/"><span class="mono">52</span>Service Server in Python: AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-53/"><span class="mono">53</span>Service Client in Python: Calling AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-54/"><span class="mono">54</span>Simple TF2 Listener in Python: a get_transform Service</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-55/"><span class="mono">55</span>Euler Angles and Quaternions</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-56/"><span class="mono">56</span>Euler to Quaternion: Turning the Robot with tf_transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-57/"><span class="mono">57</span>tf2 Tools: view_frames and tf2_echo</a></li>
+    </ol>
+  </aside>
+  <article class="rd-main">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/documented-software-learnings/">Library</a><span>/</span><a href="/documented-software-learnings/ros2/">ROS 2</a><span>/</span><span>49</span></nav>
+    <button class="btn btn-sm btn-line rd-tg" type="button" id="rd-tg">All chapters</button>
+<p class="sh-label mono"><span>49</span>Chapter 49 of 57</p>    <h1>Simple TF2 Static Broadcaster</h1>
+<div class="rd-prog" aria-hidden="true"><i style="width:86.0%"></i></div>    <div class="prose"><div class="col">
+<h2 id="introduction">Introduction</h2>
+<p>In ROS 2, a <strong>transform</strong> describes where one coordinate frame sits relative to another. A <strong>static transform</strong> is one that never changes, such as a sensor bolted onto a robot body. It is published once on the <code>/tf_static</code> topic and stays valid for as long as the node runs.</p>
+<p>In this chapter we write a small Python node, <code>simple_tf_kinematics</code>, that publishes one static transform between two frames: <code>bumperbot_base</code> (the parent) and <code>bumperbot_top</code> (the child), placed 0.3 above it along the Z axis with no rotation. We then build the package, run the node, inspect <code>/tf_static</code> and view both frames in rviz2.</p>
+<figure class="img"><img src="/uploads/claude/ros2-49-20261107-152518/tf-static-frames.svg" alt="Frame tree showing bumperbot_base as parent and bumperbot_top as child, offset by 0.3 along Z, next to a sketch of the two frames in rviz2"><figcaption>The transform we will publish: the child frame sits 0.3 above the parent with the same orientation.</figcaption></figure>
+<div class="table-wrap"><table>
+<tbody><tr><td>Field</td><td>Value</td></tr>
+<tr><td>Parent frame (<code>header.frame_id</code>)</td><td><code>bumperbot_base</code></td></tr>
+<tr><td>Child frame (<code>child_frame_id</code>)</td><td><code>bumperbot_top</code></td></tr>
+<tr><td>Translation (x, y, z)</td><td>0.0, 0.0, 0.3</td></tr>
+<tr><td>Rotation quaternion (x, y, z, w)</td><td>0.0, 0.0, 0.0, 1.0 (no rotation)</td></tr>
+</tbody></table></div>
+</div>
+
+<div class="col">
+<h2 id="create-the-node">Create the Node</h2>
+<h3>Create the Python file</h3>
+<p>In the workspace, open <code>src</code>, then the <code>bumperbot_py_examples</code> package folder, then the inner <code>bumperbot_py_examples</code> folder, and create a new Python file named:</p>
+<pre class="code"><code>simple_tf_kinematics.py</code></pre>
+<figure class="img sz-s al-l"><img src="/uploads/wp/2026/10/image-81.png" alt="VS Code explorer for bumperbot_ws with numbered arrows: 1 src, 2 the bumperbot_py_examples package, 3 the inner bumperbot_py_examples folder, 4 simple_tf_kinematics.py"><figcaption>Folder path: (1) src, (2) the package, (3) the inner module folder, (4) the new file.</figcaption></figure>
+
+<h3>Write the code</h3>
+<p>Inside <code>simple_tf_kinematics.py</code>, add:</p>
+<pre class="code"><code>import rclpy
+from rclpy.node import Node
+from tf2_ros.static_transform_broadcaster import StaticTransformBroadcaster
+from geometry_msgs.msg import TransformStamped
+
+
+class SimpleTfKinematics(Node):
+
+    def __init__(self):
+        super().__init__("simple_tf_kinematics")
+
+        self.static_tf_broadcaster_ = StaticTransformBroadcaster(self)
+
+        self.static_transform_stamped_ = TransformStamped()
+        self.static_transform_stamped_.header.stamp = self.get_clock().now().to_msg()
+        self.static_transform_stamped_.header.frame_id = "bumperbot_base"
+        self.static_transform_stamped_.child_frame_id = "bumperbot_top"
+        self.static_transform_stamped_.transform.translation.x = 0.0
+        self.static_transform_stamped_.transform.translation.y = 0.0
+        self.static_transform_stamped_.transform.translation.z = 0.3
+        self.static_transform_stamped_.transform.rotation.x = 0.0
+        self.static_transform_stamped_.transform.rotation.y = 0.0
+        self.static_transform_stamped_.transform.rotation.z = 0.0
+        self.static_transform_stamped_.transform.rotation.w = 1.0
+
+        self.static_tf_broadcaster_.sendTransform(self.static_transform_stamped_)
+
+        self.get_logger().info("Publishing static transform between %s and %s" %
+                      (
+                        self.static_transform_stamped_.header.frame_id,
+                        self.static_transform_stamped_.child_frame_id
+                      ))
+
+
+def main():
+    rclpy.init()
+
+    simple_tf_kinematics = SimpleTfKinematics()
+    rclpy.spin(simple_tf_kinematics)
+
+    simple_tf_kinematics.destroy_node()
+    rclpy.shutdown()
+
+
+if __name__ == '__main__':
+    main()</code></pre>
+<p class="note">The transform is sent once, inside <code>__init__</code>. The node then only needs to keep spinning so that it stays alive and the transform remains available on <code>/tf_static</code>.</p>
+</div>
+
+<div class="col">
+<h2 id="register-the-node-in-the-package">Register the Node in the Package</h2>
+<h3>Add the entry point in setup.py</h3>
+<p>Open <code>setup.py</code> in the <code>bumperbot_py_examples</code> package and add the following line to the <code>console_scripts</code> list under <code>entry_points</code>. Keep a comma after the previous entry.</p>
+<pre class="code"><code>'simple_tf_kinematics = bumperbot_py_examples.simple_tf_kinematics:main'</code></pre>
+<figure class="img"><img src="/uploads/wp/2026/10/image-82.png" alt="setup.py in VS Code with the new simple_tf_kinematics entry highlighted at the end of the console_scripts list"><figcaption>The new entry (highlighted) sits at the end of the <code>console_scripts</code> list in <code>setup.py</code>.</figcaption></figure>
+
+<h3>Declare the dependencies in package.xml</h3>
+<p>Open <code>package.xml</code> and add these two lines next to the other <code>exec_depend</code> entries. They tell ROS 2 that the node needs <code>tf2_ros</code> (the broadcaster) and <code>geometry_msgs</code> (the <code>TransformStamped</code> message).</p>
+<pre class="code"><code>&lt;exec_depend&gt;tf2_ros&lt;/exec_depend&gt;
+&lt;exec_depend&gt;geometry_msgs&lt;/exec_depend&gt;</code></pre>
+<figure class="img"><img src="/uploads/wp/2026/10/image-83.png" alt="package.xml in VS Code with the tf2_ros and geometry_msgs exec_depend lines highlighted"><figcaption>The two new <code>exec_depend</code> lines (highlighted) in <code>package.xml</code>.</figcaption></figure>
+</div>
+
+<div class="col">
+<h2 id="explanation">Explanation</h2>
+<p>Use the interactive visualizer below to walk through the code line by line, see how the pieces connect, and follow the build and run steps.</p>
+<div class="widget"><iframe src="/widgets/20261107-152448-ros2-49.html" loading="lazy" title="Interactive walkthrough of simple_tf_kinematics" scrolling="no"></iframe></div>
+</div>
+
+<div class="col">
+<h2 id="build-and-run">Build and Run</h2>
+<h3>Build the workspace</h3>
+<p>Open a terminal and go to the workspace:</p>
+<pre class="code"><code>cd bumperbot_ws</code></pre>
+<p>Then build it:</p>
+<pre class="code"><code>colcon build</code></pre>
+<p>Wait for the build to finish successfully.</p>
+<figure class="img"><img src="/uploads/wp/2026/10/image-84.png" alt="Terminal showing colcon build finishing all four bumperbot packages"><figcaption>A successful <code>colcon build</code>: all four packages finished.</figcaption></figure>
+
+<h3>Run the node</h3>
+<p>Open a second terminal and source the workspace:</p>
+<pre class="code"><code>. install/setup.bash</code></pre>
+<p>Then start the node:</p>
+<pre class="code"><code>ros2 run bumperbot_py_examples simple_tf_kinematics</code></pre>
+<figure class="img"><img src="/uploads/wp/2026/10/image-85.png" alt="Two terminals: the build terminal on top and, below it, the second terminal running the node, which logs that it is publishing a static transform between bumperbot_base and bumperbot_top"><figcaption>The node is running and logs the two frames it publishes between.</figcaption></figure>
+</div>
+
+<div class="col">
+<h2 id="inspect-the-transform">Inspect the Transform</h2>
+<h3>List the topics</h3>
+<p>In a third terminal, list the active topics:</p>
+<pre class="code"><code>ros2 topic list</code></pre>
+<p>The output contains:</p>
+<pre class="code"><code>/parameter_events
+/rosout
+/tf_static</code></pre>
+<figure class="img"><img src="/uploads/wp/2026/10/image-86.png" alt="Third terminal running ros2 topic list, which prints /parameter_events, /rosout and /tf_static"><figcaption><code>/tf_static</code> appears because the node is publishing the static transform.</figcaption></figure>
+
+<h3>Echo /tf_static</h3>
+<p>To see the message itself, run:</p>
+<pre class="code"><code>ros2 topic echo /tf_static</code></pre>
+<p>The message shows the parent frame <code>bumperbot_base</code>, the child frame <code>bumperbot_top</code>, a translation of 0.3 on Z and an identity rotation (<code>w: 1.0</code>), exactly the values set in the code.</p>
+<figure class="img"><img src="/uploads/wp/2026/10/image-87.png" alt="Output of ros2 topic echo /tf_static showing frame_id bumperbot_base, child_frame_id bumperbot_top, translation z 0.3 and rotation w 1.0"><figcaption>The echoed transform matches the values written in the node.</figcaption></figure>
+<figure class="img"><img src="/uploads/claude/ros2-49-20261107-152518/tf-static-flow.svg" alt="Diagram: the node publishes on the /tf_static topic, and both ros2 topic echo and rviz2 subscribe to it"><figcaption>The node publishes on <code>/tf_static</code>; the echo command and rviz2 both read from it.</figcaption></figure>
+</div>
+
+<div class="col">
+<h2 id="visualize-in-rviz2">Visualize in rviz2</h2>
+<h3>Launch rviz2</h3>
+<p>In another terminal, start rviz2:</p>
+<pre class="code"><code>rviz2</code></pre>
+<figure class="img"><img src="/uploads/wp/2026/10/image-88.png" alt="Fourth terminal running the rviz2 command, with the three earlier terminals stacked above it"><figcaption>rviz2 started from a fourth terminal.</figcaption></figure>
+
+<h3>Set the fixed frame</h3>
+<p>In the Displays panel, change <strong>Fixed Frame</strong> to <code>bumperbot_base</code>.</p>
+<figure class="img"><img src="/uploads/wp/2026/10/image-89.png" alt="rviz2 Displays panel with Fixed Frame set to bumperbot_base and an empty grid in the 3D view"><figcaption>Fixed Frame set to <code>bumperbot_base</code>.</figcaption></figure>
+
+<h3>Add the TF display</h3>
+<p>Click <strong>Add</strong>, choose <strong>TF</strong> from the list of display types and confirm. Two sets of axes appear in the 3D view.</p>
+<figure class="img"><img src="/uploads/wp/2026/10/image-90.png" alt="rviz2 Create visualization dialog with TF selected, and two sets of coordinate axes visible in the 3D view"><figcaption>Steps: (1) Add, (2) select TF, (3) the two frames appear in the 3D view.</figcaption></figure>
+
+<h3>Show the frame names</h3>
+<p>Expand the TF settings and tick <strong>Show Names</strong>. The labels <code>bumperbot_top</code> and <code>bumperbot_base</code> appear next to their axes, with <code>bumperbot_top</code> above the base.</p>
+<figure class="img"><img src="/uploads/wp/2026/10/image-91.png" alt="rviz2 with TF Show Names enabled, labelling the upper frame bumperbot_top and the lower frame bumperbot_base"><figcaption>With <strong>Show Names</strong> on, both frames are labelled.</figcaption></figure>
+</div></div>
+    <nav class="pager" aria-label="Chapters">
+<a href="/documented-software-learnings/ros2/ros2-48/"><span class="mono">Chapter 48</span>Static &amp; Dynamic Transformations</a><a class="nx" href="/documented-software-learnings/ros2/ros2-50/"><span class="mono">Chapter 50</span>Simple TF2 Broadcaster: Static and Dynamic Transforms</a>    </nav>
+  </article>
+</div>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/plc/">PLC &amp; Industrial Automation</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=a6e775a3ba" defer></script>
+<script src="/assets/home.js?v=a6e775a3ba" defer></script>
+</body>
+</html>

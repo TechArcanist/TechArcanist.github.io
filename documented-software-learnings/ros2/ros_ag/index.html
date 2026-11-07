@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Introduction to Turtlesim | ROS 2 | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="Turtlesim is a simple 2D simulation tool available in ROS 2. It allows us to move a turtle around a virtual environment and understand some of the fundamental…">
+<link rel="canonical" href="https://techarcanist.com/documented-software-learnings/ros2/ros_ag/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="Introduction to Turtlesim | ROS 2">
+<meta property="og:description" content="Turtlesim is a simple 2D simulation tool available in ROS 2. It allows us to move a turtle around a virtual environment and understand some of the fundamental…">
+<meta property="og:url" content="https://techarcanist.com/documented-software-learnings/ros2/ros_ag/">
+<meta property="og:image" content="https://techarcanist.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=a6e775a3ba">
+<link rel="stylesheet" href="/assets/home.css?v=a6e775a3ba">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/" aria-current="page">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap reader wide">
+  <aside class="rd-nav" id="rd-nav">
+    <a class="rd-series" href="/documented-software-learnings/ros2/"><span class="label">Series</span>ROS 2</a>
+    <ol>
+      <li><a href="/documented-software-learnings/ros2/ros2_a/"><span class="mono">01</span>Installing Ubuntu Desktop (Dual Boot with Windows)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_b/"><span class="mono">02</span>ROS 2 Jazzy Installation on Ubuntu (Step-by-Step)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_c/"><span class="mono">03</span>Development Environment Setup for ROS 2 Jazzy on Ubuntu (With Clear Explanations)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_d/"><span class="mono">04</span>ROS 2 Fundamentals: Architecture, Communication, Packages, and Workspaces</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_e/"><span class="mono">05</span>ROS 2 Workspace &amp; Package Creation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_f/"><span class="mono">06</span>ROS 2 Python Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_g/"><span class="mono">07</span>ROS 2 C++ Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_h/"><span class="mono">08</span>ROS 2 Python Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_i/"><span class="mono">09</span>ROS 2 C++ Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_j/"><span class="mono">10</span>Robot Locomotion: Introduction</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_k/"><span class="mono">11</span>Wheeled Locomotion Architectures</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_l/"><span class="mono">12</span>Rolling Friction &amp; Wheeled Locomotion Efficiency</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_m/"><span class="mono">13</span>Introduction to Robot Simulation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_n/"><span class="mono">14</span>URDF</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_o/"><span class="mono">15</span>Create a URDF Model</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_p/"><span class="mono">16</span>Rviz</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_q/"><span class="mono">17</span>Node Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_r/"><span class="mono">18</span>Python Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_s/"><span class="mono">19</span>C++ Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_t/"><span class="mono">20</span>ROS 2 Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-u/"><span class="mono">21</span>Visualize The Robot In RVIZ2</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-v/"><span class="mono">22</span>Launch Files</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-w/"><span class="mono">23</span>ROS 2 Launch Files: Visualizing the Robot with One Command</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-x/"><span class="mono">24</span>Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-y/"><span class="mono">25</span>Simulating the Robot in Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-z/"><span class="mono">26</span>ROS 2 Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-aa/"><span class="mono">27</span>Control Types</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ab/"><span class="mono">28</span>ROS 2 Control: Prepare the Robot for Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ac/"><span class="mono">29</span>Understanding ROS 2 Control | Explanation of Chapter 28</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ad/"><span class="mono">30</span>ROS 2 Control: Moving the BumperBot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ae/"><span class="mono">31</span>Robot Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-af/"><span class="mono">32</span>Pose of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_af/"><span class="mono">33</span>Translation Vector</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ag/" aria-current="page"><span class="mono">34</span>Introduction to Turtlesim</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ah/"><span class="mono">35</span>Translation Vector Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ai/"><span class="mono">36</span>Translation Vector Between Two Turtles: CPP</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_aj/"><span class="mono">37</span>Rotation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ak/"><span class="mono">38</span>Rotation Matrix Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_al/"><span class="mono">39</span>Transformation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_am/"><span class="mono">40</span>Differential Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-41/"><span class="mono">41</span>Velocity of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-42/"><span class="mono">42</span>Simple Speed Controller: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-43/"><span class="mono">43</span>Launch the Simple Speed Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-44/"><span class="mono">44</span>Teleoperating the BumperBot with a Joystick</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-45/"><span class="mono">45</span>ROS 2 Diff Drive Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-46/"><span class="mono">46</span>TF 2 Library</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-47/"><span class="mono">47</span>Operation With Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-48/"><span class="mono">48</span>Static &amp; Dynamic Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-49/"><span class="mono">49</span>Simple TF2 Static Broadcaster</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-50/"><span class="mono">50</span>Simple TF2 Broadcaster: Static and Dynamic Transforms</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-51/"><span class="mono">51</span>ROS 2 Services</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-52/"><span class="mono">52</span>Service Server in Python: AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-53/"><span class="mono">53</span>Service Client in Python: Calling AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-54/"><span class="mono">54</span>Simple TF2 Listener in Python: a get_transform Service</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-55/"><span class="mono">55</span>Euler Angles and Quaternions</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-56/"><span class="mono">56</span>Euler to Quaternion: Turning the Robot with tf_transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-57/"><span class="mono">57</span>tf2 Tools: view_frames and tf2_echo</a></li>
+    </ol>
+  </aside>
+  <article class="rd-main">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/documented-software-learnings/">Library</a><span>/</span><a href="/documented-software-learnings/ros2/">ROS 2</a><span>/</span><span>34</span></nav>
+    <button class="btn btn-sm btn-line rd-tg" type="button" id="rd-tg">All chapters</button>
+<p class="sh-label mono"><span>34</span>Chapter 34 of 57</p>    <h1>Introduction to Turtlesim</h1>
+<div class="rd-prog" aria-hidden="true"><i style="width:59.6%"></i></div>    <div class="prose"><div class="col">
+<p>Turtlesim is a simple 2D simulation tool available in ROS 2. It allows us to move a turtle around a virtual environment and understand some of the fundamental concepts used in robotics.</p>
+<p>In this lesson, we will use Turtlesim to explore:</p>
+<ul>
+<li>ROS 2 nodes and topics</li>
+<li>Publishing velocity commands</li>
+<li>Understanding a robot’s pose in 2D</li>
+<li>Using <code>rqt_graph</code> to visualize communication between nodes</li>
+<li>Using a ROS 2 service to spawn another turtle</li>
+<li>Remapping topics to control different turtles</li>
+</ul>
+<p>Although Turtlesim is a simple application, the same communication concepts are relevant when working with more complex robots such as our BumperBot.</p>
+<h2 id="start-turtlesim">Start Turtlesim</h2>
+<p>First, we need to start the Turtlesim simulation.</p>
+<p>Open a terminal and run:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">ros2 run turtlesim turtlesim_node</span></code></pre></div>
+<figure class="img"><img alt="" decoding="async" height="178" loading="lazy" src="/uploads/wp/2026/10/image.png" width="1331"></figure>
+<h2 id="what-does-this-command-do">What does this command do?</h2>
+<p>The command starts the <code>turtlesim_node</code> executable from the <code>turtlesim</code> package.</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">ros2 run</span>
+<span class="ln">    │</span>
+<span class="ln">    ├── turtlesim</span>
+<span class="ln">    │      Package name</span>
+<span class="ln">    │</span>
+<span class="ln">    └── turtlesim_node</span>
+<span class="ln">           Executable name</span></code></pre></div>
+<p>After running the command, a new window will appear containing a turtle inside a 2D environment.</p>
+<figure class="img sz-s al-l"><img alt="" decoding="async" height="547" loading="lazy" src="/uploads/wp/2026/10/image-1.png" width="507"></figure>
+<p>This window represents the environment in which our turtle will move.</p>
+<h2 id="control-the-turtle-using-the-keyboard">Control the Turtle Using the Keyboard</h2>
+<p>Now we will start another node that allows us to control the turtle using the keyboard.</p>
+<p><strong>Open a new terminal</strong> while keeping the Turtlesim window running.</p>
+<p>Run:</p>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln">ros2 run turtlesim turtle_teleop_key</span></code></pre></div>
+<figure class="img"><img alt="" decoding="async" height="627" loading="lazy" src="/uploads/wp/2026/10/image-2.png" width="1343"></figure>
+<p>The <code>turtle_teleop_key</code> node allows us to control the turtle using the keyboard. Make sure the terminal running this node is focused when you press the movement keys.</p>
+<p>Try moving the turtle around the environment.</p>
+<h3>What is happening behind the scenes?</h3>
+<p>Two ROS 2 nodes are now running:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">┌─────────────────────┐</span>
+<span class="ln">│   turtle_teleop_key │</span>
+<span class="ln">│                     │</span>
+<span class="ln">│ Reads keyboard input│</span>
+<span class="ln">└──────────┬──────────┘</span>
+<span class="ln">           │</span>
+<span class="ln">           │ Velocity commands</span>
+<span class="ln">           ▼</span>
+<span class="ln">┌─────────────────────┐</span>
+<span class="ln">│    turtlesim_node   │</span>
+<span class="ln">│                     │</span>
+<span class="ln">│ Moves the turtle    │</span>
+<span class="ln">└─────────────────────┘</span></code></pre></div>
+<p>The teleoperation node sends velocity commands, and the Turtlesim node receives those commands and moves the turtle accordingly.</p>
+<p>In the following sections, we will inspect this communication directly.</p>
+<h2 id="list-the-available-ros-2-topics">List the Available ROS 2 Topics</h2>
+<p>Open another terminal and run:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">ros2 topic list</span></code></pre></div>
+<figure class="img"><img alt="" decoding="async" height="561" loading="lazy" src="/uploads/wp/2026/10/image-3.png" width="1334"></figure>
+<p>You should see several topics, including:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">/parameter_events</span>
+<span class="ln">/rosout</span>
+<span class="ln">/turtle1/cmd_vel</span>
+<span class="ln">/turtle1/color_sensor</span>
+<span class="ln">/turtle1/pose</span></code></pre></div>
+<h2 id="what-are-these-topics">What Are These Topics?</h2>
+<p>A ROS 2 topic allows nodes to communicate by publishing and receiving messages.</p>
+<p>Let’s look at the most relevant topics in this example.</p>
+<div class="table-wrap"><table><thead><tr><th>Topic</th><th>Purpose</th></tr></thead><tbody><tr><td><code>/turtle1/cmd_vel</code></td><td>Carries velocity commands for the turtle</td></tr><tr><td><code>/turtle1/pose</code></td><td>Publishes the turtle’s current pose and velocity</td></tr><tr><td><code>/turtle1/color_sensor</code></td><td>Provides the turtle’s color-sensor information</td></tr><tr><td><code>/rosout</code></td><td>Carries ROS 2 logging messages</td></tr><tr><td><code>/parameter_events</code></td><td>Reports parameter-related events</td></tr></tbody></table></div>
+<p>The topic that we will use first is:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">/turtle1/cmd_vel</span></code></pre></div>
+<p>This is the topic through which the teleoperation node sends velocity commands to the turtle.</p>
+<h3>Understand the communication</h3>
+<div class="codeblock"><pre class="code"><code><span class="ln">turtle_teleop_key</span>
+<span class="ln">       │</span>
+<span class="ln">       │ Publishes velocity commands</span>
+<span class="ln">       ▼</span>
+<span class="ln">/turtle1/cmd_vel</span>
+<span class="ln">       │</span>
+<span class="ln">       │ Receives messages</span>
+<span class="ln">       ▼</span>
+<span class="ln">turtlesim_node</span>
+<span class="ln">       │</span>
+<span class="ln">       ▼</span>
+<span class="ln">Turtle moves</span></code></pre></div>
+<p><strong>Key idea:</strong> The teleoperation node does not move the turtle directly. It publishes messages, and the Turtlesim node uses those messages to determine the turtle’s movement.</p>
+<h2 id="visualize-node-communication-using-rqt-graph">Visualize Node Communication Using <code>rqt_graph</code></h2>
+<p>The terminal allows us to list the available topics, but it does not show the complete communication structure visually.</p>
+<p>ROS 2 provides another useful tool: <strong><code>rqt_graph</code></strong>.</p>
+<p>Open a new terminal and run:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">ros2 run rqt_graph rqt_graph</span></code></pre></div>
+<figure class="img"><img alt="" decoding="async" height="394" loading="lazy" src="/uploads/wp/2026/10/image-5-1024x394.png" width="1024"></figure>
+<h2 id="understand-the-graph">Understand the Graph</h2>
+<p>Inside <code>rqt_graph</code>, you can choose to display the active nodes, topics, or their connections.</p>
+<p>For example, when both Turtlesim and keyboard teleoperation are running, the graph should show the relationship between:</p>
+<ul>
+<li><code>/teleop_turtle</code></li>
+<li><code>/turtlesim</code></li>
+<li><code>/turtle1/cmd_vel</code></li>
+</ul>
+<p>The communication can be represented as:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">/teleop_turtle</span>
+<span class="ln">       │</span>
+<span class="ln">       │ Publisher</span>
+<span class="ln">       ▼</span>
+<span class="ln">/turtle1/cmd_vel</span>
+<span class="ln">       │</span>
+<span class="ln">       │ Subscriber</span>
+<span class="ln">       ▼</span>
+<span class="ln">/turtlesim</span></code></pre></div>
+<p>The graph makes it easier to understand how the nodes communicate.</p>
+<figure class="img"><img alt="" decoding="async" height="375" loading="lazy" src="/uploads/wp/2026/10/image-4-1024x375.png" width="1024"></figure>
+<h2 id="what-happens-when-we-stop-teleoperation">What Happens When We Stop Teleoperation?</h2>
+<p>Go to the terminal running:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">ros2 run turtlesim turtle_teleop_key</span></code></pre></div>
+<p>Press:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">Ctrl + C</span></code></pre></div>
+<p>This stops the teleoperation node.</p>
+<p>Return to <code>rqt_graph</code> and refresh the graph.</p>
+<figure class="img"><img alt="" decoding="async" height="429" loading="lazy" src="/uploads/wp/2026/10/image-6.png" width="1209"></figure>
+<p>Now, the teleoperation node should disappear because it is no longer running. The Turtlesim node remains active.</p>
+<p>This demonstrates that the graph reflects the nodes and communication relationships currently available in the ROS 2 system.</p>
+<h2 id="publish-velocity-commands-manually">Publish Velocity Commands Manually</h2>
+<p>Start by typing:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">ros2 topic pub /turtle1/cmd_vel geometry_msgs/msg/Twist</span></code></pre></div>
+<figure class="img"><img alt="" decoding="async" height="354" loading="lazy" src="/uploads/wp/2026/10/image-7.png" width="1236"></figure>
+<p>Press <strong>Tab twice</strong> to explore the available message completions.</p>
+<p>You can use the terminal’s autocompletion to generate a template for the <code>Twist</code> message.</p>
+<p>The message will contain fields similar to:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">ros2 topic pub /turtle1/cmd_vel geometry_msgs/msg/Twist "'linear:</span>
+<span class="ln">  x: 0.0</span>
+<span class="ln">  y: 0.0</span>
+<span class="ln">  z: 0.0</span>
+<span class="ln">angular:</span>
+<span class="ln">  x: 0.0</span>
+<span class="ln">  y: 0.0</span>
+<span class="ln">  z: 0.0</span>
+<span class="ln">'"</span></code></pre></div>
+<p>This is the structure of the message we will publish.</p>
+<h2 id="rotate-the-turtle-in-place">Rotate the Turtle in Place</h2>
+<p>First, let’s make the turtle rotate without moving forward.</p>
+<p>We will set all the linear velocities to zero and set <code>angular.z</code> to <code>1.0</code>.</p>
+<p>Run:</p>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln">ros2 topic pub /turtle1/cmd_vel geometry_msgs/msg/Twist "linear:</span>
+<span class="ln">  x: 0.0</span>
+<span class="ln">  y: 0.0</span>
+<span class="ln">  z: 0.0</span>
+<span class="ln">angular:</span>
+<span class="ln">  x: 0.0</span>
+<span class="ln">  y: 0.0</span>
+<span class="ln">  z: 1.0</span>
+<span class="ln">"</span></code></pre></div>
+<figure>
+<div class="embed"><iframe src="https://www.youtube-nocookie.com/embed/L3UCXMu__U0?rel=0&amp;modestbranding=1&amp;playsinline=1&amp;autoplay=1&amp;mute=1&amp;loop=1&amp;playlist=L3UCXMu__U0" loading="lazy" title="Video" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+</figure>
+<p>Since the linear velocity is zero, the turtle does not move forward. Instead, it rotates in place.</p>
+<h2 id="move-forward-while-rotating">Move Forward While Rotating</h2>
+<p>Run:</p>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln">ros2 topic pub /turtle1/cmd_vel geometry_msgs/msg/Twist "linear:</span>
+<span class="ln">  x: 1.0</span>
+<span class="ln">  y: 0.0</span>
+<span class="ln">  z: 0.0</span>
+<span class="ln">angular:</span>
+<span class="ln">  x: 0.0</span>
+<span class="ln">  y: 0.0</span>
+<span class="ln">  z: 1.0</span>
+<span class="ln">" </span></code></pre></div>
+<p>Now if we take x as 1 in linear </p>
+<figure>
+<div class="embed"><iframe src="https://www.youtube-nocookie.com/embed/CvM3zM2E7TU?rel=0&amp;modestbranding=1&amp;playsinline=1&amp;autoplay=1&amp;mute=1&amp;loop=1&amp;playlist=CvM3zM2E7TU" loading="lazy" title="Video" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+</figure>
+<p>Now both linear and angular velocities are nonzero.</p>
+<p>The turtle moves forward while changing its orientation, producing a circular path under these constant velocity commands.</p>
+<h2 id="read-the-turtle-s-pose">Read the Turtle’s Pose</h2>
+<p>So far, we have sent commands to move the turtle.</p>
+<p>Now let’s inspect the turtle’s current position and orientation.</p>
+<p>Open a new terminal.</p>
+<p>Run:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">ros2 topic echo /turtle1/pose</span></code></pre></div>
+<figure class="img"><img alt="" decoding="async" height="34" loading="lazy" src="/uploads/wp/2026/10/image-9.png" width="683"></figure>
+<figure class="img sz-s al-l"><img alt="" decoding="async" height="432" loading="lazy" src="/uploads/wp/2026/10/image-10.png" width="418"></figure>
+<p>This command subscribes to <code>/turtle1/pose</code> and prints the messages being published on that topic.</p>
+<p>You should see output similar to:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">x: 10.485991477966309</span>
+<span class="ln">y: 4.498754501342773</span>
+<span class="ln">theta: 1.1740517616271973</span>
+<span class="ln">linear_velocity: 1.0</span>
+<span class="ln">angular_velocity: 1.0</span>
+<span class="ln">---</span>
+<span class="ln">x: 10.491937637329102</span>
+<span class="ln">y: 4.513608455657959</span>
+<span class="ln">theta: 1.190051794052124</span>
+<span class="ln">linear_velocity: 1.0</span>
+<span class="ln">angular_velocity: 1.0</span>
+<span class="ln">---</span></code></pre></div>
+<p>Your values will be different depending on the turtle’s position and movement.</p>
+<h2 id="understanding-the-pose-message">Understanding the Pose Message</h2>
+
+<div class="widget"><iframe loading="lazy" scrolling="no" src="/widgets/documented-software-learnings__ros2__ros_ag-1.html" title="Interactive guide"></iframe></div></div>
+
+<div class="col">
+<h2 id="spawn-another-turtle">Spawn Another Turtle</h2>
+<p>So far, we have been working with turtle1.</p>
+<p>Turtlesim also allows us to create another turtle in the same environment using a <strong>ROS 2 service</strong>.</p>
+<p>Now we will use the /spawn service to create turtle2.</p>
+<figure class="img"><img alt="" decoding="async" height="235" loading="lazy" src="/uploads/wp/2026/10/image-11.png" width="859"></figure>
+<p>Run:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">ros2 service call /spawn turtlesim/srv/Spawn "x: 4.0</span>
+<span class="ln">y: 4.0</span>
+<span class="ln">theta: 0.0</span>
+<span class="ln">name: 'turtle2'"</span></code></pre></div>
+<p>This requests that Turtlesim create another turtle with:</p>
+<div class="table-wrap"><table><thead><tr><th>Field</th><th>Value</th><th>Meaning</th></tr></thead><tbody><tr><td><code>x</code></td><td><code>4.0</code></td><td>Horizontal starting position</td></tr><tr><td><code>y</code></td><td><code>4.0</code></td><td>Vertical starting position</td></tr><tr><td><code>theta</code></td><td><code>0.0</code></td><td>Initial orientation</td></tr><tr><td><code>name</code></td><td><code>turtle2</code></td><td>Name assigned to the new turtle</td></tr></tbody></table></div>
+<p>Remember that these coordinates use the Turtlesim coordinate system, whose origin is in the bottom-left corner.</p>
+<figure class="img sz-s al-l"><img alt="" decoding="async" height="516" loading="lazy" src="/uploads/wp/2026/10/image-12.png" width="487"></figure>
+<h2 id="what-changed">What Changed?</h2>
+<p>After spawning the second turtle, Turtlesim provides additional topics associated with it.</p>
+<p>For example:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">/turtle2/cmd_vel</span>
+<span class="ln">/turtle2/pose</span>
+<span class="ln">/turtle2/color_sensor</span></code></pre></div>
+<p>This means that the second turtle has its own velocity-command topic and pose topic.</p>
+<p>Conceptually:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">turtle1/cmd_vel  ──► turtle1</span>
+<span class="ln"></span>
+<span class="ln">turtle2/cmd_vel  ──► turtle2</span></code></pre></div>
+<p>We can therefore control the two turtles independently by publishing to their respective topics.</p>
+<p>to control another turtle2 quit current teleop and run</p>
+<h2 id="control-the-second-turtle-using-keyboard-teleoperation">Control the Second Turtle Using Keyboard Teleoperation</h2>
+<figure class="img"><img alt="" decoding="async" height="642" loading="lazy" src="/uploads/wp/2026/10/image-13.png" width="1364"></figure>
+<p>The keyboard teleoperation node normally publishes to:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">/turtle1/cmd_vel</span></code></pre></div>
+<p>But we want to use it to control <code>turtle2</code>.</p>
+<p>Instead of modifying the teleoperation node’s source code, we can <strong>remap its topic</strong> when we start it.</p>
+<p>First, stop the existing teleoperation node with <strong>Ctrl + C</strong>.</p>
+<p>Now run:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">ros2 run turtlesim turtle_teleop_key --ros-args --remap turtle1/cmd_vel:=turtle2/cmd_vel</span></code></pre></div>
+<p>Think of it as:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">Default topic</span>
+<span class="ln">/turtle1/cmd_vel</span>
+<span class="ln">        │</span>
+<span class="ln">        │ Remap</span>
+<span class="ln">        ▼</span>
+<span class="ln">/turtle2/cmd_vel</span></code></pre></div>
+<p>The teleoperation node now publishes its velocity commands to the second turtle’s topic.</p>
+<figure class="img sz-s al-l"><img alt="" decoding="async" height="524" loading="lazy" src="/uploads/wp/2026/10/image-14.png" width="497"></figure>
+<h3>Key idea</h3>
+<p><strong>Remapping changes which topic a node uses without requiring you to modify its source code.</strong></p>
+<p>This is a useful feature in ROS 2 because it allows the same node to be reused with different topics and different parts of a robot system.</p>
+</div></div>
+    <nav class="pager" aria-label="Chapters">
+<a href="/documented-software-learnings/ros2/ros_af/"><span class="mono">Chapter 33</span>Translation Vector</a><a class="nx" href="/documented-software-learnings/ros2/ros_ah/"><span class="mono">Chapter 35</span>Translation Vector Between Two Turtles: Python</a>    </nav>
+  </article>
+</div>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/plc/">PLC &amp; Industrial Automation</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=a6e775a3ba" defer></script>
+<script src="/assets/home.js?v=a6e775a3ba" defer></script>
+</body>
+</html>

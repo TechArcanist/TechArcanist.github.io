@@ -1,0 +1,315 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="/assets/widget-base.css">
+</head><body><style>
+.highlight { color:#64FFDA; font-weight:600; }
+
+.highlight-bg {
+
+  background:#64FFDA33;
+
+  color:#0A192F;
+
+  padding:0.05em 0.25em;
+
+  border-radius:0.25em;
+
+}
+
+</style>
+
+<figure class="wp-block-image aligncenter size-full is-resized wp-duotone-unset-8"><img alt="" class="wp-image-2790" height="714" loading="lazy" src="/uploads/wp/2026/09/image-41-edited.png" style="aspect-ratio:2.2941978112740036;width:852px;height:auto" width="1638"/></figure>
+<p class="has-text-align-center wp-block-paragraph"><strong>Rviz Interface</strong></p>
+<div id="cv-rviz-explainer"></div>
+<script>
+    (function () {
+        const mount = document.getElementById('cv-rviz-explainer');
+        if (!mount) return;
+        const shadow = mount.attachShadow({ mode: 'open' });
+
+        shadow.innerHTML = `
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;600;700&display=swap');
+
+        :host {
+            display: block;
+            --bg: #0d1512;
+            --bg-1: #111a16;
+            --panel: #141f1a;
+            --panel-2: #0f1713;
+            --line: rgba(231,237,233,0.10);
+            --line-strong: rgba(231,237,233,0.20);
+            --ink: #e7ede9;
+            --ink-dim: #8fa39a;
+            --ink-faint: #5c6c65;
+            --accent: #ff8a3d;
+            --accent-2: #4dd6c0;
+            --ok: #7cd992;
+            --warn: #ff6b6b;
+            --blue: #7dc4ff;
+            --purple: #c9a6ff;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(180deg, var(--bg-1), var(--bg) 220px);
+            border-radius: 1.5rem;
+            overflow: hidden;
+            margin: 20px auto;
+            max-width: 1100px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.6);
+            border: 1px solid var(--line);
+        }
+
+        .wrap { padding: 2rem; color: var(--ink); }
+
+        .header { text-align: center; margin-bottom: 1.6rem; }
+        .eyebrow { display:inline-block; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); background: rgba(255,138,61,0.1); border: 1px solid rgba(255,138,61,0.3); padding: 5px 12px; border-radius: 999px; margin-bottom: 14px; }
+        h1 { font-size: 2rem; font-weight: 800; margin: 0; color: var(--ink); }
+        .subtitle { color: var(--ink-dim); font-size: 0.95rem; margin-top: 8px; max-width: 640px; margin-left: auto; margin-right: auto; line-height: 1.55; }
+
+        .intro-card { background: var(--panel); border: 1px solid var(--line-strong); border-radius: 14px; padding: 1.4rem 1.6rem; margin-bottom: 1.6rem; font-size: 0.98rem; line-height: 1.65; color: var(--ink); }
+        .intro-card b { color: var(--accent-2); }
+
+        .diagram-section { background: var(--panel-2); border: 1px solid var(--line-strong); border-radius: 16px; padding: 1.6rem; }
+        .diagram-head { display:flex; align-items:center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 1.2rem; }
+        .diagram-badge { display:inline-flex; align-items:center; gap:8px; font-size: 12px; font-weight: 800; color: var(--bg); background: var(--accent); padding: 6px 14px; border-radius: 999px; }
+        .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 0 rgba(124,217,146,0.6); animation: pulseDot 1.6s infinite; }
+        @keyframes pulseDot { 0% { box-shadow: 0 0 0 0 rgba(124,217,146,0.55); } 70% { box-shadow: 0 0 0 8px rgba(124,217,146,0); } 100% { box-shadow: 0 0 0 0 rgba(124,217,146,0); } }
+        .live-label { font-size: 12px; color: var(--ok); font-weight: 700; display:flex; align-items:center; gap: 6px; }
+
+        .controls { display:flex; gap: 8px; }
+        .ctrl-btn { background: transparent; border: 1px solid var(--line-strong); color: var(--ink-dim); font-size: 12px; font-weight: 700; padding: 7px 14px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        .ctrl-btn:hover { border-color: var(--accent-2); color: var(--accent-2); }
+        .ctrl-btn.active { background: var(--accent-2); color: var(--bg); border-color: var(--accent-2); }
+
+        .flow-grid { display: grid; grid-template-columns: 1fr 1.15fr; gap: 1.6rem; }
+        @media (max-width: 820px) { .flow-grid { grid-template-columns: 1fr; } }
+
+        .flow-col { position: relative; padding: 10px 0; }
+        .stage {
+            position: relative; background: var(--panel); border: 1.5px solid var(--line-strong); border-radius: 12px;
+            padding: 14px 16px; margin-bottom: 46px; cursor: pointer; transition: 0.25s;
+            font-family: 'Fira Code', monospace;
+        }
+        .stage:last-child { margin-bottom: 0; }
+        .stage-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-faint); margin-bottom: 4px; font-family: 'Inter', sans-serif; }
+        .stage-name { font-size: 1.05rem; font-weight: 700; color: var(--ink); }
+        .stage.node { border-left: 4px solid var(--blue); }
+        .stage.topic { border-left: 4px solid var(--accent); }
+        .stage.subscriber { border-left: 4px solid var(--accent-2); }
+        .stage.display { border-left: 4px solid var(--ok); }
+        .stage.active { border-color: var(--accent-2); box-shadow: 0 0 0 3px rgba(77,214,192,0.15); transform: translateX(4px); }
+        .stage.selected { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(255,138,61,0.18); }
+
+        .arrow-track { position: absolute; left: 24px; width: 2px; height: 46px; background: var(--line-strong); overflow: visible; }
+        .arrow-track .flow-line { position:absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(180deg, var(--accent-2), transparent); opacity: 0; transition: opacity 0.3s; }
+        .arrow-track.flowing .flow-line { opacity: 1; animation: flowMove 0.9s linear infinite; }
+        @keyframes flowMove { from { transform: translateY(-100%);} to { transform: translateY(100%);} }
+        .arrow-tip { position: absolute; left: 19px; bottom: -2px; width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid var(--line-strong); }
+        .arrow-caption { position: absolute; left: 40px; top: 50%; transform: translateY(-50%); font-size: 11px; color: var(--ink-faint); font-family: 'Inter', sans-serif; white-space: nowrap; }
+
+        .packet {
+            position: absolute; left: 21px; width: 8px; height: 8px; border-radius: 50%;
+            background: var(--accent); box-shadow: 0 0 10px 2px rgba(255,138,61,0.6);
+            transition: top 0.7s cubic-bezier(0.65,0,0.35,1);
+            z-index: 5;
+        }
+
+        .info-panel { background: var(--panel); border: 1px solid var(--line-strong); border-radius: 14px; padding: 1.4rem; min-height: 100%; box-sizing: border-box; }
+        .info-badge { display:inline-block; font-size: 10px; font-weight: 800; text-transform: uppercase; padding: 4px 10px; border-radius: 6px; margin-bottom: 12px; }
+        .info-title { font-size: 1.25rem; font-weight: 800; margin: 0 0 10px 0; color: var(--ink); }
+        .info-body { font-size: 0.94rem; line-height: 1.6; color: var(--ink-dim); }
+        .info-body b { color: var(--ink); }
+        .caption-line { font-size: 0.82rem; color: var(--accent-2); font-weight: 600; margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--line-strong); }
+
+        .summary-card { background: var(--panel); border: 1px solid var(--line-strong); border-radius: 14px; padding: 1.4rem 1.6rem; margin-top: 1.6rem; font-size: 0.95rem; line-height: 1.65; color: var(--ink-dim); }
+        .summary-card b { color: var(--ink); }
+    </style>
+
+    <div class="wrap">
+        <div class="header">
+            <span class="eyebrow">ROS 2 \u00b7 Visualization</span>
+            <h1>How RViz2 Works</h1>
+            <div class="subtitle">RViz2 follows the same publisher\u2013subscriber communication model used throughout ROS 2 \u2014 it does not talk to your robot directly, it just listens.</div>
+        </div>
+
+        <div class="intro-card">
+            The basic concept behind RViz2 is actually quite simple. RViz2 <b>subscribes</b> to ROS 2 topics and receives the messages being published on them. It then <b>interprets</b> those messages and uses an appropriate visualization plugin to <b>display</b> the information \u2014 the exact same publish/subscribe pattern any two ROS 2 nodes use to talk to each other.
+        </div>
+
+        <div class="diagram-section">
+            <div class="diagram-head">
+                <span class="diagram-badge">\u2b50 Interactive \u2014 Publisher \u2192 Topic \u2192 RViz2</span>
+                <div style="display:flex; align-items:center; gap:16px;">
+                    <span class="live-label" id="live-label"><span class="live-dot"></span> Animating</span>
+                    <div class="controls">
+                        <button class="ctrl-btn active" id="btn-play">\u23f8 Pause</button>
+                        <button class="ctrl-btn" id="btn-speed">1\u00d7 Speed</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flow-grid">
+                <div class="flow-col" id="flow-col">
+                    <div class="stage node" data-stage="0" id="stage-0">
+                        <div class="stage-label">Publishes</div>
+                        <div class="stage-name">ROS 2 Node</div>
+                    </div>
+                    <div class="arrow-track" id="arrow-0"><div class="flow-line"></div><div class="arrow-tip"></div><div class="arrow-caption">publish</div></div>
+
+                    <div class="stage topic" data-stage="1" id="stage-1">
+                        <div class="stage-label">Carries the</div>
+                        <div class="stage-name">ROS 2 Topic</div>
+                    </div>
+                    <div class="arrow-track" id="arrow-1"><div class="flow-line"></div><div class="arrow-tip"></div><div class="arrow-caption">message</div></div>
+
+                    <div class="stage subscriber" data-stage="2" id="stage-2">
+                        <div class="stage-label">Receives via</div>
+                        <div class="stage-name">RViz2 Subscriber</div>
+                    </div>
+                    <div class="arrow-track" id="arrow-2"><div class="flow-line"></div><div class="arrow-tip"></div><div class="arrow-caption">interprets</div></div>
+
+                    <div class="stage display" data-stage="3" id="stage-3">
+                        <div class="stage-label">Renders as</div>
+                        <div class="stage-name">Visual Display</div>
+                    </div>
+
+                    <div class="packet" id="packet"></div>
+                </div>
+
+                <div class="info-panel" id="info-panel"></div>
+            </div>
+        </div>
+
+        <div class="summary-card">
+            <b>In short:</b> RViz2 never talks to your robot\u2019s hardware, and your robot\u2019s nodes never know RViz2 exists. RViz2 is just another subscriber on the network \u2014 it listens to whatever topics you point it at, and turns each incoming message into the matching piece of the 3D view.
+        </div>
+    </div>
+    `;
+
+        const stages = [
+            {
+                key: 'node', title: 'ROS 2 Node', badgeColor: '#7dc4ff', caption: 'Publishing a message\u2026',
+                body: 'A <b>Node</b> is any running ROS 2 program doing one job \u2014 a lidar driver publishing scan data, a camera driver publishing images, a SLAM node publishing a map, or a navigation stack publishing a planned path. It has no idea who, if anyone, is listening. It just publishes to a named topic and moves on.'
+            },
+            {
+                key: 'topic', title: 'ROS 2 Topic', badgeColor: '#ff8a3d', caption: 'Message travelling on the topic\u2026',
+                body: 'A <b>Topic</b> is a named channel messages flow through \u2014 think of it like a labeled radio frequency, e.g. <code>/scan</code> or <code>/tf</code>. Any node can publish to it, and any number of nodes (including RViz2, and several RViz2 windows at once) can subscribe and receive a copy, all at the same time.'
+            },
+            {
+                key: 'subscriber', title: 'RViz2 Subscriber', badgeColor: '#4dd6c0', caption: 'RViz2 receiving and interpreting the message\u2026',
+                body: 'RViz2 itself is just another <b>ROS 2 node</b> under the hood. For every Display you add in its side panel (LaserScan, PointCloud2, Path, TF, Image\u2026) it creates a subscriber to the topic you choose, and starts receiving whatever messages that node upstream is publishing.'
+            },
+            {
+                key: 'display', title: 'Visual Display', badgeColor: '#7cd992', caption: 'Rendering the result in the 3D viewport\u2026',
+                body: 'Once a message arrives, RViz2 hands it to the matching <b>Display plugin</b> for that message type \u2014 the LaserScan display knows how to draw dots for a laser scan, the TF display knows how to draw coordinate frame axes, and so on. That plugin turns the raw data into the 3D graphics you actually see.'
+            }
+        ];
+
+        const packet = shadow.getElementById('packet');
+        const flowCol = shadow.getElementById('flow-col');
+        const infoPanel = shadow.getElementById('info-panel');
+        const btnPlay = shadow.getElementById('btn-play');
+        const btnSpeed = shadow.getElementById('btn-speed');
+        const liveLabel = shadow.getElementById('live-label');
+
+        let current = 0;
+        let playing = true;
+        let speedMs = 1600;
+        let timer = null;
+
+        function stagePositions() {
+            const stageEls = [0,1,2,3].map(i => shadow.getElementById(`stage-${i}`));
+            return stageEls.map(el => el.offsetTop + el.offsetHeight / 2 - 4);
+        }
+
+        function renderInfo(i, selectedByClick) {
+            const s = stages[i];
+            infoPanel.innerHTML = `
+                <span class="info-badge" style="background:${s.badgeColor}22; color:${s.badgeColor}; border:1px solid ${s.badgeColor}55;">Stage ${i + 1} / 4</span>
+                <h3 class="info-title">${s.title}</h3>
+                <div class="info-body">${s.body}</div>
+                <div class="caption-line">${selectedByClick ? '\ud83d\udccc Paused on this stage' : s.caption}</div>
+            `;
+        }
+
+        function setActiveStage(i) {
+            shadow.querySelectorAll('.stage').forEach(el => el.classList.remove('active'));
+            shadow.querySelectorAll('.arrow-track').forEach(el => el.classList.remove('flowing'));
+            const stageEl = shadow.getElementById(`stage-${i}`);
+            if (stageEl) stageEl.classList.add('active');
+            if (i < 3) {
+                const arrowEl = shadow.getElementById(`arrow-${i}`);
+                if (arrowEl) arrowEl.classList.add('flowing');
+            }
+            const positions = stagePositions();
+            packet.style.top = positions[i] + 'px';
+        }
+
+        function advance() {
+            current = (current + 1) % 4;
+            setActiveStage(current);
+            renderInfo(current, false);
+        }
+
+        function startTimer() {
+            clearInterval(timer);
+            timer = setInterval(advance, speedMs);
+        }
+
+        function stopTimer() {
+            clearInterval(timer);
+        }
+
+        shadow.querySelectorAll('.stage').forEach(el => {
+            el.addEventListener('click', () => {
+                const i = parseInt(el.getAttribute('data-stage'), 10);
+                playing = false;
+                stopTimer();
+                btnPlay.textContent = '\u25b6 Play';
+                btnPlay.classList.remove('active');
+                current = i;
+                setActiveStage(i);
+                shadow.querySelectorAll('.stage').forEach(s2 => s2.classList.remove('selected'));
+                el.classList.add('selected');
+                renderInfo(i, true);
+            });
+        });
+
+        btnPlay.addEventListener('click', () => {
+            playing = !playing;
+            if (playing) {
+                btnPlay.textContent = '\u23f8 Pause';
+                btnPlay.classList.add('active');
+                shadow.querySelectorAll('.stage').forEach(s2 => s2.classList.remove('selected'));
+                startTimer();
+            } else {
+                btnPlay.textContent = '\u25b6 Play';
+                btnPlay.classList.remove('active');
+                stopTimer();
+            }
+        });
+
+        let speedLevel = 1;
+        const speedLevels = [1600, 900, 2600];
+        const speedLabels = ['1\u00d7 Speed', '2\u00d7 Speed', '0.5\u00d7 Speed'];
+        btnSpeed.addEventListener('click', () => {
+            speedLevel = (speedLevel + 1) % speedLevels.length;
+            speedMs = speedLevels[speedLevel];
+            btnSpeed.textContent = speedLabels[speedLevel];
+            if (playing) startTimer();
+        });
+
+        setTimeout(() => {
+            setActiveStage(0);
+            renderInfo(0, false);
+            startTimer();
+        }, 50);
+
+        window.addEventListener('resize', () => { setActiveStage(current); });
+    })();
+</script>
+
+<script>
+(function(){function send(){parent.postMessage({taWidget:location.pathname,h:document.documentElement.scrollHeight},'*')}
+new ResizeObserver(send).observe(document.documentElement);addEventListener('load',send);setInterval(send,1500);
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href]');if(a&&!a.target){a.target='_top'}});})();
+</script></body></html>

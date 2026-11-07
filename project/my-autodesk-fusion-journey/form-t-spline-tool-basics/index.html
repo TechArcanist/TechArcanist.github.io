@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Form (T-Spline) Tool Basics | Autodesk Fusion Journey | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="PDF, Notes Form (T-Spline) Tool Basics [24] Open Download PDF preview unavailable. Open the PDF .">
+<link rel="canonical" href="https://techarcanist.com/project/my-autodesk-fusion-journey/form-t-spline-tool-basics/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="Form (T-Spline) Tool Basics | Autodesk Fusion Journey">
+<meta property="og:description" content="PDF, Notes Form (T-Spline) Tool Basics [24] Open Download PDF preview unavailable. Open the PDF .">
+<meta property="og:url" content="https://techarcanist.com/project/my-autodesk-fusion-journey/form-t-spline-tool-basics/">
+<meta property="og:image" content="https://techarcanist.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=a6e775a3ba">
+<link rel="stylesheet" href="/assets/home.css?v=a6e775a3ba">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/" aria-current="page">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap reader">
+  <aside class="rd-nav" id="rd-nav">
+    <a class="rd-series" href="/project/my-autodesk-fusion-journey/"><span class="label">Series</span>Autodesk Fusion Journey</a>
+    <ol>
+      <li><a href="/project/my-autodesk-fusion-journey/glass-bottle/"><span class="mono">01</span>Glass Bottle</a></li>
+      <li><a href="/project/my-autodesk-fusion-journey/paper-clip/"><span class="mono">02</span>Paper Clip</a></li>
+      <li><a href="/project/my-autodesk-fusion-journey/loft-bottle/"><span class="mono">03</span>Loft Bottle</a></li>
+      <li><a href="/project/my-autodesk-fusion-journey/ice-tray/"><span class="mono">04</span>ICE Tray</a></li>
+      <li><a href="/project/my-autodesk-fusion-journey/hex-nut/"><span class="mono">05</span>Hex Nut</a></li>
+      <li><a href="/project/my-autodesk-fusion-journey/rubber-grip/"><span class="mono">06</span>Rubber Grip</a></li>
+      <li><a href="/project/my-autodesk-fusion-journey/door-stop/"><span class="mono">07</span>Door Stop</a></li>
+      <li><a href="/project/my-autodesk-fusion-journey/bulb/"><span class="mono">08</span>Bulb</a></li>
+      <li><a href="/project/my-autodesk-fusion-journey/phone-case-9/"><span class="mono">09</span>Phone Case</a></li>
+      <li><a href="/project/my-autodesk-fusion-journey/dog-bowl-surface-modelling/"><span class="mono">10</span>Dog Bowl (Surface Modelling)</a></li>
+      <li><a href="/project/my-autodesk-fusion-journey/auger/"><span class="mono">11</span>Auger</a></li>
+      <li><a href="/project/my-autodesk-fusion-journey/flathead-screwdriver/"><span class="mono">12</span>Flathead Screwdriver</a></li>
+      <li><a href="/project/my-autodesk-fusion-journey/painters-tripod/"><span class="mono">13</span>Painter’s Tripod</a></li>
+      <li><a href="/project/my-autodesk-fusion-journey/mesh-editing-converting-stl-to-editable-solid/"><span class="mono">14</span>Mesh Editing &amp; Converting STL to Editable Solid</a></li>
+      <li><a href="/project/my-autodesk-fusion-journey/user-parameters-joints/"><span class="mono">15</span>User Parameters &amp; Joints</a></li>
+      <li><a href="/project/my-autodesk-fusion-journey/printable-hinges/"><span class="mono">16</span>3D Printable Hinges</a></li>
+      <li><a href="/project/my-autodesk-fusion-journey/sketch-constraints/"><span class="mono">17</span>Sketch Constraints</a></li>
+      <li><a href="/project/my-autodesk-fusion-journey/one-part-mold/"><span class="mono">18</span>One-Part Mold</a></li>
+      <li><a href="/project/my-autodesk-fusion-journey/two-part-mold/"><span class="mono">19</span>Two-Part Mold</a></li>
+      <li><a href="/project/my-autodesk-fusion-journey/as-built-joint-concepts-tripod-assembly/"><span class="mono">20</span>As-Built Joint Concepts (Tripod Assembly)</a></li>
+      <li><a href="/project/my-autodesk-fusion-journey/napkin-holder-sheet-metal/"><span class="mono">21</span>Napkin Holder (Sheet Metal)</a></li>
+      <li><a href="/project/my-autodesk-fusion-journey/propellor-surface-modelling/"><span class="mono">22</span>Propellor (Surface Modelling)</a></li>
+      <li><a href="/project/my-autodesk-fusion-journey/mesh-editing-basics/"><span class="mono">23</span>Mesh Editing Basics</a></li>
+      <li><a href="/project/my-autodesk-fusion-journey/form-t-spline-tool-basics/" aria-current="page"><span class="mono">24</span>Form (T-Spline) Tool Basics</a></li>
+      <li><a href="/project/my-autodesk-fusion-journey/keyring-from-an-image-using-svg/"><span class="mono">25</span>Keyring from an Image using SVG</a></li>
+    </ol>
+<p class="label rd-sub">Designs</p><ol>
+<li><a href="/project/my-autodesk-fusion-journey/modular-smart-desk-planter-maker-edition/"><span class="mono">D</span>Modular Smart Desk Planter ( Maker Edition )</a></li><li><a href="/project/my-autodesk-fusion-journey/smart-study-desk-planter-utility-maker-edition/"><span class="mono">D</span>Smart Study Desk Planter (Utility + Maker Edition )</a></li>    </ol>  </aside>
+  <article class="rd-main">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/documented-software-learnings/">Library</a><span>/</span><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><span>/</span><span>24</span></nav>
+    <button class="btn btn-sm btn-line rd-tg" type="button" id="rd-tg">All chapters</button>
+<p class="sh-label mono"><span>24</span>Chapter 24 of 25</p>    <h1>Form (T-Spline) Tool Basics</h1>
+<div class="rd-prog" aria-hidden="true"><i style="width:96.0%"></i></div>    <div class="prose">
+<div class="cols cols-2"><div class="col">
+<figure class="img"><img src="/uploads/wp/2025/12/Day_27_-_Demo_File_-_ProductDesignOnline.com_2025-Dec-05_11-24-21AM-000_CustomizedView24401925005-1024x576.jpg" alt="" loading="lazy" decoding="async" width="1024" height="576"></figure>
+</div><div class="col">
+<figure class="img"><img src="/uploads/wp/2025/12/Day_27_-_Demo_File_-_ProductDesignOnline.com_2025-Dec-05_11-27-09AM-000_CustomizedView11952888424-1024x576.jpg" alt="" loading="lazy" decoding="async" width="1024" height="576"></figure>
+</div></div>
+<div class="col">
+<h2 id="pdf-notes">PDF, Notes</h2>
+<div class="pdf"><div class="pdf-bar"><span class="pdf-name">Form (T-Spline) Tool Basics [24]</span><a class="btn btn-sm" href="/uploads/wp/2025/12/Form-T-Spline-Tool-Basics-24.pdf" target="_blank" rel="noopener">Open</a><a class="btn btn-sm btn-ghost" href="/uploads/wp/2025/12/Form-T-Spline-Tool-Basics-24.pdf" download>Download</a></div><object data="/uploads/wp/2025/12/Form-T-Spline-Tool-Basics-24.pdf#view=FitH" type="application/pdf" class="pdf-view"><p>PDF preview unavailable. <a href="/uploads/wp/2025/12/Form-T-Spline-Tool-Basics-24.pdf">Open the PDF</a>.</p></object></div>
+</div>
+</div>
+    <nav class="pager" aria-label="Chapters">
+<a href="/project/my-autodesk-fusion-journey/mesh-editing-basics/"><span class="mono">Chapter 23</span>Mesh Editing Basics</a><a class="nx" href="/project/my-autodesk-fusion-journey/keyring-from-an-image-using-svg/"><span class="mono">Chapter 25</span>Keyring from an Image using SVG</a>    </nav>
+  </article>
+</div>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/plc/">PLC &amp; Industrial Automation</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=a6e775a3ba" defer></script>
+<script src="/assets/home.js?v=a6e775a3ba" defer></script>
+</body>
+</html>

@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Translation Vector Between Two Turtles: CPP | ROS 2 | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="NOTE: I will be prioritizing Python and temporarily pausing C++ implementations after this chapter. You can explore the C++ chapters covered so far. I will…">
+<link rel="canonical" href="https://techarcanist.com/documented-software-learnings/ros2/ros_ai/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="Translation Vector Between Two Turtles: CPP | ROS 2">
+<meta property="og:description" content="NOTE: I will be prioritizing Python and temporarily pausing C++ implementations after this chapter. You can explore the C++ chapters covered so far. I will…">
+<meta property="og:url" content="https://techarcanist.com/documented-software-learnings/ros2/ros_ai/">
+<meta property="og:image" content="https://techarcanist.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=a6e775a3ba">
+<link rel="stylesheet" href="/assets/home.css?v=a6e775a3ba">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/" aria-current="page">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap reader wide">
+  <aside class="rd-nav" id="rd-nav">
+    <a class="rd-series" href="/documented-software-learnings/ros2/"><span class="label">Series</span>ROS 2</a>
+    <ol>
+      <li><a href="/documented-software-learnings/ros2/ros2_a/"><span class="mono">01</span>Installing Ubuntu Desktop (Dual Boot with Windows)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_b/"><span class="mono">02</span>ROS 2 Jazzy Installation on Ubuntu (Step-by-Step)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_c/"><span class="mono">03</span>Development Environment Setup for ROS 2 Jazzy on Ubuntu (With Clear Explanations)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_d/"><span class="mono">04</span>ROS 2 Fundamentals: Architecture, Communication, Packages, and Workspaces</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_e/"><span class="mono">05</span>ROS 2 Workspace &amp; Package Creation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_f/"><span class="mono">06</span>ROS 2 Python Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_g/"><span class="mono">07</span>ROS 2 C++ Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_h/"><span class="mono">08</span>ROS 2 Python Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_i/"><span class="mono">09</span>ROS 2 C++ Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_j/"><span class="mono">10</span>Robot Locomotion: Introduction</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_k/"><span class="mono">11</span>Wheeled Locomotion Architectures</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_l/"><span class="mono">12</span>Rolling Friction &amp; Wheeled Locomotion Efficiency</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_m/"><span class="mono">13</span>Introduction to Robot Simulation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_n/"><span class="mono">14</span>URDF</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_o/"><span class="mono">15</span>Create a URDF Model</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_p/"><span class="mono">16</span>Rviz</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_q/"><span class="mono">17</span>Node Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_r/"><span class="mono">18</span>Python Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_s/"><span class="mono">19</span>C++ Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_t/"><span class="mono">20</span>ROS 2 Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-u/"><span class="mono">21</span>Visualize The Robot In RVIZ2</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-v/"><span class="mono">22</span>Launch Files</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-w/"><span class="mono">23</span>ROS 2 Launch Files: Visualizing the Robot with One Command</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-x/"><span class="mono">24</span>Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-y/"><span class="mono">25</span>Simulating the Robot in Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-z/"><span class="mono">26</span>ROS 2 Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-aa/"><span class="mono">27</span>Control Types</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ab/"><span class="mono">28</span>ROS 2 Control: Prepare the Robot for Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ac/"><span class="mono">29</span>Understanding ROS 2 Control | Explanation of Chapter 28</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ad/"><span class="mono">30</span>ROS 2 Control: Moving the BumperBot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ae/"><span class="mono">31</span>Robot Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-af/"><span class="mono">32</span>Pose of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_af/"><span class="mono">33</span>Translation Vector</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ag/"><span class="mono">34</span>Introduction to Turtlesim</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ah/"><span class="mono">35</span>Translation Vector Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ai/" aria-current="page"><span class="mono">36</span>Translation Vector Between Two Turtles: CPP</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_aj/"><span class="mono">37</span>Rotation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ak/"><span class="mono">38</span>Rotation Matrix Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_al/"><span class="mono">39</span>Transformation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_am/"><span class="mono">40</span>Differential Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-41/"><span class="mono">41</span>Velocity of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-42/"><span class="mono">42</span>Simple Speed Controller: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-43/"><span class="mono">43</span>Launch the Simple Speed Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-44/"><span class="mono">44</span>Teleoperating the BumperBot with a Joystick</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-45/"><span class="mono">45</span>ROS 2 Diff Drive Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-46/"><span class="mono">46</span>TF 2 Library</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-47/"><span class="mono">47</span>Operation With Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-48/"><span class="mono">48</span>Static &amp; Dynamic Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-49/"><span class="mono">49</span>Simple TF2 Static Broadcaster</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-50/"><span class="mono">50</span>Simple TF2 Broadcaster: Static and Dynamic Transforms</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-51/"><span class="mono">51</span>ROS 2 Services</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-52/"><span class="mono">52</span>Service Server in Python: AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-53/"><span class="mono">53</span>Service Client in Python: Calling AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-54/"><span class="mono">54</span>Simple TF2 Listener in Python: a get_transform Service</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-55/"><span class="mono">55</span>Euler Angles and Quaternions</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-56/"><span class="mono">56</span>Euler to Quaternion: Turning the Robot with tf_transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-57/"><span class="mono">57</span>tf2 Tools: view_frames and tf2_echo</a></li>
+    </ol>
+  </aside>
+  <article class="rd-main">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/documented-software-learnings/">Library</a><span>/</span><a href="/documented-software-learnings/ros2/">ROS 2</a><span>/</span><span>36</span></nav>
+    <button class="btn btn-sm btn-line rd-tg" type="button" id="rd-tg">All chapters</button>
+<p class="sh-label mono"><span>36</span>Chapter 36 of 57</p>    <h1>Translation Vector Between Two Turtles: CPP</h1>
+<div class="rd-prog" aria-hidden="true"><i style="width:63.2%"></i></div>    <div class="prose"><div class="col">
+<p><strong>NOTE:</strong> I will be prioritizing Python and temporarily pausing C++ implementations after this chapter. You can explore the C++ chapters covered so far. I will first complete the remaining topics in Python, then revisit the skipped chapters to add their corresponding C++ implementations.</p>
+<h2 id="introduction">Introduction</h2>
+<p>In the previous chapter, we used Turtlesim to explore ROS 2 nodes, topics, services, velocity commands, and the pose of a turtle in a 2D environment.</p>
+<p>Now, we will apply our understanding of <strong>translation vectors</strong> by developing a C++ ROS 2 node.</p>
+<p>The node will subscribe to the pose of two turtles, calculate the translation vector from <code>turtle1</code> to <code>turtle2</code>, and display the result in the terminal.</p>
+<h2 id="start-the-turtlesim-simulator"><code>Start the Turtlesim Simulator</code></h2>
+<p>First, we need to start the Turtlesim simulator.</p>
+<p>Open a terminal and run:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">ros2 run turtlesim turtlesim_node</span></code></pre></div>
+<figure class="img"><img alt="" decoding="async" height="570" loading="lazy" src="/uploads/wp/2026/10/image-15.png" width="1715"></figure>
+<p>The Turtlesim window will open with the default turtle, named <code>turtle1</code>.</p>
+<h2 id="spawn-another-turtle">Spawn Another Turtle</h2>
+<p>To calculate the translation vector between two turtles, we first need two turtles in the same environment.</p>
+<p>We can create another turtle using the ROS 2 <code>/spawn</code> service.</p>
+<p>Run and press tab twice and it will autocomplete</p>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln">ros2 service call /spawn turtlesim/srv/Spawn "</span></code></pre></div>
+<figure class="img"><img alt="" decoding="async" height="442" loading="lazy" src="/uploads/wp/2026/10/image-16.png" width="1705"></figure>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln">ros2 service call /spawn turtlesim/srv/Spawn "x: 1.0</span>
+<span class="ln">y: 4.0</span>
+<span class="ln">theta: 0.0</span>
+<span class="ln">name: 'turtle2'"</span></code></pre></div>
+<p>After the service call succeeds, you should see <code>turtle2</code> at approximately the coordinates <code>(1, 4)</code>.</p>
+<h2 id="list-the-available-topics">List the Available Topics</h2>
+<p>Now that we have two turtles, let’s inspect the topics available in ROS 2.</p>
+<p>Open another terminal and run:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">ros2 topic list</span></code></pre></div>
+<figure class="img"><img alt="" decoding="async" height="661" loading="lazy" src="/uploads/wp/2026/10/image-17.png" width="1688"></figure>
+<p>You should see topics associated with both turtles, including:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">/turtle1/cmd_vel</span>
+<span class="ln">/turtle1/color_sensor</span>
+<span class="ln">/turtle1/pose</span>
+<span class="ln">/turtle2/cmd_vel</span>
+<span class="ln">/turtle2/color_sensor</span>
+<span class="ln">/turtle2/pose</span></code></pre></div>
+<figure class="img"><img alt="" decoding="async" height="646" loading="lazy" src="/uploads/wp/2026/10/image-18.png" width="1719"></figure>
+<p>The <code>/turtle1/pose</code> topic contains information about the first turtle’s position and orientation in the Turtlesim world.</p>
+<p>Similarly, <code>/turtle2/pose</code> contains the pose of the second turtle.</p>
+<figure class="img"><img alt="" decoding="async" height="573" loading="lazy" src="/uploads/wp/2026/10/image-19.png" width="1713"></figure>
+<p>now lets create ros2 nodes to calculate translation vector between turtle 1 and turtle 2</p>
+
+<div class="widget"><iframe loading="lazy" scrolling="no" src="/widgets/documented-software-learnings__ros2__ros_ai-1.html" title="Interactive guide"></iframe></div></div>
+
+<div class="col">
+<h2 id="create-the-c-ros-2-node">Create the C++ ROS 2 Node</h2>
+<p>Now, we will create a ROS 2 node named <code>simple_turtlesim_kinematics</code>.</p>
+<p>The node will subscribe to both pose topics, save the latest pose information, and calculate the translation vector.</p>
+<p>We will divide the implementation into two files:</p>
+<ul>
+<li>A <strong>header file (</strong><code><strong>.hpp</strong></code><strong>)</strong> to declare the class, functions, and variables.</li>
+<li>A <strong>source file (</strong><code><strong>.cpp</strong></code><strong>)</strong> to define the functions and implement the node’s behavior.</li>
+</ul>
+<p>Open your <code>bumperbot_cpp_examples</code> package in Visual Studio Code.</p>
+<p>Create the following file structure:</p>
+<figure class="img sz-s al-l"><img alt="" decoding="async" height="347" loading="lazy" src="/uploads/wp/2026/10/image-35.png" width="306"></figure>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln">simple_turtlesim_kinematics.hpp</span></code></pre></div>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln">simple_turtlesim_kinematics.cp</span></code></pre></div>
+<figure class="img"><img alt="" decoding="async" height="414" loading="lazy" src="/uploads/wp/2026/10/image-32.png" width="888"></figure>
+<h2 id="declare-the-class-in-the-header-file">Declare the Class in the Header File</h2>
+<p>Open:</p>
+<p><code>simple_turtlesim_kinematics.hpp</code></p>
+<p>Add the following code:</p>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln">#ifndef SIMPLE_TURTLESIM_KINEMATICS_HPP</span>
+<span class="ln">#define SIMPLE_TURTLESIM_KINEMATICS_HPP</span>
+<span class="ln"></span>
+<span class="ln">#include &lt;rclcpp/rclcpp.hpp&gt;</span>
+<span class="ln">#include &lt;turtlesim/msg/pose.hpp&gt;</span>
+<span class="ln"></span>
+<span class="ln">class SimpleTurtlesimKinematics : public rclcpp::Node</span>
+<span class="ln">{</span>
+<span class="ln">public:</span>
+<span class="ln">    SimpleTurtlesimKinematics(const std::string&amp; name);</span>
+<span class="ln"></span>
+<span class="ln">    void turtle1PoseCallback(const turtlesim::msg::Pose&amp; pose);</span>
+<span class="ln"></span>
+<span class="ln">    void turtle2PoseCallback(const turtlesim::msg::Pose&amp; pose);</span>
+<span class="ln"></span>
+<span class="ln">private:</span>
+<span class="ln">    rclcpp::Subscription&lt;turtlesim::msg::Pose&gt;::SharedPtr turtle1_pose_sub_;</span>
+<span class="ln">    rclcpp::Subscription&lt;turtlesim::msg::Pose&gt;::SharedPtr turtle2_pose_sub_;</span>
+<span class="ln"></span>
+<span class="ln">    turtlesim::msg::Pose last_turtle1_pose_;</span>
+<span class="ln">    turtlesim::msg::Pose last_turtle2_pose_;</span>
+<span class="ln">};</span>
+<span class="ln"></span>
+<span class="ln">#endif // SIMPLE_TURTLESIM_KINEMATICS_HPP</span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"></span></code></pre></div>
+<h2 id="implement-the-c-node">Implement the C++ Node</h2>
+<p>Open:</p>
+<p><code>src/simple_turtlesim_kinematics.cpp</code></p>
+<p>Add the following code:</p>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln">#include "bumperbot_cpp_examples/include/simple_turtlesim_kinematics.hpp"</span>
+<span class="ln">using std::placeholders::_1;</span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln">SimpleTurtlesimKinematics::SimpleTurtlesimKinematics(const std::string&amp; name)</span>
+<span class="ln">    : Node(name)</span>
+<span class="ln">{</span>
+<span class="ln">    turtle1_pose_sub_ = create_subscription&lt;turtlesim::msg::Pose&gt;(</span>
+<span class="ln">        "/turtle1/pose", 10, std::bind(&amp;SimpleTurtlesimKinematics::turtle1PoseCallback, this, _1));</span>
+<span class="ln"></span>
+<span class="ln">    turtle2_pose_sub_ = create_subscription&lt;turtlesim::msg::Pose&gt;(</span>
+<span class="ln">        "/turtle2/pose", 10, std::bind(&amp;SimpleTurtlesimKinematics::turtle2PoseCallback, this, _1));</span>
+<span class="ln">}</span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln">void SimpleTurtlesimKinematics::turtle1PoseCallback(const turtlesim::msg::Pose&amp; pose)</span>
+<span class="ln">{</span>
+<span class="ln">    last_turtle1_pose_ = pose;</span>
+<span class="ln">}</span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln">void SimpleTurtlesimKinematics::turtle2PoseCallback(const turtlesim::msg::Pose&amp; pose)</span>
+<span class="ln">{</span>
+<span class="ln">    last_turtle2_pose_ = pose;</span>
+<span class="ln">    float Tx = last_turtle2_pose_.x - last_turtle1_pose_.x;</span>
+<span class="ln">    float Ty = last_turtle2_pose_.y - last_turtle1_pose_.y;</span>
+<span class="ln">    RCLCPP_INFO_STREAM(get_logger(), "\nTranslation Vector turtle1 -&gt; turtle2 \n" &lt;&lt;</span>
+<span class="ln">                    "Tx: " &lt;&lt; Tx &lt;&lt; "\n" &lt;&lt;</span>
+<span class="ln">                    "Ty: " &lt;&lt; Ty &lt;&lt; "\n");</span>
+<span class="ln">}</span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln">int main(int argc, char* argv[])</span>
+<span class="ln">{</span>
+<span class="ln">  rclcpp::init(argc, argv);</span>
+<span class="ln">  auto node = std::make_shared&lt;SimpleTurtlesimKinematics&gt;("simple_turtlesim_kinematics");</span>
+<span class="ln">  rclcpp::spin(node);</span>
+<span class="ln">  rclcpp::shutdown();</span>
+<span class="ln">  return 0;</span>
+<span class="ln">}</span></code></pre></div>
+
+<div class="widget"><iframe loading="lazy" scrolling="no" src="/widgets/documented-software-learnings__ros2__ros_ai-2.html" title="Interactive guide"></iframe></div></div>
+
+<div class="col">
+<h2 id="in-cmake-lists">in CMake Lists</h2>
+<figure class="img"><img alt="" decoding="async" height="581" loading="lazy" src="/uploads/wp/2026/10/image-34.png" width="1286"></figure>
+<p>Add:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">find_package(turtlesim REQUIRED)</span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"></span></code></pre></div>
+<div class="codeblock"><pre class="code"><code><span class="ln">include_directories(include)</span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"></span></code></pre></div>
+<div class="codeblock"><pre class="code"><code><span class="ln">add_executable(simple_turtlesim_kinematics src/simple_turtlesim_kinematics.cpp)</span>
+<span class="ln">ament_target_dependencies(simple_turtlesim_kinematics rclcpp turtlesim)</span></code></pre></div>
+<div class="codeblock"><pre class="code"><code><span class="ln">install(</span>
+<span class="ln">  DIRECTORY include</span>
+<span class="ln">  DESTINATION include</span>
+<span class="ln">)</span></code></pre></div>
+<div class="codeblock"><pre class="code"><code><span class="ln">install(TARGETS</span>
+<span class="ln">  simple_publisher</span>
+<span class="ln">  simple_subscriber</span>
+<span class="ln">  simple_parameter</span>
+<span class="ln">  simple_turtlesim_kinematics</span>
+<span class="ln">  DESTINATION lib/${PROJECT_NAME}</span>
+<span class="ln">)</span></code></pre></div>
+<h2 id="add-the-dependency-to-package-xml">Add the Dependency to <code>package.xml</code></h2>
+<figure class="img"><img alt="" decoding="async" height="710" loading="lazy" src="/uploads/wp/2026/10/image-29.png" width="1543"></figure>
+<p>Add:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">&lt;exec_depend&gt;turtlesim&lt;/exec_depend&gt;</span></code></pre></div>
+<h2 id="build-the-workspace">Build the Workspace</h2>
+<figure class="img"><img alt="" decoding="async" height="273" loading="lazy" src="/uploads/wp/2026/10/image-36.png" width="610"></figure>
+<p>Open a terminal and run:</p>
+<div class="codeblock"><pre class="code numbered"><code><span class="ln">cd bumperbot_ws</span>
+<span class="ln">colcon build</span></code></pre></div>
+<p>Wait for the build to finish successfully.</p>
+<h2 id="run-the-translation-vector-node">Run the Translation Vector Node</h2>
+<p>Open a new terminal.</p>
+<figure class="img"><img alt="" decoding="async" height="437" loading="lazy" src="/uploads/wp/2026/10/image-37.png" width="1067"></figure>
+<p>Go to the workspace if necessary and source it and run:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">. install/setup.bash</span>
+<span class="ln">ros2 run bumperbot_cpp_examples simple_turtlesim_kinematics</span></code></pre></div>
+<figure class="img"><img alt="" decoding="async" height="264" loading="lazy" src="/uploads/wp/2026/10/image-38.png" width="733"></figure>
+<p>This starts the node that calculates the translation vector between the two turtles.</p>
+<p>You should see output similar to:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">[simple_turtlesim_kinematics]:</span>
+<span class="ln"></span>
+<span class="ln">Translation Vector turtle1 -&gt; turtle2</span>
+<span class="ln"></span>
+<span class="ln">Tx: -4.544445</span>
+<span class="ln">Ty: -1.544445</span></code></pre></div>
+<h2 id="what-do-the-negative-values-mean">What do the negative values mean?</h2>
+<p>For these values:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">Tx: -4.544445</span>
+<span class="ln">Ty: -1.544445</span></code></pre></div>
+<p>Turtle 2 is to the left of Turtle 1 and below it in the world coordinate system.</p>
+<p>The node keeps running and calculating the translation vector as new pose messages arrive.</p>
+<h2 id="move-turtle-1-and-observe-the-change">Move Turtle 1 and Observe the Change</h2>
+<p>Now let's see whether our calculation responds to changes in the turtle positions.</p>
+<p>Open another terminal.</p>
+<figure class="img"><img alt="" decoding="async" height="581" loading="lazy" src="/uploads/wp/2026/10/image-39.png" width="756"></figure>
+<p>Run the keyboard teleoperation node:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">ros2 run turtlesim turtle_teleop_key</span></code></pre></div>
+<figure class="img sz-s al-l"><img alt="" decoding="async" height="525" loading="lazy" src="/uploads/wp/2026/10/image-27.png" width="487"></figure>
+<p>Make sure the teleoperation terminal is focused, then move Turtle 1 using the keyboard.</p>
+<p>As Turtle 1 moves, the translation vector printed by <code>simple_turtlesim_kinematics</code> changes.</p>
+<p>For example:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">Before movement:</span>
+<span class="ln"></span>
+<span class="ln">Tx: -4.544445</span>
+<span class="ln">Ty: -1.544445</span></code></pre></div>
+<p>After moving Turtle 1, the values may become:</p>
+<div class="codeblock"><pre class="code"><code><span class="ln">Tx: -3.200000</span>
+<span class="ln">Ty: -0.800000</span></code></pre></div>
+<p>These second values are illustrative; your actual results depend on how you move the turtle.</p>
+</div></div>
+    <nav class="pager" aria-label="Chapters">
+<a href="/documented-software-learnings/ros2/ros_ah/"><span class="mono">Chapter 35</span>Translation Vector Between Two Turtles: Python</a><a class="nx" href="/documented-software-learnings/ros2/ros_aj/"><span class="mono">Chapter 37</span>Rotation Matrix</a>    </nav>
+  </article>
+</div>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/plc/">PLC &amp; Industrial Automation</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=a6e775a3ba" defer></script>
+<script src="/assets/home.js?v=a6e775a3ba" defer></script>
+</body>
+</html>

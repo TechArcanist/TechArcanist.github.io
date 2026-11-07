@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Decoding tf2_echo</title>
+<style>
+html,body{margin:0;background:#0e182c;color:#e8eef7;font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+.w{padding:16px;max-width:980px;margin:0 auto}
+h1{font-size:18px;margin:0 0 4px}.sub{color:#a9b8cc;font-size:14px;margin:0 0 12px}
+.card{background:#13213a;border:1px solid #23395c;border-radius:12px;padding:14px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:8px 0}
+.btn{background:#1b2c4a;color:#e8eef7;border:1px solid #2b4366;border-radius:8px;padding:5px 10px;font:600 12.5px system-ui,sans-serif;cursor:pointer}
+.btn.on,.btn:hover{border-color:#ff8a3d}
+input[type=range]{width:100%;accent-color:#ff8a3d}
+.grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:14px}
+@media (max-width:760px){.grid{grid-template-columns:1fr}}
+.term{background:#060c18;border:1px solid #1f3352;border-radius:8px;padding:10px;font:12.5px/1.75 ui-monospace,Consolas,monospace;color:#cfe0f5;white-space:pre;overflow-x:auto}
+.term span{cursor:pointer;border-radius:3px}
+.term span.lit{background:rgba(255,138,61,.25)}
+.say{background:#0f1b31;border:1px solid #23395c;border-radius:10px;padding:10px 12px;font-size:14px;min-height:150px}
+svg{width:100%;height:auto;display:block}
+.ok{color:#66e3b0}.warn{color:#ffd24a}.dim{color:#6b7f96}
+</style></head><body><div class="w">
+<h1>Decoding tf2_echo odom bumperbot_top</h1>
+<p class="sub">Every block tf2_echo prints describes one transform in five ways. Pick a tick, then point at a part of the output to see where its numbers come from.</p>
+<div class="card">
+<div class="row"><span class="dim">recorded samples:</span><span id="pre"></span></div>
+<div class="row"><span>tick: <b id="tv"></b> (<span id="ts"></span>)</span></div>
+<input type="range" id="t" min="0" max="7000" step="1" value="6443" aria-label="tick">
+<div class="grid"><div class="term" id="term"></div><div><svg id="sv" viewBox="0 0 300 210" role="img" aria-label="The base from above"></svg><div class="say" id="say"></div></div></div>
+</div>
+</div>
+<script>
+(function(){
+var PRE=[6013,6023,6443,6453,6463,6473],REC={6013:[300.650,0.319,0.948,0.650,37.242],6023:[301.150,0.544,0.839,1.150,65.890],6443:[322.150,0.880,0.476,2.150,123.186],6453:[322.650,0.970,0.243,2.650,151.834],6463:[323.150,1.000,-0.004,-3.133,-179.518],6473:[323.650,0.968,-0.251,-2.633,-150.870]};
+var S={n:6443,hl:null};
+function $(i){return document.getElementById(i)}
+function f3(v){var s=v.toFixed(3);return s}
+function pose(n){/* the node of the previous chapter: 0.05 m and 0.05 rad per tick, turning back every 100 ticks */
+  var x=0,yaw=0,dir=1,c=0,i;for(i=0;i<n;i++){x+=0.05;yaw+=dir*0.05;c++;if(c>=100){dir=-dir;c=0}}
+  var w=Math.atan2(Math.sin(yaw),Math.cos(yaw));return{x:x,yaw:yaw,wrapped:w,qz:Math.sin(yaw/2),qw:Math.cos(yaw/2)}}
+function sp(id,t){return '<span data-h="'+id+'"'+(S.hl===id?' class="lit"':'')+'>'+t+'</span>'}
+function draw(){
+  var p=pose(S.n),c=Math.cos(p.yaw),s=Math.sin(p.yaw),qz=p.qz,qw=p.qw;
+  $('tv').textContent=S.n;$('ts').textContent=(S.n/10).toFixed(1)+' s after the node started';$('t').value=S.n;
+  $('pre').innerHTML=PRE.map(function(k){return '<button class="btn'+(k===S.n?' on':'')+'" data-p="'+k+'">'+k+'</button>'}).join(' ');
+  var T='At time ...\n'+sp('tr','- Translation: ['+f3(p.x)+', 0.000, 0.300]')+'\n'+sp('q','- Rotation: in Quaternion (xyzw) [0.000, 0.000, '+f3(qz)+', '+f3(qw)+']')+'\n'+
+    sp('rr','- Rotation: in RPY (radian) [0.000, -0.000, '+f3(p.wrapped)+']')+'\n'+sp('rd','- Rotation: in RPY (degree) [0.000, -0.000, '+f3(p.wrapped*180/Math.PI)+']')+'\n- Matrix:\n'+
+    sp('m','  '+f3(c)+' '+f3(-s)+'  0.000')+' '+sp('mt',f3(p.x))+'\n'+sp('m','  '+f3(s)+'  '+f3(c)+'  0.000')+' '+sp('mt','0.000')+'\n'+sp('m','  0.000  0.000  1.000')+' '+sp('mt','0.300')+'\n  0.000  0.000  0.000  1.000';
+  $('term').innerHTML=T;
+  var g='<circle cx="150" cy="105" r="80" fill="none" stroke="#23395c"/><line x1="150" y1="105" x2="250" y2="105" stroke="#ff6b6b" stroke-dasharray="5 5"/><text x="248" y="97" fill="#ff6b6b" font-size="10" text-anchor="end">odom X</text>';
+  function P(a,b){return (150+(a*c-b*s)).toFixed(1)+','+(105-(a*s+b*c)).toFixed(1)}
+  g+='<polygon points="'+P(-40,-30)+' '+P(40,-30)+' '+P(40,30)+' '+P(-40,30)+'" fill="rgba(255,138,61,.2)" stroke="#ff8a3d" stroke-width="2.5"/><line x1="150" y1="105" x2="'+(150+75*c).toFixed(1)+'" y2="'+(105-75*s).toFixed(1)+'" stroke="#ff6b6b" stroke-width="3"/>';
+  g+='<text x="150" y="204" fill="#ffd24a" font-size="11" text-anchor="middle">yaw '+f3(p.wrapped)+' rad, seen from above</text>';$('sv').innerHTML=g;
+  var R=REC[S.n],m;
+  var EX={tr:'Translation: where bumperbot_top is, seen from odom, in metres. x = ticks × 0.05 = '+f3(p.x)+'. z = 0.300 comes from the fixed base → top transform.',
+   q:'Quaternion in x, y, z, w order. A pure yaw only uses z = sin(yaw ÷ 2) = '+f3(qz)+' and w = cos(yaw ÷ 2) = '+f3(qw)+'.',
+   rr:'Roll, pitch, yaw in radians. Yaw is shown between minus π and π (minus 3.142 to 3.142), so a turn of '+f3(p.yaw)+' rad prints as '+f3(p.wrapped)+'. The "-0.000" is a tiny negative number rounded to 0: it means zero.',
+   rd:'The same angles in degrees: radians × 180 ÷ π.',
+   m:'The 3 by 3 rotation part: cos(yaw) and sin(yaw) in the top left, 1 for the Z axis that does not turn.',
+   mt:'The last column of the 4 by 4 matrix is the translation (x, y, z). The bottom row 0 0 0 1 is always the same.'};
+  m=S.hl?EX[S.hl]:'Point at a line of the output.';
+  if(R)m+='<br><br><span class="ok">Recorded at this tick: x '+f3(R[0])+', z '+f3(R[1])+', w '+f3(R[2])+', yaw '+f3(R[3])+' rad ('+f3(R[4])+'°). Computed here: x '+f3(p.x)+', z '+f3(qz)+', w '+f3(qw)+', yaw '+f3(p.wrapped)+' rad.</span>';
+  $('say').innerHTML=m}
+document.addEventListener('mouseover',function(e){var t=e.target.closest&&e.target.closest('[data-h]');if(t&&S.hl!==t.getAttribute('data-h')){S.hl=t.getAttribute('data-h');draw()}});
+document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('[data-h],[data-p]');if(!t)return;if(t.hasAttribute('data-p'))S.n=+t.getAttribute('data-p');else S.hl=t.getAttribute('data-h');draw()});
+$('t').oninput=function(){S.n=+this.value;draw()};
+draw();
+})();
+</script>
+<script>
+(function(){function s(){parent.postMessage({taWidget:location.pathname,h:document.documentElement.scrollHeight},'*')}
+new ResizeObserver(s).observe(document.documentElement);addEventListener('load',s);setInterval(s,1500);})();
+</script></body></html>

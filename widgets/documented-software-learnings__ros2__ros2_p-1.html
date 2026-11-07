@@ -1,0 +1,696 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="/assets/widget-base.css">
+</head><body><style>
+.highlight { color:#64FFDA; font-weight:600; }
+
+.highlight-bg {
+
+  background:#64FFDA33;
+
+  color:#0A192F;
+
+  padding:0.05em 0.25em;
+
+  border-radius:0.25em;
+
+}
+
+</style>
+
+html
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<title>What is RViz2? — Interactive Guide</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Sans+Condensed:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#0d1512; --bg-1:#111a16; --panel:#141f1a; --panel-2:#0f1713;
+  --line:rgba(231,237,233,0.10); --line-strong:rgba(231,237,233,0.20);
+  --ink:#e7ede9; --ink-dim:#8fa39a; --ink-faint:#5c6c65;
+  --accent:#ff8a3d; --accent-soft:rgba(255,138,61,0.14);
+  --accent-2:#4dd6c0; --accent-2-soft:rgba(77,214,192,0.12);
+  --ok:#7cd992; --ok-soft:rgba(124,217,146,0.12);
+  --blue:#7dc4ff; --blue-soft:rgba(125,196,255,0.12);
+  --purple:#c9a6ff; --purple-soft:rgba(201,166,255,0.12);
+  --red:#ff6b6b;
+  --mono:'IBM Plex Mono', ui-monospace, monospace;
+  --sans:'IBM Plex Sans', -apple-system, sans-serif;
+  --cond:'IBM Plex Sans Condensed', var(--sans);
+  /* fluid spacing scale — shrinks smoothly from phone to wide desktop */
+  --pad-page: clamp(16px, 4.2vw, 40px);
+  --pad-card: clamp(14px, 3vw, 22px);
+  --gap-lg: clamp(12px, 2.6vw, 18px);
+  --gap-md: clamp(8px, 1.8vw, 14px);
+  --section-gap: clamp(28px, 6vw, 44px);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{background:var(--bg); color:var(--ink); font-family:var(--sans); line-height:1.6; -webkit-font-smoothing:antialiased;}
+.rv-app{max-width:1180px; margin:0 auto;
+  padding-bottom:clamp(36px,6vw,60px);
+  padding-left:env(safe-area-inset-left,0px); padding-right:env(safe-area-inset-right,0px);
+  padding-top:env(safe-area-inset-top,0px);
+  background-image:linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size:34px 34px; background-position:-1px -1px;}
+code{font-family:var(--mono); color:var(--accent); background:rgba(255,138,61,0.1); padding:1px 6px; border-radius:2px; font-size:0.88em; word-break:break-word;}
+
+/* ---- hero ---- */
+.rv-hero{display:grid; grid-template-columns:1.1fr 0.9fr; border-bottom:1px solid var(--line-strong); background:transparent;}
+@media (max-width:820px){ .rv-hero{grid-template-columns:1fr;} }
+.rv-titleblock{padding:var(--pad-page) var(--pad-page) clamp(20px,4vw,32px); border-right:1px solid var(--line-strong);}
+@media (max-width:820px){ .rv-titleblock{border-right:none; border-bottom:1px solid var(--line-strong);} }
+.rv-eyebrow{font-family:var(--mono); font-size:11px; letter-spacing:0.14em; color:var(--accent-2); display:flex; align-items:center; gap:8px; margin-bottom:clamp(10px,2vw,14px);}
+.rv-eyebrow::before{content:""; width:7px; height:7px; background:var(--accent-2); display:inline-block; transform:rotate(45deg); flex-shrink:0;}
+.rv-hero h1{font-family:var(--cond); font-weight:700; font-size:clamp(1.75rem, 5vw, 2.6rem); line-height:1.12; margin:0 0 clamp(10px,2.4vw,16px) 0; letter-spacing:-0.01em;}
+.rv-hero h1 span{color:var(--accent);}
+.rv-lede{max-width:52ch; color:var(--ink-dim); font-size:clamp(0.92rem, 2vw, 1.02rem); margin:0;}
+.rv-hero-diagram{display:flex; align-items:center; justify-content:center; padding:clamp(18px,4vw,30px);}
+
+/* ---- section labels ---- */
+.rv-section{padding:var(--section-gap) var(--pad-page) 10px;}
+.rv-section-h{display:flex; align-items:baseline; gap:12px; margin-bottom:clamp(14px,3vw,20px); flex-wrap:wrap;}
+.rv-section-h .num{font-family:var(--mono); font-size:12px; color:var(--ink-faint);}
+.rv-section-h h2{font-family:var(--cond); font-weight:700; font-size:clamp(1.3rem, 3.4vw, 1.6rem); margin:0; line-height:1.25;}
+
+/* ---- why box: terminal vs rviz compare ---- */
+.rv-compare{display:grid; grid-template-columns:1fr auto 1fr; gap:var(--gap-lg); align-items:stretch; margin-top:6px;}
+@media (max-width:700px){ .rv-compare{grid-template-columns:1fr;} }
+.rv-compare .vs{align-self:center; font-family:var(--mono); font-size:12px; color:var(--ink-faint); text-align:center;}
+@media (max-width:700px){ .rv-compare .vs{transform:rotate(90deg); padding:4px 0;} }
+.rv-compare-panel{border:1px solid var(--line-strong); background:var(--panel-2); padding:var(--pad-card);}
+.rv-compare-panel .lbl{font-family:var(--mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:10px;}
+.rv-terminal{font-family:var(--mono); font-size:clamp(10.5px,2vw,12px); line-height:1.7; color:#8fd48f; background:#080c0a; padding:clamp(10px,2.4vw,12px) clamp(12px,2.6vw,14px); border-radius:2px; overflow-x:auto;}
+.rv-terminal .dim{color:var(--ink-faint);}
+.rv-visual{display:flex; align-items:center; justify-content:center; padding:10px 0;}
+.rv-compare-panel p{font-size:clamp(0.82rem,1.8vw,0.86rem); color:var(--ink-dim); margin:12px 0 0 0;}
+
+/* ---- cards grid (always open) ---- */
+.rv-grid{display:grid; grid-template-columns:1fr 1fr; gap:var(--gap-lg);}
+@media (max-width:760px){ .rv-grid{grid-template-columns:1fr;} }
+.rv-card{border:1px solid var(--line-strong); background:var(--panel); overflow:hidden; display:flex; flex-direction:column;}
+.rv-card.wide{grid-column:1 / -1;}
+.rv-card-head{display:flex; align-items:center; gap:var(--gap-md); padding:clamp(14px,2.8vw,20px) clamp(14px,3vw,22px); border-bottom:1px solid var(--line); flex-wrap:wrap;}
+.rv-card-icon{width:clamp(40px,8vw,52px); height:clamp(40px,8vw,52px); border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:clamp(20px,4.4vw,26px); flex-shrink:0; background:var(--card-accent-soft, var(--accent-soft));}
+.rv-card-titles{flex:1; min-width:140px;}
+.rv-card-titles h3{font-family:var(--cond); font-weight:700; font-size:clamp(1rem,2.6vw,1.15rem); margin:0 0 3px 0; color:var(--ink);}
+.rv-card-titles .teaser{font-size:clamp(0.78rem,1.8vw,0.85rem); color:var(--ink-faint); margin:0;}
+.rv-card-flag{font-family:var(--mono); font-size:9.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--card-accent, var(--accent)); background:var(--card-accent-soft, var(--accent-soft)); padding:4px 8px; border-radius:2px; flex-shrink:0;}
+.rv-card-body-inner{padding:0 clamp(14px,3vw,22px) clamp(14px,3vw,22px);}
+.rv-card-body-inner p{font-size:clamp(0.86rem,1.9vw,0.92rem); color:var(--ink); margin:16px 0 0 0;}
+.rv-card-topic{display:inline-flex; align-items:center; gap:6px; font-family:var(--mono); font-size:clamp(10px,2vw,11px); color:var(--card-accent, var(--accent)); background:var(--card-accent-soft, var(--accent-soft)); padding:5px 10px; border-radius:2px; margin-top:14px; word-break:break-word;}
+
+/* ---- live demo boxes ---- */
+.rv-demo{margin-top:16px; border:1px solid var(--line-strong); background:#0a0f0c; position:relative;}
+.rv-demo canvas, .rv-demo svg{display:block; width:100%; height:auto;}
+.rv-demo-caption{display:flex; justify-content:space-between; align-items:center; gap:8px; padding:7px clamp(10px,2.4vw,12px); border-top:1px solid var(--line); font-family:var(--mono); font-size:10px; color:var(--ink-faint); letter-spacing:0.02em; flex-wrap:wrap;}
+.rv-demo-caption .live-dot{width:6px; height:6px; border-radius:50%; background:var(--ok); display:inline-block; margin-right:6px; animation:rvBlink 1.4s ease-in-out infinite; flex-shrink:0;}
+@keyframes rvBlink{0%,100%{opacity:1;} 50%{opacity:0.25;}}
+
+/* robot demo (pure svg/css) */
+.robot-demo-svg{background:radial-gradient(circle at 50% 30%, #16211c 0%, #0a0f0c 75%);}
+.robot-drive{animation:rvDrive 4.2s ease-in-out infinite;}
+@keyframes rvDrive{0%,100%{transform:translateX(-42px);} 50%{transform:translateX(42px);}}
+.wheel-spin{animation:rvSpin 0.85s linear infinite; transform-box:fill-box; transform-origin:center;}
+.axis-spin{animation:rvSpin 5s linear infinite; transform-box:fill-box; transform-origin:center;}
+@keyframes rvSpin{to{transform:rotate(360deg);}}
+
+/* ---- controls (interactive demo cards) ---- */
+.rv-controls{display:flex; flex-wrap:wrap; gap:var(--gap-lg) var(--gap-md); padding:clamp(10px,2.4vw,14px); background:var(--panel-2); border-top:1px solid var(--line);}
+.rv-ctrl{display:flex; flex-direction:column; gap:5px; min-width:130px; flex:1;}
+.rv-ctrl-label{font-family:var(--mono); font-size:10.5px; color:var(--ink-faint); display:flex; justify-content:space-between; flex-wrap:wrap; gap:4px 8px;}
+.rv-ctrl-label b{color:var(--card-accent, var(--accent)); font-weight:600;}
+.rv-ctrl input[type=range]{width:100%; accent-color:var(--card-accent, var(--accent)); touch-action:pan-y;}
+.rv-btnrow{display:flex; gap:8px; align-items:flex-end; flex-wrap:wrap;}
+.rv-btn{font-family:var(--mono); font-size:clamp(10.5px,2vw,11.5px); color:var(--ink); background:transparent; border:1px solid var(--line-strong); padding:clamp(7px,1.8vw,9px) clamp(10px,2.4vw,14px); border-radius:2px; cursor:pointer; white-space:nowrap;}
+.rv-btn:hover{border-color:var(--card-accent, var(--accent)); color:var(--card-accent, var(--accent));}
+.rv-btn.primary{background:var(--card-accent, var(--accent)); color:#0d1512; border-color:transparent; font-weight:600;}
+.rv-hint{font-family:var(--mono); font-size:10.5px; color:var(--ink-faint); padding:10px clamp(10px,2.4vw,14px) 0;}
+
+/* ---- more chips ---- */
+.rv-more{padding:clamp(20px,4.5vw,26px) var(--pad-page) clamp(30px,6vw,44px);}
+.rv-more-label{font-family:var(--mono); font-size:11px; color:var(--ink-faint); margin-bottom:10px;}
+.rv-chips{display:flex; flex-wrap:wrap; gap:8px;}
+.rv-chip{font-family:var(--mono); font-size:12px; color:var(--ink-dim); border:1px solid var(--line-strong); padding:6px 12px; border-radius:999px;}
+
+.rv-footer{padding:clamp(18px,4vw,24px) var(--pad-page); border-top:1px solid var(--line-strong); font-size:12px; color:var(--ink-faint); padding-bottom:calc(clamp(18px,4vw,24px) + env(safe-area-inset-bottom,0px));}
+
+/* demo canvases keep their intrinsic aspect ratio on small screens automatically via width:100%/height:auto above */
+@media (max-width:480px){
+  .rv-hero-diagram svg{max-width:260px;}
+}
+</style>
+<div class="rv-app">
+
+<section class="rv-section">
+<div class="rv-section-h"><span class="num">01</span><h2>Why not just read the terminal?</h2></div>
+<p style="color:var(--ink-dim); font-size:0.96rem; max-width:70ch; margin:0 0 8px 0;">Every ROS 2 topic can be inspected from the command line with <code>ros2 topic echo</code> — but a LaserScan message is a flat array of 360 floating point numbers, and a map is a giant list of 0–100 integers. RViz2 subscribes to those same messages and draws them instead of printing them.</p>
+<div class="rv-compare">
+<div class="rv-compare-panel">
+<div class="lbl">Terminal — ros2 topic echo /scan</div>
+<div class="rv-terminal">ranges: [1.94, 1.93, 1.91, 1.88,
+<span class="dim">  1.85, 1.79, 1.74, 1.70, …,
+  0.91, 0.90, 0.92, 0.95, …]</span>
+angle_min: -3.14159
+angle_max: 3.14159
+<span class="dim">— 360 numbers, no obvious shape —</span></div>
+<p>Technically correct. Not something you can glance at and understand.</p>
+</div>
+<div class="vs">→</div>
+<div class="rv-compare-panel">
+<div class="lbl">RViz2 — LaserScan display</div>
+<div class="rv-visual">
+<svg style="max-width:180px;" viewbox="0 0 160 110" width="100%">
+<circle cx="80" cy="90" fill="#ff8a3d" r="3"></circle>
+<g opacity="0.9" stroke="#7dc4ff" stroke-width="1">
+<line x1="80" x2="30" y1="90" y2="20"></line><line x1="80" x2="45" y1="90" y2="14"></line>
+<line x1="80" x2="62" y1="90" y2="10"></line><line x1="80" x2="80" y1="90" y2="8"></line>
+<line x1="80" x2="98" y1="90" y2="10"></line><line x1="80" x2="115" y1="90" y2="14"></line>
+<line x1="80" x2="130" y1="90" y2="20"></line>
+</g>
+<g fill="#7dc4ff">
+<circle cx="30" cy="20" r="2"></circle><circle cx="45" cy="14" r="2"></circle><circle cx="62" cy="10" r="2"></circle>
+<circle cx="80" cy="8" r="2"></circle><circle cx="98" cy="10" r="2"></circle><circle cx="115" cy="14" r="2"></circle><circle cx="130" cy="20" r="2"></circle>
+</g>
+</svg>
+</div>
+<p>The same 360 numbers, drawn as points around the sensor. Obstacles are immediately obvious.</p>
+</div>
+</div>
+</section>
+<section class="rv-section">
+<div class="rv-section-h"><span class="num">02</span><h2>What can RViz2 visualize?</h2></div>
+<p style="color:var(--ink-dim); font-size:0.96rem; max-width:74ch; margin:0 0 22px 0;">RViz2 works through <b style="color:var(--ink);">displays</b> — small plugins, each built to understand one message type. Every card below runs a small <b style="color:var(--ink);">live simulated preview</b> right in the page — the last two are hands-on: the controls actually drive the visualization, the way a real display responds to live data.</p>
+<div class="rv-grid" id="card-grid"></div>
+</section>
+<div class="rv-more">
+<div class="rv-more-label">RViz2 also visualizes —</div>
+<div class="rv-chips">
+<span class="rv-chip">Point clouds</span>
+<span class="rv-chip">Marker arrays</span>
+<span class="rv-chip">IMU orientation</span>
+<span class="rv-chip">Costmaps</span>
+<span class="rv-chip">Wrenches / forces</span>
+</div>
+</div>
+
+</div>
+<script>
+const CARDS = [
+  { id:'robot', icon:'🤖', accent:'#7dc4ff', accentSoft:'rgba(125,196,255,0.14)',
+    title:'Robot Model', teaser:'Your URDF, drawn in 3D',
+    topic:'sensor: none — reads your URDF/xacro description',
+    body:'The RobotModel display loads a robot\'s URDF (or xacro) description and draws every link exactly as described. As TF frames update — from real encoders, a simulator, or a bag file — every link redraws in its new position, giving a live digital twin of the robot rather than a static picture.' },
+
+  { id:'map', icon:'🗺️', accent:'#4dd6c0', accentSoft:'rgba(77,214,192,0.14)',
+    title:'Map', teaser:'The occupancy grid the robot navigates on',
+    topic:'nav_msgs/OccupancyGrid · usually on /map',
+    body:'The Map display renders a 2D occupancy grid: black means occupied, white means free, grey means never observed. This is the same map SLAM builds while exploring, and the one Nav2 plans paths across.' },
+
+  { id:'laser', icon:'📡', accent:'#ff8a3d', accentSoft:'rgba(255,138,61,0.14)',
+    title:'Laser Scan', teaser:'Raw LiDAR points, live',
+    topic:'sensor_msgs/LaserScan · commonly /scan',
+    body:'The LaserScan display plots every range reading from a 2D LiDAR as a point around the sensor, refreshed every scan — the rawest possible view of what the robot\'s laser currently sees.' },
+
+  { id:'camera', icon:'📷', accent:'#c9a6ff', accentSoft:'rgba(201,166,255,0.14)',
+    title:'Camera', teaser:'A live image topic, previewed inline',
+    topic:'sensor_msgs/Image or CompressedImage',
+    body:'The Image display subscribes to an image topic and shows it as a live 2D feed — effectively a video preview of whatever the robot\'s camera is publishing right now.' },
+
+  { id:'tf', icon:'📐', accent:'#7cd992', accentSoft:'rgba(124,217,146,0.14)', control:true,
+    title:'Coordinate Frames (TF)', teaser:'Drag the sliders — watch the child frame move',
+    topic:'geometry_msgs/TransformStamped · broadcast on /tf',
+    body:'The TF display draws every frame in the robot\'s transform tree — red/green/blue axes for X/Y/Z, connected by a line to its parent. Every frame from the URDF walkthrough (base_footprint, base_link, each wheel) shows up here, always current, because TF is just a live stream of exactly this kind of offset. The sliders below drive child_link\'s position and rotation relative to parent_link the same way a joint\'s <code>&lt;origin xyz rpy&gt;</code> does — move them and watch the transform update in real time.' },
+
+  { id:'path', icon:'🧭', accent:'#ff6b6b', accentSoft:'rgba(255,107,107,0.14)', control:true, wide:true,
+    title:'Path &amp; Nav Goals', teaser:'Click the grid to drop waypoints, then send the robot',
+    topic:'nav_msgs/Path (plan) · geometry_msgs/PoseStamped on /goal_pose (goal)',
+    body:'The Path display draws a line through a sequence of poses — usually the plan Nav2 just computed. It pairs with the "2D Nav Goal" tool: click a point in RViz2, and that click is published as a PoseStamped goal for the robot to drive to. Click anywhere on the grid below to build a path of your own, then press Animate to send a simulated robot along it.' }
+];
+
+/* ---------------- card scaffolding (always open) ---------------- */
+const grid = document.getElementById('card-grid');
+const DEMOS = {};
+
+function buildCards(){
+  CARDS.forEach(c => {
+    const card = document.createElement('div');
+    card.className = 'rv-card' + (c.wide ? ' wide' : '');
+    card.style.setProperty('--card-accent', c.accent);
+    card.style.setProperty('--card-accent-soft', c.accentSoft);
+    card.innerHTML = `
+      <div class="rv-card-head">
+        <div class="rv-card-icon">${c.icon}</div>
+        <div class="rv-card-titles"><h3>${c.title}</h3><p class="teaser">${c.teaser}</p></div>
+        ${c.control ? '<span class="rv-card-flag">Interactive</span>' : ''}
+      </div>
+      <div class="rv-card-body-inner">
+        <div class="rv-demo" id="demo-${c.id}"></div>
+        <p>${c.body}</p>
+        <span class="rv-card-topic">${c.topic}</span>
+      </div>
+    `;
+    grid.appendChild(card);
+    const demoMount = card.querySelector('#demo-'+c.id);
+    DEMOS[c.id].build(demoMount);
+    DEMOS[c.id].start();
+  });
+}
+
+/* ================================================================
+   ROBOT MODEL DEMO — pure SVG + CSS
+   ================================================================ */
+DEMOS.robot = {
+  build(mount){
+    mount.innerHTML = `
+      <svg viewBox="0 0 240 140" class="robot-demo-svg">
+        <line x1="14" y1="118" x2="226" y2="118" stroke="#25302b" stroke-width="1"/>
+        <g class="robot-drive">
+          <g transform="translate(120,50)"><g class="axis-spin">
+            <line x1="0" y1="0" x2="22" y2="0" stroke="#ff6b6b" stroke-width="2"/>
+            <line x1="0" y1="0" x2="0" y2="-22" stroke="#7cd992" stroke-width="2"/>
+            <circle cx="0" cy="0" r="9" fill="none" stroke="#7dc4ff" stroke-width="1.2" opacity="0.6"/>
+          </g><circle r="2.5" fill="#7dc4ff"/></g>
+          <rect x="95" y="45" width="55" height="34" rx="6" fill="#7dc4ff" opacity="0.85"/>
+          <g transform="translate(95,83)"><g class="wheel-spin">
+            <circle r="11" fill="#1f2328"/><line x1="-8" y1="0" x2="8" y2="0" stroke="#5c6c65" stroke-width="2"/><line x1="0" y1="-8" x2="0" y2="8" stroke="#5c6c65" stroke-width="2"/>
+          </g></g>
+          <g transform="translate(150,83)"><g class="wheel-spin">
+            <circle r="11" fill="#1f2328"/><line x1="-8" y1="0" x2="8" y2="0" stroke="#5c6c65" stroke-width="2"/><line x1="0" y1="-8" x2="0" y2="8" stroke="#5c6c65" stroke-width="2"/>
+          </g></g>
+        </g>
+      </svg>
+      <div class="rv-demo-caption"><span><span class="live-dot"></span>simulated · pose driven by /tf</span><span>base_link</span></div>
+    `;
+  },
+  start(){}, stop(){}
+};
+
+/* ================================================================
+   MAP DEMO — canvas occupancy grid that "discovers" itself
+   ================================================================ */
+DEMOS.map = (function(){
+  const COLS=25, ROWS=13;
+  const layout = [
+"1111111111111111111111111",
+"1000000000001000000000001",
+"1011111011101011111011101",
+"1010000010001000001010001",
+"1010111010111111101010101",
+"1000100000100000001000101",
+"1111101111101011111011101",
+"1000001000001010000010001",
+"1011101011101010111110101",
+"1010001010001010100000101",
+"1010101110101110101111101",
+"1000100000000000101000001",
+"1111111111111111111111111"
+  ].map(r => r.split('').map(Number));
+
+  let raf=null, canvas=null, ctx=null, t0=null;
+  const cell = 15;
+  const cx0 = 12, cy0 = 6;
+  let order = null, maxDist = 0;
+
+  function computeOrder(){
+    order = [];
+    for(let y=0;y<ROWS;y++) for(let x=0;x<COLS;x++){
+      const d = Math.hypot(x-cx0, y-cy0);
+      order.push({x,y,d});
+      if(d>maxDist) maxDist = d;
+    }
+  }
+
+  function draw(ts){
+    if(!t0) t0 = ts;
+    const elapsed = (ts - t0) % 6200;
+    const revealT = Math.min(elapsed/4400, 1);
+    const revealDist = revealT * maxDist * 1.05;
+
+    ctx.fillStyle = '#0a0f0c';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    order.forEach(o => {
+      const discovered = o.d <= revealDist;
+      const wall = layout[o.y][o.x] === 1;
+      if(discovered){
+        ctx.fillStyle = wall ? '#e7ede9' : '#1c2822';
+        ctx.globalAlpha = wall ? 0.92 : 1;
+      } else {
+        ctx.fillStyle = '#2a332e';
+        ctx.globalAlpha = 0.55;
+      }
+      ctx.fillRect(o.x*cell, o.y*cell, cell-1, cell-1);
+      ctx.globalAlpha = 1;
+    });
+
+    const pulse = (Math.sin(ts/220)+1)/2;
+    ctx.beginPath();
+    ctx.arc(cx0*cell+cell/2, cy0*cell+cell/2, 4+pulse*3, 0, Math.PI*2);
+    ctx.strokeStyle = '#4dd6c0';
+    ctx.globalAlpha = 0.8 - pulse*0.4;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+    ctx.beginPath();
+    ctx.arc(cx0*cell+cell/2, cy0*cell+cell/2, 3, 0, Math.PI*2);
+    ctx.fillStyle = '#4dd6c0';
+    ctx.fill();
+
+    raf = requestAnimationFrame(draw);
+  }
+
+  return {
+    build(mount){
+      mount.innerHTML = `<canvas width="${COLS*cell}" height="${ROWS*cell}"></canvas>
+        <div class="rv-demo-caption"><span><span class="live-dot"></span>simulated · occupancy grid building up</span><span>/map</span></div>`;
+      canvas = mount.querySelector('canvas');
+      ctx = canvas.getContext('2d');
+      if(!order) computeOrder();
+    },
+    start(){ if(!raf){ t0=null; raf = requestAnimationFrame(draw); } },
+    stop(){ if(raf){ cancelAnimationFrame(raf); raf=null; } }
+  };
+})();
+
+/* ================================================================
+   LASER SCAN DEMO — canvas rotating beam + fading point trail
+   ================================================================ */
+DEMOS.laser = (function(){
+  let raf=null, canvas=null, ctx=null, angle=0;
+  const W=400, H=220, sensorX=W/2, sensorY=H/2;
+  const halfW=170, halfH=90;
+  const obstacle = { x:60, y:-20, r:26 };
+  let points = [];
+
+  function rangeAt(a){
+    const c = Math.cos(a), s = Math.sin(a);
+    const tx = c!==0 ? halfW/Math.abs(c) : Infinity;
+    const ty = s!==0 ? halfH/Math.abs(s) : Infinity;
+    let dist = Math.min(tx,ty);
+    const ox = obstacle.x, oy = obstacle.y, r = obstacle.r;
+    const proj = ox*c + oy*s;
+    if(proj > 0){
+      const closestX = c*proj, closestY = s*proj;
+      const dx = ox-closestX, dy = oy-closestY;
+      const perp = Math.hypot(dx,dy);
+      if(perp < r){
+        const back = Math.sqrt(r*r - perp*perp);
+        const hit = proj - back;
+        if(hit > 0 && hit < dist) dist = hit;
+      }
+    }
+    return dist + (Math.sin(a*37)*1.5);
+  }
+
+  function draw(ts){
+    ctx.fillStyle = '#0a0f0c';
+    ctx.fillRect(0,0,W,H);
+
+    angle += 0.05;
+    const d = rangeAt(angle);
+    points.push({a:angle, d});
+    if(points.length > 130) points.shift();
+
+    ctx.strokeStyle = '#25302b';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(sensorX-halfW, sensorY-halfH, halfW*2, halfH*2);
+    ctx.beginPath();
+    ctx.arc(sensorX+obstacle.x, sensorY+obstacle.y, obstacle.r, 0, Math.PI*2);
+    ctx.strokeStyle = 'rgba(255,138,61,0.35)';
+    ctx.stroke();
+
+    points.forEach((p,i) => {
+      const px = sensorX + Math.cos(p.a)*p.d;
+      const py = sensorY + Math.sin(p.a)*p.d;
+      const alpha = i/points.length;
+      ctx.beginPath();
+      ctx.arc(px,py,2,0,Math.PI*2);
+      ctx.fillStyle = `rgba(255,138,61,${0.15+alpha*0.75})`;
+      ctx.fill();
+    });
+
+    const bx = sensorX + Math.cos(angle)*d, by = sensorY + Math.sin(angle)*d;
+    ctx.beginPath();
+    ctx.moveTo(sensorX,sensorY);
+    ctx.lineTo(bx,by);
+    ctx.strokeStyle = 'rgba(255,138,61,0.9)';
+    ctx.lineWidth = 1.4;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(sensorX,sensorY,4,0,Math.PI*2);
+    ctx.fillStyle = '#e7ede9';
+    ctx.fill();
+
+    raf = requestAnimationFrame(draw);
+  }
+
+  return {
+    build(mount){
+      mount.innerHTML = `<canvas width="${W}" height="${H}"></canvas>
+        <div class="rv-demo-caption"><span><span class="live-dot"></span>simulated · continuous 360° sweep</span><span>/scan</span></div>`;
+      canvas = mount.querySelector('canvas');
+      ctx = canvas.getContext('2d');
+    },
+    start(){ if(!raf) raf = requestAnimationFrame(draw); },
+    stop(){ if(raf){ cancelAnimationFrame(raf); raf=null; } points=[]; }
+  };
+})();
+
+/* ================================================================
+   CAMERA DEMO — synthetic "live feed" with HUD overlay
+   ================================================================ */
+DEMOS.camera = (function(){
+  let raf=null, canvas=null, ctx=null, frame=0, t0=null;
+  const W=400, H=220;
+
+  function draw(ts){
+    if(!t0) t0 = ts;
+    frame++;
+    const t = (ts-t0)/1000;
+
+    const sky = ctx.createLinearGradient(0,0,0,H*0.55);
+    sky.addColorStop(0, '#16211c'); sky.addColorStop(1, '#0f1a15');
+    ctx.fillStyle = sky; ctx.fillRect(0,0,W,H*0.55);
+    ctx.fillStyle = '#0a0f0c'; ctx.fillRect(0,H*0.55,W,H*0.45);
+    ctx.strokeStyle = 'rgba(231,237,233,0.12)'; ctx.beginPath();
+    ctx.moveTo(0,H*0.55); ctx.lineTo(W,H*0.55); ctx.stroke();
+
+    ctx.strokeStyle = 'rgba(125,196,255,0.15)';
+    for(let i=-4;i<=4;i++){
+      ctx.beginPath(); ctx.moveTo(W/2, H*0.55); ctx.lineTo(W/2 + i*70, H); ctx.stroke();
+    }
+
+    const bx = (Math.sin(t*0.6)*0.5+0.5) * (W-60) + 30;
+    ctx.fillStyle = 'rgba(201,166,255,0.85)';
+    ctx.fillRect(bx-16, H*0.55-34, 32, 34);
+    ctx.fillStyle = 'rgba(201,166,255,0.35)';
+    ctx.beginPath(); ctx.ellipse(bx, H*0.55+4, 20, 6, 0, 0, Math.PI*2); ctx.fill();
+
+    ctx.strokeStyle = 'rgba(231,237,233,0.5)'; ctx.lineWidth = 1.5;
+    const m=10, L=16;
+    [[m,m,1,1],[W-m,m,-1,1],[m,H-m,1,-1],[W-m,H-m,-1,-1]].forEach(([x,y,dx,dy])=>{
+      ctx.beginPath(); ctx.moveTo(x,y+dy*L); ctx.lineTo(x,y); ctx.lineTo(x+dx*L,y); ctx.stroke();
+    });
+    ctx.strokeStyle = 'rgba(231,237,233,0.3)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(W/2-8,H/2); ctx.lineTo(W/2+8,H/2); ctx.moveTo(W/2,H/2-8); ctx.lineTo(W/2,H/2+8); ctx.stroke();
+
+    ctx.font = '10px IBM Plex Mono, monospace';
+    ctx.fillStyle = 'rgba(231,237,233,0.7)';
+    ctx.fillText('SIMULATED FEED', 16, 24);
+    ctx.fillText('640x360 · 30fps', 16, H-14);
+    ctx.textAlign = 'right';
+    ctx.fillText('frame ' + frame, W-14, H-14);
+    ctx.textAlign = 'left';
+
+    raf = requestAnimationFrame(draw);
+  }
+
+  return {
+    build(mount){
+      mount.innerHTML = `<canvas width="${W}" height="${H}"></canvas>
+        <div class="rv-demo-caption"><span><span class="live-dot"></span>simulated · illustrative only</span><span>/camera/image_raw</span></div>`;
+      canvas = mount.querySelector('canvas');
+      ctx = canvas.getContext('2d');
+    },
+    start(){ if(!raf){ t0=null; raf = requestAnimationFrame(draw); } },
+    stop(){ if(raf){ cancelAnimationFrame(raf); raf=null; } }
+  };
+})();
+
+/* ================================================================
+   TF DEMO — interactive: sliders control child frame xyz + yaw
+   ================================================================ */
+DEMOS.tf = (function(){
+  let svgRoot=null, childG=null, lineEl=null, readoutEl=null;
+  let x=40, y=10, yaw=25;
+  const originX=70, originY=110, scale=1;
+
+  function render(){
+    const rad = yaw*Math.PI/180;
+    const cx = originX + x, cy = originY - y;
+    childG.setAttribute('transform', `translate(${cx},${cy}) rotate(${-yaw})`);
+    lineEl.setAttribute('x2', cx); lineEl.setAttribute('y2', cy);
+    readoutEl.textContent = `xyz: (${(x/100).toFixed(2)}, ${(y/100).toFixed(2)}, 0.00) m   yaw: ${yaw}°`;
+  }
+
+  return {
+    build(mount){
+      mount.innerHTML = `
+        <svg viewBox="0 0 260 150" style="background:radial-gradient(circle at 50% 40%, #16211c 0%, #0a0f0c 75%);">
+          <line x1="70" y1="110" x2="70" y2="110" stroke="#5c6c65" stroke-width="1.5" stroke-dasharray="3 3" id="tf-link"/>
+          <g transform="translate(70,110)">
+            <line x1="0" y1="0" x2="20" y2="0" stroke="#ff6b6b" stroke-width="2"/>
+            <line x1="0" y1="0" x2="0" y2="-20" stroke="#7cd992" stroke-width="2"/>
+            <circle r="3" fill="#e7ede9"/>
+            <text x="6" y="16" fill="#8fa39a" font-size="9" font-family="IBM Plex Mono, monospace">parent_link</text>
+          </g>
+          <g id="tf-child">
+            <line x1="0" y1="0" x2="20" y2="0" stroke="#ff6b6b" stroke-width="2"/>
+            <line x1="0" y1="0" x2="0" y2="-20" stroke="#7cd992" stroke-width="2"/>
+            <circle r="3" fill="#7dc4ff"/>
+            <text x="6" y="16" fill="#7dc4ff" font-size="9" font-family="IBM Plex Mono, monospace">child_link</text>
+          </g>
+          <text id="tf-readout" x="10" y="20" fill="#7cd992" font-size="10.5" font-family="IBM Plex Mono, monospace"></text>
+        </svg>
+        <div class="rv-controls">
+          <div class="rv-ctrl"><div class="rv-ctrl-label">X offset <b id="tf-xval">0.40 m</b></div><input type="range" id="tf-x" min="-80" max="80" value="40"></div>
+          <div class="rv-ctrl"><div class="rv-ctrl-label">Y offset <b id="tf-yval">0.10 m</b></div><input type="range" id="tf-y" min="-60" max="60" value="10"></div>
+          <div class="rv-ctrl"><div class="rv-ctrl-label">Yaw <b id="tf-yawval">25°</b></div><input type="range" id="tf-yaw" min="-180" max="180" value="25"></div>
+        </div>
+        <div class="rv-demo-caption"><span><span class="live-dot"></span>interactive · you are moving this transform</span><span>child_link → parent_link</span></div>
+      `;
+      lineEl = mount.querySelector('#tf-link');
+      childG = mount.querySelector('#tf-child');
+      readoutEl = mount.querySelector('#tf-readout');
+      const xi = mount.querySelector('#tf-x'), yi = mount.querySelector('#tf-y'), yawi = mount.querySelector('#tf-yaw');
+      const xv = mount.querySelector('#tf-xval'), yv = mount.querySelector('#tf-yval'), yawv = mount.querySelector('#tf-yawval');
+      xi.addEventListener('input', () => { x = +xi.value; xv.textContent = (x/100).toFixed(2)+' m'; render(); });
+      yi.addEventListener('input', () => { y = +yi.value; yv.textContent = (y/100).toFixed(2)+' m'; render(); });
+      yawi.addEventListener('input', () => { yaw = +yawi.value; yawv.textContent = yaw+'°'; render(); });
+      render();
+    },
+    start(){}, stop(){}
+  };
+})();
+
+/* ================================================================
+   PATH DEMO — interactive: click to add waypoints, animate robot
+   ================================================================ */
+DEMOS.path = (function(){
+  let raf=null, canvas=null, ctx=null, mount=null;
+  const W=760, H=230;
+  let waypoints = [];
+  let animT = null; // 0..totalLen while animating
+
+  function pathLength(){
+    let len=0;
+    for(let i=1;i<waypoints.length;i++){
+      len += Math.hypot(waypoints[i].x-waypoints[i-1].x, waypoints[i].y-waypoints[i-1].y);
+    }
+    return len;
+  }
+  function pointAtDist(d){
+    for(let i=1;i<waypoints.length;i++){
+      const a=waypoints[i-1], b=waypoints[i];
+      const seg = Math.hypot(b.x-a.x, b.y-a.y);
+      if(d <= seg || i===waypoints.length-1){
+        const t = seg>0 ? Math.min(d/seg,1) : 0;
+        return { x:a.x+(b.x-a.x)*t, y:a.y+(b.y-a.y)*t, heading:Math.atan2(b.y-a.y,b.x-a.x) };
+      }
+      d -= seg;
+    }
+    return waypoints[0];
+  }
+
+  function drawGrid(){
+    ctx.fillStyle = '#0a0f0c'; ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle = 'rgba(231,237,233,0.05)';
+    for(let gx=0; gx<W; gx+=30){ ctx.beginPath(); ctx.moveTo(gx,0); ctx.lineTo(gx,H); ctx.stroke(); }
+    for(let gy=0; gy<H; gy+=30){ ctx.beginPath(); ctx.moveTo(0,gy); ctx.lineTo(W,gy); ctx.stroke(); }
+  }
+
+  function draw(){
+    drawGrid();
+    if(waypoints.length){
+      ctx.beginPath();
+      ctx.moveTo(waypoints[0].x, waypoints[0].y);
+      for(let i=1;i<waypoints.length;i++) ctx.lineTo(waypoints[i].x, waypoints[i].y);
+      ctx.strokeStyle = 'rgba(255,107,107,0.8)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([7,5]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    waypoints.forEach((p,i) => {
+      ctx.beginPath(); ctx.arc(p.x,p.y,5,0,Math.PI*2);
+      ctx.fillStyle = i===0 ? '#7cd992' : (i===waypoints.length-1 ? '#ff6b6b' : '#e7ede9');
+      ctx.fill();
+    });
+    if(animT !== null && waypoints.length>1){
+      const total = pathLength();
+      const p = pointAtDist(animT);
+      ctx.save();
+      ctx.translate(p.x,p.y); ctx.rotate(p.heading);
+      ctx.beginPath(); ctx.moveTo(9,0); ctx.lineTo(-7,6); ctx.lineTo(-4,0); ctx.lineTo(-7,-6); ctx.closePath();
+      ctx.fillStyle = '#ff8a3d'; ctx.fill();
+      ctx.restore();
+      animT += 1.6;
+      if(animT >= total){ animT = null; raf=null; }
+    }
+    if(animT !== null) raf = requestAnimationFrame(draw);
+  }
+
+  return {
+    build(m){
+      mount = m;
+      mount.innerHTML = `
+        <canvas width="${W}" height="${H}" style="cursor:crosshair;"></canvas>
+        <div class="rv-controls">
+          <div class="rv-hint" style="padding:0;">Click the grid to drop waypoints (first = start, last = goal).</div>
+          <div class="rv-btnrow" style="margin-left:auto;">
+            <button class="rv-btn primary" id="path-animate">▶ Animate</button>
+            <button class="rv-btn" id="path-clear">✕ Clear</button>
+          </div>
+        </div>
+        <div class="rv-demo-caption"><span><span class="live-dot"></span>interactive · you are building this plan</span><span>/plan</span></div>
+      `;
+      canvas = mount.querySelector('canvas');
+      ctx = canvas.getContext('2d');
+      canvas.addEventListener('click', (e) => {
+        const r = canvas.getBoundingClientRect();
+        const px = (e.clientX - r.left) * (W / r.width);
+        const py = (e.clientY - r.top) * (H / r.height);
+        waypoints.push({x:px, y:py});
+        draw();
+      });
+      mount.querySelector('#path-animate').addEventListener('click', () => {
+        if(waypoints.length < 2) return;
+        animT = 0;
+        if(!raf) raf = requestAnimationFrame(draw);
+      });
+      mount.querySelector('#path-clear').addEventListener('click', () => {
+        waypoints = []; animT = null;
+        if(raf){ cancelAnimationFrame(raf); raf=null; }
+        draw();
+      });
+      draw();
+      waypoints = [{x:90,y:170},{x:250,y:80},{x:430,y:150},{x:620,y:60}];
+      draw();
+    },
+    start(){}, stop(){}
+  };
+})();
+
+/* ---- now that every DEMOS entry exists, actually build the cards ---- */
+buildCards();
+</script>
+
+<script>
+(function(){function send(){parent.postMessage({taWidget:location.pathname,h:document.documentElement.scrollHeight},'*')}
+new ResizeObserver(send).observe(document.documentElement);addEventListener('load',send);setInterval(send,1500);
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href]');if(a&&!a.target){a.target='_top'}});})();
+</script></body></html>

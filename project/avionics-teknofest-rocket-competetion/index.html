@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Avionics (Teknofest Rocket Competition) | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="For the Teknofest International Rocket Competition , we developed a dual-redundant avionics system for a sounding rocket. The objective was to build a flight…">
+<link rel="canonical" href="https://techarcanist.com/project/avionics-teknofest-rocket-competetion/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="Avionics (Teknofest Rocket Competition)">
+<meta property="og:description" content="For the Teknofest International Rocket Competition , we developed a dual-redundant avionics system for a sounding rocket. The objective was to build a flight…">
+<meta property="og:url" content="https://techarcanist.com/project/avionics-teknofest-rocket-competetion/">
+<meta property="og:image" content="/uploads/wp/2025/08/Untitled-design-37-1024x576.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=a6e775a3ba">
+<link rel="stylesheet" href="/assets/home.css?v=a6e775a3ba">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/" aria-current="page">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<section class="cs-hero">
+  <div class="wrap">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/project/">Work</a><span>/</span><span>10 of 27</span></nav>
+    <h1>Avionics (Teknofest Rocket Competition)</h1>
+<div class="cs-lead"><p>For the <span class="hl"><strong>Teknofest International Rocket Competition</strong></span>, we developed a <span class="hl"><strong>dual-redundant avionics system</strong></span> for a sounding rocket. The objective was to build a flight computer capable of <span class="hl"><strong>logging sensor + GPS data</strong></span>, <span class="hl"><strong>detecting apogee autonomously</strong></span> <span class="hl"><strong>triggering parachute deployment (pyro activation)</strong></span>, and <span class="hl"><strong>sending telemetry to the ground station</strong></span>.</p></div>  </div>
+  <div class="wrap">
+    <dl class="cs-spec mono">
+<div><dt>Discipline</dt><dd><a href="/project/#aero">Aerospace &amp; Rocketry</a>, <a href="/project/#pcb">PCB Design</a></dd></div>      <div><dt>Contents</dt><dd>7 images</dd></div>
+    </dl>
+  </div>
+  <div class="wrap"><figure class="cs-cover"><img src="/uploads/wp/2025/08/Untitled-design-37-1024x576.jpg" alt="Avionics (Teknofest Rocket Competition)"><span class="corner tl"></span><span class="corner br"></span></figure></div>
+</section>
+
+<section class="sec tight">
+  <div class="wrap doc">
+    <aside class="toc" aria-label="On this page">
+      <p class="label">On this page</p>
+      <ol><li><a href="#project-overview"><span class="mono">01</span>Project Overview</a></li><li><a href="#hardware-architecture-primary-flight-computer"><span class="mono">02</span>Hardware Architecture (Primary Flight…</a></li><li><a href="#diagrams"><span class="mono">03</span>Diagrams</a></li><li><a href="#working"><span class="mono">04</span>Working</a></li><li><a href="#my-learnings"><span class="mono">05</span>My Learnings</a></li><li><a href="#team-collaborators"><span class="mono">06</span>Team Collaborators</a></li></ol>
+    </aside>
+    <article class="prose">
+      
+<div class="cols cols-2"><div class="col">
+<figure class="img"><img src="/uploads/wp/2025/11/Copy-of-Untitled-Design-2-1-1024x576.webp" alt="" loading="lazy" decoding="async" width="1024" height="576"></figure>
+</div><div class="col">
+<figure class="img"><img src="/uploads/wp/2025/11/Untitled-design-38-1024x576.jpg" alt="" loading="lazy" decoding="async" width="1024" height="576"></figure>
+</div></div>
+<div class="col">
+<h2 id="project-overview">Project Overview</h2>
+<p class="note">The competition required two independent flight controllers for safety:</p>
+<div class="table-wrap"><table><tbody><tr><td><strong>Flight Controller</strong></td><td><strong>Purpose</strong></td><td><strong>Notes</strong></td></tr><tr><td><strong>Primary Flight Computer (Custom PCB)</strong></td><td>Real-time sensor fusion, telemetry, data logging, pyro deployment</td><td><strong>Designed &amp; developed by our team from scratch</strong></td></tr><tr><td><strong>Secondary Flight Computer (Backup)</strong></td><td>Redundant apogee detection + backup pyro trigger</td><td>EasyMini Altimeter (Teknofest recommended safety module)</td></tr></tbody></table></div>
+<p class="note">We cleared all documentation and review rounds, but could not reach the final launch stage due to logistics (covered here:- <a href="/project/teknofest-insights/">Teknofest Insights</a> ).</p>
+</div>
+<div class="col">
+<h2 id="hardware-architecture-primary-flight-computer">Hardware Architecture (Primary Flight Computer)</h2>
+<p class="note">The custom PCB integrated the following modules:</p>
+<div class="table-wrap"><table><tbody><tr><td><strong>Component</strong></td><td><strong>Function</strong></td></tr><tr><td><strong>Raspberry Pi Pico 2 (RP2040)</strong></td><td>Main microcontroller, handles sensor fusion &amp; data logging</td></tr><tr><td><strong>BNO085 (IMU)</strong></td><td>Quaternion + acceleration readings used for apogee detection</td></tr><tr><td><strong>BMP390 (Barometric sensor)</strong></td><td>Altitude estimation using high-resolution pressure drop</td></tr><tr><td><strong>INA219 (Power monitor)</strong></td><td>Battery voltage &amp; current measurement for power safety</td></tr><tr><td><strong>NEO-M9N GPS</strong></td><td>Flight tracking + landing location after descent</td></tr><tr><td><strong>SIM800L V2 (GSM backup)</strong></td><td>Sends SMS with last known GPS location if XBee fails</td></tr><tr><td><strong>XBee 3 Pro (Telemetry)</strong></td><td>Real-time long-range wireless telemetry to ground station</td></tr><tr><td><strong>IRFZ44N MOSFETs (x2)</strong></td><td>Pyro deployment channels: drogue + main parachute</td></tr><tr><td><strong>DS1307 RTC</strong></td><td>RTC timestamps for each logged event during flight</td></tr><tr><td><strong>SD Card module</strong></td><td>Stores flight events and sensor logs at 100 Hz</td></tr><tr><td><strong>Level shifters &amp; Protection circuits</strong></td><td>Isolates 5V / 3.3V domains and protects Pico MCU</td></tr><tr><td><strong>Buzzer &amp; LED indicators</strong></td><td>Pre-launch, arming, and status feedback</td></tr></tbody></table></div>
+</div>
+<div class="col">
+<h2 id="diagrams">Diagrams</h2>
+<figure class="img"><img src="/uploads/wp/2025/11/Schematic_turkish-avionics-v1_2025-11-07-1024x855.png" alt="" loading="lazy" decoding="async" width="1024" height="855"><figcaption><mark><strong><em>Schematic of Avionics</em></strong></mark></figcaption></figure>
+<figure class="img"><img src="/uploads/wp/2025/11/PCB_PCB_PCB_turkish-avionics-v1_2025-07-25_2025-11-07-749x1024.png" alt="" loading="lazy" decoding="async" width="749" height="1024"><figcaption><mark><strong><em>Pcb Layout of Avionics (Front Side)</em></strong></mark></figcaption></figure>
+<figure class="img"><img src="/uploads/wp/2025/11/PCB_PCB_PCB_turkish-avionics-v1_2025-07-25_2025-11-dddd-1-749x1024.png" alt="" loading="lazy" decoding="async" width="749" height="1024"><figcaption><mark><strong><em>Pcb Layout of Avionics (Back Side)</em></strong></mark></figcaption></figure>
+<figure class="img"><img src="/uploads/wp/2025/11/IMG-20250811-WA0399-576x1024.jpg" alt="" loading="lazy" decoding="async" width="576" height="1024"><figcaption><mark><strong><em>Manufactured PCB</em></strong></mark></figcaption></figure>
+<figure class="img"><img src="/uploads/wp/2025/11/Untitled-design-38-1-1024x576.jpg" alt="" loading="lazy" decoding="async" width="1024" height="576"><figcaption><mark><strong><em><strong>Assembled board with components installed</strong></em></strong></mark></figcaption></figure>
+</div>
+<div class="col">
+<h2 id="working">Working</h2>
+<p class="note"><a href="/project/teknofest-insights/">Teknofest Insights</a></p>
+</div>
+<div class="col">
+<h2 id="my-learnings">My Learnings</h2>
+<ul>
+<li>Learned how to <strong>design a full avionics PCB</strong> (from schematic → routing → Gerber → manufacturing).</li>
+<li>Understood how to integrate <strong>multiple sensors</strong> (IMU + barometer + GPS + INA219) into one system.</li>
+<li>Gained experience in <strong>sensor fusion</strong> (IMU + barometer for apogee detection).</li>
+<li>Learned how to create <strong>dual-redundancy architecture</strong> (primary flight computer + secondary EasyMini).</li>
+<li>Designed <strong>pyro-deployment circuits</strong> (MOSFET + safety interlocks).</li>
+<li>Learned importance of <strong>ground testing before integrating in rocket body</strong>.</li>
+<li>Understood <strong>telemetry systems</strong> (XBee long-range + GSM fallback using SIM800L).</li>
+<li>Learned how to log flight data at <strong>high sampling rate (100 Hz)</strong> to SD card with timestamps.</li>
+<li>Realized how critical <strong>power budgeting &amp; noise isolation</strong> is (5V/3.3V domains, level shifting).</li>
+<li>Improved skills in <strong>documentation, failure-reporting, and presentation</strong> for competition rounds.</li>
+</ul>
+</div>
+<div class="col">
+<h2 id="team-collaborators">Team Collaborators</h2>
+<ul>
+<li><a href="https://www.linkedin.com/in/sandeep-kumar-khare-26993516b/?lipi=urn%3Ali%3Apage%3Ad_flagship3_detail_base%3BpwYJPpeXRUuEzfvJiWRzyg%3D%3D" target="_blank" rel="noopener">Sandeep Khare</a></li>
+<li><a href="https://www.linkedin.com/in/shubham-khandelwal-551391267/" target="_blank" rel="noopener">Shubham Khandelwal</a></li>
+<li><a href="https://www.linkedin.com/in/kumar-manas-7a9169256/" target="_blank" rel="noopener">Manas </a></li>
+<li><a href="https://www.linkedin.com/in/riya-verma-641230317/?lipi=urn%3Ali%3Apage%3Ad_flagship3_detail_base%3BpwYJPpeXRUuEzfvJiWRzyg%3D%3D" target="_blank" rel="noopener">Riya Verma</a></li>
+<li><a href="https://www.linkedin.com/in/anmol-deep-singh-09a3952a3/?lipi=urn%3Ali%3Apage%3Ad_flagship3_detail_base%3BpwYJPpeXRUuEzfvJiWRzyg%3D%3D" target="_blank" rel="noopener">Anmol Deep Singh</a></li>
+<li><a href="https://www.linkedin.com/in/ritish-katiyar-612aba260/?lipi=urn%3Ali%3Apage%3Ad_flagship3_detail_base%3BpwYJPpeXRUuEzfvJiWRzyg%3D%3D" target="_blank" rel="noopener">Ritish Katiyar</a></li>
+<li><a href="https://www.linkedin.com/in/gaurav-shahi-levi/?lipi=urn%3Ali%3Apage%3Ad_flagship3_detail_base%3BpwYJPpeXRUuEzfvJiWRzyg%3D%3D" target="_blank" rel="noopener">Gaurav Shahi</a></li>
+<li>Sparsh Verma</li>
+</ul>
+</div>
+
+    </article>
+  </div>
+</section>
+
+<section class="wrap">
+  <nav class="pager" aria-label="More projects">
+<a href="/project/payload-teknofest-rocket-competetion/"><span class="mono">Previous</span>Payload (Teknofest Rocket Competition)</a><a class="nx" href="/project/vaman-v3/"><span class="mono">Next</span>Vaman V3-3D-Printed Quadruped Experiment (Paused Version)</a>  </nav>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <p class="label">Related work</p>
+    <div class="grid3"><a class="pcard" href="/project/inspace-isro-rocket-avionics-pcb/" data-cats="aero pcb" data-search="inspace isro rocket avionics pcb the inspace isro rocket avionics pcb is a compact and reliable avionics system designed for our rocket trishul , responsible for telemetry , navigation , data logging … aerospace &amp; rocketry pcb design">
+  <div class="pcard-media">
+<img src="/uploads/wp/2025/08/Untitled-design-44-1024x576.jpg" alt="" loading="lazy">    <span class="pcard-kind mono">Project</span>
+  </div>
+  <div class="pcard-body">
+    <p class="pcard-cats mono">Aerospace &amp; Rocketry / PCB Design</p>
+    <h3>Inspace ISRO Rocket Avionics PCB</h3>
+    <p class="pcard-sum">The InSpace ISRO Rocket Avionics PCB is a compact and reliable avionics system designed for our rocket Trishul , responsible for telemetry , navigation , data logging …</p>
+  </div>
+</a>
+<a class="pcard" href="/project/inspace-isro-cansat-pcb/" data-cats="aero pcb" data-search="inspace isro cansat pcb fully integrated cansat pcb designed for the inspace isro cansat mission, combining telemetry, sensing, power monitoring, communication, and actuation on a single board. aerospace &amp; rocketry pcb design">
+  <div class="pcard-media">
+<img src="/uploads/wp/2025/08/Untitled-design-41-1024x576.jpg" alt="" loading="lazy">    <span class="pcard-kind mono">Project</span>
+  </div>
+  <div class="pcard-body">
+    <p class="pcard-cats mono">Aerospace &amp; Rocketry / PCB Design</p>
+    <h3>Inspace ISRO Cansat PCB</h3>
+    <p class="pcard-sum">Fully integrated cansat PCB designed for the InSpace ISRO CanSat mission, combining telemetry, sensing, power monitoring, communication, and actuation on a single board.</p>
+  </div>
+</a>
+<a class="pcard" href="/project/pcb-teknofest-cansat-competetion/" data-cats="aero pcb" data-search="pcb (teknofest model satellite competition) for the teknofest model satellite competition , i contributed as a volunteer pcb designer (not an official team member), collaborating with [ rahul kumar ] . the… aerospace &amp; rocketry pcb design">
+  <div class="pcard-media">
+<img src="/uploads/wp/2025/08/Battery-and-Loadcell-Attched-3-1024x576.jpg" alt="" loading="lazy">    <span class="pcard-kind mono">Project</span>
+  </div>
+  <div class="pcard-body">
+    <p class="pcard-cats mono">Aerospace &amp; Rocketry / PCB Design</p>
+    <h3>PCB (Teknofest Model Satellite Competition)</h3>
+    <p class="pcard-sum">For the Teknofest Model Satellite Competition , I contributed as a volunteer PCB designer (not an official team member), collaborating with [ Rahul Kumar ] . The…</p>
+  </div>
+</a>
+</div>
+  </div>
+</section>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/plc/">PLC &amp; Industrial Automation</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=a6e775a3ba" defer></script>
+<script src="/assets/home.js?v=a6e775a3ba" defer></script>
+</body>
+</html>

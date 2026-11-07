@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vaman V3-3D-Printed Quadruped Experiment (Paused Version) | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="After Vaman v2 successfully implemented AI-based movement (voice + gesture + object find/stop) , the next challenge was to move beyond wheels. Vaman v3…">
+<link rel="canonical" href="https://techarcanist.com/project/vaman-v3/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="Vaman V3-3D-Printed Quadruped Experiment (Paused Version)">
+<meta property="og:description" content="After Vaman v2 successfully implemented AI-based movement (voice + gesture + object find/stop) , the next challenge was to move beyond wheels. Vaman v3…">
+<meta property="og:url" content="https://techarcanist.com/project/vaman-v3/">
+<meta property="og:image" content="/uploads/wp/2025/08/Untitled-design-34-1024x576.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=a6e775a3ba">
+<link rel="stylesheet" href="/assets/home.css?v=a6e775a3ba">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/" aria-current="page">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<section class="cs-hero">
+  <div class="wrap">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/project/">Work</a><span>/</span><span>11 of 27</span></nav>
+    <h1>Vaman V3-3D-Printed Quadruped Experiment (Paused Version)</h1>
+<div class="cs-lead"><p>After <span class="hl"><strong><a href="/project/vaman-v2/">Vaman v2</a></strong></span> successfully implemented <span class="hl"><strong>AI-based movement (voice + gesture + object find/stop)</strong></span>, the next challenge was to move beyond wheels. <span class="hl"><strong>Vaman v3</strong></span> explored <span class="hl"><strong>legged locomotion</strong></span>, building a <span class="hl"><strong>quadruped robot capable of walking and balancing</strong></span>.</p></div>  </div>
+  <div class="wrap">
+    <dl class="cs-spec mono">
+<div><dt>Discipline</dt><dd><a href="/project/#robotics">Robotics</a>, <a href="/project/#ai">Edge AI &amp; Vision</a></dd></div>      <div><dt>Contents</dt><dd>5 images · 4 videos</dd></div>
+    </dl>
+  </div>
+  <div class="wrap"><figure class="cs-cover"><img src="/uploads/wp/2025/08/Untitled-design-34-1024x576.jpg" alt="Vaman V3-3D-Printed Quadruped Experiment (Paused Version)"><span class="corner tl"></span><span class="corner br"></span></figure></div>
+</section>
+
+<section class="sec tight">
+  <div class="wrap doc">
+    <aside class="toc" aria-label="On this page">
+      <p class="label">On this page</p>
+      <ol><li><a href="#important-note"><span class="mono">01</span>Important Note</a></li><li><a href="#features-it-could-have-completed"><span class="mono">02</span>Features it Could Have Completed</a></li><li><a href="#version-history"><span class="mono">03</span>Version History</a></li><li><a href="#why-the-project-was-paused"><span class="mono">04</span>Why the project was paused</a></li><li><a href="#what-happened-in-the-background-parallel-development"><span class="mono">05</span>What happened in the background (parallel…</a></li><li><a href="#some-snaps-and-clips"><span class="mono">06</span>Some Snaps and Clips</a></li><li><a href="#circuit"><span class="mono">07</span>Circuit</a></li><li><a href="#my-learnings"><span class="mono">08</span>My Learnings</a></li><li><a href="#team-collaborators"><span class="mono">09</span>Team Collaborators</a></li></ol>
+    </aside>
+    <article class="prose">
+      
+<div class="cols cols-2"><div class="col">
+<figure class="img"><img src="/uploads/wp/2025/11/Untitled-design-36-1024x576.jpg" alt="" loading="lazy" decoding="async" width="1024" height="576"></figure>
+</div><div class="col">
+<figure class="img"><img src="/uploads/wp/2025/11/Untitled-design-35-1024x576.jpg" alt="" loading="lazy" decoding="async" width="1024" height="576"></figure>
+</div></div>
+<div class="col">
+<h2 id="important-note">Important Note</h2>
+<p class="note">The mechanical design (3D model) of the Vaman v3 quadruped was not created by us.<br>We used an existing open-source design and made some modifications to fit our servo motor, based on this reference video <a href="https://www.youtube.com/watch?v=SU3fmMUz9Zg" target="_blank" rel="noopener">🔗</a>.<br><br>We did not copy code or electronics, only the mechanical STL body structure was taken from this model so we could focus on:<br>- Motor control algorithms<br>- ESP32 real-time control loop<br>- Voice + gesture interaction<br>- IMU balancing + gait logic<br>- LLM-based voice assistant integration</p>
+</div>
+<div class="col">
+<h2 id="features-it-could-have-completed">Features it Could Have Completed</h2>
+<div class="table-wrap"><table><thead><tr><th>Sr. No.</th><th>Feature Category</th><th>Feature Name</th><th>Description / Outcome</th></tr></thead><tbody><tr><td>1</td><td>Autonomous Navigation</td><td>SLAM-based Mapping &amp; Navigation</td><td>Build live map using LiDAR + IMU fusion and walk autonomously in unknown indoor environments.</td></tr><tr><td>2</td><td>Computer Vision</td><td>Object Detection &amp; Tracking</td><td>Detect object/person (YOLO) and walk toward it.</td></tr><tr><td>3</td><td>Multimodal Interaction</td><td>Voice + Gesture Combination Control</td><td>Robot moves only when both input modes match.</td></tr><tr><td>4</td><td>Security &amp; HRI</td><td>Voice Authentication</td><td>Only authorized user can control robot.</td></tr><tr><td>5</td><td>Companion Mode</td><td>Human Follow Mode</td><td>Follows a human continuously using realtime pose tracking.</td></tr><tr><td>6</td><td>Surveillance Mode</td><td>Autonomous Patrol</td><td>Walks on predefined route and logs data.</td></tr><tr><td>7</td><td>Adaptive Gait Control</td><td>IMU-based Stabilization</td><td>Self-balances automatically when pushed or tilted.</td></tr><tr><td>8</td><td>Terrain Adaptation</td><td>Adaptive Stride Adjustment</td><td>Walks on uneven / rough terrain.</td></tr><tr><td>9</td><td>Firmware Management</td><td>OTA Updates</td><td>Firmware updates wirelessly without connecting cable.</td></tr><tr><td>10</td><td>Power Efficiency</td><td>Low Power Gait Mode</td><td>Automatically reduces torque &amp; gait speed when battery is low.</td></tr><tr><td>11</td><td>Natural Language Interface</td><td>LLM Assistant</td><td>Commands like “Vaman walk 2 meters” → robot moves intelligently.</td></tr><tr><td>12</td><td>Future Expandability</td><td>Object Fetching</td><td>Finds object using vision and brings it back (future capability).</td></tr></tbody></table></div>
+</div>
+<div class="col">
+<h2 id="version-history">Version History</h2>
+<div class="table-wrap"><table><thead><tr><th>Version / Prototype</th><th>Platform</th><th>Brief Description</th><th>Status / Why It Stopped</th></tr></thead><tbody><tr><td><strong>VAMAN V1</strong></td><td>Jetson Nano (Wheeled)</td><td>Camera + voice + gesture testing (proof of concept).</td><td>Stalled due to <strong>PWM control issue &amp; USB serial detection problems</strong>.</td></tr><tr><td><strong>VAMAN V2, P1</strong></td><td>Cardboard Chassis (Wheeled)</td><td>ESP32 + Gesture + IMU tests, basic locomotion verified.</td><td><strong>Chassis bent</strong> because cardboard couldn’t carry battery + electronics weight.</td></tr><tr><td><strong>VAMAN V2 -P2</strong></td><td><strong>Metal Chassis (Wheeled)</strong></td><td>Johnson motors + BTS7960 + ESP32 + voice &amp; gesture fully functional.</td><td><strong>No failure, successfully working.</strong><br>Stopped because we realized wheeled robots cannot handle uneven terrain → <strong>decision to upgrade to quadruped (VAMAN V3)</strong>.</td></tr><tr><td><strong>VAMAN V3 (Current)</strong></td><td><strong>Quadruped (3D printed, mechanical) </strong></td><td>35kg·cm servos + IMU balance + walking gait.</td><td>Paused due to <strong>servo brownouts + mechanical tuning + parallel national rocket competition workload</strong>.</td></tr></tbody></table></div>
+</div>
+<div class="col">
+<h2 id="why-the-project-was-paused">Why the project was paused</h2>
+<ul>
+<li>High-current servo power issues</li>
+<li>Battery + load → brownouts when walking</li>
+<li>Mechanical structure from downloaded STL wasn’t strong enough for long tests</li>
+<li>At the same time, team was selected for <strong>National/ International Rocket/Cansat Competitions</strong>, time shifted to that</li>
+</ul>
+</div>
+<div class="col">
+<h2 id="what-happened-in-the-background-parallel-development">What happened in the background (parallel development)</h2>
+<div class="table-wrap"><table><thead><tr><th>Area / Module Worked On</th><th>Status</th><th>Responsibility</th></tr></thead><tbody><tr><td><strong>LLM-based Robot Assistant</strong></td><td>✅ Completed</td><td>Gaurav + Anshuman</td></tr><tr><td><strong>Voice Assistant (Offline VOSK)</strong></td><td>✅ Completed</td><td>Deepanshu</td></tr><tr><td><strong>Voice Authentication (Resemblyzer)</strong></td><td>✅ Completed</td><td>Deepanshu</td></tr><tr><td><strong>Face Authentication (Face Recognition )</strong></td><td>✅ Completed</td><td>Gaurav</td></tr><tr><td><strong>Multi-modal Input Pipeline (Gesture + Voice → command)</strong></td><td>✅ Completed</td><td>Team</td></tr></tbody></table></div>
+</div>
+<div class="col">
+<h2 id="some-snaps-and-clips">Some Snaps and Clips</h2>
+<div class="embed"><iframe src="https://www.youtube-nocookie.com/embed/v8IjEVoMJWM?rel=0&amp;modestbranding=1&amp;playsinline=1" loading="lazy" title="Video" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+<p><span class="hl"><strong>Walking</strong></span></p>
+<div class="embed"><iframe src="https://www.youtube-nocookie.com/embed/LZXm52O3yuo?rel=0&amp;modestbranding=1&amp;playsinline=1" loading="lazy" title="Video" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+<p><span class="hl"><strong><span class="hl"><strong>Torque Test</strong></span></strong></span></p>
+<div class="embed"><iframe src="https://www.youtube-nocookie.com/embed/F0kwBKMfMuY?rel=0&amp;modestbranding=1&amp;playsinline=1" loading="lazy" title="Video" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+<p><span class="hl"><strong><span class="hl"><strong>Finetuned LLM (Eleven Labs API Used for TTS)</strong></span></strong></span></p>
+<div class="embed"><iframe src="https://www.youtube-nocookie.com/embed/e5Sa66YI2ZI?rel=0&amp;modestbranding=1&amp;playsinline=1" loading="lazy" title="Video" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+<p><span class="hl"><strong><span class="hl"><strong><span class="hl"><strong><span class="hl"><strong>Finetuned LLM ( Full Integrated Model )</strong></span></strong></span></strong></span></strong></span></p>
+<figure class="img"><img src="/uploads/wp/2025/11/IMG_20251106_165918920-1024x576.jpg" alt="" loading="lazy" decoding="async" width="1024" height="576"></figure>
+<p><span class="hl"><strong><span class="hl"><strong><span class="hl"><strong>Zero PCB Testing Phase</strong></span></strong></span></strong></span></p>
+</div>
+<div class="col">
+<h2 id="circuit">Circuit</h2>
+<figure class="img"><img src="/uploads/wp/2025/11/Schematic_Vaman_2025-04-30-1024x527.png" alt="" loading="lazy" decoding="async" width="1024" height="527"></figure>
+<p><span class="hl"><strong><span class="hl"><strong><span class="hl"><strong>Vaman Schematic</strong></span></strong></span></strong></span></p>
+<figure class="img"><img src="/uploads/wp/2025/11/PCB_PCB_Vaman_2025-04-30.png" alt="" loading="lazy" decoding="async" width="563" height="568"></figure>
+<p><span class="hl"><strong><span class="hl"><strong><span class="hl"><strong>Vaman PCB Layout</strong></span></strong></span></strong></span></p>
+</div>
+<div class="col">
+<h2 id="my-learnings">My Learnings</h2>
+<ul>
+<li>Even if the idea and skills are strong, lack of dedicated time kills execution.</li>
+</ul>
+</div>
+<div class="col">
+<h2 id="team-collaborators">Team Collaborators</h2>
+<ul>
+<li><a href="https://www.linkedin.com/in/gaurav-shahi-levi?miniProfileUrn=urn%3Ali%3Afsd_profile%3AACoAAEh4jZoBowOmLEQ3QoA4LZek0AfLi_mdVXg&amp;lipi=urn%3Ali%3Apage%3Ad_flagship3_detail_base%3BplW9mT8zT4Opb6IbelAkHw%3D%3D" target="_blank" rel="noopener">Gaurav</a></li>
+<li><a href="https://www.linkedin.com/in/the-anshuman-pathak/?lipi=urn%3Ali%3Apage%3Ad_flagship3_detail_base%3BplW9mT8zT4Opb6IbelAkHw%3D%3D" target="_blank" rel="noopener">Anshuman</a></li>
+<li><a href="https://www.linkedin.com/in/deepanshu-dwivedi-89787a2b6/" target="_blank" rel="noopener">Deepanshu</a></li>
+</ul>
+</div>
+
+    </article>
+  </div>
+</section>
+
+<section class="wrap">
+  <nav class="pager" aria-label="More projects">
+<a href="/project/avionics-teknofest-rocket-competetion/"><span class="mono">Previous</span>Avionics (Teknofest Rocket Competition)</a><a class="nx" href="/project/vaman-v2/"><span class="mono">Next</span>Vaman v2</a>  </nav>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <p class="label">Related work</p>
+    <div class="grid3"><a class="pcard" href="/project/vaman-v2/" data-cats="robotics ai" data-search="vaman v2 after vaman v1 validated wi-fi controlled movement using the jetson nano , the next goal was to make the robot smarter, not just remotely controllable. vaman v2 evolved… robotics edge ai &amp; vision">
+  <div class="pcard-media">
+<img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-14-1024x576.png" alt="" loading="lazy">    <span class="pcard-kind mono">Project</span>
+  </div>
+  <div class="pcard-body">
+    <p class="pcard-cats mono">Robotics / Edge AI &amp; Vision</p>
+    <h3>Vaman v2</h3>
+    <p class="pcard-sum">After Vaman v1 validated Wi-Fi controlled movement using the Jetson Nano , the next goal was to make the robot smarter, not just remotely controllable. Vaman v2 evolved…</p>
+  </div>
+</a>
+<a class="pcard" href="/project/vaman-v1/" data-cats="robotics ai" data-search="vaman v1 the vaman v1 prototype was built to validate whether the jetson nano alone could handle wireless remote control over 5g wi-fi , real-time motor control , and live camera… robotics edge ai &amp; vision">
+  <div class="pcard-media">
+<img src="/uploads/wp/2025/08/Copy-of-Untitled-Design-13-1024x576.png" alt="" loading="lazy">    <span class="pcard-kind mono">Project</span>
+  </div>
+  <div class="pcard-body">
+    <p class="pcard-cats mono">Robotics / Edge AI &amp; Vision</p>
+    <h3>Vaman v1</h3>
+    <p class="pcard-sum">The Vaman v1 prototype was built to validate whether the Jetson Nano alone could handle wireless remote control over 5G Wi-Fi , real-time motor control , and live camera…</p>
+  </div>
+</a>
+<a class="pcard" href="/documented-software-learnings/ros2/" data-cats="robotics learn" data-search="ros 2 diy this page documents the beginning of my ros 2 journey , starting with setting up ubuntu . credits: this documentation is based on my learning from the udemy course self… robotics teaching &amp; docs">
+  <div class="pcard-media">
+<img src="/uploads/wp/2025/08/image-7.png" alt="" loading="lazy">    <span class="pcard-kind mono">Series</span>
+  </div>
+  <div class="pcard-body">
+    <p class="pcard-cats mono">Robotics / Teaching &amp; Docs</p>
+    <h3>ROS 2 DIY</h3>
+    <p class="pcard-sum">This page documents the beginning of my ROS 2 journey , starting with setting up Ubuntu . Credits: This documentation is based on my learning from the Udemy course Self…</p>
+  </div>
+</a>
+</div>
+  </div>
+</section>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/plc/">PLC &amp; Industrial Automation</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=a6e775a3ba" defer></script>
+<script src="/assets/home.js?v=a6e775a3ba" defer></script>
+</body>
+</html>
