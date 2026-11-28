@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Three angular velocities</title>
+<style>
+html,body{margin:0;background:#0e182c;color:#e8eef7;font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+.w{padding:12px 14px;max-width:1100px;margin:0 auto;background:#0e182c}
+.w.fs{max-width:none;height:100vh;overflow:auto;padding:14px 20px}
+.top{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+h1{font-size:18px;margin:0 0 4px}.sub{color:#a9b8cc;font-size:14px;margin:0 0 10px}
+.card{background:#13213a;border:1px solid #23395c;border-radius:12px;padding:12px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:6px 0}
+.btn{background:#1b2c4a;color:#e8eef7;border:1px solid #2b4366;border-radius:8px;padding:6px 12px;font:600 13px system-ui,sans-serif;cursor:pointer}
+.btn:hover,.btn.on{border-color:#ff8a3d}
+.btn.on{background:#2a2a3a}
+label.ck{display:flex;align-items:center;gap:6px;font-size:14px;color:#cfe0f5}
+.sl{flex:1 1 220px;font-size:13.5px;color:#cfe0f5}
+input[type=range]{width:100%;accent-color:#ff8a3d}
+svg{width:100%;height:auto;display:block;max-height:300px}
+.w.fs svg{max-height:52vh}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:10px;margin-top:8px}
+@media (max-width:700px){.grid{grid-template-columns:minmax(0,1fr)}}
+.say{background:#0f1b31;border:1px solid #23395c;border-radius:10px;padding:8px 10px;font-size:13.5px}
+.term{background:#060c18;border:1px solid #1f3352;border-radius:8px;padding:8px 10px;font:12px/1.6 ui-monospace,Consolas,monospace;white-space:pre-wrap;word-break:break-word;color:#cfe0f5;max-height:190px;overflow:auto}
+table{border-collapse:collapse;width:100%;font-size:13px}td{padding:3px 6px;border-bottom:1px solid #23395c}
+.ok{color:#66e3b0}.bad{color:#ff6b6b}.warn{color:#ffd24a}.dim{color:#8a9bb2}.cy{color:#5ad8f0}.or{color:#ff8a3d}
+</style></head><body><div class="w" id="wrap">
+<div class="top"><div><h1>Three angular velocities, side by side</h1>
+<p class="sub">The same plot as in PlotJuggler: the true turning speed (odom), the noisy one (odom_noisy) and the filtered one (odom_kalman). Press Play, switch between a still robot and a turning robot, and change the noise.</p></div>
+<button class="btn" id="fsb" aria-label="Show full screen. Press Escape to exit.">Full screen</button></div>
+<div class="card">
+<div class="row"><button class="btn" id="pl">Play</button><button class="btn" id="st">One message</button><button class="btn" id="rs">Reset</button>
+<span class="dim">|</span><button class="btn on" id="m0">Robot still</button><button class="btn" id="m1">Robot turning (joystick)</button>
+<span class="dim">|</span><button class="btn" id="zm">Zoom in</button></div>
+<div class="row"><div class="sl">Noise on the wheel odometry (example spread): <b id="wv"></b> rad/s<input type="range" id="w" min="0.02" max="0.3" step="0.01" value="0.15" aria-label="wheel noise"></div>
+<div class="sl">Noise on the IMU (example spread): <b id="iv"></b> rad/s<input type="range" id="i" min="0.005" max="0.3" step="0.005" value="0.01" aria-label="IMU noise"></div></div>
+<div class="row"><label class="ck"><input type="checkbox" id="c0" checked> <span class="or">odom (true)</span></label><label class="ck"><input type="checkbox" id="c1" checked> <span class="cy">odom_noisy</span></label><label class="ck"><input type="checkbox" id="c2" checked> <span class="ok">odom_kalman</span></label></div>
+<svg id="sv" viewBox="0 0 720 270" role="img" aria-label="Angular velocity around z of the three odometry topics over the last 5 seconds"></svg>
+<div class="grid"><div class="say" id="say"></div><div class="term" id="wk"></div></div>
+</div>
+</div>
+<script>
+(function(){
+function $(i){return document.getElementById(i)}
+var DT=0.05,WIN=5,MV=4.0,SV=0.5;
+var S={t:0,mode:0,zoom:0,id:null,play:0,seed:7,hist:[],f:null,last:null};
+function rng(){S.seed|=0;S.seed=S.seed+0x6D2B79F5|0;var t=Math.imul(S.seed^S.seed>>>15,1|S.seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}
+function gauss(){var u=Math.max(rng(),1e-9),v=rng();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+function trueW(t){if(S.mode==0)return 0;var p=t%10;return p<2?0:p<7?0.5:0}
+function f4(v){return (v<0?'':' ')+v.toFixed(4)}
+function fp(v){return v<0?'('+v.toFixed(4)+')':v.toFixed(4)}
+function reset(){S.t=0;S.seed=7;S.hist=[];S.f={first:true,mean:0,variance:1000,last:0};S.last=null;draw()}
+function step(){var sw=+$('w').value,si=+$('i').value,tw=trueW(S.t),od=tw+sw*gauss(),im=tw+si*gauss(),f=S.f,r={t:S.t,tw:tw,od:od,im:im};
+ if(f.first){f.first=false;f.last=od;f.mean=od;r.first=true;r.km=null}
+ else{var mo=od-f.last,m1=f.mean,v1=f.variance,pm=m1+mo,pv=v1+MV,um=(SV*pm+pv*im)/(pv+SV),uv=(pv*SV)/(pv+SV);
+  f.mean=um;f.variance=uv;f.last=od;r.mo=mo;r.m1=m1;r.v1=v1;r.pm=pm;r.pv=pv;r.um=um;r.uv=uv;r.km=um;r.last=od-mo}
+ S.hist.push(r);while(S.hist.length&&S.hist[0].t<S.t-WIN)S.hist.shift();S.last=r;S.t=Math.round((S.t+DT)*1000)/1000}
+function draw(){var X0=60,X1=700,Y0=20,Y1=240,lo=S.zoom?-0.2:-0.6,hi=S.zoom?0.2:1.0;
+ $('wv').textContent=(+$('w').value).toFixed(2);$('iv').textContent=(+$('i').value).toFixed(3);
+ var t1=Math.max(S.t,WIN),t0=t1-WIN;function X(t){return X0+(t-t0)/WIN*(X1-X0)}function Y(v){return Y1-(Math.max(lo,Math.min(hi,v))-lo)/(hi-lo)*(Y1-Y0)}
+ var s='<rect x="'+X0+'" y="'+Y0+'" width="'+(X1-X0)+'" height="'+(Y1-Y0)+'" fill="#0f1b31" stroke="#2b4366"/>',k,st=S.zoom?0.1:0.2;
+ for(k=lo;k<=hi+1e-9;k+=st){var y=Y(k);s+='<line x1="'+X0+'" y1="'+y.toFixed(1)+'" x2="'+X1+'" y2="'+y.toFixed(1)+'" stroke="#23395c"/><text x="'+(X0-6)+'" y="'+(y+4).toFixed(1)+'" text-anchor="end" fill="#8a9bb2" font-size="11">'+k.toFixed(1)+'</text>'}
+ for(k=Math.ceil(t0);k<=t1+1e-9;k++)s+='<text x="'+X(k).toFixed(1)+'" y="'+(Y1+16)+'" text-anchor="middle" fill="#8a9bb2" font-size="11">'+k+' s</text>';
+ s+='<text x="'+X0+'" y="14" fill="#8a9bb2" font-size="11">angular velocity around z, in rad/s (the last 5 s, like the 5 sec buffer of PlotJuggler)</text>';
+ function line(key,col,w){var p=[];S.hist.forEach(function(r){if(r[key]!=null)p.push(X(r.t).toFixed(1)+','+Y(r[key]).toFixed(1))});return p.length>1?'<polyline points="'+p.join(' ')+'" fill="none" stroke="'+col+'" stroke-width="'+w+'"/>':''}
+ if($('c1').checked)s+=line('od','#5ad8f0',1.5);if($('c0').checked)s+=line('tw','#ff8a3d',3);if($('c2').checked)s+=line('km','#66e3b0',2.2);
+ $('sv').innerHTML=s;
+ var gN=0,gK=0;S.hist.forEach(function(r){gN=Math.max(gN,Math.abs(r.od-r.tw));if(r.km!=null)gK=Math.max(gK,Math.abs(r.km-r.tw))});
+ var si=+$('i').value,sw=+$('w').value,msg;
+ if(!S.hist.length)msg='Press Play or One message. Every message the filter runs one round: the state prediction with the wheel motion, then the measurement update with the newest IMU reading (chapter 77).';
+ else msg='Largest distance from the true value in the last 5 s: <b class="cy">odom_noisy '+gN.toFixed(3)+' rad/s</b>, <b class="ok">odom_kalman '+gK.toFixed(3)+' rad/s</b>. '+(gK<gN?'The filtered line stays much closer to the true one.':'Here the filtered line is <span class="bad">not</span> better.')+(si>sw?' <span class="warn">The IMU is now noisier than the wheels, but the code still uses the fixed variances 4.0 and 0.5 and keeps trusting the IMU: the estimates in the code must fit the real sensors.</span>':'')+(S.mode==1?' The robot turns at 0.5 rad/s from second 2 to second 7 of every 10 s (an example drive).':' The robot stands still, so the true value is 0.');
+ $('say').innerHTML=msg;
+ var r=S.last,w;
+ if(!r)w='The working of the last round appears here.';
+ else if(r.first)w='First odometry message (step 1, initialisation):\nmean = odometry = '+f4(r.od)+' rad/s\nvariance stays 1000.0\nnothing is published yet.';
+ else w='Message at '+r.t.toFixed(2)+' s (values rounded to 4 decimals)\ntrue '+f4(r.tw)+'   odom_noisy '+f4(r.od)+'   imu '+f4(r.im)+'\n\nmotion = new odometry minus last odometry\n       = '+fp(r.od)+' minus '+fp(r.last)+' = '+f4(r.mo)+'\n\nstate prediction (add the Gaussians):\n mean = old mean + motion = '+fp(r.m1)+' + '+fp(r.mo)+' = '+f4(r.pm)+'\n variance = old variance + motion variance = '+r.v1.toFixed(4)+' + 4.0 = '+r.pv.toFixed(4)+'\n\nmeasurement update (multiply by the IMU Gaussian):\n mean = (0.5 × '+fp(r.pm)+' + '+r.pv.toFixed(4)+' × '+fp(r.im)+') ÷ ('+r.pv.toFixed(4)+' + 0.5) = '+f4(r.um)+'\n variance = ('+r.pv.toFixed(4)+' × 0.5) ÷ ('+r.pv.toFixed(4)+' + 0.5) = '+r.uv.toFixed(4)+'\n\npublished on odom_kalman: '+f4(r.um)+' rad/s';
+ $('wk').textContent=w}
+function stop(){if(S.id){clearInterval(S.id);S.id=null}S.play=0;$('pl').textContent='Play'}
+$('pl').onclick=function(){if(S.play){stop();return}S.play=1;this.textContent='Pause';S.id=setInterval(function(){step();step();draw()},100)};
+$('st').onclick=function(){stop();step();draw()};
+$('rs').onclick=function(){stop();reset()};
+function mode(m){S.mode=m;$('m0').className='btn'+(m==0?' on':'');$('m1').className='btn'+(m==1?' on':'');stop();reset()}
+$('m0').onclick=function(){mode(0)};$('m1').onclick=function(){mode(1)};
+$('zm').onclick=function(){S.zoom=1-S.zoom;this.textContent=S.zoom?'Zoom out':'Zoom in';draw()};
+['w','i'].forEach(function(id){$(id).oninput=draw});['c0','c1','c2'].forEach(function(id){$(id).onchange=draw});
+reset();
+(function(){
+  var W=$('wrap'),B=$('fsb'),pseudo=false;
+  function isFs(){return !!(document.fullscreenElement||document.webkitFullscreenElement)}
+  function on(p){W.classList.add('fs');if(p){W.style.position='fixed';W.style.inset='0';W.style.zIndex='99';pseudo=true}B.textContent='Exit full screen'}
+  function off(){W.classList.remove('fs');W.style.position='';W.style.inset='';W.style.zIndex='';pseudo=false;B.textContent='Full screen'}
+  B.onclick=function(){
+    if(W.classList.contains('fs')){if(isFs())(document.exitFullscreen||document.webkitExitFullscreen).call(document);off();return}
+    var f=W.requestFullscreen||W.webkitRequestFullscreen;
+    if(f){try{var r=f.call(W);if(r&&r.then)r.then(function(){on(false)},function(){on(true)});else on(false)}catch(e){on(true)}}else on(true)};
+  document.addEventListener('fullscreenchange',function(){if(!isFs()&&!pseudo)off()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&pseudo)off()});
+})();
+})();
+</script>
+<script>
+(function(){function s(){parent.postMessage({taWidget:location.pathname,h:document.documentElement.scrollHeight},'*')}
+new ResizeObserver(s).observe(document.documentElement);addEventListener('load',s);setInterval(s,1500);})();
+</script></body></html>
