@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Kalman loop for the angular velocity</title>
+<style>
+html,body{margin:0;background:#0e182c;color:#e8eef7;font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+.w{padding:12px 14px;max-width:1100px;margin:0 auto;background:#0e182c}
+.w.fs{max-width:none;height:100vh;overflow:auto;padding:14px 20px}
+.top{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+h1{font-size:18px;margin:0 0 4px}.sub{color:#a9b8cc;font-size:14px;margin:0 0 10px}
+.sub a{color:#ff8a3d}
+.card{background:#13213a;border:1px solid #23395c;border-radius:12px;padding:12px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:6px 0}
+.btn{background:#1b2c4a;color:#e8eef7;border:1px solid #2b4366;border-radius:8px;padding:6px 12px;font:600 13px system-ui,sans-serif;cursor:pointer}
+.btn:hover,.btn.on{border-color:#ff8a3d}
+.sl{display:flex;flex-direction:column;flex:1 1 220px;font-size:13.5px;color:#cfe0f5}
+input[type=range]{width:100%;accent-color:#ff8a3d}
+.grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:12px;margin-top:6px}
+@media (max-width:760px){.grid{grid-template-columns:1fr}}
+svg{width:100%;height:auto;display:block;max-height:300px}
+.w.fs svg{max-height:58vh}
+.say{background:#0f1b31;border:1px solid #23395c;border-radius:10px;padding:10px 12px;font-size:14px;max-height:300px;overflow:auto}
+.say b{color:#ffd24a}
+.say .f{font-family:ui-monospace,Consolas,monospace;font-size:13px;color:#cfe0f5;white-space:pre-wrap;display:block;margin:4px 0}
+.step{font-weight:700;color:#ff8a3d}
+table{border-collapse:collapse;width:100%;font-size:12.5px;margin-top:8px}
+td,th{border-bottom:1px solid #23395c;padding:3px 6px;text-align:right}
+th{color:#a9b8cc;font-weight:600}td:first-child,th:first-child{text-align:left}
+tr.on td{color:#ff8a3d}
+.dim{color:#6b7f96}
+.tw{max-height:150px;overflow:auto}
+</style></head><body><div class="w" id="wrap">
+<div class="top"><div><h1>The Kalman loop for the angular velocity</h1>
+<p class="sub">Each bell curve is a belief about how fast the robot turns (rad/s). Press Next or Play: the first odometry message sets the start, then every round predicts with the wheel motion (the curve moves and gets wider) and corrects with the IMU (it gets narrower). The readings are example numbers. Met before: <a href="/documented-software-learnings/ros2/ros2-76/#sd-s1x" target="_blank" rel="noopener">measurement update</a>, <a href="/documented-software-learnings/ros2/ros2-76/#sd-s2x" target="_blank" rel="noopener">state prediction and the loop</a>, <a href="/documented-software-learnings/ros2/ros2-68/#sd-s6x" target="_blank" rel="noopener">combining Gaussians</a>.</p></div>
+<button class="btn" id="fsb" aria-label="Show full screen. Press Escape to exit.">Full screen</button></div>
+<div class="card">
+<div class="row"><button class="btn" id="bk">Back</button><button class="btn" id="nx">Next</button><button class="btn" id="pl">Play</button><button class="btn" id="rs">Reset</button><span class="step" id="stl"></span></div>
+<div class="row"><label class="sl"><span>motion variance (motion_variance_): <b id="qv"></b></span><input type="range" id="q" min="0.1" max="10" step="0.1" value="4" aria-label="motion variance"></label>
+<label class="sl"><span>measurement variance of the IMU (measurement_variance_): <b id="rv"></b></span><input type="range" id="r" min="0.05" max="5" step="0.05" value="0.5" aria-label="measurement variance"></label></div>
+<div class="grid"><div><svg id="sv" viewBox="0 0 640 250" role="img" aria-label="Bell curves of the belief, the prediction, the IMU reading and the updated belief"></svg></div>
+<div><div class="say" id="say"></div></div></div>
+<div class="tw"><table id="tb"></table></div>
+</div>
+</div>
+<script>
+(function(){
+var ODOM=[0.48,0.55,0.47,0.53,0.58,0.50],IMU=[0.52,0.50,0.51,0.49,0.50];
+var S={i:0,play:0,id:null,q:4,r:0.5};
+function $(i){return document.getElementById(i)}
+function f(v,d){var s=v.toFixed(d===undefined?4:d);return /^-0\.0+$/.test(s)?s.slice(1):s}
+function steps(){
+  var L=[],m=0,v=1000,q=S.q,r=S.r,k;
+  L.push({k:0,kind:'start',m:m,v:v,cur:[['belief',m,v,'#9fb3cc']],t:'<b>Start.</b> Before any message the node knows nothing, so it uses a very wide bell curve:<span class="f">mean_ = 0.0, variance_ = 1000.0</span>A variance of 1000 is a standard deviation of &radic;1000 = '+f(Math.sqrt(1000),1)+' rad/s: the curve is almost flat, every speed looks equally likely.'});
+  m=ODOM[0];
+  L.push({k:0,kind:'init',m:m,v:v,od:ODOM[0],cur:[['belief',m,v,'#9fb3cc']],t:'<b>Initialisation.</b> The first odometry message says angular.z = '+f(ODOM[0],2)+' rad/s. The node takes it as the first guess:<span class="f">mean_ = '+f(ODOM[0],2)+'\nlast_angular_z_ = '+f(ODOM[0],2)+'\nvariance_ stays 1000.0</span>Then it returns: no prediction, no update, nothing published for this first message.'});
+  for(k=1;k<ODOM.length;k++){
+    var mo=ODOM[k]-ODOM[k-1],pm=m+mo,pv=v+q,z=IMU[k-1];
+    L.push({k:k,kind:'pred',m:pm,v:pv,od:ODOM[k],mo:mo,old:[m,v],cur:[['before',m,v,'#6b7f96',1],['prediction',pm,pv,'#ff8a3d']],
+      t:'<b>Round '+k+', state prediction.</b> A new odometry message says '+f(ODOM[k],2)+' rad/s.<span class="f">motion = new odometry minus last odometry\n       = '+f(ODOM[k],2)+' minus '+f(ODOM[k-1],2)+' = '+f(mo)+'</span>The two Gaussians are added: belief (&mu;1 = '+f(m)+', &sigma;1&sup2; = '+f(v)+') and motion (&mu;2 = '+f(mo)+', &sigma;2&sup2; = '+f(q,2)+').<span class="f">&mu;3 = &mu;1 + &mu;2 = '+f(m)+' + '+f(mo)+' = '+f(pm)+'\n&sigma;3&sup2; = &sigma;1&sup2; + &sigma;2&sup2; = '+f(v)+' + '+f(q,2)+' = '+f(pv)+'</span>The curve moves by the motion and gets <b>wider</b>: moving adds uncertainty.'});
+    L.push({k:k,kind:'meas',m:pm,v:pv,z:z,cur:[['prediction',pm,pv,'#ff8a3d'],['IMU',z,r,'#66e3b0']],
+      t:'<b>Round '+k+', the IMU reading.</b> The last IMU message stored imu_angular_z_ = '+f(z,2)+' rad/s. As a Gaussian it has &mu;2 = '+f(z,2)+' and &sigma;2&sup2; = measurement variance = '+f(r,2)+', much narrower than the prediction (&sigma;1&sup2; = '+f(pv)+').'});
+    var um=(r*pm+pv*z)/(r+pv),uv=1/(1/r+1/pv);
+    L.push({k:k,kind:'upd',m:um,v:uv,z:z,cur:[['prediction',pm,pv,'#ff8a3d',1],['IMU',z,r,'#66e3b0',1],['updated belief',um,uv,'#5ab4ff']],
+      t:'<b>Round '+k+', measurement update.</b> The two Gaussians are multiplied: prediction (&mu;1 = '+f(pm)+', &sigma;1&sup2; = '+f(pv)+') and IMU (&mu;2 = '+f(z,2)+', &sigma;2&sup2; = '+f(r,2)+').<span class="f">&mu;3 = (&sigma;2&sup2;&middot;&mu;1 + &sigma;1&sup2;&middot;&mu;2) / (&sigma;2&sup2; + &sigma;1&sup2;)\n   = ('+f(r,2)+' &times; '+f(pm)+' + '+f(pv)+' &times; '+f(z,2)+') / ('+f(r,2)+' + '+f(pv)+')\n   = ('+f(r*pm)+' + '+f(pv*z)+') / '+f(r+pv)+' = '+f(um)+'\n&sigma;3&sup2; = 1 / (1/&sigma;2&sup2; + 1/&sigma;1&sup2;)\n    = 1 / (1/'+f(r,2)+' + 1/'+f(pv)+') = 1 / ('+f(1/r)+' + '+f(1/pv)+') = '+f(uv)+'</span>The result is <b>narrower</b> than both curves and sits closer to the narrower one, the IMU. The node publishes mean_ = '+f(um)+' rad/s on odom_kalman.'});
+    m=um;v=uv}
+  return L}
+var L=steps();
+function X(x){return 40+(x+0.5)*(580/2)}
+function curve(mu,v,col,ghost,top){
+  var pk=1/Math.sqrt(2*Math.PI*v),p='',i;
+  for(i=0;i<=200;i++){var x=-0.5+2*i/200,y=Math.exp(-(x-mu)*(x-mu)/(2*v))/Math.sqrt(2*Math.PI*v);p+=(i?' L':'M')+X(x).toFixed(1)+','+(205-Math.min(y/top,1.05)*165).toFixed(1)}
+  return '<path d="'+p+'" fill="none" stroke="'+col+'" stroke-width="'+(ghost?1.6:2.8)+'"'+(ghost?' stroke-dasharray="5 4" opacity="0.8"':'')+'/>'}
+function draw(){
+  var s=L[S.i],g='',top=0;
+  s.cur.forEach(function(c){top=Math.max(top,1/Math.sqrt(2*Math.PI*c[2]))});top=Math.max(top,0.3);
+  g+='<line x1="40" y1="205" x2="620" y2="205" stroke="#4a5a70"/>';
+  for(var t=-0.5;t<=1.501;t+=0.25){g+='<line x1="'+X(t)+'" y1="205" x2="'+X(t)+'" y2="210" stroke="#4a5a70"/><text x="'+X(t)+'" y="224" fill="#a9b8cc" font-size="11" text-anchor="middle">'+f(t,2)+'</text>'}
+  g+='<text x="330" y="244" fill="#7f93ad" font-size="11" text-anchor="middle">angular velocity around z (rad/s)</text>';
+  s.cur.forEach(function(c){g+=curve(c[1],c[2],c[3],c[4],top)});
+  var ly=18;s.cur.forEach(function(c){g+='<rect x="430" y="'+(ly-9)+'" width="14" height="4" fill="'+c[3]+'"/><text x="450" y="'+ly+'" fill="#e8eef7" font-size="11.5">'+c[0]+': mean '+f(c[1],3)+', var '+f(c[2],3)+'</text>';ly+=17});
+  s.cur.forEach(function(c){if(!c[4])g+='<line x1="'+X(c[1]).toFixed(1)+'" y1="40" x2="'+X(c[1]).toFixed(1)+'" y2="205" stroke="'+c[3]+'" stroke-width="1" stroke-dasharray="2 3"/>'});
+  $('sv').innerHTML=g;
+  $('stl').textContent='step '+(S.i+1)+' of '+L.length;
+  $('say').innerHTML=s.t;
+  $('qv').textContent=S.q.toFixed(1);$('rv').textContent=S.r.toFixed(2);
+  var h='<tr><th>round</th><th>odometry z</th><th>motion</th><th>IMU z</th><th>published mean_</th><th>variance_</th></tr>',k,m0=0;
+  for(k=0;k<ODOM.length;k++){var u=null;L.forEach(function(x){if(x.k===k&&(x.kind==='upd'||x.kind==='init'))u=x});
+    var on=L[S.i].k===k?' class="on"':'',shown=u&&L.indexOf(u)<=S.i;
+    h+='<tr'+on+'><td>'+(k===0?'0 (first message)':k)+'</td><td>'+f(ODOM[k],2)+'</td><td>'+(k?f(ODOM[k]-ODOM[k-1],2):'')+'</td><td>'+(k?f(IMU[k-1],2):'')+'</td><td>'+(shown?(k?f(u.m):'nothing published'):'')+'</td><td>'+(shown?f(u.v):'')+'</td></tr>'}
+  $('tb').innerHTML=h}
+function go(i){S.i=Math.max(0,Math.min(L.length-1,i));draw()}
+function stop(){if(S.id){clearInterval(S.id);S.id=null}S.play=0;$('pl').textContent='Play'}
+$('nx').onclick=function(){stop();go(S.i+1)};$('bk').onclick=function(){stop();go(S.i-1)};
+$('pl').onclick=function(){if(S.play){stop();return}S.play=1;this.textContent='Pause';if(S.i>=L.length-1)go(0);
+  S.id=setInterval(function(){if(S.i>=L.length-1){stop();return}go(S.i+1)},1600)};
+$('rs').onclick=function(){stop();S.q=4;S.r=0.5;$('q').value=4;$('r').value=0.5;L=steps();go(0)};
+$('q').oninput=function(){S.q=+this.value;L=steps();draw()};
+$('r').oninput=function(){S.r=+this.value;L=steps();draw()};
+draw();
+(function(){
+  var W=$('wrap'),B=$('fsb'),pseudo=false;
+  function isFs(){return !!(document.fullscreenElement||document.webkitFullscreenElement)}
+  function on(p){W.classList.add('fs');if(p){W.style.position='fixed';W.style.inset='0';W.style.zIndex='99';pseudo=true}B.textContent='Exit full screen'}
+  function off(){W.classList.remove('fs');W.style.position='';W.style.inset='';W.style.zIndex='';pseudo=false;B.textContent='Full screen'}
+  B.onclick=function(){
+    if(W.classList.contains('fs')){if(isFs())(document.exitFullscreen||document.webkitExitFullscreen).call(document);off();return}
+    var f=W.requestFullscreen||W.webkitRequestFullscreen;
+    if(f){try{var r=f.call(W);if(r&&r.then)r.then(function(){on(false)},function(){on(true)});else on(false)}catch(e){on(true)}}else on(true)};
+  document.addEventListener('fullscreenchange',function(){if(!isFs()&&!pseudo)off()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&pseudo)off()});
+})();
+})();
+</script>
+<script>
+(function(){function s(){parent.postMessage({taWidget:location.pathname,h:document.documentElement.scrollHeight},'*')}
+new ResizeObserver(s).observe(document.documentElement);addEventListener('load',s);setInterval(s,1500);})();
+</script></body></html>
