@@ -137,13 +137,14 @@
       <li><a href="/documented-software-learnings/ros2/ros2-76/"><span class="mono">76</span>Kalman Filter</a></li>
       <li><a href="/documented-software-learnings/ros2/ros2-77/"><span class="mono">77</span>Kalman Filter Node in Python: Angular Velocity from Odometry and IMU</a></li>
       <li><a href="/documented-software-learnings/ros2/ros2-78/"><span class="mono">78</span>Localization with Kalman Filter</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-79/"><span class="mono">79</span>Extended Kalman Filter (EKF)</a></li>
     </ol>
   </aside>
   <article class="rd-main">
     <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/documented-software-learnings/">Library</a><span>/</span><a href="/documented-software-learnings/ros2/">ROS 2</a><span>/</span><span>49</span></nav>
     <button class="btn btn-sm btn-line rd-tg" type="button" id="rd-tg">All chapters</button>
-<p class="sh-label mono"><span>49</span>Chapter 49 of 78</p>    <h1>Simple TF2 Static Broadcaster</h1>
-<div class="rd-prog" aria-hidden="true"><i style="width:62.8%"></i></div>    <div class="prose"><div class="col">
+<p class="sh-label mono"><span>49</span>Chapter 49 of 79</p>    <h1>Simple TF2 Static Broadcaster</h1>
+<div class="rd-prog" aria-hidden="true"><i style="width:62.0%"></i></div>    <div class="prose"><div class="col">
 <h2 id="introduction">Introduction</h2>
 <p>In ROS 2, a <strong>transform</strong> describes where one coordinate frame sits relative to another. A <strong>static transform</strong> is one that never changes, such as a sensor bolted onto a robot body. It is published once on the <code>/tf_static</code> topic and stays valid for as long as the node runs.</p>
 <p>In this chapter we write a small Python node, <code>simple_tf_kinematics</code>, that publishes one static transform between two frames: <code>bumperbot_base</code> (the parent) and <code>bumperbot_top</code> (the child), placed 0.3 above it along the Z axis with no rotation. We then build the package, run the node, inspect <code>/tf_static</code> and view both frames in rviz2.</p>
