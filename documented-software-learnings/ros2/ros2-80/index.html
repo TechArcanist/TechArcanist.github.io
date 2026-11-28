@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IMU Republisher | ROS 2 | Tech Arcanist · Lavitra Sahu</title>
+<meta name="description" content="Introduction Chapter 79 explained the extended Kalman filter, and the next chapters use a ready-made one from the robot_localization package to improve the…">
+<link rel="canonical" href="https://techarcanist.com/documented-software-learnings/ros2/ros2-80/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tech Arcanist">
+<meta property="og:title" content="IMU Republisher | ROS 2">
+<meta property="og:description" content="Introduction Chapter 79 explained the extended Kalman filter, and the next chapters use a ready-made one from the robot_localization package to improve the…">
+<meta property="og:url" content="https://techarcanist.com/documented-software-learnings/ros2/ros2-80/">
+<meta property="og:image" content="https://techarcanist.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a121e">
+<link rel="icon" href="/assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=e43b0871b9">
+<link rel="stylesheet" href="/assets/home.css?v=e43b0871b9">
+<script>try{var t=localStorage.getItem('ta-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add('js')</script>
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="/" aria-label="Tech Arcanist home">
+      <img src="/assets/logo.webp" alt="" width="28" height="28">
+      <span class="brand-t">Tech Arcanist</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/project/">Work</a>
+      <a href="/documented-software-learnings/">Library</a>
+      <a href="/documented-software-learnings/ros2/" aria-current="page">ROS 2</a>
+      <a href="/#story">Story</a>
+    </nav>
+    <div class="hdr-act">
+      <button class="kbd-btn" type="button" data-palette aria-label="Search (Ctrl K)">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="hide-sm">Search</span><kbd class="hide-sm">Ctrl K</kbd>
+      </button>
+      <button class="ib" id="theme" type="button" aria-label="Switch accent colour, blue or green" title="Blue or green">
+        <svg class="i-swap" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="9" cy="12" r="5.5" fill="#5ab4ff"/><circle cx="15" cy="12" r="5.5" fill="#3dff8b" fill-opacity=".9"/></svg>
+      </button>
+      <a class="btn btn-sm btn-accent-line hide-sm" href="/#contact">Get in touch</a>
+      <button class="ib nav-tg" id="nav-tg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap reader wide">
+  <aside class="rd-nav" id="rd-nav">
+    <a class="rd-series" href="/documented-software-learnings/ros2/"><span class="label">Series</span>ROS 2</a>
+    <ol>
+      <li><a href="/documented-software-learnings/ros2/ros2_a/"><span class="mono">01</span>Installing Ubuntu Desktop (Dual Boot with Windows)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_b/"><span class="mono">02</span>ROS 2 Jazzy Installation on Ubuntu (Step-by-Step)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_c/"><span class="mono">03</span>Development Environment Setup for ROS 2 Jazzy on Ubuntu (With Clear Explanations)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_d/"><span class="mono">04</span>ROS 2 Fundamentals: Architecture, Communication, Packages, and Workspaces</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_e/"><span class="mono">05</span>ROS 2 Workspace &amp; Package Creation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_f/"><span class="mono">06</span>ROS 2 Python Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_g/"><span class="mono">07</span>ROS 2 C++ Publisher</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_h/"><span class="mono">08</span>ROS 2 Python Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_i/"><span class="mono">09</span>ROS 2 C++ Subscriber</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_j/"><span class="mono">10</span>Robot Locomotion: Introduction</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_k/"><span class="mono">11</span>Wheeled Locomotion Architectures</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_l/"><span class="mono">12</span>Rolling Friction &amp; Wheeled Locomotion Efficiency</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_m/"><span class="mono">13</span>Introduction to Robot Simulation</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_n/"><span class="mono">14</span>URDF</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_o/"><span class="mono">15</span>Create a URDF Model</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_p/"><span class="mono">16</span>Rviz</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_q/"><span class="mono">17</span>Node Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_r/"><span class="mono">18</span>Python Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_s/"><span class="mono">19</span>C++ Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2_t/"><span class="mono">20</span>ROS 2 Parameters</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-u/"><span class="mono">21</span>Visualize The Robot In RVIZ2</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-v/"><span class="mono">22</span>Launch Files</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-w/"><span class="mono">23</span>ROS 2 Launch Files: Visualizing the Robot with One Command</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-x/"><span class="mono">24</span>Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-y/"><span class="mono">25</span>Simulating the Robot in Gazebo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-z/"><span class="mono">26</span>ROS 2 Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-aa/"><span class="mono">27</span>Control Types</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ab/"><span class="mono">28</span>ROS 2 Control: Prepare the Robot for Control</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ac/"><span class="mono">29</span>Understanding ROS 2 Control | Explanation of Chapter 28</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ad/"><span class="mono">30</span>ROS 2 Control: Moving the BumperBot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-ae/"><span class="mono">31</span>Robot Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-af/"><span class="mono">32</span>Pose of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_af/"><span class="mono">33</span>Translation Vector</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ag/"><span class="mono">34</span>Introduction to Turtlesim</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ah/"><span class="mono">35</span>Translation Vector Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ai/"><span class="mono">36</span>Translation Vector Between Two Turtles: CPP</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_aj/"><span class="mono">37</span>Rotation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_ak/"><span class="mono">38</span>Rotation Matrix Between Two Turtles: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_al/"><span class="mono">39</span>Transformation Matrix</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros_am/"><span class="mono">40</span>Differential Kinematics</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-41/"><span class="mono">41</span>Velocity of a Mobile Robot</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-42/"><span class="mono">42</span>Simple Speed Controller: Python</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-43/"><span class="mono">43</span>Launch the Simple Speed Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-44/"><span class="mono">44</span>Teleoperating the BumperBot with a Joystick</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-45/"><span class="mono">45</span>ROS 2 Diff Drive Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-46/"><span class="mono">46</span>TF 2 Library</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-47/"><span class="mono">47</span>Operation With Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-48/"><span class="mono">48</span>Static &amp; Dynamic Transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-49/"><span class="mono">49</span>Simple TF2 Static Broadcaster</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-50/"><span class="mono">50</span>Simple TF2 Broadcaster: Static and Dynamic Transforms</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-51/"><span class="mono">51</span>ROS 2 Services</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-52/"><span class="mono">52</span>Service Server in Python: AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-53/"><span class="mono">53</span>Service Client in Python: Calling AddTwoInts</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-54/"><span class="mono">54</span>Simple TF2 Listener in Python: a get_transform Service</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-55/"><span class="mono">55</span>Euler Angles and Quaternions</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-56/"><span class="mono">56</span>Euler to Quaternion: Turning the Robot with tf_transformations</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-57/"><span class="mono">57</span>tf2 Tools: view_frames and tf2_echo</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-58/"><span class="mono">58</span>Where Is the Robot? Local and Global Localization</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-59/"><span class="mono">59</span>Odometry: Counting Steps to Know Where the Robot Is</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-60/"><span class="mono">60</span>Wheel Odometry and Encoders</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-61/"><span class="mono">61</span>Robot Speed from Wheel Encoders</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-62/"><span class="mono">62</span>Simple Controller: Robot Speed from Joint States</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-63/"><span class="mono">63</span>Robot Position and Orientation from the Wheels</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-64/"><span class="mono">64</span>Wheel Odometry: x, y and theta in the Simple Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-65/"><span class="mono">65</span>Publish Odometry Message</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-66/"><span class="mono">66</span>Broadcast Odometry Transform</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-67/"><span class="mono">67</span>Probability Introduction</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-68/"><span class="mono">68</span>Probability Tools for Localization</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-69/"><span class="mono">69</span>Adding Noise to Robot Motion: the Noisy Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-70/"><span class="mono">70</span>Launch Noisy Controller</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-71/"><span class="mono">71</span>Odometry Comparison</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-72/"><span class="mono">72</span>Advantages of Having Multiple Sensors</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-73/"><span class="mono">73</span>Gyroscope</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros-74/"><span class="mono">74</span>Accelerometer and IMU</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-75/"><span class="mono">75</span>Simulate IMU Sensor</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-76/"><span class="mono">76</span>Kalman Filter</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-77/"><span class="mono">77</span>Kalman Filter Node in Python: Angular Velocity from Odometry and IMU</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-78/"><span class="mono">78</span>Localization with Kalman Filter</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-79/"><span class="mono">79</span>Extended Kalman Filter (EKF)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-80/" aria-current="page"><span class="mono">80</span>IMU Republisher</a></li>
+    </ol>
+  </aside>
+  <article class="rd-main">
+    <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/documented-software-learnings/">Library</a><span>/</span><a href="/documented-software-learnings/ros2/">ROS 2</a><span>/</span><span>80</span></nav>
+    <button class="btn btn-sm btn-line rd-tg" type="button" id="rd-tg">All chapters</button>
+<p class="sh-label mono"><span>80</span>Chapter 80 of 80</p>    <h1>IMU Republisher</h1>
+<div class="rd-prog" aria-hidden="true"><i style="width:100.0%"></i></div>    <div class="prose"><div class="col"><h2 id="introduction">Introduction</h2>
+<p>Chapter 79 explained the extended Kalman filter, and the next chapters use a ready-made one from the robot_localization package to improve the linear and the angular velocity of the robot with the wheel encoders and the IMU (<a href="/documented-software-learnings/ros2/ros2-79/#sd-s4x" target="_blank" rel="noopener">chapter 79, linearization and the EKF loop</a>). Before that filter can be set up, the IMU messages need one small change.</p>
+<p>This chapter writes a tiny node, <b>imu_republisher.py</b>. It receives every IMU message on <code>imu/out</code>, changes only the <b>frame ID</b> in its header to <code>base_footprint_ekf</code>, and publishes it again on a new topic, <code>imu_ekf</code>. The readings themselves are not touched. This is trivial, but it is needed for the configuration of robot_localization.</p>
+<h3 id="where-the-pieces-come-from">Where the pieces come from</h3>
+<div class="table-wrap"><table>
+<tbody><tr><td>Idea</td><td>Where it was met</td><td>Section</td></tr>
+<tr><td>the IMU and its topic imu/out</td><td>chapter 75</td><td><a href="/documented-software-learnings/ros2/ros2-75/#terminal-3-read-the-imu-topic" target="_blank" rel="noopener">Terminal 3: read the IMU topic</a></td></tr>
+<tr><td>the frame name base_footprint_ekf</td><td>chapter 69</td><td><a href="/documented-software-learnings/ros2/ros2-69/#two-nodes-one-fixed-frame" target="_blank" rel="noopener">Two nodes, one fixed frame</a></td></tr>
+<tr><td>the package bumperbot_localization, a Python node in an ament_cmake package</td><td>chapter 77</td><td><a href="/documented-software-learnings/ros2/ros2-77/#the-python-folder-and-files" target="_blank" rel="noopener">The Python folder and files</a>, <a href="/documented-software-learnings/ros2/ros2-77/#cmakelists-txt" target="_blank" rel="noopener">CMakeLists.txt</a></td></tr>
+<tr><td>the extended Kalman filter</td><td>chapter 79</td><td><a href="/documented-software-learnings/ros2/ros2-79/#sd-s4x" target="_blank" rel="noopener">Linearization: the extended Kalman filter</a></td></tr>
+</tbody></table></div>
+<h3 id="what-must-already-work">What must already work</h3>
+<ul>
+<li>The package bumperbot_localization with kalman_filter.py builds (chapter 77).</li>
+<li>The simulated IMU publishes on imu/out (chapter 75).</li>
+</ul>
+</div>
+
+<div class="col"><h2 id="writing-the-node">Writing the node</h2>
+<h3 id="create-the-file">Create the file</h3>
+<p>In VS Code, open src, then bumperbot_localization, then the bumperbot_localization folder inside it. Next to kalman_filter.py, create a new file called <b>imu_republisher.py</b>.</p>
+<figure class="img sz-s al-l"><img src="/uploads/2026/11/image-157.png" alt="VS Code explorer: imu_republisher.py next to __init__.py and kalman_filter.py in the bumperbot_localization folder, marked with an arrow" loading="lazy"><figcaption>The new file next to kalman_filter.py.</figcaption></figure>
+<h3 id="the-code">The code</h3>
+<p>The whole file, 26 lines:</p>
+<div class="codeblock" data-lang="Python"><pre class="code numbered"><code><span class="ln"><span class="tok-comment">#!/usr/bin/env python3</span></span>
+<span class="ln"><span class="tok-keyword">import</span> <span class="tok-namespace">rclpy</span></span>
+<span class="ln"><span class="tok-keyword">import</span> <span class="tok-namespace">time</span></span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">rclpy</span><span class="tok-namespace">.</span><span class="tok-namespace">node</span> <span class="tok-keyword">import</span> Node</span>
+<span class="ln"><span class="tok-keyword">from</span> <span class="tok-namespace">sensor_msgs</span><span class="tok-namespace">.</span><span class="tok-namespace">msg</span> <span class="tok-keyword">import</span> Imu</span>
+<span class="ln"></span>
+<span class="ln">imu_pub <span class="tok-operator">=</span> <span class="tok-bool">None</span></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">def</span> <span class="tok-definition">imuCallback</span><span class="tok-punctuation">(</span>imu<span class="tok-punctuation">)</span><span class="tok-punctuation">:</span></span>
+<span class="ln">    <span class="tok-keyword">global</span> imu_pub</span>
+<span class="ln">    imu<span class="tok-operator">.</span>header<span class="tok-operator">.</span>frame_id <span class="tok-operator">=</span> <span class="tok-string">"</span><span class="tok-string">base_footprint_ekf</span><span class="tok-string">"</span></span>
+<span class="ln">    imu_pub<span class="tok-operator">.</span>publish<span class="tok-punctuation">(</span>imu<span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">def</span> <span class="tok-definition">main</span><span class="tok-punctuation">(</span>args<span class="tok-operator">=</span><span class="tok-bool">None</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span></span>
+<span class="ln">    <span class="tok-keyword">global</span> imu_pub</span>
+<span class="ln">    rclpy<span class="tok-operator">.</span>init<span class="tok-punctuation">(</span>args<span class="tok-operator">=</span>args<span class="tok-punctuation">)</span></span>
+<span class="ln">    node <span class="tok-operator">=</span> Node<span class="tok-punctuation">(</span><span class="tok-string">'</span><span class="tok-string">imu_republisher_node</span><span class="tok-string">'</span><span class="tok-punctuation">)</span></span>
+<span class="ln">    time<span class="tok-operator">.</span>sleep<span class="tok-punctuation">(</span><span class="tok-number">1</span><span class="tok-punctuation">)</span></span>
+<span class="ln">    imu_pub <span class="tok-operator">=</span> node<span class="tok-operator">.</span>create_publisher<span class="tok-punctuation">(</span>Imu<span class="tok-punctuation">,</span> <span class="tok-string">"</span><span class="tok-string">imu_ekf</span><span class="tok-string">"</span><span class="tok-punctuation">,</span> <span class="tok-number">10</span><span class="tok-punctuation">)</span></span>
+<span class="ln">    imu_sub <span class="tok-operator">=</span> node<span class="tok-operator">.</span>create_subscription<span class="tok-punctuation">(</span>Imu<span class="tok-punctuation">,</span> <span class="tok-string">"</span><span class="tok-string">imu/out</span><span class="tok-string">"</span><span class="tok-punctuation">,</span> imuCallback<span class="tok-punctuation">,</span> <span class="tok-number">10</span><span class="tok-punctuation">)</span></span>
+<span class="ln">    rclpy<span class="tok-operator">.</span>spin<span class="tok-punctuation">(</span>node<span class="tok-punctuation">)</span></span>
+<span class="ln">    rclpy<span class="tok-operator">.</span>shutdown<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-keyword">if</span> <span class="tok-variableName">__name__</span> <span class="tok-operator">==</span> <span class="tok-string">'</span><span class="tok-string">__main__</span><span class="tok-string">'</span><span class="tok-punctuation">:</span></span>
+<span class="ln">    main<span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></span></code></pre></div>
+<h3 id="what-each-part-does">What each part does</h3>
+<div class="table-wrap"><table>
+<tbody><tr><td>Lines</td><td>What happens</td></tr>
+<tr><td>1 to 5</td><td>The shebang (needed because CMake installs the file as a program) and the imports: rclpy, time for the pause, Node, and the Imu message from sensor_msgs.</td></tr>
+<tr><td>7</td><td>A <b>global variable</b> for the publisher, empty (None) for now. There is no class in this file, so a global lets main fill it and the callback use it.</td></tr>
+<tr><td>9 to 12</td><td>The callback. For every IMU message it writes <code>base_footprint_ekf</code> into <code>header.frame_id</code> and publishes the same message again. Everything else (stamp, orientation, angular velocity, acceleration) stays as received.</td></tr>
+<tr><td>15 to 17</td><td>main starts and ROS 2 is initialised. <code>global imu_pub</code> on line 16 is needed because line 20 assigns the global.</td></tr>
+<tr><td>18</td><td>A plain Node named <code>imu_republisher_node</code>.</td></tr>
+<tr><td>19</td><td>A 1 second pause, so the IMU is already publishing and robot_localization has started before the node begins its work.</td></tr>
+<tr><td>20, 21</td><td>The publisher on the new topic <code>imu_ekf</code> and the subscription on <code>imu/out</code> that calls imuCallback; queue size 10 for both.</td></tr>
+<tr><td>22, 23, 25, 26</td><td>spin keeps the node running until Ctrl+C, then shutdown; the guard starts main when the file is run as a program.</td></tr>
+</tbody></table></div>
+<p class="note">Line 10 (<code>global imu_pub</code> inside the callback) is optional: the callback only reads imu_pub, and Python finds a global name for reading without it. Line 16 is not optional: without it, line 20 would make a new local variable in main, the global would stay None, and the first IMU message would crash the node with <code>AttributeError: 'NoneType' object has no attribute 'publish'</code>.</p>
+<p class="note">The new frame name is the same as the child frame that the noisy odometry message carries, base_footprint_ekf (<a href="/documented-software-learnings/ros2/ros2-69/#two-nodes-one-fixed-frame" target="_blank" rel="noopener">chapter 69</a>). As far as I know, the frame the IMU sends before the change is the frame of its own link, imu_link.</p>
+<h3 id="code-visualizer">Code visualizer</h3>
+<p>Every line explained, a step-by-step trace of three IMU messages, a map, bugs to try (including the missing global and the wrong topic, which print no error or crash only later), five small labs and a live picture of one message before and after.</p>
+<div class="widget"><iframe allow="fullscreen" allowfullscreen src="/widgets/claude-ros2-80-20261128-155416-imu-republisher-visualizer.html?v=7f9115d347" title="IMU republisher: code visualizer"></iframe></div>
+</div>
+
+<div class="col"><h2 id="install-and-build">Install and build</h2>
+<h3 id="cmakelists-txt">CMakeLists.txt</h3>
+<p>Open CMakeLists.txt of bumperbot_localization. In <code>install(PROGRAMS ...)</code>, where kalman_filter.py is already installed, add the new file below it:</p>
+<div class="codeblock" data-lang="CMake"><pre class="code"><code><span class="ln"><span class="tok-typeName">install</span><span class="tok-punctuation">(</span><span class="tok-string">PROGRAMS</span></span>
+<span class="ln">  <span class="tok-operator">${</span><span class="tok-variableName">PROJECT_NAME</span><span class="tok-operator">}</span><span class="tok-string">/kalman_filter.py</span></span>
+<span class="ln">  <span class="tok-operator">${</span><span class="tok-variableName">PROJECT_NAME</span><span class="tok-operator">}</span><span class="tok-string">/imu_republisher.py</span></span>
+<span class="ln">  <span class="tok-string">DESTINATION</span> <span class="tok-string">lib/</span><span class="tok-operator">${</span><span class="tok-variableName">PROJECT_NAME</span><span class="tok-operator">}</span></span>
+<span class="ln"><span class="tok-punctuation">)</span></span></code></pre></div>
+<figure class="img sz-l"><img src="/uploads/2026/11/image-158.png" alt="CMakeLists.txt of bumperbot_localization in VS Code with the line ${PROJECT_NAME}/imu_republisher.py added under install(PROGRAMS, marked with an arrow" loading="lazy"><figcaption>The new line in install(PROGRAMS ...).</figcaption></figure>
+<p>The node uses only rclpy and sensor_msgs, which the package already depends on (chapter 77), so package.xml does not change.</p>
+<h3 id="build-the-workspace">Build the workspace</h3>
+<p>Go to the workspace:</p>
+<div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln"><span class="tok-typeName">cd</span> bumperbot_ws</span></code></pre></div>
+<p>Build it, to check that everything compiles and the new file is installed:</p>
+<div class="codeblock" data-lang="Bash"><pre class="code"><code><span class="ln">colcon build</span></code></pre></div>
+<p class="caption">What you should see</p>
+<div class="codeblock" data-lang="Plain text"><pre class="code"><code>Starting &gt;&gt;&gt; bumperbot_msgs
+Starting &gt;&gt;&gt; bumperbot_controller
+Starting &gt;&gt;&gt; bumperbot_cpp_examples
+Starting &gt;&gt;&gt; bumperbot_description
+Finished &lt;&lt;&lt; bumperbot_description [0.28s]
+Starting &gt;&gt;&gt; bumperbot_localization
+Finished &lt;&lt;&lt; bumperbot_cpp_examples [0.40s]
+Finished &lt;&lt;&lt; bumperbot_controller [0.91s]
+Finished &lt;&lt;&lt; bumperbot_msgs [0.98s]
+Starting &gt;&gt;&gt; bumperbot_py_examples
+Finished &lt;&lt;&lt; bumperbot_localization [2.18s]
+Finished &lt;&lt;&lt; bumperbot_py_examples [2.48s]
+
+Summary: 6 packages finished [3.67s]</code></pre></div>
+<figure class="img sz-m al-l"><img src="/uploads/2026/11/image-159.png" alt="Terminal: cd bumperbot_ws and colcon build, ending with Summary: 6 packages finished in 3.67 s" loading="lazy"><figcaption>All 6 packages build, bumperbot_localization included.</figcaption></figure>
+<p>The node is written and installed. It is started together with robot_localization when the extended Kalman filter is set up.</p>
+</div>
+
+<div class="col"><h2 id="remember">Remember</h2>
+<ul>
+<li>imu_republisher.py receives every IMU message on imu/out, sets header.frame_id to base_footprint_ekf, and publishes it again on imu_ekf. The readings do not change.</li>
+<li>It is needed for the configuration of robot_localization and its extended Kalman filter.</li>
+<li>Without a class, a global variable holds the publisher. global is needed in main (which assigns it), not in the callback (which only reads it).</li>
+<li>A 1 second pause at start-up lets the IMU and robot_localization start first.</li>
+<li>Install the file with install(PROGRAMS ...) in CMakeLists.txt; no new dependency, so package.xml stays the same. Then colcon build.</li>
+</ul>
+</div></div>
+    <nav class="pager" aria-label="Chapters">
+<a href="/documented-software-learnings/ros2/ros2-79/"><span class="mono">Chapter 79</span>Extended Kalman Filter (EKF)</a><a class="nx" href="/documented-software-learnings/ros2/"><span class="mono">Series complete</span>Back to ROS 2</a>    </nav>
+  </article>
+</div>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <p class="label">Open for collaborations, workshops &amp; mentoring</p>
+      <a class="ftr-mail" href="mailto:lavitra@techarcanist.com">lavitra@techarcanist.com<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/logo.webp" alt="" width="28" height="28"><span class="brand-t">Tech Arcanist</span></a>
+        <p class="muted">From zero to maker. Building rockets, teaching students, and documenting the messy journey of learning through failures.</p>
+      </div>
+      <div>
+        <p class="label">Work</p>
+        <a href="/project/">All projects</a>
+        <a href="/project/#aero">Aerospace</a>
+        <a href="/project/#robotics">Robotics</a>
+        <a href="/project/#iot">IoT &amp; automation</a>
+      </div>
+      <div>
+        <p class="label">Library</p>
+<a href="/documented-software-learnings/ros2/">ROS 2</a><a href="/project/my-autodesk-fusion-journey/">Autodesk Fusion Journey</a><a href="/documented-software-learnings/flutterflow/">FlutterFlow</a><a href="/documented-software-learnings/onshape/">Onshape</a><a href="/documented-software-learnings/ultimaker-cura/">Ultimaker Cura</a>      </div>
+      <div>
+        <p class="label">About</p>
+        <a href="/#story">My story</a>
+        <a href="/#teaching">Teaching</a>
+        <a href="/#stack">Skills</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div>
+        <p class="label">Elsewhere</p>
+        <a href="https://github.com/TechArcanist" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/tech-arcanist/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/tech_arcanist/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="ftr-bot mono">
+      <span>© 2026 Lavitra Sahu</span>
+      <span>Kanpur, India</span>
+      <a href="/privacy/">Privacy</a>
+      <span class="status"><i></i>Available for projects</span>
+    </div>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" placeholder="Search projects, chapters, topics…" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="pal-list" id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" hidden><button type="button" aria-label="Close">Close</button><img alt=""></div>
+<script src="/assets/site.js?v=e43b0871b9" defer></script>
+<script data-goatcounter="https://techarcanist.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script><script src="/assets/home.js?v=e43b0871b9" defer></script>
+</body>
+</html>

@@ -138,13 +138,14 @@
       <li><a href="/documented-software-learnings/ros2/ros2-77/"><span class="mono">77</span>Kalman Filter Node in Python: Angular Velocity from Odometry and IMU</a></li>
       <li><a href="/documented-software-learnings/ros2/ros2-78/" aria-current="page"><span class="mono">78</span>Localization with Kalman Filter</a></li>
       <li><a href="/documented-software-learnings/ros2/ros2-79/"><span class="mono">79</span>Extended Kalman Filter (EKF)</a></li>
+      <li><a href="/documented-software-learnings/ros2/ros2-80/"><span class="mono">80</span>IMU Republisher</a></li>
     </ol>
   </aside>
   <article class="rd-main">
     <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/documented-software-learnings/">Library</a><span>/</span><a href="/documented-software-learnings/ros2/">ROS 2</a><span>/</span><span>78</span></nav>
     <button class="btn btn-sm btn-line rd-tg" type="button" id="rd-tg">All chapters</button>
-<p class="sh-label mono"><span>78</span>Chapter 78 of 79</p>    <h1>Localization with Kalman Filter</h1>
-<div class="rd-prog" aria-hidden="true"><i style="width:98.7%"></i></div>    <div class="prose"><div class="col"><h2 id="introduction">Introduction</h2>
+<p class="sh-label mono"><span>78</span>Chapter 78 of 80</p>    <h1>Localization with Kalman Filter</h1>
+<div class="rd-prog" aria-hidden="true"><i style="width:97.5%"></i></div>    <div class="prose"><div class="col"><h2 id="introduction">Introduction</h2>
 <p>Chapter 77 wrote the Kalman filter node, kalman_filter.py. It estimates one number, the angular velocity of the robot around z, by fusing two sources: the noisy wheel odometry on bumperbot_controller/odom_noisy and the IMU on imu/out. The result goes out as a new Odometry message on bumperbot_controller/odom_kalman (<a href="/documented-software-learnings/ros2/ros2-77/#introduction" target="_blank" rel="noopener">chapter 77, Introduction</a>).</p>
 <p>This chapter starts the node and checks whether it does its job. The simulation, the controllers and the filter run together, and PlotJuggler draws three angular velocities on one graph: the perfect one, the noisy one and the filtered one. The filtered line should stay much closer to the perfect one, first with the robot standing still and then while it turns with the joystick.</p>
 <h3 id="where-the-pieces-come-from">Where the pieces come from</h3>
